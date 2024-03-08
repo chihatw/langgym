@@ -3,8 +3,8 @@
 import { createSupabaseServerActionClient } from '@/lib/supabase/actions';
 import { PROJECT_URL } from './constants';
 
-// const localhost = '127.0.0.1';
-const localhost = 'localhost';
+const localhost = '127.0.0.1';
+// const localhost = 'localhost';
 
 const isDev = process.env.NODE_ENV === 'development';
 const url = (isDev ? `http://${localhost}:3000` : PROJECT_URL) + '/welcome';
