@@ -1,3 +1,5 @@
+import ManagementHeader from '@/features/mng/components/ManagementHeader';
+
 export default function ManagementLayout({
   children,
 }: {
@@ -5,7 +7,7 @@ export default function ManagementLayout({
 }) {
   return (
     <div className='space-y-4'>
-      <div>header</div>
+      <ManagementHeader />
       {children}
     </div>
   );
