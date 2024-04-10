@@ -1,7 +1,8 @@
 'use server';
 
 import { createSupabaseServerActionClient } from '@/lib/supabase/actions';
-import { PROJECT_URL } from './constants';
+import { redirect } from 'next/navigation';
+import { PROJECT_URL } from '../constants';
 
 const localhost = '127.0.0.1';
 // const localhost = 'localhost';
@@ -16,4 +17,10 @@ export async function signInWithMagicLink(email: string) {
     options: { emailRedirectTo: url },
   });
   return result;
+}
+
+export async function signOut() {
+  const supabase = createSupabaseServerActionClient();
+  await supabase.auth.signOut();
+  redirect('/login');
 }

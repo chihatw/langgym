@@ -1,22 +1,15 @@
 import BorderLabel from '@/components/BorderLabel';
 import ArticleList from '@/features/article/components/ArticleList';
-import { DUMMY_ARTICLES } from '@/features/article/constant';
-import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
+import { fetchArticles } from '@/features/article/services/server';
+import { getUserFromServerSide } from '@/features/auth/services/server';
 
 type Props = {};
 
 const ArticleListPage = async (props: Props) => {
-  const supabase = createSupabaseServerComponentClient();
-
-  const { data, error } = await supabase.auth.getSession();
-  console.log(data.session?.user.id);
-
-  // debug use dummy articles
-  const articles = DUMMY_ARTICLES.filter((item) => item.uid === 'dummy').sort(
-    (a, b) => b.createdAt - a.createdAt
-  );
-
-  console.log(articles);
+  const user = await getUserFromServerSide();
+  console.log(user?.id);
+  // debug use dummy uid
+  const articles = await fetchArticles('dummy');
 
   return (
     <div className='space-y-4'>

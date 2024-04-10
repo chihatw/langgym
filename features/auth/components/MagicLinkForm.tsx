@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { type AuthError } from '@supabase/supabase-js';
 import { Loader2, Mailbox } from 'lucide-react';
 import { useRef, useState, useTransition } from 'react';
-import { signInWithMagicLink } from '../actions';
+import { signInWithMagicLink } from '../services/actions';
 
 import {
   Dialog,
