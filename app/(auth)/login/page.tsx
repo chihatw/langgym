@@ -2,7 +2,7 @@ import LoginForm from '@/features/auth/components/MagicLinkForm';
 
 const Login = () => {
   return (
-    <div>
+    <>
       <div className='flex flex-col items-center text-2xl font-extralight pt-20 gap-1 text-gray-500'>
         <span>{`We'll send`}</span>
         <span className='space-x-[0.5em]'>
@@ -12,7 +12,7 @@ const Login = () => {
         <span>{`to your mailbox.`}</span>
       </div>
       <LoginForm />
-    </div>
+    </>
   );
 };
 
