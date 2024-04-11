@@ -8,7 +8,7 @@ const items: { label: string; href: string }[] = [
   { label: 'dummy', href: '/' },
 ];
 
-const ManagementHeader = (props: Props) => {
+const MngHeader = (props: Props) => {
   return (
     <div>
       {items.map((item, index) => (
@@ -24,4 +24,4 @@ const ManagementHeader = (props: Props) => {
   );
 };
 
-export default ManagementHeader;
+export default MngHeader;

@@ -24,7 +24,7 @@ const MngArticleListRow = ({ article, removeArticle, display }: Props) => {
 
       {article.title}
       <Link
-        href={`/mng/article/${article.id}/batchInput`} // todo
+        href={`/mng/article/${article.id}/batchInput`}
         className={buttonVariants({ size: 'icon', variant: 'ghost' })}
       >
         <FileDown />

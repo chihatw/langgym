@@ -3,7 +3,7 @@ import { fetchArticleById } from '@/features/article/services/server';
 import { fetchUsers } from '@/features/user/services/server';
 
 type Props = {
-  params: { id: string };
+  params: { id: number };
 };
 
 const MngArticleEditPage = async ({ params: { id } }: Props) => {

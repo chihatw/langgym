@@ -49,3 +49,7 @@ export async function deleteArticle(id: number) {
   revalidatePath('/mng');
   return;
 }
+
+export async function batchInsertSentences() {
+  // todo
+}

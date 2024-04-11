@@ -1,4 +1,5 @@
 import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
+import { Article } from '../schema';
 
 export async function fetchArticles(limit: number) {
   const supabase = createSupabaseServerComponentClient();
@@ -28,7 +29,7 @@ export async function fetchArticlesByUid(uid: string) {
   return data;
 }
 
-export async function fetchArticleById(id: string) {
+export async function fetchArticleById(id: number) {
   const supabase = createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('articles')
@@ -39,5 +40,5 @@ export async function fetchArticleById(id: string) {
     console.log(error.message);
     return;
   }
-  return data[0];
+  return data[0] as Article;
 }
