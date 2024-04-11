@@ -1,4 +1,5 @@
-import { Database } from '@/types/supabase';
+// todo generate supabase types
+// import { Database } from '@/types/supabase';
 import {
   createBrowserClient,
   createServerClient,
@@ -9,7 +10,7 @@ import { getCookie, setCookie } from 'cookies-next';
 import { NextRequest, NextResponse } from 'next/server';
 
 export function createSupabaseClientComponentClient() {
-  return createBrowserClient<Database>(
+  return createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
@@ -19,7 +20,7 @@ export function createSupabaseMiddlewareClient(
   req: NextRequest,
   res: NextResponse
 ) {
-  return createServerClient<Database>(
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {

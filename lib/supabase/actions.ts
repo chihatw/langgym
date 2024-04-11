@@ -1,11 +1,12 @@
-import { Database } from '@/types/supabase';
+// todo supabase types
+// import { Database } from '@/types/supabase';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 
 import { cookies } from 'next/headers';
 
 export function createSupabaseServerActionClient(serverComponent = false) {
   const cookieStore = cookies();
-  return createServerClient<Database>(
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {

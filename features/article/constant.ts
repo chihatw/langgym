@@ -8,7 +8,7 @@ export const DUMMY_ARTICLES: Article[] = [
     title: 'ダミー1',
     audioPath: '',
     isShowAccents: true,
-    createdAt: 1712716400705,
+    created_at: 1712716400705,
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ export const DUMMY_ARTICLES: Article[] = [
     title: 'ダミー2',
     audioPath: '',
     isShowAccents: true,
-    createdAt: 1712716400706,
+    created_at: 1712716400706,
   },
 ];
 
@@ -30,7 +30,7 @@ export const DUMMY_SENTENCES: Sentence[] = [
     japanese: 'こんにちは',
     pitchStr: 'こんにちは',
     original: 'こんにちは',
-    createdAt: 1712716400705,
+    created_at: 1712716400705,
   },
   {
     id: 2,
@@ -40,7 +40,7 @@ export const DUMMY_SENTENCES: Sentence[] = [
     japanese: 'これはパンです。',
     pitchStr: 'これは　パ＼ンです',
     original: 'これはラーメンです。',
-    createdAt: 1712716400706,
+    created_at: 1712716400706,
   },
   {
     id: 3,
@@ -50,7 +50,7 @@ export const DUMMY_SENTENCES: Sentence[] = [
     japanese: 'ありがとうございます。',
     pitchStr: 'ありがと＼ー　ございま＼す',
     original: 'ありがとございす',
-    createdAt: 1712716400707,
+    created_at: 1712716400707,
   },
 ];
 
@@ -61,7 +61,7 @@ export const INITIAL_ARTICLE: Article = {
   title: '',
   audioPath: '',
   isShowAccents: false,
-  createdAt: 0,
+  created_at: 0,
 };
 
 export const INITIAL_SENTENCE: Sentence = {
@@ -72,5 +72,5 @@ export const INITIAL_SENTENCE: Sentence = {
   japanese: '',
   pitchStr: '',
   original: '',
-  createdAt: 0,
+  created_at: 0,
 };

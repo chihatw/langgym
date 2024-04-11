@@ -1,7 +1,8 @@
 export function getYMDFromDateString(date: string) {
+  const [y, m, d] = date.split('/');
   return {
-    year: parseInt(date.substring(0, 4)),
-    month: parseInt(date.substring(4, 6)),
-    day: parseInt(date.substring(6, 8)),
+    year: parseInt(y),
+    month: parseInt(m),
+    day: parseInt(d),
   };
 }

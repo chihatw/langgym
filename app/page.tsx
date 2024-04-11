@@ -5,9 +5,10 @@ import { getUserFromServerSide } from '@/features/auth/services/server';
 
 export default async function Home() {
   const user = await getUserFromServerSide();
-  console.log(user?.id);
-  // debug use dummy uid
-  const articles = await fetchArticlesByUid('dummy');
+
+  if (!user) return <></>;
+
+  const articles = await fetchArticlesByUid(user.id);
 
   return (
     <div className='space-y-4'>
