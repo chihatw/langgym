@@ -1,7 +1,6 @@
 'use client';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { Edit2, FileText, Trash2 } from 'lucide-react';
+import { Edit2, FileDown, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { Article } from '../schema';
 import { deleteArticle } from '../services/actions';
@@ -18,20 +17,20 @@ const MngArticleListRow = ({ article, removeArticle, display }: Props) => {
     deleteArticle(article.id);
   };
   return (
-    <div className='border-b border-black/20 px-2 py-1 text-sm grid grid-cols-[auto,1fr,auto,auto] justify-between items-center gap-y-2'>
+    <div className='border-b border-black/20 px-2 py-1 text-sm grid grid-cols-[auto,1fr,auto,auto,auto] justify-between items-center gap-y-2'>
       <div className='pr-2 text-xs font-extralight text-gray-500'>
         {display}
       </div>
-      <Link
-        href={'/'} // debug
-        className={cn(buttonVariants({ variant: 'ghost' }), 'justify-start')}
-      >
-        {article.title}
-        <FileText className='h-4 w-4 ml-2 opacity-80' />
-      </Link>
 
+      {article.title}
       <Link
-        href={'/'} // debug
+        href={`/mng/article/${article.id}/batchInput`} // todo
+        className={buttonVariants({ size: 'icon', variant: 'ghost' })}
+      >
+        <FileDown />
+      </Link>
+      <Link
+        href={`/mng/article/${article.id}/edit`}
         className={buttonVariants({ size: 'icon', variant: 'ghost' })}
       >
         <Edit2 />

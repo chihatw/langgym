@@ -18,9 +18,9 @@ import { AppUser } from '@/features/user/schema';
 import { format } from 'date-fns';
 import { CalendarIcon, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { Article } from '../schema';
-import { insertArticle } from '../services/actions';
+import { insertArticle, updateArticle } from '../services/actions';
 
 type Props = { users: AppUser[]; article?: Article };
 
@@ -42,59 +42,28 @@ const INITIAL_STATE: FormProps = {
 
 const ArticleForm = ({ users, article }: Props) => {
   const router = useRouter();
-  const form = useRef<HTMLFormElement | null>(null);
-  const uidInput = useRef<HTMLInputElement | null>(null);
-  const dateInput = useRef<HTMLInputElement | null>(null);
 
   const [value, setValue] = useState(INITIAL_STATE);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    dateInput.current!.value = article
-      ? new Date(article.date).getTime().toString()
-      : INITIAL_STATE.date.getTime().toString();
-  }, [article]);
-
-  useEffect(() => {
     if (!article) return;
-
-    // todo update の時の初期値設定
+    setTimeout(() => {
+      setValue({
+        uid: article.uid,
+        date: new Date(article.date),
+        title: article.title,
+        errMsg: '',
+        disabled: false,
+      });
+    }, 0); // 遅らせないと select されない？
   }, [article]);
 
-  const handleSelectUid = (input: string) => {
-    uidInput.current!.value = input;
-    handleChange();
-  };
-
-  const handleSelectDate = (input: Date | undefined): void => {
-    if (!input) return;
-    setValue((prev) => ({ ...prev, date: input }));
-    dateInput.current!.value = input.getTime().toString();
-    handleChange();
-  };
-
-  const handleChange = () => {
-    const formData = new FormData(form.current!);
-    const uid = formData.get('uid')?.toString || '';
-    const date = formData.get('date')?.toString() || '';
-    const title = formData.get('title')?.toString() || '';
-
-    let disabled = false;
-    if (!uid || !title || !date) {
-      disabled = true;
-    }
-    setValue((prev) => ({ ...prev, disabled, errMsg: '' }));
-  };
-
-  const createArticle = (formData: FormData) => {
-    const uid = formData.get('uid')!.toString();
-    const date = formData.get('date')!.toString();
-    const title = formData.get('title')!.toString();
-
+  const create = () => {
     const newArticle: Omit<Article, 'id' | 'created_at'> = {
-      uid,
-      date: new Date(parseInt(date)).toLocaleDateString(),
-      title,
+      uid: value.uid,
+      date: value.date.toLocaleDateString(),
+      title: value.title,
       audioPath: '',
       isShowAccents: false,
     };
@@ -105,30 +74,47 @@ const ArticleForm = ({ users, article }: Props) => {
         setValue((prev) => ({ ...prev, errMsg }));
         return;
       }
-      router.push('/mng/article/list');
+      router.push('/mng');
     });
   };
-  const updateArticle = (formData: FormData) => {
-    // todo update article
+  const update = () => {
+    const item = {
+      uid: value.uid,
+      date: value.date.toLocaleDateString(),
+      title: value.title,
+    };
+
+    startTransition(async () => {
+      const errMsg = await updateArticle(article!.id, item);
+      if (errMsg) {
+        setValue((prev) => ({ ...prev, errMsg }));
+        return;
+      }
+      router.push('/mng');
+    });
   };
 
   const action = async (formData: FormData) => {
     if (!article) {
-      createArticle(formData);
+      create();
     } else {
-      updateArticle(formData);
+      update();
     }
   };
 
   return (
-    <form
-      ref={form}
-      onChange={handleChange}
-      className='grid gap-y-4'
-      action={action}
-    >
-      <input type='hidden' name='uid' ref={uidInput} />
-      <Select onValueChange={handleSelectUid}>
+    <div className='grid gap-y-4'>
+      <Select
+        onValueChange={(value) => {
+          setValue((prev) => ({
+            ...prev,
+            uid: value,
+            errMst: '',
+            disabled: !value || !prev.title || !prev.date,
+          }));
+        }}
+        value={value.uid}
+      >
         <SelectTrigger>
           <SelectValue placeholder='user' />
         </SelectTrigger>
@@ -140,7 +126,7 @@ const ArticleForm = ({ users, article }: Props) => {
           ))}
         </SelectContent>
       </Select>
-      <input type='hidden' name='date' ref={dateInput} />
+
       <Popover>
         <PopoverTrigger>
           <Button
@@ -155,24 +141,46 @@ const ArticleForm = ({ users, article }: Props) => {
           <Calendar
             mode='single'
             selected={value.date}
-            onSelect={handleSelectDate}
+            onSelect={(input) => {
+              if (!input) return;
+              setValue((prev) => ({
+                ...prev,
+                date: input,
+                errMsg: '',
+                disabled: !prev.uid || !prev.title,
+              }));
+            }}
             initialFocus
           />
         </PopoverContent>
       </Popover>
-      <Input placeholder='title' name='title' />
-      <Button
-        type='submit'
-        disabled={value.disabled || isPending}
-        className='flex items-center gap-x-0.5'
-      >
-        Submit
-        {isPending ? <Loader2 className='animate-spin' /> : null}
-      </Button>
+      <Input
+        placeholder='title'
+        name='title'
+        value={value.title}
+        onChange={(e) =>
+          setValue((prev) => ({
+            ...prev,
+            title: e.target.value,
+            errMsg: '',
+            disabled: !prev.date || !prev.uid || !e.target.value,
+          }))
+        }
+      />
+      <form action={action}>
+        <Button
+          type='submit'
+          disabled={value.disabled || isPending}
+          className='flex items-center gap-x-0.5 w-full'
+        >
+          Submit
+          {isPending ? <Loader2 className='animate-spin' /> : null}
+        </Button>
+      </form>
       {value.errMsg ? (
         <div className='text-xs text-red-500'>{value.errMsg}</div>
       ) : null}
-    </form>
+    </div>
   );
 };
 

@@ -27,3 +27,17 @@ export async function fetchArticlesByUid(uid: string) {
   }
   return data;
 }
+
+export async function fetchArticleById(id: string) {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('articles')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .eq('id', id);
+  if (error) {
+    console.log(error.message);
+    return;
+  }
+  return data[0];
+}

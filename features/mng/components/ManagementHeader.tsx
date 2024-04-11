@@ -4,7 +4,7 @@ import Link from 'next/link';
 type Props = {};
 
 const items: { label: string; href: string }[] = [
-  { label: 'article list', href: '/mng/article/list' },
+  { label: 'article list', href: '/mng' },
   { label: 'dummy', href: '/' },
 ];
 

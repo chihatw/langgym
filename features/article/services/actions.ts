@@ -13,7 +13,28 @@ export async function insertArticle(
     return error.message;
   }
   revalidatePath('/');
-  revalidatePath('/mng/article/list');
+  revalidatePath('/mng');
+  return;
+}
+
+export async function updateArticle(
+  id: number,
+  item: {
+    uid: string;
+    date: string;
+    title: string;
+  }
+) {
+  const supabase = createSupabaseServerActionClient();
+  const { error } = await supabase
+    .from('articles')
+    .update({ ...item })
+    .eq('id', id);
+  if (error) {
+    return error.message;
+  }
+  revalidatePath('/');
+  revalidatePath('/mng');
   return;
 }
 
@@ -25,6 +46,6 @@ export async function deleteArticle(id: number) {
     return;
   }
   revalidatePath('/');
-  revalidatePath('/mng/article/list');
+  revalidatePath('/mng');
   return;
 }
