@@ -12,14 +12,14 @@ export default function RootLayout({
     <html lang='en'>
       <body
         className={cn(
-          'grid min-h-screen grid-rows-[48px,1fr] bg-slate-200 font-sans text-gray-700',
+          'grid min-h-screen grid-rows-[48px,1fr] bg-slate-200 font-sans text-gray-700 print:text-black',
           fontSans.className
         )}
       >
         <Header />
-        <div className='pt-10 pb-40'>
+        <div className='pt-10 pb-40 print:pt-0'>
           {/* ↑↑↑ max-w-xs を grid の 子要素にそのままつけると効かない */}
-          <div className='max-w-md mx-auto'>{children}</div>
+          <div className='max-w-lg mx-auto '>{children}</div>
         </div>
       </body>
     </html>

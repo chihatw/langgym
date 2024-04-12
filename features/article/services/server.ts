@@ -1,7 +1,7 @@
 import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
 import { Article, Sentence } from '../schema';
 
-export async function fetchArticles(limit: number) {
+export async function fetchArticles(limit: number): Promise<Article[]> {
   const supabase = createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('articles')
@@ -12,10 +12,13 @@ export async function fetchArticles(limit: number) {
     console.log(error.message);
     return [];
   }
-  return data;
+  return data.map((item) => ({
+    ...item,
+    created_at: new Date(item.created_at),
+  }));
 }
 
-export async function fetchArticlesByUid(uid: string) {
+export async function fetchArticlesByUid(uid: string): Promise<Article[]> {
   const supabase = createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('articles')
@@ -26,10 +29,15 @@ export async function fetchArticlesByUid(uid: string) {
     console.log(error.message);
     return [];
   }
-  return data;
+  return data.map((item) => ({
+    ...item,
+    created_at: new Date(item.created_at),
+  }));
 }
 
-export async function fetchArticleById(id: number) {
+export async function fetchArticleById(
+  id: number
+): Promise<Article | undefined> {
   const supabase = createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('articles')
@@ -45,11 +53,13 @@ export async function fetchArticleById(id: number) {
 
   return {
     ..._article,
-    created_at: new Date(_article.date),
+    created_at: new Date(_article.created_at),
   } as Article;
 }
 
-export async function fetchSentencesByArticleId(articleId: number) {
+export async function fetchSentencesByArticleId(
+  articleId: number
+): Promise<Sentence[]> {
   const supabase = createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('sentences')
@@ -58,7 +68,7 @@ export async function fetchSentencesByArticleId(articleId: number) {
     .eq('articleId', articleId);
   if (error) {
     console.log(error.message);
-    return;
+    return [];
   }
   return data.map((item) => ({
     ...item,

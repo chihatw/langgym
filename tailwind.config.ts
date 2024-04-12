@@ -71,6 +71,10 @@ module.exports = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      // https://dev.to/andreasbergstrom/how-to-easily-use-media-queries-for-print-in-tailwind-2o9a
+      screens: {
+        print: { raw: 'print' },
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],

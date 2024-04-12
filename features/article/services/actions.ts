@@ -76,3 +76,21 @@ export async function batchInsertSentences(
   revalidatePath(`/article/${articleId}`);
   revalidatePath(`/mng/article/${articleId}/batchInput`);
 }
+
+export async function updateArticleIsShowAccents(
+  id: number,
+  isShowAccents: boolean
+) {
+  const supabase = createSupabaseServerActionClient();
+  const { error } = await supabase
+    .from('articles')
+    .update({ isShowAccents })
+    .eq('id', id);
+  if (error) {
+    return error.message;
+  }
+  revalidatePath('/');
+  revalidatePath(`/article/${id}`);
+  revalidatePath('/mng');
+  return;
+}

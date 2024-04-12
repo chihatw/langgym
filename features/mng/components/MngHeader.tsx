@@ -10,7 +10,7 @@ const items: { label: string; href: string }[] = [
 
 const MngHeader = (props: Props) => {
   return (
-    <div>
+    <div className='print:hidden'>
       {items.map((item, index) => (
         <Link
           href={item.href}

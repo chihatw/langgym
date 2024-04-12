@@ -31,10 +31,13 @@ const ArticlePage = async ({ params: { id } }: Props) => {
             <div className='text-[11px] p-2 rounded bg-gray-200 text-gray-500'>
               {line.original}
             </div>
-            {/* todo isShow 対応 */}
-            <div className='p-2 rounded border-[0.5px] border-gray-500'>
-              <SentencePitchLine pitchStr={line.pitchStr} />
-            </div>
+            {article.isShowAccents ? (
+              <div>
+                <div className='p-2 rounded border-[0.5px] border-gray-500'>
+                  <SentencePitchLine pitchStr={line.pitchStr} />
+                </div>
+              </div>
+            ) : null}
           </div>
         ))}
       </div>
