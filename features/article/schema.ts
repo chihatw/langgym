@@ -5,7 +5,7 @@ export interface Article {
   title: string;
   audioPath: string;
   isShowAccents: boolean;
-  created_at: number;
+  created_at: Date;
 }
 
 export interface Sentence {
@@ -16,5 +16,5 @@ export interface Sentence {
   japanese: string;
   pitchStr: string;
   original: string;
-  created_at: number;
+  created_at: Date;
 }

@@ -1,5 +1,5 @@
 import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
-import { Article } from '../schema';
+import { Article, Sentence } from '../schema';
 
 export async function fetchArticles(limit: number) {
   const supabase = createSupabaseServerComponentClient();
@@ -40,5 +40,28 @@ export async function fetchArticleById(id: number) {
     console.log(error.message);
     return;
   }
-  return data[0] as Article;
+
+  const _article = data[0];
+
+  return {
+    ..._article,
+    created_at: new Date(_article.date),
+  } as Article;
+}
+
+export async function fetchSentencesByArticleId(articleId: number) {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('sentences')
+    .select('*')
+    .order('line')
+    .eq('articleId', articleId);
+  if (error) {
+    console.log(error.message);
+    return;
+  }
+  return data.map((item) => ({
+    ...item,
+    created_at: new Date(item.created_at),
+  })) as Sentence[];
 }

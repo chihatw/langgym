@@ -6,11 +6,17 @@ import {
   markLongVowel,
   removeMarks,
 } from '@/features/pitchLine/services/utils';
-import { useMemo, useState } from 'react';
-import { Article } from '../schema';
+import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState, useTransition } from 'react';
+import { Article, Sentence } from '../schema';
+import { batchInsertSentences } from '../services/actions';
 import SentencesMonitor from './SentencesMonitor';
 
-type Props = { article: Article };
+type Props = {
+  article: Article;
+  sentences?: Sentence[];
+};
 
 type FormProps = {
   japanese: string;
@@ -32,13 +38,37 @@ const INITIAL_STATE: FormProps = {
   disabled: true,
 };
 
-const ButchInputForm = ({ article }: Props) => {
+const ButchInputForm = ({ article, sentences }: Props) => {
+  const router = useRouter();
   const [value, setValue] = useState(INITIAL_STATE);
+  const [originalValue, setOriginalValue] = useState(INITIAL_STATE);
+  const [isPending, startTransigion] = useTransition();
 
   const result = useMemo(() => buildResult(value), [value]);
 
+  useEffect(() => {
+    if (!sentences) return;
+    const newValue = buildNewValue(sentences);
+    setValue(newValue);
+    setOriginalValue(newValue);
+  }, [sentences]);
+
   const action = async () => {
-    // todo
+    const sentences: Omit<Sentence, 'id' | 'created_at'>[] = result.map(
+      (item, line) => ({
+        ...item,
+        line,
+        articleId: article.id,
+      })
+    );
+    startTransigion(async () => {
+      const errMsg = await batchInsertSentences(article.id, sentences);
+      if (errMsg) {
+        setValue((prev) => ({ ...prev, errMsg }));
+        return;
+      }
+      router.push('/mng');
+    });
   };
 
   return (
@@ -105,9 +135,19 @@ const ButchInputForm = ({ article }: Props) => {
         }}
       />
       {result.length ? <SentencesMonitor sentences={result} /> : null}
-      <Button type='submit' disabled={value.disabled}>
+      <Button
+        type='submit'
+        disabled={
+          value.disabled || isPending || isSameValue(value, originalValue)
+        }
+        className='flex items-center gap-x-0.5 w-full'
+      >
         Submit
+        {isPending ? <Loader2 className='animate-spin' /> : null}
       </Button>
+      {value.errMsg ? (
+        <div className='text-xs text-red-500'>{value.errMsg}</div>
+      ) : null}
     </form>
   );
 };
@@ -129,4 +169,40 @@ function buildResult(value: FormProps) {
     };
   });
   return result;
+}
+
+function buildNewValue(sentences: Sentence[]) {
+  const _japanese: string[] = [];
+  const _original: string[] = [];
+  const _pitchStr: string[] = [];
+  const _chinese: string[] = [];
+
+  for (let i = 0; i < sentences.length; i++) {
+    const line = sentences[i];
+    _japanese.push(line.japanese);
+    _original.push(line.original);
+    _pitchStr.push(line.pitchStr);
+    _chinese.push(line.chinese);
+  }
+
+  const newValue: FormProps = {
+    japanese: _japanese.join('\n'),
+    original: _original.join('\n'),
+    _pitchStr: _pitchStr.join('\n'),
+    pitchStr: _pitchStr.join('\n'),
+    chinese: _chinese.join('\n'),
+    errMsg: '',
+    disabled: false,
+  };
+  return newValue;
+}
+
+function isSameValue(a: FormProps, b: FormProps) {
+  return (
+    a.japanese === b.japanese &&
+    a.original === b.original &&
+    a.pitchStr === b.pitchStr &&
+    a._pitchStr === b._pitchStr &&
+    a.chinese === b.chinese
+  );
 }
