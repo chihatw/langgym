@@ -34,6 +34,7 @@ export async function updateArticle(
     return error.message;
   }
   revalidatePath('/');
+  revalidatePath(`/article/${id}`);
   revalidatePath('/mng');
   return;
 }
@@ -72,5 +73,6 @@ export async function batchInsertSentences(
     return _error.message;
   }
 
+  revalidatePath(`/article/${articleId}`);
   revalidatePath(`/mng/article/${articleId}/batchInput`);
 }

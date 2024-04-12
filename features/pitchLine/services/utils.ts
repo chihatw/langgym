@@ -1,27 +1,12 @@
 import { hira2Kana } from '@/utils';
 import { ACCENT_MARK, LONG_VOWELS, MORA_VOWEL_MAP, YOUONS } from '../constants';
 
-export function buildMoras(input: string): string[] {
-  return input.split('').reduce((acc, cur, index) => {
-    // 拗音が含まれていない場合
-    if (!YOUONS.includes(cur)) {
-      return [...acc, cur];
-    }
-
-    // 拗音が含まれている場合
-    if (index === 0) throw new Error('拗音が先頭にある！');
-
-    acc[acc.length - 1] = acc.at(-1)! + cur;
-    return acc;
-  }, [] as string[]);
-}
-
 export function removeMarks(input: string) {
   return input.replace(/[、。「」？]/g, '');
 }
 
 export function markLongVowel(input: string) {
-  const moras = buildMoras(input);
+  const moras = buildMoras_no_remove_mark(input);
 
   const result: string[] = [];
   for (let i = 0; i < moras.length; i++) {
@@ -57,50 +42,65 @@ export function markLongVowel(input: string) {
   return result.join('');
 }
 
+export function buildMoras_no_remove_mark(input: string): string[] {
+  return input.split('').reduce((acc, cur, index) => {
+    // 拗音が含まれていない場合
+    if (!YOUONS.includes(cur)) {
+      return [...acc, cur];
+    }
+
+    // 拗音が含まれている場合
+    if (index === 0) throw new Error('拗音が先頭にある！');
+
+    acc[acc.length - 1] = acc.at(-1)! + cur;
+    return acc;
+  }, [] as string[]);
+}
+
+export function buildMoras(input: string) {
+  if (!input) return [];
+  const _input = input.replace(ACCENT_MARK, '');
+  return buildMoras_no_remove_mark(_input);
+}
+
 export const buildPitches = (pitchStr: string) => {
   // アクセントの位置からピッチを計算
-  const moras_with_mark = buildMoras(pitchStr);
-
-  // 最後尾が「＼」かどうか
-  const isOdaka = moras_with_mark.at(-1) === ACCENT_MARK;
+  const moras_with_mark = buildMoras_no_remove_mark(pitchStr);
 
   // 「＼」の位置確認、ない場合は0
   const pitchPoint = Math.max(moras_with_mark.indexOf(ACCENT_MARK), 0);
   // 「＼」の削除
   const moras = moras_with_mark.filter((m) => m !== ACCENT_MARK);
 
-  const pitches = moras.map((mora, index) => {
+  const pitches = moras.map((_, index) => {
     switch (pitchPoint) {
       // 平板型の場合、先頭以外が高ピッチ
       case 0:
-        return index !== 0 ? [mora, 'h'] : [mora];
+        return index !== 0;
       // 頭高型の場合、先頭だけが高ピッチ
       case 1:
-        return index === 0 ? [mora, 'h'] : [mora];
+        return index === 0;
       // それ以外は、先頭が低ピッチ、その後はピッチポイントまでが高ピッチ
       default:
         if (index === 0) {
-          return [mora];
+          return false;
         } else {
-          return index < pitchPoint ? [mora, 'h'] : [mora];
+          return index < pitchPoint;
         }
     }
   });
 
-  // 尾高の場合、最後に空文字を追加
-  if (isOdaka) pitches.push(['']);
-
   return pitches;
 };
 
-export const checkIsOdaka = (pitches: string[][]) => {
-  return (
-    pitches.length > 1 && // pitchesの長さが1より大きい
-    // pitchesの最後から二つ目が高ピッチ
-    !!pitches.at(-2)?.at(1) &&
-    // pitchesの最後が空文字列
-    pitches.at(-1)?.at(0) === ''
-  );
+export const buildHasAccent = (pitches: boolean[], isOdaka: boolean) => {
+  return pitches.map((pitch, index) => {
+    if (isOdaka) {
+      return index === pitches.length - 1;
+    }
+    const postPitch = pitches.at(index + 1);
+    return index < pitches.length - 1 && pitch && !postPitch;
+  });
 };
 
 // MORA_VOWEL_MAP 作成用

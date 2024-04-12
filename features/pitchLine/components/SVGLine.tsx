@@ -1,19 +1,13 @@
-const SVGLine = ({
-  isOdaka,
-  pitches,
-  width,
-}: {
-  isOdaka: boolean;
-  pitches: string[][];
-  width: number;
-}) => {
-  const { points, odakaLastPoint } = buildPoints(pitches, width);
-  const isKanaWord = pitches.every((pitch) => {
-    const mora = pitch.at(0) || '';
-    return /^[\p{scx=Hiragana}\p{scx=Katakana}]+$/u.test(mora);
-  });
+import { PITCH_LINE_WIDTH } from '../constants';
 
-  if (!isKanaWord) return <></>;
+const SVGLine = ({
+  pitches,
+  isOdaka,
+}: {
+  pitches: boolean[];
+  isOdaka: boolean;
+}) => {
+  const { points, odakaLastPoint } = buildPoints(pitches);
 
   return (
     <svg>
@@ -38,22 +32,24 @@ export default SVGLine;
 const HIGH_POSITION = 7.8;
 const LOW_POSITION = 17;
 
-const buildPoints = (pitches: string[][], width: number) => {
-  const points: number[] = [];
+const buildPoints = (pitches: boolean[]) => {
+  const points = pitches.reduce((acc, cur, index) => {
+    const isHigh = cur;
+    return [
+      ...acc,
+      PITCH_LINE_WIDTH * (1 / 2 + index),
+      isHigh ? HIGH_POSITION : LOW_POSITION,
+    ];
+  }, [] as number[]);
 
-  pitches.forEach((pitch, index) => {
-    points.push(width * (1 / 2 + index));
-    points.push(!!pitch.at(1) ? HIGH_POSITION : LOW_POSITION);
-  });
-
-  const lastXPos = width * (pitches.length - 1 / 2);
+  const lastXPos = PITCH_LINE_WIDTH * (pitches.length - 1 / 2);
 
   return {
     points: points.join(','),
     odakaLastPoint: [
       lastXPos,
       HIGH_POSITION,
-      lastXPos + width,
+      lastXPos + PITCH_LINE_WIDTH,
       LOW_POSITION,
     ].join(','),
   };

@@ -2,6 +2,8 @@ export const FULL_SPACE = '\u3000';
 
 export const ACCENT_MARK = '\uff3c';
 
+export const PITCH_LINE_WIDTH = 15;
+
 export const MORA_VOWEL_MAP: { [key: string]: string } = {
   あ: 'a',
   い: 'i',
