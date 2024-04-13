@@ -1,4 +1,5 @@
 import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
 type Props = {};
@@ -10,12 +11,12 @@ const items: { label: string; href: string }[] = [
 
 const MngHeader = (props: Props) => {
   return (
-    <div className='print:hidden'>
+    <div className='print:hidden space-x-2'>
       {items.map((item, index) => (
         <Link
           href={item.href}
           key={index}
-          className={buttonVariants({ variant: 'ghost' })}
+          className={cn(buttonVariants({ variant: 'ghost' }), 'p-2 h-6')}
         >
           {item.label}
         </Link>

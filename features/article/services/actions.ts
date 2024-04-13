@@ -4,6 +4,21 @@ import { createSupabaseServerActionClient } from '@/lib/supabase/actions';
 import { revalidatePath } from 'next/cache';
 import { Article, Sentence } from '../schema';
 
+function revalidatePath_article_list() {
+  revalidatePath('/');
+  revalidatePath('/mng');
+}
+
+function revalidatePath_article(id: number) {
+  revalidatePath('/');
+  revalidatePath('/mng');
+  revalidatePath(`/article/${id}`);
+  revalidatePath(`/mng/article/${id}/batchInput`);
+  revalidatePath(`/mng/article/${id}/edit`);
+  revalidatePath(`/mng/article/${id}/print`);
+  revalidatePath(`/mng/article/${id}/upload`);
+}
+
 export async function insertArticle(
   article: Omit<Article, 'id' | 'created_at'>
 ) {
@@ -12,8 +27,7 @@ export async function insertArticle(
   if (error) {
     return error.message;
   }
-  revalidatePath('/');
-  revalidatePath('/mng');
+  revalidatePath_article_list();
   return;
 }
 
@@ -33,9 +47,7 @@ export async function updateArticle(
   if (error) {
     return error.message;
   }
-  revalidatePath('/');
-  revalidatePath(`/article/${id}`);
-  revalidatePath('/mng');
+  revalidatePath_article(id);
   return;
 }
 
@@ -46,8 +58,7 @@ export async function deleteArticle(id: number) {
     console.log(error.message);
     return;
   }
-  revalidatePath('/');
-  revalidatePath('/mng');
+  revalidatePath_article_list();
   return;
 }
 
@@ -73,8 +84,7 @@ export async function batchInsertSentences(
     return _error.message;
   }
 
-  revalidatePath(`/article/${articleId}`);
-  revalidatePath(`/mng/article/${articleId}/batchInput`);
+  revalidatePath_article(articleId);
 }
 
 export async function updateArticleIsShowAccents(
@@ -89,8 +99,18 @@ export async function updateArticleIsShowAccents(
   if (error) {
     return error.message;
   }
-  revalidatePath('/');
-  revalidatePath(`/article/${id}`);
-  revalidatePath('/mng');
+  revalidatePath_article(id);
   return;
+}
+
+export async function updateArticleAudioPath(id: number, audioPath: string) {
+  const supabase = createSupabaseServerActionClient();
+  const { error } = await supabase
+    .from('articles')
+    .update({ audioPath })
+    .eq('id', id);
+  if (error) {
+    return error.message;
+  }
+  revalidatePath_article(id);
 }

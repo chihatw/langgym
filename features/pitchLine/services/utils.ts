@@ -1,4 +1,3 @@
-import { hira2Kana } from '@/utils';
 import { ACCENT_MARK, LONG_VOWELS, MORA_VOWEL_MAP, YOUONS } from '../constants';
 
 export function removeMarks(input: string) {
@@ -104,6 +103,14 @@ export const buildHasAccent = (pitches: boolean[], isOdaka: boolean) => {
 };
 
 // MORA_VOWEL_MAP 作成用
+
+const hira2Kana = (str: string): string => {
+  return str.replace(/[\u3041-\u3096]/g, function (match) {
+    var chr = match.charCodeAt(0) + 0x60;
+    return String.fromCharCode(chr);
+  });
+};
+
 const VOWELS = 'aiueo'.split('');
 
 function temp() {

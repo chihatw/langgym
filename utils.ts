@@ -19,3 +19,10 @@ export const hira2Kana = (str: string): string => {
     return String.fromCharCode(chr);
   });
 };
+
+export const blobToAudioBuffer = async (blob: Blob) => {
+  const audioContext = new AudioContext();
+  const arrayBuffer = await blob.arrayBuffer();
+  const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+  return audioBuffer;
+};

@@ -5,8 +5,10 @@ import {
   Edit2,
   Eye,
   EyeOff,
+  FileVolume,
   Printer,
   Trash2,
+  UploadCloud,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useOptimistic } from 'react';
@@ -20,9 +22,6 @@ type Props = {
 };
 
 const MngArticleListRow = ({ article, removeArticle, display }: Props) => {
-  const action = async () => {
-    //
-  };
   return (
     <div className='border-b border-black/20 px-2 py-1 text-sm grid grid-cols-[auto,1fr,auto] justify-between items-center gap-y-2'>
       <div className='pr-2 text-xs font-extralight text-gray-500'>
@@ -41,6 +40,16 @@ const MngArticleListRow = ({ article, removeArticle, display }: Props) => {
           className={buttonVariants({ size: 'icon', variant: 'ghost' })}
         >
           <AlignJustify className='h-5 w-5' />
+        </Link>
+        <Link
+          href={`/mng/article/${article.id}/upload`}
+          className={buttonVariants({ size: 'icon', variant: 'ghost' })}
+        >
+          {article.audioPath ? (
+            <FileVolume className='h-5 w-5' />
+          ) : (
+            <UploadCloud className='h-5 w-5' />
+          )}
         </Link>
         <Link
           href={`/mng/article/${article.id}/print`}
