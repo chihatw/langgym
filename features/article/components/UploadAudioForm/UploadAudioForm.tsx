@@ -1,8 +1,8 @@
 'use client';
 import { blobToAudioBuffer } from '@/utils';
 import { useEffect, useState } from 'react';
-import { Article, ArticleMark, Sentence } from '../schema';
-import { downloadAudioFile } from '../services/client';
+import { Article, ArticleMark, Sentence } from '../../schema';
+import { downloadAudioFile } from '../../services/client';
 import ArticleMarksForm from './ArtilceMarksForm';
 import DeleteAudioInput from './DeleteAudioInput';
 import UploadAudioInput from './UploadAudioInput';

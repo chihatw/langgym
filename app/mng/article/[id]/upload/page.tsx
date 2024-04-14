@@ -1,4 +1,4 @@
-import UploadAudioForm from '@/features/article/components/UploadAudioForm';
+import UploadAudioForm from '@/features/article/components/UploadAudioForm/UploadAudioForm';
 import {
   fetchArticleById,
   fetchArticleMarks,

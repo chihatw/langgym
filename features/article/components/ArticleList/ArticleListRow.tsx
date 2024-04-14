@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { Article } from '../schema';
-import { getYMDFromDateString } from '../services/utils';
+import { Article } from '../../schema';
+import { getYMDFromDateString } from '../../services/utils';
 
 const ArticleListRow = ({ article }: { article: Article }) => {
   const { year, month, day } = getYMDFromDateString(article.date);

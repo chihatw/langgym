@@ -3,8 +3,8 @@
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { Dispatch, SetStateAction, useTransition } from 'react';
-import { updateArticleAudioPath } from '../services/actions';
-import { deleteAudioFile } from '../services/client';
+import { updateArticleAudioPath } from '../../services/actions';
+import { deleteAudioFile } from '../../services/client';
 import { UploadAudioFormProps } from './UploadAudioForm';
 
 type Props = {

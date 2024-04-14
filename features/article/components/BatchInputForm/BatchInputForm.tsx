@@ -9,8 +9,8 @@ import {
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState, useTransition } from 'react';
-import { Article, Sentence } from '../schema';
-import { batchInsertSentences } from '../services/actions';
+import { Article, Sentence } from '../../schema';
+import { batchInsertSentences } from '../../services/actions';
 import SentencesMonitor from './SentencesMonitor';
 
 type Props = {

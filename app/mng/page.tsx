@@ -1,5 +1,5 @@
 import { buttonVariants } from '@/components/ui/button';
-import MngArticleList from '@/features/article/components/MngArticleList';
+import MngArticleList from '@/features/article/components/MngArtileList/MngArticleList';
 import { fetchArticles } from '@/features/article/services/server';
 import { fetchUsers } from '@/features/user/services/server';
 import Link from 'next/link';

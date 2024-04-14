@@ -1,4 +1,4 @@
-import BatchInputForm from '@/features/article/components/BatchInputForm';
+import BatchInputForm from '@/features/article/components/BatchInputForm/BatchInputForm';
 import {
   fetchArticleById,
   fetchSentencesByArticleId,

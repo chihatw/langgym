@@ -6,8 +6,8 @@ import AudioWave from '@/features/wave/components/AudioWave';
 import MarkLines from '@/features/wave/components/MarkLines';
 import { buildMarks } from '@/features/wave/services/utils';
 import { useRouter } from 'next/navigation';
-import { ArticleMark, Sentence } from '../schema';
-import { batchInsertArticleMarks } from '../services/actions';
+import { ArticleMark, Sentence } from '../../schema';
+import { batchInsertArticleMarks } from '../../services/actions';
 import ArticleMarksMonitor from './ArticleMarksMonitor';
 
 const CANVAS_WIDTH = 512;

@@ -1,4 +1,4 @@
-import { Article } from '../schema';
+import { Article } from '../../schema';
 import ArticleListRow from './ArticleListRow';
 
 type Props = { articles: Article[] };

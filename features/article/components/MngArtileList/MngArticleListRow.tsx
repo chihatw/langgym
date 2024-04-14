@@ -12,8 +12,11 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useOptimistic } from 'react';
-import { Article } from '../schema';
-import { deleteArticle, updateArticleIsShowAccents } from '../services/actions';
+import { Article } from '../../schema';
+import {
+  deleteArticle,
+  updateArticleIsShowAccents,
+} from '../../services/actions';
 
 type Props = {
   display: string;

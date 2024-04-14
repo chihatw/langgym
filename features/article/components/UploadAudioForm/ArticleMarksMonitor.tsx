@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 import { Play } from 'lucide-react';
 import { useMemo } from 'react';
-import { Sentence } from '../schema';
+import { Sentence } from '../../schema';
 
 type Props = {
   sentences: Sentence[];

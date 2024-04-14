@@ -1,7 +1,7 @@
 'use client';
 import { AppUser } from '@/features/user/schema';
 import { useOptimistic } from 'react';
-import { Article } from '../schema';
+import { Article } from '../../schema';
 import MngArticleListRow from './MngArticleListRow';
 
 type Props = {

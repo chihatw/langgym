@@ -5,9 +5,9 @@ import { Input } from '@/components/ui/input';
 import { blobToAudioBuffer } from '@/utils';
 import { Loader2 } from 'lucide-react';
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
-import { Article } from '../schema';
-import { updateArticleAudioPath } from '../services/actions';
-import { uploadAudioFile } from '../services/client';
+import { Article } from '../../schema';
+import { updateArticleAudioPath } from '../../services/actions';
+import { uploadAudioFile } from '../../services/client';
 import { UploadAudioFormProps } from './UploadAudioForm';
 
 type Props = {

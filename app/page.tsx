@@ -1,5 +1,5 @@
 import BorderLabel from '@/components/BorderLabel';
-import ArticleList from '@/features/article/components/ArticleList';
+import ArticleList from '@/features/article/components/ArticleList/ArticleList';
 import { fetchArticlesByUid } from '@/features/article/services/server';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 
