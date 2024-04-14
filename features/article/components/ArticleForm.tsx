@@ -167,11 +167,11 @@ const ArticleForm = ({ users, article }: Props) => {
           }))
         }
       />
-      <form action={action}>
+      <form action={action} className='grid'>
         <Button
           type='submit'
           disabled={value.disabled || isPending}
-          className='flex items-center gap-x-0.5 w-full'
+          className='flex items-center gap-x-0.5'
         >
           Submit
           {isPending ? <Loader2 className='animate-spin' /> : null}

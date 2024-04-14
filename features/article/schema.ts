@@ -18,3 +18,12 @@ export interface Sentence {
   original: string;
   created_at: Date;
 }
+
+export interface ArticleMark {
+  id: number;
+  line: number;
+  articleId: number;
+  start: number;
+  end: number;
+  created_at: Date;
+}

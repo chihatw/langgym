@@ -9,6 +9,41 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      article_marks: {
+        Row: {
+          articleId: number
+          created_at: string
+          end: number
+          id: number
+          line: number
+          start: number
+        }
+        Insert: {
+          articleId: number
+          created_at?: string
+          end: number
+          id?: number
+          line: number
+          start: number
+        }
+        Update: {
+          articleId?: number
+          created_at?: string
+          end?: number
+          id?: number
+          line?: number
+          start?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "article_marks_articleid_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       articles: {
         Row: {
           audioPath: string

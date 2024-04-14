@@ -2,7 +2,7 @@
 
 import { createSupabaseServerActionClient } from '@/lib/supabase/actions';
 import { revalidatePath } from 'next/cache';
-import { Article, Sentence } from '../schema';
+import { Article, ArticleMark, Sentence } from '../schema';
 
 function revalidatePath_article_list() {
   revalidatePath('/');
@@ -16,6 +16,11 @@ function revalidatePath_article(id: number) {
   revalidatePath(`/mng/article/${id}/batchInput`);
   revalidatePath(`/mng/article/${id}/edit`);
   revalidatePath(`/mng/article/${id}/print`);
+  revalidatePath(`/mng/article/${id}/upload`);
+}
+
+function revalidatePath_article_marks(id: number) {
+  revalidatePath(`/article/${id}`);
   revalidatePath(`/mng/article/${id}/upload`);
 }
 
@@ -113,4 +118,29 @@ export async function updateArticleAudioPath(id: number, audioPath: string) {
     return error.message;
   }
   revalidatePath_article(id);
+}
+
+export async function batchInsertArticleMarks(
+  articleId: number,
+  marks: Omit<ArticleMark, 'id' | 'created_at'>[]
+) {
+  const supabase = createSupabaseServerActionClient();
+
+  // 既存の articleMarks を削除
+  const { error } = await supabase
+    .from('article_marks')
+    .delete()
+    .eq('articleId', articleId);
+
+  if (error) {
+    return error.message;
+  }
+
+  // 新規作成
+  const { error: _error } = await supabase.from('article_marks').insert(marks);
+  if (_error) {
+    return _error.message;
+  }
+
+  revalidatePath_article_marks(articleId);
 }

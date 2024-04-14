@@ -1,16 +1,16 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import { blobToAudioBuffer } from '@/utils';
-import { Play } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
-import { Article, Sentence } from '../schema';
+import { useEffect, useState } from 'react';
+import { Article, ArticleMark, Sentence } from '../schema';
 import { downloadAudioFile } from '../services/client';
+import ArticleMarksForm from './ArtilceMarksForm';
 import DeleteAudioInput from './DeleteAudioInput';
 import UploadAudioInput from './UploadAudioInput';
 
 type Props = {
   article: Article;
   sentences: Sentence[];
+  marks: ArticleMark[];
 };
 
 export type UploadAudioFormProps = {
@@ -23,8 +23,7 @@ const INITIAL_STATE: UploadAudioFormProps = {
   errMsg: '',
 };
 
-const UploadAudioForm = ({ article, sentences }: Props) => {
-  const audioContext = useMemo(() => new AudioContext(), []);
+const UploadAudioForm = ({ article, sentences, marks }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
 
   useEffect(() => {
@@ -38,24 +37,15 @@ const UploadAudioForm = ({ article, sentences }: Props) => {
     })();
   }, [article]);
 
-  const playAudio = () => {
-    const sourceNode = audioContext.createBufferSource();
-    sourceNode.buffer = value.audioBuffer;
-    sourceNode.connect(audioContext.destination);
-    sourceNode.start();
-  };
-
   return (
     <div className='space-y-4'>
       {value.audioBuffer ? (
-        <div className='space-y-4'>
-          <div className='bg-white rounded text-4xl flex items-center justify-center h-32'>
-            wave
-          </div>
-          <Button size={'icon'} onClick={playAudio} className='w-full'>
-            <Play />
-          </Button>
-        </div>
+        <ArticleMarksForm
+          articleId={article.id}
+          sentences={sentences}
+          audioBuffer={value.audioBuffer}
+          articleMarks={marks}
+        />
       ) : null}
       {article.audioPath ? (
         <DeleteAudioInput articleId={article.id} setValue={setValue} />
