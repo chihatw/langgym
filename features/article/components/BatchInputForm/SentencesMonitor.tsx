@@ -26,13 +26,11 @@ const SentencesMonitor = ({ sentences, articleMarks, audioBuffer }: Props) => {
             <SentencePitchLine pitchStr={line.pitchStr} />
           </div>
           {articleMarks.at(index) && audioBuffer ? (
-            <div className='border-2 p-2 rounded'>
-              <AudioSlider
-                start={articleMarks.at(index)!.start}
-                end={articleMarks.at(index)!.end}
-                audioBuffer={audioBuffer}
-              />
-            </div>
+            <AudioSlider
+              start={articleMarks.at(index)!.start}
+              end={articleMarks.at(index)!.end}
+              audioBuffer={audioBuffer}
+            />
           ) : null}
         </div>
       ))}

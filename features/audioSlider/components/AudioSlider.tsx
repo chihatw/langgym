@@ -1,7 +1,15 @@
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Pause, Play } from 'lucide-react';
-import { useMemo, useRef, useState } from 'react';
+import {
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 type Props = {
   start: number;
@@ -9,104 +17,139 @@ type Props = {
   audioBuffer: AudioBuffer;
 };
 
+type FormProps = {
+  progress: number; // 0-100
+  isPlaying: boolean;
+};
+
+type RefProps = {
+  rafId: number;
+  isPaused: boolean;
+  startedAt: number;
+  sourceNode: AudioBufferSourceNode | undefined;
+  elapsedTime: number;
+  elaspedTime_at_last_time: number;
+};
+
 const AudioSlider = ({ start, end, audioBuffer }: Props) => {
-  const [value, setValue] = useState<{
-    progress: number;
-    isPlaying: boolean;
-  }>({ progress: 0, isPlaying: false });
-
-  const ref = useRef<{
-    rafId: number;
-    elapsedTime: number;
-    startedAt: number;
-    isPaused: boolean;
-    sourceNode: AudioBufferSourceNode | undefined;
-  }>({
-    rafId: 0,
-    elapsedTime: 0,
-    startedAt: 0,
-    isPaused: false,
-    sourceNode: undefined,
-  });
-
   const audioContext = useMemo(() => new AudioContext(), []);
 
-  const play = () => {
-    const _sourceNode = audioContext.createBufferSource();
-    _sourceNode.buffer = audioBuffer;
-    _sourceNode.connect(audioContext.destination);
+  // 描画変更を伴う変数
+  const [value, setValue] = useState<FormProps>({
+    progress: 0,
+    isPlaying: false,
+  });
 
-    ref.current = { ...ref.current, sourceNode: _sourceNode };
+  // 描画に直接関係のない変数
+  const ref = useRef<RefProps>({
+    rafId: 0,
+    isPaused: false,
+    startedAt: 0,
+    sourceNode: undefined,
+    elapsedTime: 0,
+    elaspedTime_at_last_time: 0,
+  });
 
-    //　pause または最後まで再生した時の処理
-    _sourceNode.onended = () => {
-      window.cancelAnimationFrame(ref.current.rafId);
+  // コンポーネント消滅時の処理
+  useEffect(() => {
+    return () => pause();
+  }, []);
 
-      // 最後まで再生した場合、経過時間をリセット
-      if (!ref.current.isPaused) {
-        ref.current = { ...ref.current, elapsedTime: 0 };
+  const handleEnded = (
+    ref: MutableRefObject<RefProps>,
+    setValue: Dispatch<SetStateAction<FormProps>>
+  ) => {
+    // pause の場合、何もしない
+    if (ref.current.isPaused) return;
 
-        setTimeout(() => {
-          setValue((prev) => ({ ...prev, progress: 0, isPlaying: false }));
-        }, 500);
-      } else {
-        setValue((prev) => ({ ...prev, isPlaying: false }));
-      }
+    // 最後まで再生した場合、
+    // アニメを止めて経過時間をリセットし、playing 状態を変更
+    window.cancelAnimationFrame(ref.current.rafId);
+    ref.current = {
+      ...ref.current,
+      elapsedTime: 0,
+      elaspedTime_at_last_time: 0,
     };
 
-    const _elapsedTime = ref.current.elapsedTime;
+    setTimeout(() => {
+      setValue((prev) => ({
+        ...prev,
+        progress: 0,
+        isPlaying: false,
+      }));
+    }, 500); // 余韻をもたせる
+  };
 
-    // elapsedTime が duration の範囲外の場合は、0 に変更する
-    if (_elapsedTime < 0 || _elapsedTime > end - start) {
-      ref.current = { ...ref.current, elapsedTime: 0 };
-      setTimeout(() => {
-        setValue((prev) => ({ ...prev, progress: 0 }));
-      }, 500);
-    }
+  const play = () => {
+    const sourceNode = audioContext.createBufferSource();
+    sourceNode.buffer = audioBuffer;
+    sourceNode.connect(audioContext.destination);
 
-    const _currentTime = audioContext.currentTime;
+    //　停止処理
+    sourceNode.onended = () => handleEnded(ref, setValue);
 
-    _sourceNode.start(_currentTime, start + _elapsedTime);
-    _sourceNode.stop(_currentTime + (end - start) - _elapsedTime);
+    // 再生処理
+    const offset = start + ref.current.elapsedTime;
+    const duration = end - start - ref.current.elapsedTime;
+    sourceNode.start(0, offset, duration); // 即時再生
 
-    // 経過時間の起点を更新
-    ref.current = { ...ref.current, startedAt: _currentTime, isPaused: false };
+    // 変数更新
+    ref.current = {
+      ...ref.current,
+      isPaused: false,
+      startedAt: audioContext.currentTime,
+      sourceNode,
+    };
 
-    setValue((prev) => ({ ...prev, isPlaying: true }));
+    setValue((prev) => ({
+      ...prev,
+      isPlaying: true,
+    }));
 
     loop();
   };
 
   const loop = () => {
-    const _currentTime = audioContext.currentTime;
-    const { elapsedTime, startedAt } = ref.current;
+    // loop
+    const rafId = window.requestAnimationFrame(loop);
 
-    // 経過時間を累積経過時間に追加
-    const _newElapsedTime = elapsedTime + _currentTime - startedAt;
+    // 今回、play の経過時間
+    const currentElapsedTime = audioContext.currentTime - ref.current.startedAt;
+
+    // 累計経過時間（前回 pause 時までの経過時間と合計）
+    const totalElapsedTime =
+      currentElapsedTime + ref.current.elaspedTime_at_last_time;
+
+    // 変数更新
+    ref.current = {
+      ...ref.current,
+      rafId,
+      elapsedTime: totalElapsedTime,
+    };
 
     setValue((prev) => ({
       ...prev,
-      progress: (_newElapsedTime / (end - start)) * 100,
+      progress: (totalElapsedTime / (end - start)) * 100,
     }));
-
-    const rafId = window.requestAnimationFrame(loop);
-
-    ref.current = {
-      ...ref.current,
-      elapsedTime: _newElapsedTime,
-      startedAt: _currentTime,
-      rafId,
-    };
   };
 
   const pause = () => {
+    window.cancelAnimationFrame(ref.current.rafId);
+
     !!ref.current.sourceNode && ref.current.sourceNode.stop(0);
 
-    ref.current = { ...ref.current, sourceNode: undefined, isPaused: true };
+    // 停止時点の累計経過時間を記録する
+    ref.current = {
+      ...ref.current,
+      isPaused: true,
+      sourceNode: undefined,
+      elaspedTime_at_last_time: ref.current.elapsedTime,
+    };
 
-    setValue((prev) => ({ ...prev, isPlaying: false }));
-
-    window.cancelAnimationFrame(ref.current.rafId);
+    setValue((prev) => ({
+      ...prev,
+      isPlaying: false,
+    }));
   };
 
   const handleClickPlayButton = () => {
@@ -118,27 +161,30 @@ const AudioSlider = ({ start, end, audioBuffer }: Props) => {
     if (typeof progress === 'undefined') return;
 
     pause();
-    setValue((prev) => ({
-      ...prev,
-      progress,
-    }));
 
     ref.current = {
       ...ref.current,
       elapsedTime: ((end - start) * progress) / 100,
     };
+
+    setValue((prev) => ({
+      ...prev,
+      progress,
+    }));
   };
   return (
-    <div className='flex items-center'>
+    <div className='grid grid-cols-[auto,1fr] items-center '>
       <Button size='icon' variant={'ghost'} onClick={handleClickPlayButton}>
         {value.isPlaying ? <Pause /> : <Play />}
       </Button>
-      <div className='flex items-center text-xs font-mono font-extralight text-gray-700 px-2'>
-        <Time seconds={((end - start) * value.progress) / 100} />
-        <span>/</span>
-        <Time seconds={end - start} />
+      <div className='grid grid-cols-[1fr,auto] items-center rounded py-3 pl-3 bg-slate-200'>
+        <Slider value={[value.progress]} onValueChange={handleSlide} />
+        <div className='flex items-center text-xs font-mono font-extralight text-gray-600 px-2'>
+          <Time seconds={((end - start) * value.progress) / 100} />
+          <span>/</span>
+          <Time seconds={end - start} />
+        </div>
       </div>
-      <Slider value={[value.progress]} onValueChange={handleSlide} min={0} />
     </div>
   );
 };

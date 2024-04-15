@@ -22,11 +22,11 @@ const SentenceRow = ({
       <div className='text-xs font-extrabold'>{index + 1}</div>
       <div className='p-0 text-sm'>{sentence.japanese}</div>
       <div className='text-[11px] text-[#52a2aa]'>{sentence.chinese}</div>
-      <div className='text-[11px] p-2 rounded bg-gray-200 text-gray-500'>
+      <div className='text-[11px] p-2 rounded bg-slate-200 text-slate-500'>
         {sentence.original}
       </div>
       {isShowAccents ? (
-        <div>
+        <div className='space-y-2'>
           <div className='p-2 rounded border-[0.5px] border-gray-500'>
             <SentencePitchLine pitchStr={sentence.pitchStr} />
           </div>
