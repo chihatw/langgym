@@ -1,29 +1,21 @@
-'use client';
-import { AppUser } from '@/features/user/schema';
-import { useOptimistic } from 'react';
-import { Article } from '../../schema';
-import MngArticleListRow from './MngArticleListRow';
+import { buttonVariants } from '@/components/ui/button';
+import MngHeader from '@/features/mng/components/MngHeader';
+import { fetchUsers } from '@/features/user/services/server';
+import Link from 'next/link';
+import { fetchArticles } from '../../services/server';
+import MngArticleListClientComponent from './MngArticleListClientComponent';
 
-type Props = {
-  articles: Article[];
-  users: AppUser[];
-};
-
-const MngArticleList = ({ articles, users }: Props) => {
-  const [opti_articles, removeArticle] = useOptimistic<Article[], number>(
-    articles,
-    (state, id) => state.filter((item) => item.id !== id)
-  );
+const MngArticleList = async () => {
+  const articles = await fetchArticles(10);
+  const users = await fetchUsers();
   return (
-    <div>
-      {opti_articles.map((article) => (
-        <MngArticleListRow
-          key={article.id}
-          article={article}
-          display={users.find(({ uid }) => uid === article.uid)?.display || ''}
-          removeArticle={removeArticle}
-        />
-      ))}
+    <div className='space-y-4 max-w-lg mx-auto pb-40'>
+      <MngHeader />
+      <div className='text-2xl font-extrabold'>Article List</div>
+      <Link href='/mng/article/new' className={buttonVariants()}>
+        Create New Article
+      </Link>
+      <MngArticleListClientComponent articles={articles} users={users} />
     </div>
   );
 };

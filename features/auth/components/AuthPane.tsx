@@ -1,6 +1,6 @@
 import { Button, buttonVariants } from '@/components/ui/button';
 import { User } from '@supabase/supabase-js';
-import { DoorClosed, DoorOpen, Settings } from 'lucide-react';
+import { AlignJustify, DoorClosed, DoorOpen } from 'lucide-react';
 import Link from 'next/link';
 import { signOut } from '../services/actions';
 
@@ -16,10 +16,10 @@ const AuthPane = ({ user }: Props) => {
           {user.email === process.env.NEXT_PUBLIC_SUPABASE_ADMIN_EMAIL ? (
             <div>
               <Link
-                href='/mng'
+                href='/article/list'
                 className={buttonVariants({ variant: 'ghost', size: 'icon' })}
               >
-                <Settings />
+                <AlignJustify />
               </Link>
             </div>
           ) : null}

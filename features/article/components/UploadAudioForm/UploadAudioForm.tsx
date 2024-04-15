@@ -41,7 +41,7 @@ const UploadAudioForm = ({ article, sentences, marks }: Props) => {
     <div className='space-y-4'>
       {value.audioBuffer ? (
         <ArticleMarksForm
-          articleId={article.id}
+          article={article}
           sentences={sentences}
           audioBuffer={value.audioBuffer}
           articleMarks={marks}

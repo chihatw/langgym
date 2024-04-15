@@ -1,19 +1,19 @@
-import BorderLabel from '@/components/BorderLabel';
 import ArticleList from '@/features/article/components/ArticleList/ArticleList';
-import { fetchArticlesByUid } from '@/features/article/services/server';
+import MngArticleList from '@/features/article/components/MngArtileList/MngArticleList';
 import { getUserFromServerSide } from '@/features/auth/services/server';
+import { getUserGroup } from '@/features/auth/services/utils';
 
 export default async function Home() {
   const user = await getUserFromServerSide();
 
   if (!user) return <></>;
 
-  const articles = await fetchArticlesByUid(user.id);
+  const userGroup = getUserGroup(user.email!);
 
-  return (
-    <div className='space-y-4'>
-      <BorderLabel label='最近の作文' />
-      <ArticleList articles={articles} />
-    </div>
-  );
+  switch (userGroup) {
+    case 'admin':
+      return <MngArticleList />;
+    default:
+      return <ArticleList uid={user.id} />;
+  }
 }

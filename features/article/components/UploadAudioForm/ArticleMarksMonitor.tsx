@@ -13,7 +13,6 @@ type Props = {
 const ArticleMarksMonitor = ({ sentences, marks, audioBuffer }: Props) => {
   return (
     <div className='space-y-4'>
-      <div className='text-xs font-extralight text-gray-500'>{`${marks.length} / ${sentences.length}`}</div>
       {sentences.map((sentence, index) => (
         <ArticleMarkMonitorRow
           key={index}
@@ -63,7 +62,7 @@ const ArticleMarkMonitorRow = ({
         <div>{sentence.japanese}</div>
         <SentencePitchLine pitchStr={sentence.pitchStr} />
         <div className='flex gap-x-2 justify-end'>
-          <div className='flex gap-x-2 items-center p-1 pr-3 rounded bg-gray-200'>
+          <div className='grid grid-cols-[auto,64px] items-center p-1 pr-3 rounded bg-gray-200'>
             {typeof start !== 'undefined' && typeof end !== 'undefined' ? (
               <Button
                 size={'icon'}
@@ -76,7 +75,7 @@ const ArticleMarkMonitorRow = ({
 
             <div>{`start: ${start}`}</div>
           </div>
-          <div className='flex gap-x-2 items-center p-1 pr-3 rounded bg-gray-200'>
+          <div className='grid grid-cols-[auto,64px] gap-x-2 items-center p-1 pr-3 rounded bg-gray-200'>
             {typeof start !== 'undefined' && typeof end !== 'undefined' ? (
               <Button
                 size={'icon'}

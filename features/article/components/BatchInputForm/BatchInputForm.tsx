@@ -67,7 +67,7 @@ const ButchInputForm = ({ article, sentences }: Props) => {
         setValue((prev) => ({ ...prev, errMsg }));
         return;
       }
-      router.push('/mng');
+      router.push('/');
     });
   };
 

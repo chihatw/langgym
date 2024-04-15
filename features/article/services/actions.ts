@@ -6,12 +6,10 @@ import { Article, ArticleMark, Sentence } from '../schema';
 
 function revalidatePath_article_list() {
   revalidatePath('/');
-  revalidatePath('/mng');
 }
 
 function revalidatePath_article(id: number) {
   revalidatePath('/');
-  revalidatePath('/mng');
   revalidatePath(`/article/${id}`);
   revalidatePath(`/mng/article/${id}/batchInput`);
   revalidatePath(`/mng/article/${id}/edit`);

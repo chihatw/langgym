@@ -74,7 +74,7 @@ const ArticleForm = ({ users, article }: Props) => {
         setValue((prev) => ({ ...prev, errMsg }));
         return;
       }
-      router.push('/mng');
+      router.push('/');
     });
   };
   const update = () => {
@@ -90,7 +90,7 @@ const ArticleForm = ({ users, article }: Props) => {
         setValue((prev) => ({ ...prev, errMsg }));
         return;
       }
-      router.push('/mng');
+      router.push('/');
     });
   };
 

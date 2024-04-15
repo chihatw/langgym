@@ -2,11 +2,12 @@ import { Button } from '@/components/ui/button';
 import { Loader2, Play } from 'lucide-react';
 import { useEffect, useMemo, useState, useTransition } from 'react';
 
+import { Slider } from '@/components/ui/slider';
 import AudioWave from '@/features/wave/components/AudioWave';
 import MarkLines from '@/features/wave/components/MarkLines';
 import { buildMarks } from '@/features/wave/services/utils';
 import { useRouter } from 'next/navigation';
-import { ArticleMark, Sentence } from '../../schema';
+import { Article, ArticleMark, Sentence } from '../../schema';
 import { batchInsertArticleMarks } from '../../services/actions';
 import ArticleMarksMonitor from './ArticleMarksMonitor';
 
@@ -17,14 +18,14 @@ const INITIAL_SILENT_DURATION = 700;
 type Props = {
   audioBuffer: AudioBuffer;
   sentences: Sentence[];
-  articleId: number;
+  article: Article;
   articleMarks: ArticleMark[];
 };
 
 const ArticleMarksForm = ({
   audioBuffer,
   sentences,
-  articleId,
+  article,
   articleMarks,
 }: Props) => {
   const router = useRouter();
@@ -57,17 +58,22 @@ const ArticleMarksForm = ({
     sourceNode.start(0, start, end - start);
   };
 
+  const handleSlide = (value: number[]) => {
+    if (!value.at(0)) return;
+    setSilentDuration(value.at(0)!);
+  };
+
   const action = async () => {
     const newArticleMarks: Omit<ArticleMark, 'id' | 'created_at'>[] = marks.map(
-      (mark, index) => ({ ...mark, line: index, articleId })
+      (mark, index) => ({ ...mark, line: index, articleId: article.id })
     );
     startTransition(async () => {
-      const errMsg = await batchInsertArticleMarks(articleId, newArticleMarks);
+      const errMsg = await batchInsertArticleMarks(article.id, newArticleMarks);
       if (errMsg) {
         console.log(errMsg);
         return;
       }
-      router.push('/mng');
+      router.push('/');
     });
   };
 
@@ -93,6 +99,19 @@ const ArticleMarksForm = ({
           />
         </div>
       </div>
+      <div>
+        <div className='text-xs text-gray-500 font-extralight'>
+          <div>{silentDuration}</div>
+          <div>{`${marks.length} / ${sentences.length}`}</div>
+        </div>
+        <Slider
+          min={300}
+          max={700}
+          className='py-2'
+          defaultValue={[silentDuration]}
+          onValueChange={handleSlide}
+        />
+      </div>
       <Button size={'icon'} onClick={playAudio} className='w-full'>
         <Play />
       </Button>
@@ -104,7 +123,9 @@ const ArticleMarksForm = ({
       <form className='grid' action={action}>
         <Button
           type={'submit'}
-          disabled={sentences.length !== marks.length || isPending}
+          disabled={
+            sentences.length !== marks.length || !article.audioPath || isPending
+          }
           className='flex items-center gap-x-0.5'
         >
           Submit
