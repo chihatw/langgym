@@ -1,5 +1,5 @@
+import MngHeader from '@/components/mngHeader';
 import { buttonVariants } from '@/components/ui/button';
-import MngHeader from '@/features/mng/components/MngHeader';
 import { fetchUsers } from '@/features/user/services/server';
 import Link from 'next/link';
 import { fetchArticles } from '../../services/server';

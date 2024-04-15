@@ -1,4 +1,4 @@
-import MngHeader from '@/features/mng/components/MngHeader';
+import MngHeader from '@/components/mngHeader';
 
 export default function ManagementLayout({
   children,

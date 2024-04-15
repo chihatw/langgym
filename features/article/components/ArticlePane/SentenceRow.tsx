@@ -1,3 +1,4 @@
+import AudioSlider from '@/features/audioSlider/components/AudioSlider';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 import { ArticleMark, Sentence } from '../../schema';
 
@@ -6,9 +7,11 @@ type Props = {
   index: number;
   isShowAccents: boolean;
   articleMark?: ArticleMark;
+  audioBuffer: AudioBuffer | null;
 };
 
 const SentenceRow = ({
+  audioBuffer,
   sentence,
   index,
   isShowAccents,
@@ -27,6 +30,13 @@ const SentenceRow = ({
           <div className='p-2 rounded border-[0.5px] border-gray-500'>
             <SentencePitchLine pitchStr={sentence.pitchStr} />
           </div>
+          {articleMark && audioBuffer ? (
+            <AudioSlider
+              start={articleMark.start}
+              end={articleMark.end}
+              audioBuffer={audioBuffer}
+            />
+          ) : null}
         </div>
       ) : null}
     </div>

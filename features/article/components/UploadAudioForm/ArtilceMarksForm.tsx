@@ -30,7 +30,7 @@ const ArticleMarksForm = ({
 }: Props) => {
   const router = useRouter();
   const [marks, setMarks] = useState<{ start: number; end: number }[]>([]);
-  const [silentDuration, setSilentDuration] = useState(INITIAL_SILENT_DURATION); // todo add duration slider to ArticleMarksForm
+  const [silentDuration, setSilentDuration] = useState(INITIAL_SILENT_DURATION);
   const [isPending, startTransition] = useTransition();
   const audioContext = useMemo(() => new AudioContext(), []);
 

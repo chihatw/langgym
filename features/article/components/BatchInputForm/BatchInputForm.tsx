@@ -6,16 +6,19 @@ import {
   markLongVowel,
   removeMarks,
 } from '@/features/pitchLine/services/utils';
+import { blobToAudioBuffer } from '@/utils';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState, useTransition } from 'react';
-import { Article, Sentence } from '../../schema';
+import { Article, ArticleMark, Sentence } from '../../schema';
 import { batchInsertSentences } from '../../services/actions';
+import { downloadAudioFile } from '../../services/client';
 import SentencesMonitor from './SentencesMonitor';
 
 type Props = {
   article: Article;
   sentences?: Sentence[];
+  articleMarks: ArticleMark[];
 };
 
 type FormProps = {
@@ -26,6 +29,7 @@ type FormProps = {
   chinese: string;
   errMsg: string;
   disabled: boolean;
+  audioBuffer: AudioBuffer | null;
 };
 
 const INITIAL_STATE: FormProps = {
@@ -36,9 +40,10 @@ const INITIAL_STATE: FormProps = {
   chinese: '',
   errMsg: '',
   disabled: true,
+  audioBuffer: null,
 };
 
-const ButchInputForm = ({ article, sentences }: Props) => {
+const ButchInputForm = ({ article, sentences, articleMarks }: Props) => {
   const router = useRouter();
   const [value, setValue] = useState(INITIAL_STATE);
   const [originalValue, setOriginalValue] = useState(INITIAL_STATE);
@@ -49,9 +54,22 @@ const ButchInputForm = ({ article, sentences }: Props) => {
   useEffect(() => {
     if (!sentences) return;
     const newValue = buildNewValue(sentences);
-    setValue(newValue);
     setOriginalValue(newValue);
-  }, [sentences]);
+
+    if (!article.audioPath) {
+      setValue(newValue);
+    } else {
+      (async () => {
+        const blob = await downloadAudioFile(article.audioPath);
+        if (!blob) return;
+
+        const audioBuffer = await blobToAudioBuffer(blob);
+        if (!audioBuffer) return;
+
+        setValue({ ...newValue, audioBuffer });
+      })();
+    }
+  }, [sentences, article]);
 
   const action = async () => {
     const sentences: Omit<Sentence, 'id' | 'created_at'>[] = result.map(
@@ -72,7 +90,7 @@ const ButchInputForm = ({ article, sentences }: Props) => {
   };
 
   return (
-    <form className='grid gap-y-4' action={action}>
+    <div className='grid gap-y-4'>
       <Textarea
         placeholder='Japanese'
         value={value.japanese}
@@ -134,21 +152,29 @@ const ButchInputForm = ({ article, sentences }: Props) => {
           }));
         }}
       />
-      {result.length ? <SentencesMonitor sentences={result} /> : null}
-      <Button
-        type='submit'
-        disabled={
-          value.disabled || isPending || isSameValue(value, originalValue)
-        }
-        className='flex items-center gap-x-0.5 w-full'
-      >
-        Submit
-        {isPending ? <Loader2 className='animate-spin' /> : null}
-      </Button>
+      {result.length ? (
+        <SentencesMonitor
+          sentences={result}
+          articleMarks={articleMarks}
+          audioBuffer={value.audioBuffer}
+        />
+      ) : null}
+      <form action={action}>
+        <Button
+          type='submit'
+          disabled={
+            value.disabled || isPending || isSameValue(value, originalValue)
+          }
+          className='flex items-center gap-x-0.5 w-full'
+        >
+          Submit
+          {isPending ? <Loader2 className='animate-spin' /> : null}
+        </Button>
+      </form>
       {value.errMsg ? (
         <div className='text-xs text-red-500'>{value.errMsg}</div>
       ) : null}
-    </form>
+    </div>
   );
 };
 
@@ -193,6 +219,7 @@ function buildNewValue(sentences: Sentence[]) {
     chinese: _chinese.join('\n'),
     errMsg: '',
     disabled: false,
+    audioBuffer: null,
   };
   return newValue;
 }
