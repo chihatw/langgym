@@ -1,8 +1,9 @@
 'use client';
 import AudioPlayButton from '@/components/AudioPlayButton';
+import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Loader2, PauseCircle, Play } from 'lucide-react';
+import { PauseCircle, Play } from 'lucide-react';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { ArticleMark, Sentence } from '../../../schema';
 import { upsertArticleRecordedAssignment } from '../../../services/actions';
@@ -101,16 +102,9 @@ const CheckAudioModal = ({
         <Button variant={'outline'} onClick={handleReset}>
           重新錄音
         </Button>
-        <form action={action}>
-          <Button
-            type='submit'
-            disabled={isPending}
-            className='flex items-center gap-x-0.5 w-full'
-          >
-            錄音檔沒有唸錯
-            {isPending ? <Loader2 className='animate-spin' /> : null}
-          </Button>
-        </form>
+        <SubmitServerActionButton action={action} isPending={isPending}>
+          錄音檔沒有唸錯
+        </SubmitServerActionButton>
       </DialogContent>
     </Dialog>
   );

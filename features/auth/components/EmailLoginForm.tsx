@@ -1,9 +1,8 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Input } from '@/components/ui/input';
 import { isValidEmail } from '@/utils';
-import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { signInWithEmailAndPassword } from '../services/actions';
@@ -13,14 +12,12 @@ type Props = {};
 type FormProps = {
   email: string;
   password: string;
-  disabled: boolean;
   errMsg: string;
 };
 
 const INITIAL_STATE: FormProps = {
   email: '',
   password: '',
-  disabled: true,
   errMsg: '',
 };
 
@@ -45,11 +42,7 @@ const EmailLoginForm = (props: Props) => {
   };
 
   return (
-    <form
-      className='grid max-w-sm mx-auto gap-4 pt-20'
-      action={action}
-      autoComplete='off'
-    >
+    <div className='grid max-w-sm mx-auto gap-4 pt-20'>
       <Input
         type='email'
         placeholder='Email'
@@ -59,9 +52,9 @@ const EmailLoginForm = (props: Props) => {
             ...prev,
             email: e.target.value,
             errMsg: '',
-            disabled: !isValidEmail(e.target.value) || prev.password.length < 6,
           }))
         }
+        autoComplete='off'
       />
       <Input
         type='password'
@@ -72,22 +65,19 @@ const EmailLoginForm = (props: Props) => {
             ...prev,
             password: e.target.value,
             errMsg: '',
-            disabled: !isValidEmail(prev.email) || e.target.value.length < 6,
           }))
         }
+        autoComplete='off'
       />
-      <Button
-        type='submit'
-        disabled={value.disabled || isPending}
-        className='flex items-center gap-x-0.5'
+      <SubmitServerActionButton
+        action={action}
+        isPending={isPending}
+        disabled={!isValidEmail(value.email) || value.password.length < 6}
+        errMsg={value.errMsg}
       >
         Login
-        {isPending ? <Loader2 className='animate-spin' /> : null}
-      </Button>
-      {value.errMsg ? (
-        <div className='text-xs text-red-500'>{value.errMsg}</div>
-      ) : null}
-    </form>
+      </SubmitServerActionButton>
+    </div>
   );
 };
 

@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button';
-import { Loader2, Play } from 'lucide-react';
+import { Play } from 'lucide-react';
 import { useEffect, useMemo, useState, useTransition } from 'react';
 
+import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Slider } from '@/components/ui/slider';
 import AudioWave from '@/features/wave/components/AudioWave';
 import MarkLines from '@/features/wave/components/MarkLines';
@@ -120,18 +121,13 @@ const ArticleMarksForm = ({
         marks={marks}
         audioBuffer={audioBuffer}
       />
-      <form className='grid' action={action}>
-        <Button
-          type={'submit'}
-          disabled={
-            sentences.length !== marks.length || !article.audioPath || isPending
-          }
-          className='flex items-center gap-x-0.5'
-        >
-          Submit
-          {isPending ? <Loader2 className='animate-spin' /> : null}
-        </Button>
-      </form>
+      <SubmitServerActionButton
+        action={action}
+        isPending={isPending}
+        disabled={sentences.length !== marks.length || !article.audioPath}
+      >
+        Submit
+      </SubmitServerActionButton>
     </div>
   );
 };

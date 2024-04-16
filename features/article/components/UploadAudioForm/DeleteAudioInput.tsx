@@ -1,7 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
+import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { updateArticleAudioPath } from '../../services/actions';
 import { deleteAudioFile } from '../../services/client';
@@ -38,16 +37,13 @@ const DeleteAudioInput = ({ articleId, setValue }: Props) => {
     });
   };
   return (
-    <form className='grid' action={action}>
-      <Button
-        type='submit'
-        disabled={isPending}
-        className='flex items-center gap-x-0.5 bg-red-500'
-      >
-        Delete Audio File
-        {isPending ? <Loader2 className='animate-spin' /> : null}
-      </Button>
-    </form>
+    <SubmitServerActionButton
+      action={action}
+      isPending={isPending}
+      className='bg-red-500'
+    >
+      Delete Audio File
+    </SubmitServerActionButton>
   );
 };
 

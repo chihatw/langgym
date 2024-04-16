@@ -1,4 +1,5 @@
 'use client';
+import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
@@ -16,7 +17,7 @@ import {
 } from '@/components/ui/select';
 import { AppUser } from '@/features/user/schema';
 import { format } from 'date-fns';
-import { CalendarIcon, Loader2 } from 'lucide-react';
+import { CalendarIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
 import { Article } from '../schema';
@@ -74,7 +75,7 @@ const ArticleForm = ({ users, article }: Props) => {
         setValue((prev) => ({ ...prev, errMsg }));
         return;
       }
-      router.push('/');
+      router.push(`/?ts=${Date.now()}`);
     });
   };
   const update = () => {
@@ -167,19 +168,14 @@ const ArticleForm = ({ users, article }: Props) => {
           }))
         }
       />
-      <form action={action} className='grid'>
-        <Button
-          type='submit'
-          disabled={value.disabled || isPending}
-          className='flex items-center gap-x-0.5'
-        >
-          Submit
-          {isPending ? <Loader2 className='animate-spin' /> : null}
-        </Button>
-      </form>
-      {value.errMsg ? (
-        <div className='text-xs text-red-500'>{value.errMsg}</div>
-      ) : null}
+      <SubmitServerActionButton
+        errMsg={value.errMsg}
+        disabled={value.disabled}
+        isPending={isPending}
+        action={action}
+      >
+        Submit
+      </SubmitServerActionButton>
     </div>
   );
 };

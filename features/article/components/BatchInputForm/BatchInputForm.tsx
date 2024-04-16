@@ -1,15 +1,15 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 
+import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import {
   markLongVowel,
   removeMarks,
 } from '@/features/pitchLine/services/utils';
 import { blobToAudioBuffer } from '@/utils';
-import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState, useTransition } from 'react';
+import BuildArticlePitchQuizButton from '../../../quiz/components/BuildArticlePitchQuizButton';
 import { Article, ArticleMark, Sentence } from '../../schema';
 import { batchInsertSentences } from '../../services/actions';
 import { downloadAudioFile } from '../../services/client';
@@ -17,7 +17,7 @@ import SentencesMonitor from './SentencesMonitor';
 
 type Props = {
   article: Article;
-  sentences?: Sentence[];
+  sentences: Sentence[];
   articleMarks: ArticleMark[];
 };
 
@@ -52,7 +52,7 @@ const ButchInputForm = ({ article, sentences, articleMarks }: Props) => {
   const result = useMemo(() => buildResult(value), [value]);
 
   useEffect(() => {
-    if (!sentences) return;
+    if (!sentences.length) return;
     const newValue = buildNewValue(sentences);
     setOriginalValue(newValue);
 
@@ -72,7 +72,7 @@ const ButchInputForm = ({ article, sentences, articleMarks }: Props) => {
   }, [sentences, article]);
 
   const action = async () => {
-    const sentences: Omit<Sentence, 'id' | 'created_at'>[] = result.map(
+    const _sentences: Omit<Sentence, 'id' | 'created_at'>[] = result.map(
       (item, line) => ({
         ...item,
         line,
@@ -80,7 +80,7 @@ const ButchInputForm = ({ article, sentences, articleMarks }: Props) => {
       })
     );
     startTransigion(async () => {
-      const errMsg = await batchInsertSentences(article.id, sentences);
+      const errMsg = await batchInsertSentences(article.id, _sentences);
       if (errMsg) {
         setValue((prev) => ({ ...prev, errMsg }));
         return;
@@ -159,20 +159,17 @@ const ButchInputForm = ({ article, sentences, articleMarks }: Props) => {
           audioBuffer={value.audioBuffer}
         />
       ) : null}
-      <form action={action}>
-        <Button
-          type='submit'
-          disabled={
-            value.disabled || isPending || isSameValue(value, originalValue)
-          }
-          className='flex items-center gap-x-0.5 w-full'
-        >
-          Submit
-          {isPending ? <Loader2 className='animate-spin' /> : null}
-        </Button>
-      </form>
-      {value.errMsg ? (
-        <div className='text-xs text-red-500'>{value.errMsg}</div>
+      <SubmitServerActionButton
+        action={action}
+        isPending={isPending}
+        disabled={value.disabled || isSameValue(value, originalValue)}
+        errMsg={value.errMsg}
+      >
+        Submit
+      </SubmitServerActionButton>
+
+      {!!sentences.length ? (
+        <BuildArticlePitchQuizButton article={article} sentences={sentences} />
       ) : null}
     </div>
   );

@@ -44,6 +44,99 @@ export type Database = {
           },
         ]
       }
+      article_pitch_quiz_answers: {
+        Row: {
+          created_at: string
+          id: number
+          pitchStr: string
+          quizId: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          pitchStr: string
+          quizId: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          pitchStr?: string
+          quizId?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_article_pitch_quiz_answers_quizId_fkey"
+            columns: ["quizId"]
+            isOneToOne: false
+            referencedRelation: "article_pitch_quizzes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      article_pitch_quiz_questions: {
+        Row: {
+          created_at: string
+          id: number
+          line: number
+          lockedIndexes: string
+          quizId: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          line: number
+          lockedIndexes: string
+          quizId: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          line?: number
+          lockedIndexes?: string
+          quizId?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_article_pitch_questions_articlePitchQuizId_fkey"
+            columns: ["quizId"]
+            isOneToOne: false
+            referencedRelation: "article_pitch_quizzes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      article_pitch_quizzes: {
+        Row: {
+          articleId: number
+          created_at: string
+          hasAudio: boolean
+          id: number
+          title: string
+        }
+        Insert: {
+          articleId: number
+          created_at?: string
+          hasAudio?: boolean
+          id?: number
+          title: string
+        }
+        Update: {
+          articleId?: number
+          created_at?: string
+          hasAudio?: boolean
+          id?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       article_recorded_assignments: {
         Row: {
           articleId: number

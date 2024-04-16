@@ -6,7 +6,7 @@ type Props = {};
 
 const items: { label: string; href: string }[] = [
   { label: 'article list', href: '/' },
-  { label: 'dummy', href: '/' },
+  { label: 'quiz', href: '/mng/quiz/list' },
 ];
 
 const MngHeader = (props: Props) => {

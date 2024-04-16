@@ -1,9 +1,8 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Input } from '@/components/ui/input';
 import { blobToAudioBuffer } from '@/utils';
-import { Loader2 } from 'lucide-react';
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
 import { Article } from '../../schema';
 import { updateArticleAudioPath } from '../../services/actions';
@@ -65,21 +64,17 @@ const UploadAudioInput = ({ article, value, setValue }: Props) => {
     });
   };
   return (
-    <form className='grid gap-y-4' action={action}>
+    <div className='grid gap-y-4'>
       <Input name='audio' type='file' onChange={handleSelectFile} />
-      <Button
-        type='submit'
-        name='file'
-        disabled={!value.audioBuffer || isPending}
-        className='flex items-center gap-x-0.5 w-full'
+      <SubmitServerActionButton
+        action={action}
+        isPending={isPending}
+        disabled={!value.audioBuffer}
+        errMsg={value.errMsg}
       >
         Upload File
-        {isPending ? <Loader2 className='animate-spin' /> : null}
-      </Button>
-      {value.errMsg ? (
-        <div className='text-xs text-red-500'>{value.errMsg}</div>
-      ) : null}
-    </form>
+      </SubmitServerActionButton>
+    </div>
   );
 };
 
