@@ -44,6 +44,38 @@ export type Database = {
           },
         ]
       }
+      article_recorded_assignments: {
+        Row: {
+          articleId: number
+          audioPath: string
+          created_at: string
+          id: number
+          line: number
+        }
+        Insert: {
+          articleId: number
+          audioPath: string
+          created_at?: string
+          id?: number
+          line: number
+        }
+        Update: {
+          articleId?: number
+          audioPath?: string
+          created_at?: string
+          id?: number
+          line?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_article_recorded_assinments_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       articles: {
         Row: {
           audioPath: string

@@ -1,10 +1,8 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 
-export async function uploadAudioFile(file: File, path: string) {
+export async function uploadAudioFile(file: Blob, path: string) {
   const supabase = createSupabaseClientComponentClient();
-  const { data, error } = await supabase.storage
-    .from('audio')
-    .upload(path, file);
+  const { error } = await supabase.storage.from('audio').upload(path, file);
   if (error) {
     return error.message;
   }

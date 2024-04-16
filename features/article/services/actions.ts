@@ -2,7 +2,12 @@
 
 import { createSupabaseServerActionClient } from '@/lib/supabase/actions';
 import { revalidatePath } from 'next/cache';
-import { Article, ArticleMark, Sentence } from '../schema';
+import {
+  Article,
+  ArticleMark,
+  ArticleRecordedAssignment,
+  Sentence,
+} from '../schema';
 
 function revalidatePath_article_list() {
   revalidatePath('/');
@@ -141,4 +146,34 @@ export async function batchInsertArticleMarks(
   }
 
   revalidatePath_article_marks(articleId);
+}
+
+export async function upsertArticleRecordedAssignment(
+  articleId: number,
+  assignment: Omit<ArticleRecordedAssignment, 'id' | 'created_at'>
+) {
+  const supabase = createSupabaseServerActionClient();
+  const { error } = await supabase
+    .from('article_recorded_assignments')
+    .upsert(assignment)
+    .select();
+  if (error) {
+    return error.message;
+  }
+  revalidatePath(`/article/${articleId}`);
+}
+
+export async function deleteArticleRecordedAssignment(
+  articleId: number,
+  id: number
+) {
+  const supabase = createSupabaseServerActionClient();
+  const { error } = await supabase
+    .from('article_recorded_assignments')
+    .delete()
+    .eq('id', id);
+  if (error) {
+    return error.message;
+  }
+  revalidatePath(`/article/${articleId}`);
 }

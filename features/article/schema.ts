@@ -27,3 +27,11 @@ export interface ArticleMark {
   end: number;
   created_at: Date;
 }
+
+export interface ArticleRecordedAssignment {
+  id: number;
+  line: number;
+  articleId: number;
+  audioPath: string;
+  created_at: Date;
+}

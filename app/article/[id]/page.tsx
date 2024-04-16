@@ -2,6 +2,7 @@ import ArticlePane from '@/features/article/components/ArticlePane/ArticlePane';
 import {
   fetchArticleById_Uid,
   fetchArticleMarks,
+  fetchArticleRecordedAssignments,
   fetchSentencesByArticleId,
 } from '@/features/article/services/server';
 import { getUserFromServerSide } from '@/features/auth/services/server';
@@ -19,6 +20,9 @@ const ArticlePage = async ({ params: { id } }: Props) => {
 
   const sentences = await fetchSentencesByArticleId(article.id);
   const articleMarks = await fetchArticleMarks(article.id);
+  const articleRecordedAssignments = await fetchArticleRecordedAssignments(
+    article.id
+  );
 
   return (
     <div className='space-y-4 max-w-lg mx-auto pt-10 pb-40'>
@@ -26,6 +30,7 @@ const ArticlePage = async ({ params: { id } }: Props) => {
         article={article}
         sentences={sentences}
         articleMarks={articleMarks}
+        articleRecordedAssignments={articleRecordedAssignments}
       />
     </div>
   );

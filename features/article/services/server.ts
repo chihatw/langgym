@@ -1,5 +1,10 @@
 import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
-import { Article, ArticleMark, Sentence } from '../schema';
+import {
+  Article,
+  ArticleMark,
+  ArticleRecordedAssignment,
+  Sentence,
+} from '../schema';
 
 export async function fetchArticles(limit: number): Promise<Article[]> {
   const supabase = createSupabaseServerComponentClient();
@@ -117,5 +122,25 @@ export async function fetchArticleMarks(
   return data.map((item) => ({
     ...item,
     created_at: new Date(item.created_at),
-  })) as ArticleMark[];
+  }));
+}
+
+export async function fetchArticleRecordedAssignments(
+  articleId: number
+): Promise<ArticleRecordedAssignment[]> {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('article_recorded_assignments')
+    .select('*')
+    .order('line')
+    .eq('articleId', articleId);
+
+  if (error) {
+    console.log(error.message);
+    return [];
+  }
+  return data.map((item) => ({
+    ...item,
+    created_at: new Date(item.created_at),
+  }));
 }

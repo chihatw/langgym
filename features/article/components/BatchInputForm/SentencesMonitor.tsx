@@ -1,4 +1,4 @@
-import AudioSlider from '@/features/audioSlider/components/AudioSlider';
+import AudioSlider from '@/components/AudioSlider';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 import { ArticleMark } from '../../schema';
 
