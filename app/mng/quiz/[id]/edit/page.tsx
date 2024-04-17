@@ -1,4 +1,4 @@
-import QuizForm from '@/features/quiz/components/QuizForm/QuizForm';
+import QuizEditForm from '@/features/quiz/components/QuizEditForm/QuizEditForm';
 import { fetchArticlePitchQuiz } from '@/features/quiz/services/server';
 
 type Props = {
@@ -10,7 +10,9 @@ const QuizEditPage = async ({ params: { id } }: Props) => {
 
   if (!quiz) return <></>;
 
-  return <QuizForm quiz={quiz} sentences={sentences} questions={questions} />;
+  return (
+    <QuizEditForm quiz={quiz} sentences={sentences} questions={questions} />
+  );
 };
 
 export default QuizEditPage;

@@ -4,16 +4,16 @@ import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine
 import { FULL_SPACE } from '@/features/pitchLine/constants';
 import { cn } from '@/lib/utils';
 import { Dispatch, SetStateAction } from 'react';
-import { QuizFormProps } from './QuizForm';
+import { QuizEditFormProps } from './QuizEditForm';
 
 type Props = {
   index: number;
   sentence: Sentence;
   lockedIndexes: number[];
-  setValue: Dispatch<SetStateAction<QuizFormProps>>;
+  setValue: Dispatch<SetStateAction<QuizEditFormProps>>;
 };
 
-const QuizFormSentenceRow = ({
+const QuizEditFormSentenceRow = ({
   index,
   sentence,
   lockedIndexes,
@@ -59,4 +59,4 @@ const QuizFormSentenceRow = ({
   );
 };
 
-export default QuizFormSentenceRow;
+export default QuizEditFormSentenceRow;

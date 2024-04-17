@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
 import { ArticlePitchQuestion, ArticlePitchQuiz } from '../../schema';
 import { updateQuiz_Questions } from '../../services/actions';
-import QuizFormSentenceRow from './QuizFormSentenceRow';
+import QuizEditFormSentenceRow from './QuizEditFormSentenceRow';
 
 type Props = {
   sentences: Sentence[];
@@ -14,25 +14,25 @@ type Props = {
   questions: ArticlePitchQuestion[];
 };
 
-export type QuizFormProps = {
+export type QuizEditFormProps = {
   title: string;
   lockedIndexes: number[][];
   errMsg: string;
 };
 
-const INITIAL_STATE: QuizFormProps = {
+const INITIAL_STATE: QuizEditFormProps = {
   title: '',
   lockedIndexes: [],
   errMsg: '',
 };
 
-const QuizForm = ({ sentences, quiz, questions }: Props) => {
+const QuizEditForm = ({ sentences, quiz, questions }: Props) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [value, setValue] = useState(INITIAL_STATE);
 
   useEffect(() => {
-    const value: QuizFormProps = {
+    const value: QuizEditFormProps = {
       title: quiz.title,
       lockedIndexes: questions.map((q) => q.lockedIndexes),
       errMsg: '',
@@ -77,7 +77,7 @@ const QuizForm = ({ sentences, quiz, questions }: Props) => {
       />
       <div className='space-y-2'>
         {sentences.map((sentence, index) => (
-          <QuizFormSentenceRow
+          <QuizEditFormSentenceRow
             key={index}
             index={index}
             sentence={sentence}
@@ -107,11 +107,11 @@ const QuizForm = ({ sentences, quiz, questions }: Props) => {
   );
 };
 
-export default QuizForm;
+export default QuizEditForm;
 
 function isSameValue(
-  original: Omit<QuizFormProps, 'errMsg'>,
-  current: Omit<QuizFormProps, 'errMsg'>
+  original: Omit<QuizEditFormProps, 'errMsg'>,
+  current: Omit<QuizEditFormProps, 'errMsg'>
 ) {
   return (
     original.title === current.title &&

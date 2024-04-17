@@ -75,7 +75,7 @@ export async function updateQuiz_Questions(
   }
 
   revalidatePath(`/mng/quiz/list`);
-  revalidatePath(`/mng/quiz/${quizId}`);
+  revalidatePath(`/mng/quiz/${quizId}/edit`);
 }
 
 export async function updateQuizIsDev(id: number, isDev: boolean) {

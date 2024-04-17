@@ -28,7 +28,7 @@ const QuizListRow = ({ quiz, display, removeQuiz }: Props) => {
       <div>{quiz.title}</div>
       <div className='flex flex-nowrap'>
         <Link
-          href={`/mng/quiz/${quiz.id}`}
+          href={`/mng/quiz/${quiz.id}/edit`}
           className={buttonVariants({ size: 'icon', variant: 'ghost' })}
         >
           <Edit2 />
@@ -37,7 +37,7 @@ const QuizListRow = ({ quiz, display, removeQuiz }: Props) => {
         <HasAudioToggle hasAudio={quiz.hasAudio} quizId={quiz.id} />
         {/* todo test */}
         <Link
-          href={`/mng/quiz/${quiz.id}/test`}
+          href={`/mng/quiz/${quiz.id}/testplay`}
           className={buttonVariants({ size: 'icon', variant: 'ghost' })}
         >
           <ScrollText />
