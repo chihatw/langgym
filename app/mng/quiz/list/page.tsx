@@ -1,4 +1,4 @@
-import QuizList from '@/features/quiz/components/QuizList';
+import QuizList from '@/features/quiz/components/QuizList/QuizList';
 import { fetchArticlePitchQuizzes } from '@/features/quiz/services/server';
 import { fetchUsers } from '@/features/user/services/server';
 

@@ -3,7 +3,7 @@
 import { Article } from '@/features/article/schema';
 import { AppUser } from '@/features/user/schema';
 import { useOptimistic } from 'react';
-import { ArticlePitchQuiz } from '../schema';
+import { ArticlePitchQuiz } from '../../schema';
 import QuizListRow from './QuizListRow';
 
 type Props = {
@@ -13,7 +13,6 @@ type Props = {
 };
 
 const QuizList = ({ users, quizzes, articles }: Props) => {
-  console.log(quizzes);
   const [opti_quizzes, removeQuiz] = useOptimistic<ArticlePitchQuiz[], number>(
     quizzes,
     (state, id) => state.filter((item) => item.id !== id)

@@ -111,6 +111,7 @@ export type Database = {
           created_at: string
           hasAudio: boolean
           id: number
+          isDev: boolean
           title: string
         }
         Insert: {
@@ -118,6 +119,7 @@ export type Database = {
           created_at?: string
           hasAudio?: boolean
           id?: number
+          isDev?: boolean
           title: string
         }
         Update: {
@@ -125,6 +127,7 @@ export type Database = {
           created_at?: string
           hasAudio?: boolean
           id?: number
+          isDev?: boolean
           title?: string
         }
         Relationships: [

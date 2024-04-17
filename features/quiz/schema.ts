@@ -3,6 +3,7 @@ export interface ArticlePitchQuiz {
   title: string;
   hasAudio: boolean;
   articleId: number;
+  isDev: boolean;
   created_at: Date;
 }
 

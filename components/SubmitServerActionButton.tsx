@@ -11,15 +11,27 @@ type Props = {
   action?: (formData: FormData) => void;
   children: React.ReactNode;
   className?: string;
+  size?: 'default' | 'sm' | 'lg' | 'icon' | null | undefined;
+  variant?:
+    | 'default'
+    | 'link'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | null
+    | undefined;
 };
 
 const SubmitServerActionButton = ({
+  size,
   errMsg,
+  variant,
   disabled,
-  isPending,
-  action,
   children,
+  isPending,
   className,
+  action,
 }: Props) => {
   return (
     <>
@@ -28,6 +40,8 @@ const SubmitServerActionButton = ({
           type='submit'
           disabled={disabled || isPending}
           className={cn('flex items-center gap-x-0.5', className)}
+          size={size}
+          variant={variant}
         >
           {children}
           {isPending ? <Loader2 className='animate-spin' /> : null}

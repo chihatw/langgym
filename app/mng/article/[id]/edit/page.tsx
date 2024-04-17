@@ -7,8 +7,8 @@ type Props = {
 };
 
 const MngArticleEditPage = async ({ params: { id } }: Props) => {
-  const article = await fetchArticleById(id);
   const users = await fetchUsers();
+  const article = await fetchArticleById(id);
 
   if (!article) return <></>;
   return (

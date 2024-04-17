@@ -19,7 +19,13 @@ import { AppUser } from '@/features/user/schema';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useTransition } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+  useTransition,
+} from 'react';
 import { Article } from '../schema';
 import { insertArticle, updateArticle } from '../services/actions';
 
@@ -127,34 +133,7 @@ const ArticleForm = ({ users, article }: Props) => {
           ))}
         </SelectContent>
       </Select>
-
-      <Popover>
-        <PopoverTrigger>
-          <Button
-            variant={'outline'}
-            className={'w-full pl-3 text-left font-normal justify-start'}
-          >
-            <CalendarIcon className='mr-2 h-4 w-4 ' />
-            <div>{format(value.date, 'yyyy/MM/dd')}</div>
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className='w-auto p-0' align='center'>
-          <Calendar
-            mode='single'
-            selected={value.date}
-            onSelect={(input) => {
-              if (!input) return;
-              setValue((prev) => ({
-                ...prev,
-                date: input,
-                errMsg: '',
-                disabled: !prev.uid || !prev.title,
-              }));
-            }}
-            initialFocus
-          />
-        </PopoverContent>
-      </Popover>
+      <DatePicker date={value.date} setValue={setValue} />
       <Input
         placeholder='title'
         name='title'
@@ -181,3 +160,41 @@ const ArticleForm = ({ users, article }: Props) => {
 };
 
 export default ArticleForm;
+
+const DatePicker = ({
+  date,
+  setValue,
+}: {
+  date: Date;
+  setValue: Dispatch<SetStateAction<FormProps>>;
+}) => {
+  return (
+    <Popover>
+      <PopoverTrigger>
+        <Button
+          variant={'outline'}
+          className={'w-full pl-3 text-left font-normal justify-start'}
+        >
+          <CalendarIcon className='mr-2 h-4 w-4 ' />
+          <div>{format(date, 'yyyy/MM/dd')}</div>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className='w-auto p-0' align='center'>
+        <Calendar
+          mode='single'
+          selected={date}
+          onSelect={(input) => {
+            if (!input) return;
+            setValue((prev) => ({
+              ...prev,
+              date: input,
+              errMsg: '',
+              disabled: !prev.uid || !prev.title,
+            }));
+          }}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
+  );
+};

@@ -16,7 +16,10 @@ const BuildArticlePitchQuizButton = ({ article, sentences }: Props) => {
   const [errMsg, setErrMsg] = useState('');
   const [isPending, startTransition] = useTransition();
   const action = async () => {
-    const quiz: Omit<ArticlePitchQuiz, 'id' | 'created_at' | 'hasAudio'> = {
+    const quiz: Omit<
+      ArticlePitchQuiz,
+      'id' | 'created_at' | 'hasAudio' | 'isDev'
+    > = {
       articleId: article.id,
       title: article.title,
     };
@@ -33,7 +36,7 @@ const BuildArticlePitchQuizButton = ({ article, sentences }: Props) => {
         setErrMsg(errMsg);
         return;
       }
-      router.push('/');
+      router.push('/mng/quiz/list');
     });
   };
 
