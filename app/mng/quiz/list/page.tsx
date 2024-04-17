@@ -1,12 +1,14 @@
+import QuizList from '@/features/quiz/components/QuizList';
+import { fetchArticlePitchQuizzes } from '@/features/quiz/services/server';
+import { fetchUsers } from '@/features/user/services/server';
+
 type Props = {};
 
 const QuizListPage = async (props: Props) => {
-  // todo fetch Quiz
-  return (
-    <div className='space-y-8'>
-      <div className='text-2xl font-extrabold'>Quiz List</div>
-    </div>
-  );
+  const users = await fetchUsers();
+  const { quizzes, articles } = await fetchArticlePitchQuizzes(10);
+
+  return <QuizList users={users} quizzes={quizzes} articles={articles} />;
 };
 
 export default QuizListPage;

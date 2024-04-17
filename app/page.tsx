@@ -1,5 +1,5 @@
 import ArticleList from '@/features/article/components/ArticleList/ArticleList';
-import MngArticleList from '@/features/article/components/MngArtileList/MngArticleList';
+import MngArticleListContainer from '@/features/article/components/MngArtileList/MngArticleListContainer';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 import { getUserGroup } from '@/features/auth/services/utils';
 
@@ -12,7 +12,7 @@ export default async function Home() {
 
   switch (userGroup) {
     case 'admin':
-      return <MngArticleList />;
+      return <MngArticleListContainer />;
     default:
       return <ArticleList uid={user.id} />;
   }

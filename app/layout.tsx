@@ -17,11 +17,7 @@ export default function RootLayout({
         )}
       >
         <Header />
-        {/* <div className='pt-10 pb-40 print:pt-0'> */}
-        {/* ↑↑↑ max-w-xs を grid の 子要素にそのままつけると効かない */}
-        {/* <div className='max-w-lg mx-auto '>{children}</div> */}
         <div>{children}</div>
-        {/* </div> */}
       </body>
     </html>
   );

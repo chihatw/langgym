@@ -1,4 +1,4 @@
-import MngHeader from '@/components/mngHeader';
+import MngHeader from '@/components/MngHeader';
 
 export default function ManagementLayout({
   children,
@@ -6,7 +6,7 @@ export default function ManagementLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className='space-y-4 max-w-lg mx-auto pt-10 pb-40'>
+    <div className='space-y-4 max-w-lg mx-auto pb-40'>
       <MngHeader />
       {children}
     </div>
