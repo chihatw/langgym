@@ -35,7 +35,6 @@ const QuizListRow = ({ quiz, display, removeQuiz }: Props) => {
         </Link>
         <IsDevToggle isDev={quiz.isDev} quizId={quiz.id} />
         <HasAudioToggle hasAudio={quiz.hasAudio} quizId={quiz.id} />
-        {/* todo test */}
         <Link
           href={`/mng/quiz/${quiz.id}/testplay`}
           className={buttonVariants({ size: 'icon', variant: 'ghost' })}

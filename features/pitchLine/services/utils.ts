@@ -102,6 +102,20 @@ export const buildHasAccent = (pitches: boolean[], isOdaka: boolean) => {
   });
 };
 
+export function getAccentIndex(pitchStr: string) {
+  return Math.max(buildMoras_no_remove_mark(pitchStr).indexOf(ACCENT_MARK), 0);
+}
+
+export function buildNewPitchStr(pitchStr: string, accentIndex: number) {
+  const moras = buildMoras(pitchStr);
+
+  if (accentIndex > 0) {
+    moras.splice(accentIndex, 0, ACCENT_MARK);
+  }
+
+  return moras.join('');
+}
+
 // MORA_VOWEL_MAP 作成用
 
 const hira2Kana = (str: string): string => {

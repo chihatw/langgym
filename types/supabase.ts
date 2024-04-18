@@ -39,7 +39,60 @@ export type Database = {
             foreignKeyName: "article_marks_articleid_fkey"
             columns: ["articleId"]
             isOneToOne: false
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["articleId"]
+          },
+          {
+            foreignKeyName: "article_marks_articleid_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
             referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      article_pitch_quiz_answer_rows: {
+        Row: {
+          answerId: number
+          created_at: string
+          id: number
+          line: number
+          pitchStr: string
+        }
+        Insert: {
+          answerId: number
+          created_at?: string
+          id?: number
+          line: number
+          pitchStr: string
+        }
+        Update: {
+          answerId?: number
+          created_at?: string
+          id?: number
+          line?: number
+          pitchStr?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_article_pitch_quiz_answer_rows_answerId_fkey"
+            columns: ["answerId"]
+            isOneToOne: false
+            referencedRelation: "article_pitch_quiz_answer_rows_view"
+            referencedColumns: ["answerId"]
+          },
+          {
+            foreignKeyName: "public_article_pitch_quiz_answer_rows_answerId_fkey"
+            columns: ["answerId"]
+            isOneToOne: false
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_article_pitch_quiz_answer_rows_answerId_fkey"
+            columns: ["answerId"]
+            isOneToOne: false
+            referencedRelation: "article_pitch_quiz_answers"
             referencedColumns: ["id"]
           },
         ]
@@ -48,22 +101,26 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          pitchStr: string
           quizId: number
         }
         Insert: {
           created_at?: string
           id?: number
-          pitchStr: string
           quizId: number
         }
         Update: {
           created_at?: string
           id?: number
-          pitchStr?: string
           quizId?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "public_article_pitch_quiz_answers_quizId_fkey"
+            columns: ["quizId"]
+            isOneToOne: false
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["quizId"]
+          },
           {
             foreignKeyName: "public_article_pitch_quiz_answers_quizId_fkey"
             columns: ["quizId"]
@@ -96,6 +153,13 @@ export type Database = {
           quizId?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "public_article_pitch_questions_articlePitchQuizId_fkey"
+            columns: ["quizId"]
+            isOneToOne: false
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["quizId"]
+          },
           {
             foreignKeyName: "public_article_pitch_questions_articlePitchQuizId_fkey"
             columns: ["quizId"]
@@ -135,6 +199,13 @@ export type Database = {
             foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
             columns: ["articleId"]
             isOneToOne: false
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["articleId"]
+          },
+          {
+            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
             referencedRelation: "articles"
             referencedColumns: ["id"]
           },
@@ -163,6 +234,13 @@ export type Database = {
           line?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "public_article_recorded_assinments_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["articleId"]
+          },
           {
             foreignKeyName: "public_article_recorded_assinments_articleId_fkey"
             columns: ["articleId"]
@@ -246,6 +324,13 @@ export type Database = {
             foreignKeyName: "public_sentences_articleId_fkey"
             columns: ["articleId"]
             isOneToOne: false
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["articleId"]
+          },
+          {
+            foreignKeyName: "public_sentences_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
             referencedRelation: "articles"
             referencedColumns: ["id"]
           },
@@ -306,7 +391,30 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      article_pitch_quiz_answer_rows_view: {
+        Row: {
+          answer: string | null
+          answerId: number | null
+          id: number | null
+          line: number | null
+          lockedIndexes: string | null
+          pitchStr: string | null
+        }
+        Relationships: []
+      }
+      article_pitch_quiz_answer_view: {
+        Row: {
+          articleId: number | null
+          audioPath: string | null
+          created_at: string | null
+          display: string | null
+          hasAudio: boolean | null
+          id: number | null
+          quizId: number | null
+          title: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

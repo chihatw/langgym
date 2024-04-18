@@ -1,4 +1,4 @@
-import Header from '@/components/header';
+import Header from '@/components/Header';
 import { fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 import './globals.css';

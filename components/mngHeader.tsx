@@ -5,8 +5,9 @@ import Link from 'next/link';
 type Props = {};
 
 const items: { label: string; href: string }[] = [
-  { label: 'article list', href: '/' },
-  { label: 'quiz list', href: '/mng/quiz/list' },
+  { label: 'articles', href: '/' },
+  { label: 'quizzes', href: '/mng/quiz/list' },
+  { label: 'answers', href: '/mng/answer/list' },
 ];
 
 const MngHeader = (props: Props) => {

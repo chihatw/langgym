@@ -14,10 +14,3 @@ export interface ArticlePitchQuestion {
   quizId: number;
   created_at: Date;
 }
-
-export interface ArticlePitchQuizAnswer {
-  id: number;
-  pitchStr: number;
-  quizId: number;
-  created_at: Date;
-}
