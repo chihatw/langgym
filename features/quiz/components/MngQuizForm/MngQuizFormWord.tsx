@@ -1,6 +1,6 @@
 import { buildMoras } from '@/features/pitchLine/services/utils';
 import { cn } from '@/lib/utils';
-import QuizFormMora from './QuizFormMora';
+import QuizFormMora from './MngQuizFormMora';
 
 type Props = {
   isLocked: boolean;

@@ -59,35 +59,37 @@ const SentenceRow = ({
         {sentence.original}
       </div>
       {isShowAccents ? (
-        <div className='space-y-2'>
-          <div className='p-2 rounded border-[0.5px] border-slate-500'>
-            <SentencePitchLine pitchStr={sentence.pitchStr} />
+        <>
+          <div className='space-y-2'>
+            <div className='p-2 rounded border-[0.5px] border-slate-500'>
+              <SentencePitchLine pitchStr={sentence.pitchStr} />
+            </div>
+            {articleMark && audioBuffer ? (
+              <AudioSlider
+                start={articleMark.start}
+                end={articleMark.end}
+                audioBuffer={audioBuffer}
+              />
+            ) : null}
           </div>
-          {articleMark && audioBuffer ? (
-            <AudioSlider
-              start={articleMark.start}
-              end={articleMark.end}
-              audioBuffer={audioBuffer}
+          {assignmentAudioBuffer ? (
+            <AssignmentMonitor
+              audioBuffer={assignmentAudioBuffer}
+              articleId={articleId}
+              line={line}
+              articleRecordedAssignmentId={articleRecordedAssignment?.id!}
             />
-          ) : null}
-        </div>
+          ) : (
+            <RecordPane
+              sentence={sentence}
+              articleMark={articleMark}
+              audioBuffer={audioBuffer}
+              articleId={articleId}
+              line={line}
+            />
+          )}
+        </>
       ) : null}
-      {assignmentAudioBuffer ? (
-        <AssignmentMonitor
-          audioBuffer={assignmentAudioBuffer}
-          articleId={articleId}
-          line={line}
-          articleRecordedAssignmentId={articleRecordedAssignment?.id!}
-        />
-      ) : (
-        <RecordPane
-          sentence={sentence}
-          articleMark={articleMark}
-          audioBuffer={audioBuffer}
-          articleId={articleId}
-          line={line}
-        />
-      )}
     </div>
   );
 };

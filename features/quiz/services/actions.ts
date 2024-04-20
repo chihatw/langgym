@@ -28,7 +28,6 @@ export async function insertQuiz(
       questions.map((item) => ({
         ...item,
         quizId: _quiz.id,
-        lockedIndexes: JSON.stringify(item.lockedIndexes),
       }))
     );
 
@@ -42,7 +41,7 @@ export async function insertQuiz(
 export async function updateQuiz_Questions(
   quizId: number,
   title: string,
-  questions: ArticlePitchQuestion[],
+  questions: Omit<ArticlePitchQuestion, 'created_at'>[],
   isUpdateQuiz: boolean,
   isUpdateQuestions: boolean
 ) {
@@ -60,17 +59,21 @@ export async function updateQuiz_Questions(
   }
 
   if (isUpdateQuestions) {
-    const { error } = await supabase
-      .from('article_pitch_quiz_questions')
-      .upsert(
-        questions.map((item) => ({
-          ...item,
-          lockedIndexes: JSON.stringify(item.lockedIndexes),
-          created_at: item.created_at.toISOString(),
-        }))
-      );
-    if (error) {
-      return error.message;
+    let _error = '';
+
+    for (let question of questions) {
+      const { id, ...omitted } = question;
+      const { error } = await supabase
+        .from('article_pitch_quiz_questions')
+        .update(omitted)
+        .eq('id', id);
+      if (error) {
+        _error = error.message;
+      }
+    }
+
+    if (_error) {
+      return _error;
     }
   }
 
@@ -88,6 +91,7 @@ export async function updateQuizIsDev(id: number, isDev: boolean) {
   if (error) {
     return error.message;
   }
+  revalidatePath('/');
   revalidatePath(`/mng/quiz/list`);
 }
 

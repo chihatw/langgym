@@ -3,7 +3,6 @@
 import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { ArticlePitchQuizAnswerRow } from '@/features/answer/schema';
 import { insertQuizAnswers } from '@/features/answer/services/actions';
-import { Article, ArticleMark, Sentence } from '@/features/article/schema';
 import { downloadAudioFile } from '@/features/article/services/client';
 import { ACCENT_MARK, FULL_SPACE } from '@/features/pitchLine/constants';
 import {
@@ -13,15 +12,11 @@ import {
 import { blobToAudioBuffer } from '@/utils';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
-import { ArticlePitchQuestion, ArticlePitchQuiz } from '../../schema';
-import QuizFormSentence from './QuizFormSentence';
+import { ArticlePitchQuestionView } from '../../schema';
+import QuizFormSentence from './MngQuizFormSentence';
 
 type Props = {
-  quiz: ArticlePitchQuiz;
-  article: Article;
-  sentences: Sentence[];
-  questions: ArticlePitchQuestion[];
-  articleMarks: ArticleMark[];
+  questions: ArticlePitchQuestionView[];
 };
 
 type FormProps = {
@@ -33,36 +28,35 @@ const INITIAL_STATE: FormProps = {
   inputPitchStrs: [],
 };
 
-const QuizForm = ({
-  quiz,
-  questions,
-  sentences,
-  article,
-  articleMarks,
-}: Props) => {
+const QuizForm = ({ questions }: Props) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [value, setValue] = useState(INITIAL_STATE);
 
   // inputPitchStrs の作成
   useEffect(() => {
-    const inputPitchStrs = buildInitialPitchStrs(sentences, questions);
+    const inputPitchStrs = buildInitialPitchStrs(questions);
+
+    console.log({ questions, inputPitchStrs });
     setValue((prev) => ({ ...prev, inputPitchStrs }));
-  }, [sentences, questions]);
+  }, [questions]);
 
   // audioBuffer の取得
   useEffect(() => {
-    if (!article.audioPath || !quiz.hasAudio) return;
+    const question = questions.at(0);
+    if (!question) return;
+    const { audioPath, hasAudio } = question;
+    if (!hasAudio || !audioPath) return;
 
     (async () => {
-      const blob = await downloadAudioFile(article.audioPath);
+      const blob = await downloadAudioFile(audioPath);
       if (!blob) return;
 
       const audioBuffer = await blobToAudioBuffer(blob);
       if (!audioBuffer) return;
       setValue((prev) => ({ ...prev, audioBuffer }));
     })();
-  }, [article, quiz]);
+  }, [questions]);
 
   const handleClick = (line: number, wordIndex: number, index: number) => {
     const newPitchStrs = buildNewInputPitchStrs(
@@ -83,8 +77,12 @@ const QuizForm = ({
       ArticlePitchQuizAnswerRow,
       'id' | 'created_at' | 'answerId'
     >[] = value.inputPitchStrs.map((pitchStr, line) => ({ pitchStr, line }));
+    const question = questions.at(0);
+    if (!question) return;
+    const { quizId } = question;
+    if (!quizId) return;
     startTransition(async () => {
-      const { errMsg, answerId } = await insertQuizAnswers(quiz.id, rows);
+      const { errMsg, answerId } = await insertQuizAnswers(quizId, rows);
       if (errMsg) {
         console.log(errMsg);
         return;
@@ -102,9 +100,6 @@ const QuizForm = ({
           <QuizFormSentence
             key={line}
             pitchStr={pitchStr}
-            articleMark={articleMarks[line]}
-            line={line}
-            hasAudio={quiz.hasAudio}
             audioBuffer={value.audioBuffer}
             question={questions[line]}
             handleClick={(wordIndex: number, index: number) =>
@@ -122,15 +117,12 @@ const QuizForm = ({
 
 export default QuizForm;
 
-function buildInitialPitchStrs(
-  sentences: Sentence[],
-  questions: ArticlePitchQuestion[]
-) {
-  return sentences.map((sentence, line) =>
-    sentence.pitchStr
-      .split(FULL_SPACE)
+function buildInitialPitchStrs(questions: ArticlePitchQuestionView[]) {
+  return questions.map((question, line) =>
+    question
+      .pitchStr!.split(FULL_SPACE)
       .map((item, index) => {
-        const isLocked = questions[line].lockedIndexes.includes(index);
+        const isLocked = questions[line].lockedIndexes!.includes(index);
         if (isLocked) {
           return item;
         }

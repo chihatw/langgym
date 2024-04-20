@@ -20,10 +20,7 @@ export async function fetchAnswers(
     return [];
   }
 
-  if (!data) {
-    console.log('no data');
-    return [];
-  }
+  if (!data) return [];
 
   return data.map((item) => ({
     ...item,
@@ -31,9 +28,32 @@ export async function fetchAnswers(
   }));
 }
 
-export async function fetchAnswerRowsbyArticleIds(
+export async function fetchAnswer(
+  id: number
+): Promise<ArticlePitchQuizAnswerView | undefined> {
+  const supabase = createSupabaseServerComponentClient();
+
+  const { data, error } = await supabase
+    .from('article_pitch_quiz_answer_view')
+    .select()
+    .eq('id', id)
+    .single();
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  if (!data) return;
+
+  return {
+    ...data,
+    created_at: new Date(data.created_at!),
+  };
+}
+
+export async function fetchAnswerRowsbyAnswerIds(
   answerIds: number[]
-): Promise<undefined | ArticlePitchQuizAnswerRowView[]> {
+): Promise<ArticlePitchQuizAnswerRowView[]> {
   const supabase = createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
@@ -45,11 +65,34 @@ export async function fetchAnswerRowsbyArticleIds(
 
   if (error) {
     console.log(error.message);
-    return;
+    return [];
   }
 
   return data.map((item) => ({
     ...item,
-    lockedIndexes: item.lockedIndexes ? JSON.parse(item.lockedIndexes) : null,
+    created_at: new Date(item.created_at!),
+  }));
+}
+
+export async function fetchAnswerRowsbyQuizIds(
+  quizIds: number[]
+): Promise<ArticlePitchQuizAnswerRowView[]> {
+  const supabase = createSupabaseServerComponentClient();
+
+  const { data, error } = await supabase
+    .from('article_pitch_quiz_answer_rows_view')
+    .select()
+    .in('quizId', quizIds)
+    .order('answerId')
+    .order('line');
+
+  if (error) {
+    console.log(error.message);
+    return [];
+  }
+
+  return data.map((item) => ({
+    ...item,
+    created_at: new Date(item.created_at!),
   }));
 }

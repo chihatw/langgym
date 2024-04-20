@@ -62,29 +62,29 @@ export async function fetchArticleById(
   } as Article;
 }
 
-export async function fetchArticleById_Uid(
-  id: number,
-  uid: string
-): Promise<Article | undefined> {
-  const supabase = createSupabaseServerComponentClient();
-  const { data, error } = await supabase
-    .from('articles')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .eq('id', id)
-    .eq('uid', uid);
-  if (error) {
-    console.log(error.message);
-    return;
-  }
+// export async function fetchArticleById_Uid(
+//   id: number,
+//   uid: string
+// ): Promise<Article | undefined> {
+//   const supabase = createSupabaseServerComponentClient();
+//   const { data, error } = await supabase
+//     .from('articles')
+//     .select('*')
+//     .order('created_at', { ascending: false })
+//     .eq('id', id)
+//     .eq('uid', uid);
+//   if (error) {
+//     console.log(error.message);
+//     return;
+//   }
 
-  const _article = data[0];
+//   const _article = data[0];
 
-  return {
-    ..._article,
-    created_at: new Date(_article.created_at),
-  } as Article;
-}
+//   return {
+//     ..._article,
+//     created_at: new Date(_article.created_at),
+//   } as Article;
+// }
 
 export async function fetchSentencesByArticleId(
   articleId: number

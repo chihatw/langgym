@@ -1,17 +1,14 @@
 'use client';
 import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Input } from '@/components/ui/input';
-import { Sentence } from '@/features/article/schema';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
-import { ArticlePitchQuestion, ArticlePitchQuiz } from '../../schema';
+import { ArticlePitchQuestion, ArticlePitchQuestionView } from '../../schema';
 import { updateQuiz_Questions } from '../../services/actions';
 import QuizEditFormSentenceRow from './QuizEditFormSentenceRow';
 
 type Props = {
-  sentences: Sentence[];
-  quiz: ArticlePitchQuiz;
-  questions: ArticlePitchQuestion[];
+  questions: ArticlePitchQuestionView[];
 };
 
 export type QuizEditFormProps = {
@@ -26,34 +23,35 @@ const INITIAL_STATE: QuizEditFormProps = {
   errMsg: '',
 };
 
-const QuizEditForm = ({ sentences, quiz, questions }: Props) => {
+const QuizEditForm = ({ questions }: Props) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [value, setValue] = useState(INITIAL_STATE);
 
   useEffect(() => {
     const value: QuizEditFormProps = {
-      title: quiz.title,
-      lockedIndexes: questions.map((q) => q.lockedIndexes),
+      title: questions.at(0)!.title!,
+      lockedIndexes: questions.map((q) => q.lockedIndexes!),
       errMsg: '',
     };
     setValue(value);
-  }, [quiz, questions]);
+  }, [questions]);
 
   const action = async () => {
     startTransition(async () => {
-      const updateQuestions: ArticlePitchQuestion[] = questions.map(
-        (q, index) => ({
-          ...q,
+      const updateQuestions: Omit<ArticlePitchQuestion, 'created_at'>[] =
+        questions.map((q, index) => ({
+          id: q.id!,
+          line: q.line!,
+          quizId: q.quizId!,
           lockedIndexes: value.lockedIndexes[index],
-        })
-      );
+        }));
 
       const errMsg = await updateQuiz_Questions(
-        quiz.id,
+        questions.at(0)!.quizId!,
         value.title,
         updateQuestions,
-        value.title !== quiz.title,
+        value.title !== questions.at(0)!.title!,
         JSON.stringify(value.lockedIndexes) !==
           JSON.stringify(questions.map((q) => q.lockedIndexes))
       );
@@ -76,11 +74,11 @@ const QuizEditForm = ({ sentences, quiz, questions }: Props) => {
         }
       />
       <div className='space-y-2'>
-        {sentences.map((sentence, index) => (
+        {questions.map((question, index) => (
           <QuizEditFormSentenceRow
             key={index}
             index={index}
-            sentence={sentence}
+            question={question}
             lockedIndexes={value.lockedIndexes[index]}
             setValue={setValue}
           />
@@ -94,8 +92,8 @@ const QuizEditForm = ({ sentences, quiz, questions }: Props) => {
           !value.title ||
           isSameValue(
             {
-              ...quiz,
-              lockedIndexes: questions.map((q) => q.lockedIndexes),
+              title: questions.at(0)!.title!,
+              lockedIndexes: questions.map((q) => q.lockedIndexes!),
             },
             { ...value }
           )

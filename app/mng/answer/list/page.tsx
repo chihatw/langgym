@@ -1,6 +1,6 @@
 import AnswerList from '@/features/answer/components/AnswerList';
 import {
-  fetchAnswerRowsbyArticleIds,
+  fetchAnswerRowsbyAnswerIds,
   fetchAnswers,
 } from '@/features/answer/services/server';
 
@@ -15,7 +15,7 @@ const AnswerListPage = async (props: Props) => {
 
   const answerIds_uniq = Array.from(new Set(answerIds));
 
-  const answerRows = await fetchAnswerRowsbyArticleIds(answerIds_uniq);
+  const answerRows = await fetchAnswerRowsbyAnswerIds(answerIds_uniq);
 
   return <AnswerList answers={answers} answerRows={answerRows || []} />;
 };

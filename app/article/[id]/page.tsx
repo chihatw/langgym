@@ -1,6 +1,6 @@
 import ArticlePane from '@/features/article/components/ArticlePane/ArticlePane';
 import {
-  fetchArticleById_Uid,
+  fetchArticleById,
   fetchArticleMarks,
   fetchArticleRecordedAssignments,
   fetchSentencesByArticleId,
@@ -15,8 +15,9 @@ const ArticlePage = async ({ params: { id } }: Props) => {
   const user = await getUserFromServerSide();
   if (!user) return <></>;
 
-  const article = await fetchArticleById_Uid(id, user.id);
-  if (!article) return <></>;
+  const article = await fetchArticleById(id);
+
+  if (!article || article.uid !== user.id) return <></>;
 
   const sentences = await fetchSentencesByArticleId(article.id);
   const articleMarks = await fetchArticleMarks(article.id);

@@ -8,7 +8,7 @@ const ArticleListRow = ({ article }: { article: Article }) => {
   return (
     <Link
       href={`/article/${article.id}`}
-      className='bg-white/40 p-5 rounded-lg shadow  block'
+      className='bg-white/60 p-5 rounded-lg block'
     >
       <div>
         <div className='text-xs font-extralight'>

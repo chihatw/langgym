@@ -1,49 +1,43 @@
-'use client';
-import SubmitServerActionButton from '@/components/SubmitServerActionButton';
-import { buttonVariants } from '@/components/ui/button';
-import { Edit2, ScrollText, Trash2 } from 'lucide-react';
+import QuizListAnswerRow from '@/features/answer/components/QuizListAnswerRow';
+import { ArticlePitchQuizAnswerRowView } from '@/features/answer/schema';
+import { Check } from 'lucide-react';
 import Link from 'next/link';
-import { ArticlePitchQuiz } from '../../schema';
-import { deleteQuiz } from '../../services/actions';
-import HasAudioToggle from './HasAudioToggle';
-import IsDevToggle from './IsDevToggle';
+import { ArticlePitchQuizView } from '../../schema';
 
 type Props = {
-  quiz: ArticlePitchQuiz;
-  display: string;
-  removeQuiz: (action: number) => void;
+  quiz: ArticlePitchQuizView;
+  answerRows: ArticlePitchQuizAnswerRowView[];
 };
 
-const QuizListRow = ({ quiz, display, removeQuiz }: Props) => {
-  const action = async () => {
-    // local
-    removeQuiz(quiz.id);
-    // remote
-    deleteQuiz(quiz.id);
-  };
+const QuizListRow = ({ quiz, answerRows }: Props) => {
+  // 回答がある場合✅を表示
+
+  const answers = Array.from(new Set(answerRows.map((item) => item.answerId)))
+    .map((id) => ({
+      id,
+      created_at: answerRows.find((item) => item.answerId === id)!.created_at,
+    }))
+    .sort((a, b) => b.created_at!.getTime() - a.created_at!.getTime());
 
   return (
-    <div className='border-slate-400 border-b grid grid-cols-[auto,1fr,auto] items-center gap-x-2'>
-      <div>{display}</div>
-      <div>{quiz.title}</div>
-      <div className='flex flex-nowrap'>
-        <Link
-          href={`/mng/quiz/${quiz.id}/edit`}
-          className={buttonVariants({ size: 'icon', variant: 'ghost' })}
-        >
-          <Edit2 />
-        </Link>
-        <IsDevToggle isDev={quiz.isDev} quizId={quiz.id} />
-        <HasAudioToggle hasAudio={quiz.hasAudio} quizId={quiz.id} />
-        <Link
-          href={`/mng/quiz/${quiz.id}/testplay`}
-          className={buttonVariants({ size: 'icon', variant: 'ghost' })}
-        >
-          <ScrollText />
-        </Link>
-        <SubmitServerActionButton size='icon' variant={'ghost'} action={action}>
-          <Trash2 />
-        </SubmitServerActionButton>
+    <div className='p-5 bg-white/60 rounded-lg'>
+      <Link
+        href={`/quiz/${quiz.id}`}
+        className='flex gap-1 items-center hover:cursor-pointer'
+      >
+        <div>{quiz.title}</div>
+        {!!answerRows.length ? <Check className='text-[#52a2aa]' /> : null}
+      </Link>
+      <div className='grid gap-1'>
+        {answers.map((answer) => (
+          <QuizListAnswerRow
+            key={answer.id!}
+            answer={answer}
+            answerRows={answerRows.filter(
+              (item) => item.answerId === answer.id
+            )}
+          />
+        ))}
       </div>
     </div>
   );

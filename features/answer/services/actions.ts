@@ -31,6 +31,7 @@ export async function insertQuizAnswers(
     return { errMsg: error_r.message };
   }
 
+  revalidatePath('/');
   revalidatePath(`/mng/answer/list`);
   return { answerId: _answer.id };
 }
@@ -46,5 +47,6 @@ export async function deleteAnswer(id: number) {
   if (error) {
     return error.message;
   }
+  revalidatePath('/');
   revalidatePath('/mng/answer/list');
 }

@@ -21,7 +21,7 @@ const BuildArticlePitchQuizButton = ({ article, sentences }: Props) => {
       'id' | 'created_at' | 'hasAudio' | 'isDev'
     > = {
       articleId: article.id,
-      title: article.title,
+      title: `${article.title} - アクセント`,
     };
     const questions: Omit<
       ArticlePitchQuestion,

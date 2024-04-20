@@ -1,37 +1,32 @@
 import AudioSlider from '@/components/AudioSlider';
-import { ArticleMark } from '@/features/article/schema';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 import { FULL_SPACE } from '@/features/pitchLine/constants';
 import { getAccentIndex } from '@/features/pitchLine/services/utils';
-import { ArticlePitchQuestion } from '../../schema';
-import QuizFormWord from './QuizFormWord';
+import { ArticlePitchQuestionView } from '../../schema';
+import QuizFormWord from './MngQuizFormWord';
 
 type Props = {
-  line: number;
   pitchStr: string;
-  hasAudio: boolean;
-  question: ArticlePitchQuestion;
+  question: ArticlePitchQuestionView;
   audioBuffer?: AudioBuffer;
-  articleMark?: ArticleMark;
   handleClick: (wordIndex: number, index: number) => void;
 };
 
 const QuizFormSentence = ({
-  line,
-  hasAudio,
-  audioBuffer,
-  articleMark,
   pitchStr,
+  audioBuffer,
   question,
   handleClick,
 }: Props) => {
+  const { line, hasAudio, start, end, lockedIndexes } = question;
+  if (line === null || !lockedIndexes) return <></>;
   return (
     <div className='p-2 rounded bg-white/60 space-y-2'>
       <div className='text-xs font-extrabold'>{line + 1}</div>
       {hasAudio && audioBuffer ? (
         <AudioSlider
-          start={articleMark?.start || 0}
-          end={articleMark?.end || 0}
+          start={start || 0}
+          end={end || 0}
           audioBuffer={audioBuffer}
         />
       ) : null}
@@ -43,7 +38,7 @@ const QuizFormSentence = ({
           <QuizFormWord
             key={wordIndex}
             pitchStr={wordPitch}
-            isLocked={question.lockedIndexes.includes(wordIndex)}
+            isLocked={lockedIndexes.includes(wordIndex)}
             accentIndex={getAccentIndex(wordPitch)}
             handleClick={(index: number) => handleClick(wordIndex, index)}
           />

@@ -26,8 +26,12 @@ export interface ArticlePitchQuizAnswerRow {
 export interface ArticlePitchQuizAnswerRowView {
   id: number | null;
   answerId: number | null;
+  quizId: number | null;
   line: number | null;
   pitchStr: string | null;
   answer: string | null;
-  lockedIndexes: number[] | null; // postgres では text
+  lockedIndexes: number[] | null;
+  start: number | null;
+  end: number | null;
+  created_at: Date | null;
 }
