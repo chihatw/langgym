@@ -11,12 +11,13 @@ import {
 } from '@/features/pitchLine/services/utils';
 import { blobToAudioBuffer } from '@/utils';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import { ArticlePitchQuestionView } from '../../schema';
-import QuizFormSentence from './MngQuizFormSentence';
+import QuizFormSentence from './QuizFormSentence';
 
 type Props = {
   questions: ArticlePitchQuestionView[];
+  redirectPath: string;
 };
 
 type FormProps = {
@@ -28,16 +29,15 @@ const INITIAL_STATE: FormProps = {
   inputPitchStrs: [],
 };
 
-const QuizForm = ({ questions }: Props) => {
+const QuizForm = ({ questions, redirectPath }: Props) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [value, setValue] = useState(INITIAL_STATE);
+  const question = useMemo(() => questions.at(0), [questions]);
 
   // inputPitchStrs の作成
   useEffect(() => {
     const inputPitchStrs = buildInitialPitchStrs(questions);
-
-    console.log({ questions, inputPitchStrs });
     setValue((prev) => ({ ...prev, inputPitchStrs }));
   }, [questions]);
 
@@ -88,13 +88,16 @@ const QuizForm = ({ questions }: Props) => {
         return;
       }
       if (!answerId) return;
-      router.push(`/mng/answer/${answerId}`);
+      router.push(`${redirectPath}/${answerId}`);
     });
   };
 
+  if (!question) return <></>;
+  const { title } = question;
+
   return (
     <div className='space-y-8'>
-      <div className='text-2xl font-extrabold'>Quiz</div>
+      <div className='text-2xl font-extrabold'>{title}</div>
       <div className='grid gap-y-4'>
         {value.inputPitchStrs.map((pitchStr, line) => (
           <QuizFormSentence

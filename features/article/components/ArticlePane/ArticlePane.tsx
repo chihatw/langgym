@@ -50,8 +50,8 @@ const ArticlePane = ({ sentences }: Props) => {
   const { end } = lastSentence;
 
   return (
-    <div className='space-y-8'>
-      <div className='space-y-2'>
+    <div className='grid gap-8'>
+      <div className='grid gap-2'>
         <div className='text-2xl font-extrabold'>{title}</div>
         <div className='text-xs font-extralight'>{`${year}年${month}月${day}日`}</div>
         {isShowAccents && value.audioBuffer && start && end ? (
@@ -62,7 +62,7 @@ const ArticlePane = ({ sentences }: Props) => {
           />
         ) : null}
       </div>
-      <div className='space-y-4'>
+      <div className='grid gap-4'>
         {sentences.map((sentence, index) => (
           <SentenceRow
             key={index}

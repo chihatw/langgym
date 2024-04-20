@@ -53,7 +53,7 @@ const AssignmentMonitor = ({
   return (
     <div>
       <div className='flex pt-3 pb-2'>
-        <div className='-ml-2 text-[11px] px-4 py-0.5 bg-blue-100 rounded flex items-center gap-x-1 font-extralight'>
+        <div className='-ml-2 text-[11px] px-4 py-0.5 bg-slate-200 rounded flex items-center gap-x-1 font-extralight'>
           <CassetteTape className='w-3 h-3' />
         </div>
       </div>

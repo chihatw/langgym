@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { blobToAudioBuffer } from '@/utils';
 import { Mic, StopCircle, X } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SentenceView } from '../../../schema';
 import CheckAudioModal from './CheckAudioModal';
 
@@ -18,6 +18,7 @@ export type RecordFormProps = {
   isChecking: boolean;
   isRecording: boolean;
   audioBuffer: AudioBuffer | null;
+  audio: HTMLAudioElement | null; // useEffect の中で定義をする必要がある;
 };
 
 const INITIAL_STATE: RecordFormProps = {
@@ -26,16 +27,15 @@ const INITIAL_STATE: RecordFormProps = {
   isRecording: false,
   isChecking: false,
   audioBuffer: null,
+  audio: null,
 };
 
 // 描画と関係ない変数
 type RefProps = {
-  audio: HTMLAudioElement;
   mediaRecorder: MediaRecorder | undefined;
 };
 
 const INITIAL_REF: RefProps = {
-  audio: new Audio(),
   mediaRecorder: undefined,
 };
 
@@ -44,6 +44,10 @@ const RecordPane = ({ sentence, audioBuffer }: Props) => {
 
   // streamと連携してマイクを切るため
   const ref = useRef(INITIAL_REF);
+
+  useEffect(() => {
+    setValue((prev) => ({ ...prev, audio: new Audio() }));
+  }, []);
 
   // 録音完了時
   const handleDataVaiable = async (event: BlobEvent) => {
@@ -61,7 +65,7 @@ const RecordPane = ({ sentence, audioBuffer }: Props) => {
   };
 
   const start = async () => {
-    if (!navigator.mediaDevices) return;
+    if (!navigator.mediaDevices || !value.audio) return;
 
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: true,
@@ -73,10 +77,6 @@ const RecordPane = ({ sentence, audioBuffer }: Props) => {
     ref.current = {
       ...ref.current,
       mediaRecorder,
-      audio: {
-        ...ref.current.audio,
-        srcObject: stream,
-      },
     };
 
     // データが入力された時の処理
@@ -85,16 +85,23 @@ const RecordPane = ({ sentence, audioBuffer }: Props) => {
     // 録音開始
     mediaRecorder.start();
 
-    setValue((prev) => ({ ...prev, isRecording: true }));
+    setValue((prev) => ({
+      ...prev,
+      isRecording: true,
+      audio: {
+        ...prev.audio!,
+        srcObject: stream,
+      },
+    }));
   };
 
   const stop = () => {
-    const { mediaRecorder, audio } = ref.current;
-    if (!mediaRecorder) return;
+    const { mediaRecorder } = ref.current;
+    if (!mediaRecorder || !value.audio) return;
 
     mediaRecorder.stop();
 
-    const stream = audio.srcObject as MediaStream;
+    const stream = value.audio.srcObject as MediaStream;
     stream.getTracks().forEach((track) => {
       track.stop();
     });
@@ -103,16 +110,13 @@ const RecordPane = ({ sentence, audioBuffer }: Props) => {
     ref.current = {
       ...ref.current,
       mediaRecorder: undefined,
-      audio: {
-        ...ref.current.audio,
-        srcObject: null,
-      },
     };
 
     setValue((prev) => ({
       ...prev,
       isRecording: false,
       isChecking: true,
+      audio: { ...prev.audio!, srcObject: null },
     }));
   };
 

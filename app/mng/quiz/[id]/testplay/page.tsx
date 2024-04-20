@@ -1,4 +1,4 @@
-import QuizForm from '@/features/quiz/components/MngQuizForm/MngQuizForm';
+import QuizForm from '@/features/quiz/components/QuizForm/QuizForm';
 import { fetchArticlePitchQuizQuestions } from '@/features/quiz/services/server';
 
 type Props = {
@@ -7,8 +7,8 @@ type Props = {
 
 const QuizTestPlayPage = async ({ params: { id } }: Props) => {
   const questions = await fetchArticlePitchQuizQuestions(id);
-  console.log(questions);
-  return <QuizForm questions={questions} />;
+
+  return <QuizForm questions={questions} redirectPath='/mng/answer' />;
 };
 
 export default QuizTestPlayPage;

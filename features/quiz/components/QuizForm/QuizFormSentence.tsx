@@ -3,7 +3,7 @@ import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine
 import { FULL_SPACE } from '@/features/pitchLine/constants';
 import { getAccentIndex } from '@/features/pitchLine/services/utils';
 import { ArticlePitchQuestionView } from '../../schema';
-import QuizFormWord from './MngQuizFormWord';
+import QuizFormWord from './QuizFormWord';
 
 type Props = {
   pitchStr: string;
