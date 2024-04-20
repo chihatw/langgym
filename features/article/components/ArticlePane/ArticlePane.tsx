@@ -1,22 +1,14 @@
 'use client';
 import AudioSlider from '@/components/AudioSlider';
 import { blobToAudioBuffer } from '@/utils';
-import { useEffect, useState } from 'react';
-import {
-  Article,
-  ArticleMark,
-  ArticleRecordedAssignment,
-  Sentence,
-} from '../../schema';
+import { useEffect, useMemo, useState } from 'react';
+import { SentenceView } from '../../schema';
 import { downloadAudioFile } from '../../services/client';
 import { getYMDFromDateString } from '../../services/utils';
 import SentenceRow from './SentenceRow';
 
 type Props = {
-  article: Article;
-  sentences: Sentence[];
-  articleMarks: ArticleMark[];
-  articleRecordedAssignments: ArticleRecordedAssignment[];
+  sentences: SentenceView[];
 };
 
 type FormProps = {
@@ -29,19 +21,20 @@ const INITIAL_STATE: FormProps = {
   assignmentAudioBuffers: [],
 };
 
-const ArticlePane = ({
-  article,
-  sentences,
-  articleMarks,
-  articleRecordedAssignments,
-}: Props) => {
-  const { year, month, day } = getYMDFromDateString(article.date);
+const ArticlePane = ({ sentences }: Props) => {
+  const sentence = useMemo(() => sentences.at(0), [sentences]);
+  const lastSentence = useMemo(() => sentences.at(-1), [sentences]);
+
+  const { year, month, day } = getYMDFromDateString(sentence!.date!);
   const [value, setValue] = useState(INITIAL_STATE);
 
   useEffect(() => {
-    if (!article.audioPath) return;
+    if (!sentence) return;
+    const { audioPath } = sentence;
+
+    if (!audioPath) return;
     (async () => {
-      const blob = await downloadAudioFile(article.audioPath);
+      const blob = await downloadAudioFile(audioPath);
       if (!blob) return;
 
       const audioBuffer = await blobToAudioBuffer(blob);
@@ -49,38 +42,32 @@ const ArticlePane = ({
 
       setValue((prev) => ({ ...prev, audioBuffer }));
     })();
-  }, [article]);
+  }, [sentence]);
+
+  if (!sentence || !lastSentence) return <></>;
+
+  const { title, isShowAccents, start } = sentence;
+  const { end } = lastSentence;
 
   return (
     <div className='space-y-8'>
       <div className='space-y-2'>
-        <div className='text-2xl font-extrabold'>{article.title}</div>
+        <div className='text-2xl font-extrabold'>{title}</div>
         <div className='text-xs font-extralight'>{`${year}年${month}月${day}日`}</div>
-        {article.isShowAccents &&
-        value.audioBuffer &&
-        articleMarks.at(0) &&
-        articleMarks.at(-1) ? (
+        {isShowAccents && value.audioBuffer && start && end ? (
           <AudioSlider
-            start={articleMarks.at(0)!.start}
-            end={articleMarks.at(-1)!.end}
+            start={start}
+            end={end}
             audioBuffer={value.audioBuffer}
           />
         ) : null}
       </div>
       <div className='space-y-4'>
-        {sentences?.map((sentence, index) => (
+        {sentences.map((sentence, index) => (
           <SentenceRow
             key={index}
-            line={index}
-            index={index}
             sentence={sentence}
-            articleId={article.id}
             audioBuffer={value.audioBuffer}
-            articleMark={articleMarks.at(index)}
-            isShowAccents={article.isShowAccents}
-            articleRecordedAssignment={articleRecordedAssignments.find(
-              (item) => item.line === index
-            )}
           />
         ))}
       </div>

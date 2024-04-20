@@ -5,31 +5,20 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { PauseCircle, Play } from 'lucide-react';
 import { Dispatch, SetStateAction, useTransition } from 'react';
-import { ArticleMark, Sentence } from '../../../schema';
+import { SentenceView } from '../../../schema';
 import { upsertArticleRecordedAssignment } from '../../../services/actions';
 import { uploadAudioFile } from '../../../services/client';
 import { RecordFormProps } from './RecordPane';
 import RecordPaneSentenceMonitor from './RecordPaneSentenceMonitor';
 
 type Props = {
-  line: number;
   value: RecordFormProps;
-  sentence: Sentence;
-  articleId: number;
+  sentence: SentenceView;
   audioBuffer: AudioBuffer | null;
-  articleMark?: ArticleMark;
   setValue: Dispatch<SetStateAction<RecordFormProps>>;
 };
 
-const CheckAudioModal = ({
-  value,
-  sentence,
-  articleId,
-  line,
-  audioBuffer,
-  articleMark,
-  setValue,
-}: Props) => {
+const CheckAudioModal = ({ value, sentence, audioBuffer, setValue }: Props) => {
   const [isPending, startTransition] = useTransition();
   const handleReset = () => {
     setValue((prev) => ({
@@ -42,9 +31,11 @@ const CheckAudioModal = ({
 
   const action = async () => {
     startTransition(async () => {
-      if (!value.blob) return;
+      const { articleId, line } = sentence;
 
-      const audioPath = `assignments/${articleId}/${line}.mp3`;
+      if (!value.blob || articleId === null || line === null) return;
+
+      const audioPath = `assignments/${articleId!}/${line!}.mp3`;
 
       const errMsg = await uploadAudioFile(value.blob, audioPath);
       if (errMsg) {
@@ -84,7 +75,6 @@ const CheckAudioModal = ({
         <RecordPaneSentenceMonitor
           sentence={sentence}
           audioBuffer={audioBuffer}
-          articleMark={articleMark}
         />
         {!!value.audioBuffer ? (
           <div className='flex justify-center items-center py-10'>

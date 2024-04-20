@@ -1,10 +1,5 @@
 import ArticlePane from '@/features/article/components/ArticlePane/ArticlePane';
-import {
-  fetchArticleById,
-  fetchArticleMarks,
-  fetchArticleRecordedAssignments,
-  fetchSentencesByArticleId,
-} from '@/features/article/services/server';
+import { fetchSentencesByArticleId } from '@/features/article/services/server';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 
 type Props = {
@@ -15,24 +10,18 @@ const ArticlePage = async ({ params: { id } }: Props) => {
   const user = await getUserFromServerSide();
   if (!user) return <></>;
 
-  const article = await fetchArticleById(id);
+  const sentences = await fetchSentencesByArticleId(id);
+  const sentence = sentences.at(0);
+  if (!sentence) return <></>;
 
-  if (!article || article.uid !== user.id) return <></>;
+  const { uid } = sentence;
+  if (!uid) return <></>;
 
-  const sentences = await fetchSentencesByArticleId(article.id);
-  const articleMarks = await fetchArticleMarks(article.id);
-  const articleRecordedAssignments = await fetchArticleRecordedAssignments(
-    article.id
-  );
+  if (uid !== user.id) return <></>;
 
   return (
     <div className='space-y-4 max-w-lg mx-auto pt-10 pb-40'>
-      <ArticlePane
-        article={article}
-        sentences={sentences}
-        articleMarks={articleMarks}
-        articleRecordedAssignments={articleRecordedAssignments}
-      />
+      <ArticlePane sentences={sentences} />
     </div>
   );
 };

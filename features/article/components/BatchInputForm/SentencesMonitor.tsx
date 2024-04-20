@@ -1,22 +1,22 @@
 import AudioSlider from '@/components/AudioSlider';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
-import { ArticleMark } from '../../schema';
+import { SentenceView } from '../../schema';
 
 type Props = {
-  sentences: {
+  result: {
     japanese: string;
     original: string;
     pitchStr: string;
     chinese: string;
   }[];
-  articleMarks: ArticleMark[];
+  sentences: SentenceView[];
   audioBuffer: AudioBuffer | null;
 };
 
-const SentencesMonitor = ({ sentences, articleMarks, audioBuffer }: Props) => {
+const SentencesMonitor = ({ result, sentences, audioBuffer }: Props) => {
   return (
     <div className='space-y-4'>
-      {sentences.map((line, index) => (
+      {result.map((line, index) => (
         <div key={index} className='text-xs p-2 bg-white/60 rounded space-y-1'>
           <div className='font-extrabold'>{index + 1}</div>
           <div>{line.japanese}</div>
@@ -25,10 +25,10 @@ const SentencesMonitor = ({ sentences, articleMarks, audioBuffer }: Props) => {
           <div>
             <SentencePitchLine pitchStr={line.pitchStr} />
           </div>
-          {articleMarks.at(index) && audioBuffer ? (
+          {sentences.at(index) && audioBuffer ? (
             <AudioSlider
-              start={articleMarks.at(index)!.start}
-              end={articleMarks.at(index)!.end}
+              start={sentences.at(index)!.start!}
+              end={sentences.at(index)!.end!}
               audioBuffer={audioBuffer}
             />
           ) : null}

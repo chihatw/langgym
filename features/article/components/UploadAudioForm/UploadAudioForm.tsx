@@ -1,16 +1,14 @@
 'use client';
 import { blobToAudioBuffer } from '@/utils';
-import { useEffect, useState } from 'react';
-import { Article, ArticleMark, Sentence } from '../../schema';
+import { useEffect, useMemo, useState } from 'react';
+import { SentenceView } from '../../schema';
 import { downloadAudioFile } from '../../services/client';
 import ArticleMarksForm from './ArtilceMarksForm';
 import DeleteAudioInput from './DeleteAudioInput';
 import UploadAudioInput from './UploadAudioInput';
 
 type Props = {
-  article: Article;
-  sentences: Sentence[];
-  marks: ArticleMark[];
+  sentences: SentenceView[];
 };
 
 export type UploadAudioFormProps = {
@@ -23,34 +21,45 @@ const INITIAL_STATE: UploadAudioFormProps = {
   errMsg: '',
 };
 
-const UploadAudioForm = ({ article, sentences, marks }: Props) => {
+const UploadAudioForm = ({ sentences }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
+  const sentence = useMemo(() => sentences.at(0), [sentences]);
 
   useEffect(() => {
-    if (!article.audioPath) return;
+    if (!sentence) return;
+
+    const { audioPath } = sentence;
+
+    if (!audioPath) return;
     (async () => {
-      const blob = await downloadAudioFile(article.audioPath);
+      const blob = await downloadAudioFile(audioPath);
       if (!blob) return;
       const audioBuffer = await blobToAudioBuffer(blob);
       if (!audioBuffer) return;
       setValue((prev) => ({ ...prev, audioBuffer }));
     })();
-  }, [article]);
+  }, [sentence]);
+
+  if (!sentence) return <></>;
+  const { audioPath, articleId } = sentence;
+  if (articleId === null) return <></>;
 
   return (
     <div className='space-y-4'>
       {value.audioBuffer ? (
         <ArticleMarksForm
-          article={article}
-          sentences={sentences}
           audioBuffer={value.audioBuffer}
-          articleMarks={marks}
+          sentences={sentences}
         />
       ) : null}
-      {article.audioPath ? (
-        <DeleteAudioInput articleId={article.id} setValue={setValue} />
+      {audioPath ? (
+        <DeleteAudioInput articleId={articleId!} setValue={setValue} />
       ) : (
-        <UploadAudioInput article={article} value={value} setValue={setValue} />
+        <UploadAudioInput
+          value={value}
+          setValue={setValue}
+          articleId={articleId}
+        />
       )}
     </div>
   );

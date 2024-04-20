@@ -2,23 +2,20 @@ import { Button } from '@/components/ui/button';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 import { Play } from 'lucide-react';
 import { useMemo } from 'react';
-import { Sentence } from '../../schema';
+import { SentenceView } from '../../schema';
 
 type Props = {
-  sentences: Sentence[];
-  marks: { start: number; end: number }[];
+  sentences: SentenceView[];
   audioBuffer: AudioBuffer;
 };
 
-const ArticleMarksMonitor = ({ sentences, marks, audioBuffer }: Props) => {
+const ArticleMarksMonitor = ({ sentences, audioBuffer }: Props) => {
   return (
     <div className='space-y-4'>
       {sentences.map((sentence, index) => (
         <ArticleMarkMonitorRow
           key={index}
           sentence={sentence}
-          start={marks[index]?.start}
-          end={marks[index]?.end}
           audioBuffer={audioBuffer}
         />
       ))}
@@ -30,13 +27,9 @@ export default ArticleMarksMonitor;
 
 const ArticleMarkMonitorRow = ({
   sentence,
-  start,
-  end,
   audioBuffer,
 }: {
-  sentence: Sentence;
-  start?: number;
-  end?: number;
+  sentence: SentenceView;
   audioBuffer: AudioBuffer;
 }) => {
   const audioContext = useMemo(() => new AudioContext(), []);
@@ -56,14 +49,17 @@ const ArticleMarkMonitorRow = ({
     sourceNode.connect(audioContext.destination);
     sourceNode.start(0, start, end - start);
   };
+
+  const { pitchStr, start, end } = sentence;
+
   return (
     <div className='p-2 bg-white/60 rounded'>
       <div className='text-xs space-y-2'>
         <div>{sentence.japanese}</div>
-        <SentencePitchLine pitchStr={sentence.pitchStr} />
+        <SentencePitchLine pitchStr={pitchStr!} />
         <div className='flex gap-x-2 justify-end'>
           <div className='grid grid-cols-[auto,64px] items-center p-1 pr-3 rounded bg-gray-200'>
-            {typeof start !== 'undefined' && typeof end !== 'undefined' ? (
+            {start !== null && end !== null ? (
               <Button
                 size={'icon'}
                 variant={'ghost'}
@@ -76,7 +72,7 @@ const ArticleMarkMonitorRow = ({
             <div>{`start: ${start}`}</div>
           </div>
           <div className='grid grid-cols-[auto,64px] gap-x-2 items-center p-1 pr-3 rounded bg-gray-200'>
-            {typeof start !== 'undefined' && typeof end !== 'undefined' ? (
+            {start !== null && end !== null ? (
               <Button
                 size={'icon'}
                 variant={'ghost'}

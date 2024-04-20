@@ -3,7 +3,7 @@ import {
   Article,
   ArticleMark,
   ArticleRecordedAssignment,
-  Sentence,
+  SentenceView,
 } from '../schema';
 
 export async function fetchArticles(limit: number): Promise<Article[]> {
@@ -88,11 +88,11 @@ export async function fetchArticleById(
 
 export async function fetchSentencesByArticleId(
   articleId: number
-): Promise<Sentence[]> {
+): Promise<SentenceView[]> {
   const supabase = createSupabaseServerComponentClient();
   const { data, error } = await supabase
-    .from('sentences')
-    .select('*')
+    .from('sentences_view')
+    .select()
     .order('line')
     .eq('articleId', articleId);
   if (error) {
@@ -101,8 +101,8 @@ export async function fetchSentencesByArticleId(
   }
   return data.map((item) => ({
     ...item,
-    created_at: new Date(item.created_at),
-  })) as Sentence[];
+    created_at: new Date(item.created_at!),
+  }));
 }
 
 export async function fetchArticleMarks(

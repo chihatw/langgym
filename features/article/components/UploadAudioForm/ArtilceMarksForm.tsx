@@ -8,7 +8,7 @@ import AudioWave from '@/features/wave/components/AudioWave';
 import MarkLines from '@/features/wave/components/MarkLines';
 import { buildMarks } from '@/features/wave/services/utils';
 import { useRouter } from 'next/navigation';
-import { Article, ArticleMark, Sentence } from '../../schema';
+import { ArticleMark, SentenceView } from '../../schema';
 import { batchInsertArticleMarks } from '../../services/actions';
 import ArticleMarksMonitor from './ArticleMarksMonitor';
 
@@ -17,27 +17,23 @@ const CANVAS_HEIGHT = 100;
 const INITIAL_SILENT_DURATION = 700;
 
 type Props = {
+  sentences: SentenceView[];
   audioBuffer: AudioBuffer;
-  sentences: Sentence[];
-  article: Article;
-  articleMarks: ArticleMark[];
 };
 
-const ArticleMarksForm = ({
-  audioBuffer,
-  sentences,
-  article,
-  articleMarks,
-}: Props) => {
+const ArticleMarksForm = ({ audioBuffer, sentences }: Props) => {
   const router = useRouter();
   const [marks, setMarks] = useState<{ start: number; end: number }[]>([]);
   const [silentDuration, setSilentDuration] = useState(INITIAL_SILENT_DURATION);
   const [isPending, startTransition] = useTransition();
   const audioContext = useMemo(() => new AudioContext(), []);
+  const sentence = useMemo(() => sentences.at(0), [sentences]);
 
   useEffect(() => {
-    if (articleMarks.length) {
-      setMarks(articleMarks.map(({ start, end }) => ({ start, end })));
+    if (sentences.length) {
+      setMarks(
+        sentences.map(({ start, end }) => ({ start: start!, end: end! }))
+      );
       return;
     }
     const channelData = audioBuffer.getChannelData(0);
@@ -48,7 +44,7 @@ const ArticleMarksForm = ({
       silentDuration
     );
     setMarks(marks);
-  }, [audioBuffer, silentDuration, articleMarks]);
+  }, [audioBuffer, silentDuration, sentences]);
 
   const playAudio = () => {
     const start = marks.at(0)?.start || 0;
@@ -65,11 +61,15 @@ const ArticleMarksForm = ({
   };
 
   const action = async () => {
+    if (!sentence) return;
+    const { articleId } = sentence;
+    if (!articleId) return;
+
     const newArticleMarks: Omit<ArticleMark, 'id' | 'created_at'>[] = marks.map(
-      (mark, index) => ({ ...mark, line: index, articleId: article.id })
+      (mark, index) => ({ ...mark, line: index, articleId })
     );
     startTransition(async () => {
-      const errMsg = await batchInsertArticleMarks(article.id, newArticleMarks);
+      const errMsg = await batchInsertArticleMarks(articleId, newArticleMarks);
       if (errMsg) {
         console.log(errMsg);
         return;
@@ -77,6 +77,9 @@ const ArticleMarksForm = ({
       router.push('/');
     });
   };
+
+  if (!sentence) return;
+  const { audioPath } = sentence;
 
   return (
     <div className='grid gap-y-4'>
@@ -116,15 +119,11 @@ const ArticleMarksForm = ({
       <Button size={'icon'} onClick={playAudio} className='w-full'>
         <Play />
       </Button>
-      <ArticleMarksMonitor
-        sentences={sentences}
-        marks={marks}
-        audioBuffer={audioBuffer}
-      />
+      <ArticleMarksMonitor sentences={sentences} audioBuffer={audioBuffer} />
       <SubmitServerActionButton
         action={action}
         isPending={isPending}
-        disabled={sentences.length !== marks.length || !article.audioPath}
+        disabled={sentences.length !== marks.length || !audioPath}
       >
         Submit
       </SubmitServerActionButton>

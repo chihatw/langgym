@@ -10,15 +10,13 @@ import { blobToAudioBuffer } from '@/utils';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState, useTransition } from 'react';
 import BuildArticlePitchQuizButton from '../../../quiz/components/BuildArticlePitchQuizButton';
-import { Article, ArticleMark, Sentence } from '../../schema';
+import { Sentence, SentenceView } from '../../schema';
 import { batchInsertSentences } from '../../services/actions';
 import { downloadAudioFile } from '../../services/client';
 import SentencesMonitor from './SentencesMonitor';
 
 type Props = {
-  article: Article;
-  sentences: Sentence[];
-  articleMarks: ArticleMark[];
+  sentences: SentenceView[];
 };
 
 type FormProps = {
@@ -43,24 +41,29 @@ const INITIAL_STATE: FormProps = {
   audioBuffer: null,
 };
 
-const ButchInputForm = ({ article, sentences, articleMarks }: Props) => {
+const ButchInputForm = ({ sentences }: Props) => {
   const router = useRouter();
+
   const [value, setValue] = useState(INITIAL_STATE);
   const [originalValue, setOriginalValue] = useState(INITIAL_STATE);
   const [isPending, startTransigion] = useTransition();
 
   const result = useMemo(() => buildResult(value), [value]);
+  const sentence = useMemo(() => sentences.at(0), [sentences]);
 
   useEffect(() => {
-    if (!sentences.length) return;
+    if (!sentence) return;
+
     const newValue = buildNewValue(sentences);
     setOriginalValue(newValue);
 
-    if (!article.audioPath) {
+    const { audioPath } = sentence;
+
+    if (!audioPath) {
       setValue(newValue);
     } else {
       (async () => {
-        const blob = await downloadAudioFile(article.audioPath);
+        const blob = await downloadAudioFile(audioPath);
         if (!blob) return;
 
         const audioBuffer = await blobToAudioBuffer(blob);
@@ -69,18 +72,23 @@ const ButchInputForm = ({ article, sentences, articleMarks }: Props) => {
         setValue({ ...newValue, audioBuffer });
       })();
     }
-  }, [sentences, article]);
+  }, [sentences, sentence]);
 
   const action = async () => {
+    if (!sentence) return;
+
+    const { articleId } = sentence;
+    if (!articleId) return;
+
     const _sentences: Omit<Sentence, 'id' | 'created_at'>[] = result.map(
       (item, line) => ({
         ...item,
         line,
-        articleId: article.id,
+        articleId,
       })
     );
     startTransigion(async () => {
-      const errMsg = await batchInsertSentences(article.id, _sentences);
+      const errMsg = await batchInsertSentences(articleId, _sentences);
       if (errMsg) {
         setValue((prev) => ({ ...prev, errMsg }));
         return;
@@ -154,9 +162,9 @@ const ButchInputForm = ({ article, sentences, articleMarks }: Props) => {
       />
       {result.length ? (
         <SentencesMonitor
-          sentences={result}
-          articleMarks={articleMarks}
+          result={result}
           audioBuffer={value.audioBuffer}
+          sentences={sentences}
         />
       ) : null}
       <SubmitServerActionButton
@@ -169,7 +177,7 @@ const ButchInputForm = ({ article, sentences, articleMarks }: Props) => {
       </SubmitServerActionButton>
 
       {!!sentences.length ? (
-        <BuildArticlePitchQuizButton article={article} sentences={sentences} />
+        <BuildArticlePitchQuizButton sentences={sentences} />
       ) : null}
     </div>
   );
@@ -194,7 +202,7 @@ function buildResult(value: FormProps) {
   return result;
 }
 
-function buildNewValue(sentences: Sentence[]) {
+function buildNewValue(sentences: SentenceView[]) {
   const _japanese: string[] = [];
   const _original: string[] = [];
   const _pitchStr: string[] = [];
@@ -202,10 +210,10 @@ function buildNewValue(sentences: Sentence[]) {
 
   for (let i = 0; i < sentences.length; i++) {
     const line = sentences[i];
-    _japanese.push(line.japanese);
-    _original.push(line.original);
-    _pitchStr.push(line.pitchStr);
-    _chinese.push(line.chinese);
+    _japanese.push(line.japanese!);
+    _original.push(line.original!);
+    _pitchStr.push(line.pitchStr!);
+    _chinese.push(line.chinese!);
   }
 
   const newValue: FormProps = {

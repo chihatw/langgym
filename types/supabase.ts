@@ -554,6 +554,50 @@ export type Database = {
           },
         ]
       }
+      sentences_view: {
+        Row: {
+          articleId: number | null
+          articleRecordedAssignmentId: number | null
+          audioPath: string | null
+          chinese: string | null
+          created_at: string | null
+          date: string | null
+          end: number | null
+          id: number | null
+          isShowAccents: boolean | null
+          japanese: string | null
+          line: number | null
+          original: string | null
+          pitchStr: string | null
+          recorded_audioPath: string | null
+          start: number | null
+          title: string | null
+          uid: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "articles_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_sentences_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_sentences_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["articleId"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never

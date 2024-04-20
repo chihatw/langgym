@@ -4,18 +4,17 @@ import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Input } from '@/components/ui/input';
 import { blobToAudioBuffer } from '@/utils';
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
-import { Article } from '../../schema';
 import { updateArticleAudioPath } from '../../services/actions';
 import { uploadAudioFile } from '../../services/client';
 import { UploadAudioFormProps } from './UploadAudioForm';
 
 type Props = {
-  article: Article;
+  articleId: number;
   value: UploadAudioFormProps;
   setValue: Dispatch<SetStateAction<UploadAudioFormProps>>;
 };
 
-const UploadAudioInput = ({ article, value, setValue }: Props) => {
+const UploadAudioInput = ({ articleId, value, setValue }: Props) => {
   const [file, setFile] = useState<null | File>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -49,14 +48,14 @@ const UploadAudioInput = ({ article, value, setValue }: Props) => {
   };
 
   const action = async () => {
-    const path = `articles/${article.id}.mp3`;
+    const path = `articles/${articleId}.mp3`;
     startTransition(async () => {
       const errMsg = await uploadAudioFile(file!, path);
       if (errMsg) {
         setValue((prev) => ({ ...prev, errMsg }));
         return;
       }
-      const _errMsg = await updateArticleAudioPath(article.id, path);
+      const _errMsg = await updateArticleAudioPath(articleId, path);
       if (_errMsg) {
         setValue((prev) => ({ ...prev, errMsg: _errMsg }));
         return;

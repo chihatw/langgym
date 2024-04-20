@@ -4,14 +4,11 @@ import { Button } from '@/components/ui/button';
 import { blobToAudioBuffer } from '@/utils';
 import { Mic, StopCircle, X } from 'lucide-react';
 import { useRef, useState } from 'react';
-import { ArticleMark, Sentence } from '../../../schema';
+import { SentenceView } from '../../../schema';
 import CheckAudioModal from './CheckAudioModal';
 
 type Props = {
-  sentence: Sentence;
-  articleId: number;
-  line: number;
-  articleMark?: ArticleMark;
+  sentence: SentenceView;
   audioBuffer: AudioBuffer | null;
 };
 
@@ -42,13 +39,7 @@ const INITIAL_REF: RefProps = {
   mediaRecorder: undefined,
 };
 
-const RecordPane = ({
-  line,
-  sentence,
-  articleId,
-  articleMark,
-  audioBuffer,
-}: Props) => {
+const RecordPane = ({ sentence, audioBuffer }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
 
   // streamと連携してマイクを切るため
@@ -159,13 +150,10 @@ const RecordPane = ({
           </div>
         </div>
         <CheckAudioModal
-          line={line}
           value={value}
           sentence={sentence}
           setValue={setValue}
           audioBuffer={audioBuffer}
-          articleMark={articleMark}
-          articleId={articleId}
         />
       </>
     );

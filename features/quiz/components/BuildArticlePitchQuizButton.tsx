@@ -1,27 +1,33 @@
 'use client';
 import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
-import { Article, Sentence } from '../../article/schema';
+import { useMemo, useState, useTransition } from 'react';
+import { SentenceView } from '../../article/schema';
 import { ArticlePitchQuestion, ArticlePitchQuiz } from '../schema';
 import { insertQuiz } from '../services/actions';
 
 type Props = {
-  article: Article;
-  sentences: Sentence[];
+  sentences: SentenceView[];
 };
 
-const BuildArticlePitchQuizButton = ({ article, sentences }: Props) => {
+const BuildArticlePitchQuizButton = ({ sentences }: Props) => {
   const router = useRouter();
   const [errMsg, setErrMsg] = useState('');
   const [isPending, startTransition] = useTransition();
+
+  const sentence = useMemo(() => sentences.at(0), [sentences]);
+
   const action = async () => {
+    if (!sentence) return;
+    const { articleId, title } = sentence;
+    if (!articleId || !title) return;
+
     const quiz: Omit<
       ArticlePitchQuiz,
       'id' | 'created_at' | 'hasAudio' | 'isDev'
     > = {
-      articleId: article.id,
-      title: `${article.title} - アクセント`,
+      articleId,
+      title: `${title} - アクセント`,
     };
     const questions: Omit<
       ArticlePitchQuestion,
