@@ -421,6 +421,24 @@ export type Database = {
         }
         Relationships: []
       }
+      workout_second_audio_paths: {
+        Row: {
+          id: number
+          path: string
+          shuffledIds: number[]
+        }
+        Insert: {
+          id?: number
+          path: string
+          shuffledIds: number[]
+        }
+        Update: {
+          id?: number
+          path?: string
+          shuffledIds?: number[]
+        }
+        Relationships: []
+      }
     }
     Views: {
       article_pitch_quiz_answer_rows_view: {

@@ -4,6 +4,12 @@ export interface WorkoutFirstAudioPath {
   path: string;
 }
 
+export interface WorkoutSecondAudioPath {
+  id: number;
+  shuffledIds: number[];
+  path: string;
+}
+
 export interface WorkoutFirst {
   id: number;
   japanese: string;
