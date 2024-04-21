@@ -1,18 +1,16 @@
 'use client';
-
 import { Button } from '@/components/ui/button';
 import { blobToAudioBuffer } from '@/utils';
 import { Mic, StopCircle, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { SentenceView } from '../../../schema';
-import CheckAudioModal from './CheckAudioModal';
+import { WorkoutFirst } from '../../schema';
+import WorkoutFirstCheckAudioModal from './WorkoutFirstCheckAudioModal';
 
 type Props = {
-  sentence: SentenceView;
-  audioBuffer: AudioBuffer | null; // checkPane に渡す
+  item: WorkoutFirst;
 };
 
-export type RecordFormProps = {
+export type WorkoutFirstRecordFormProps = {
   open: boolean;
   blob: Blob | null; // blob は描画と無関係だが、ref で子コンポーネントに渡すのは難しい
   isChecking: boolean;
@@ -21,7 +19,7 @@ export type RecordFormProps = {
   audio: HTMLAudioElement | null; // useEffect の中で定義をする必要がある;
 };
 
-const INITIAL_STATE: RecordFormProps = {
+const INITIAL_STATE: WorkoutFirstRecordFormProps = {
   open: false,
   blob: null,
   isRecording: false,
@@ -39,7 +37,7 @@ const INITIAL_REF: RefProps = {
   mediaRecorder: undefined,
 };
 
-const RecordPane = ({ sentence, audioBuffer }: Props) => {
+const WorkoutFirstRecordPane = ({ item }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
 
   // streamと連携してマイクを切るため
@@ -153,15 +151,15 @@ const RecordPane = ({ sentence, audioBuffer }: Props) => {
             </Button>
           </div>
         </div>
-        <CheckAudioModal
+        <WorkoutFirstCheckAudioModal
           value={value}
-          sentence={sentence}
+          item={item}
           setValue={setValue}
-          audioBuffer={audioBuffer}
         />
       </>
     );
   }
+
   return (
     <Button
       variant={'outline'}
@@ -173,4 +171,4 @@ const RecordPane = ({ sentence, audioBuffer }: Props) => {
   );
 };
 
-export default RecordPane;
+export default WorkoutFirstRecordPane;

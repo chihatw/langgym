@@ -13,12 +13,10 @@ type Props = {
 
 type FormProps = {
   audioBuffer: AudioBuffer | null;
-  assignmentAudioBuffers: AudioBuffer[];
 };
 
 const INITIAL_STATE: FormProps = {
   audioBuffer: null,
-  assignmentAudioBuffers: [],
 };
 
 const ArticlePane = ({ sentences }: Props) => {

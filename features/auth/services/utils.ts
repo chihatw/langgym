@@ -6,7 +6,7 @@ export function getUserGroup(email: string) {
   );
 
   const groupB: string[] = JSON.parse(
-    process.env.NEXT_PUBLIC_SUPABASE_USER_GROUP_A!
+    process.env.NEXT_PUBLIC_SUPABASE_USER_GROUP_B!
   );
 
   if (email === admin) {

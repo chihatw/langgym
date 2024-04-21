@@ -403,6 +403,24 @@ export type Database = {
           },
         ]
       }
+      workout_first_audio_paths: {
+        Row: {
+          id: number
+          itemId: number
+          path: string
+        }
+        Insert: {
+          id?: number
+          itemId: number
+          path: string
+        }
+        Update: {
+          id?: number
+          itemId?: number
+          path?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       article_pitch_quiz_answer_rows_view: {

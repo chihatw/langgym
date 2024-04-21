@@ -1,3 +1,4 @@
+import Breadcrumb from '@/components/Breadcrumb';
 import ArticlePane from '@/features/article/components/ArticlePane/ArticlePane';
 import { fetchSentencesByArticleId } from '@/features/article/services/server';
 import { getUserFromServerSide } from '@/features/auth/services/server';
@@ -20,7 +21,8 @@ const ArticlePage = async ({ params: { id } }: Props) => {
   if (uid !== user.id) return <></>;
 
   return (
-    <div className='space-y-4 max-w-lg mx-auto pt-10 pb-40'>
+    <div className='grid gap-4 max-w-lg mx-auto pt-4 pb-40'>
+      <Breadcrumb label='作文' />
       <ArticlePane sentences={sentences} />
     </div>
   );
