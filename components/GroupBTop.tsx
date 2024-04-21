@@ -6,16 +6,14 @@ import {
   fetchWorkoutFirstAudioPaths,
   fetchWorkoutSecondAudioPath,
 } from '@/features/workout/services/server';
-import { cn } from '@/lib/utils';
-import Link from 'next/link';
 import BorderLabel from './BorderLabel';
-import { buttonVariants } from './ui/button';
 
 type Props = {};
 
 const GroupBTop = async (props: Props) => {
   const workoutFirstAudioPaths = await fetchWorkoutFirstAudioPaths();
   const workoutSecondAudioPath = await fetchWorkoutSecondAudioPath(2);
+  const workoutThirdAudioPath = await fetchWorkoutSecondAudioPath(3);
 
   return (
     <div className='grid gap-8 max-w-lg mx-auto pt-10 pb-40'>
@@ -29,16 +27,11 @@ const GroupBTop = async (props: Props) => {
             label={WORKOUT_LABELS.at(1)}
             audioPath={workoutSecondAudioPath}
           />
-          <div className='rounded bg-white/60 grid p-5'>
-            <Link
-              href={`/workout/3`}
-              className={cn(buttonVariants({ variant: 'link' }))}
-            >
-              <div className='font-extrabold text-2xl text-slate-700  w-32 text-center'>
-                {WORKOUT_LABELS.at(2)}
-              </div>
-            </Link>
-          </div>
+          <WorkoutSecondTopRow
+            href='/workout/3'
+            label={WORKOUT_LABELS.at(2)}
+            audioPath={workoutThirdAudioPath}
+          />
         </div>
       </div>
     </div>

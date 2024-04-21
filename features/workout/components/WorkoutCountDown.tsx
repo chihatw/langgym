@@ -2,6 +2,7 @@
 
 import { intervalToDuration } from 'date-fns';
 import { memo, useEffect, useMemo, useState } from 'react';
+import { END_DATE } from '../constants';
 
 type Props = {};
 
@@ -23,7 +24,7 @@ const INITIAL_STATE: FormProps = {
 
 const WorkoutCountDown = (props: Props) => {
   const now = new Date();
-  const endDate = useMemo(() => new Date('2024-04-23 01:00:00'), []);
+  const endDate = useMemo(() => new Date(END_DATE), []);
   const [value, setValue] = useState(INITIAL_STATE);
 
   useEffect(() => {

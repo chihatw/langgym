@@ -1,8 +1,9 @@
 import { WorkoutFirst } from './schema';
 
+export const END_DATE = '2024-04-27 01:00:00';
+
 export const WORKOUT_LABELS = ['單字發音', '一連錄音 單字', '一連錄音 句子'];
 
-// debug
 export const WORKOUT_FIRST_ITEMS: WorkoutFirst[] = [
   { id: 0, japanese: '雨', pitchStr: 'あ＼め', chinese: '下雨' },
   { id: 1, japanese: '飴', pitchStr: 'あめ', chinese: '糖果' },
@@ -50,4 +51,31 @@ export const WORKOUT_FIRST_ITEMS: WorkoutFirst[] = [
   //   pitchStr: 'み＼なかった',
   //   chinese: '當時不看',
   // },
+];
+
+export const WORKOUT_THIRD_ITEMS: WorkoutFirst[] = [
+  {
+    id: 1,
+    japanese: '簡潔にわかりやすくまとめる。',
+    chinese: '彙整成簡單易讀的形式',
+    pitchStr: 'かんけつに　わかりやす＼く　まとめる',
+  },
+  {
+    id: 2,
+    japanese: '顧客からのメールが優先される',
+    chinese: '以客戶的信件優先',
+    pitchStr: 'こきゃくから＼の　メールが　ゆーせん　される',
+  },
+  {
+    id: 3,
+    japanese: '概要がわかるようにしておかなければならない',
+    chinese: '需要讓人一看就能了解概要',
+    pitchStr: 'がいよーが　わか＼るよーに　して　おかな＼ければ　なら＼ない',
+  },
+  {
+    id: 4,
+    japanese: '長すぎても短すぎてもいけない。',
+    chinese: '不宜過長或過短',
+    pitchStr: 'ながす＼ぎても　みじかす＼ぎても　いけない',
+  },
 ];
