@@ -26,7 +26,10 @@ export interface ArticlePitchQuizAnswerRow {
 export interface ArticlePitchQuizAnswerRowView {
   id: number | null;
   answerId: number | null;
+  hasAudio: boolean | null;
+  audioPath: string | null;
   quizId: number | null;
+  title: string | null;
   line: number | null;
   pitchStr: string | null;
   answer: string | null;

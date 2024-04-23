@@ -28,29 +28,6 @@ export async function fetchAnswers(
   }));
 }
 
-export async function fetchAnswer(
-  id: number
-): Promise<ArticlePitchQuizAnswerView | undefined> {
-  const supabase = createSupabaseServerComponentClient();
-
-  const { data, error } = await supabase
-    .from('article_pitch_quiz_answer_view')
-    .select()
-    .eq('id', id)
-    .single();
-  if (error) {
-    console.log(error);
-    return;
-  }
-
-  if (!data) return;
-
-  return {
-    ...data,
-    created_at: new Date(data.created_at!),
-  };
-}
-
 export async function fetchAnswerRowsbyAnswerIds(
   answerIds: number[]
 ): Promise<ArticlePitchQuizAnswerRowView[]> {

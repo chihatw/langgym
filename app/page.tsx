@@ -14,9 +14,11 @@ export default async function Home() {
   switch (userGroup) {
     case 'admin':
       return <MngArticleListContainer />;
+    case 'a':
+      return <GroupATop uid={user.id} />;
     case 'b':
       return <GroupBTop />;
     default:
-      return <GroupATop uid={user.id} />;
+      return <></>;
   }
 }

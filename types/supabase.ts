@@ -445,14 +445,17 @@ export type Database = {
         Row: {
           answer: string | null
           answerId: number | null
+          audioPath: string | null
           created_at: string | null
           end: number | null
+          hasAudio: boolean | null
           id: number | null
           line: number | null
           lockedIndexes: number[] | null
           pitchStr: string | null
           quizId: number | null
           start: number | null
+          title: string | null
         }
         Relationships: [
           {

@@ -1,8 +1,5 @@
 import AnswerPane from '@/features/answer/components/AnswerPane/AnswerPane';
-import {
-  fetchAnswer,
-  fetchAnswerRowsbyAnswerIds,
-} from '@/features/answer/services/server';
+import { fetchAnswerRowsbyAnswerIds } from '@/features/answer/services/server';
 import { buildArticlePitchQuizScore } from '@/features/answer/services/utils';
 
 type Props = {
@@ -10,16 +7,13 @@ type Props = {
 };
 
 const AnswerPage = async ({ params: { id } }: Props) => {
-  const answer = await fetchAnswer(id);
-  if (!answer || !answer.id) return <></>;
+  const answerRows = await fetchAnswerRowsbyAnswerIds([id]);
 
-  const answerRows = await fetchAnswerRowsbyAnswerIds([answer.id]);
-
-  if (!answerRows) return <></>;
+  if (!answerRows.length) return <></>;
 
   const score = buildArticlePitchQuizScore(answerRows);
 
-  return <AnswerPane answer={answer} answerRows={answerRows} score={score} />;
+  return <AnswerPane answerRows={answerRows} score={score} />;
 };
 
 export default AnswerPage;

@@ -5,38 +5,40 @@ import { downloadAudioFile } from '@/features/article/services/client';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 import { blobToAudioBuffer } from '@/utils';
 import { Check } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import {
-  ArticlePitchQuizAnswerRowView,
-  ArticlePitchQuizAnswerView,
-} from '../../schema';
+import { useEffect, useMemo, useState } from 'react';
+import { ArticlePitchQuizAnswerRowView } from '../../schema';
 import WrongAnswer from './WrongAnswer';
 
+// todo answer は何に使っている？
 type Props = {
   score: number;
-  answer: ArticlePitchQuizAnswerView;
   answerRows: ArticlePitchQuizAnswerRowView[];
 };
 
-const AnswerPane = ({ answer, answerRows, score }: Props) => {
+const AnswerPane = ({ answerRows, score }: Props) => {
   const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
 
+  const row = useMemo(() => answerRows.at(0), [answerRows]);
+
   useEffect(() => {
-    if (!answer.hasAudio) return;
+    if (!row) return;
+    if (!row.hasAudio) return;
 
     (async () => {
-      const blob = await downloadAudioFile(answer.audioPath!);
+      const blob = await downloadAudioFile(row.audioPath!);
       if (!blob) return;
 
       const audioBuffer = await blobToAudioBuffer(blob);
 
       setAudioBuffer(audioBuffer);
     })();
-  }, [answer]);
+  }, [row]);
+
+  if (!row) return <></>;
 
   return (
     <div className='grid gap-y-8'>
-      <div className='text-2xl font-extrabold'>{answer.title}</div>
+      <div className='text-2xl font-extrabold'>{row.title}</div>
       <div className='flex justify-center items-center rounded-lg  h-24 text-9xl font-extrabold'>
         {score}
       </div>
@@ -44,7 +46,7 @@ const AnswerPane = ({ answer, answerRows, score }: Props) => {
         {answerRows.map((row) => (
           <div key={row.id} className='rounded p-2 bg-white/60 grid gap-y-2'>
             <div className='text-xs font-extrabold'>{row.line! + 1}</div>
-            {answer.hasAudio && audioBuffer ? (
+            {row.hasAudio && audioBuffer ? (
               <AudioSlider
                 audioBuffer={audioBuffer}
                 start={row.start!}
