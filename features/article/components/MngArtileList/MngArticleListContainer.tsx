@@ -7,9 +7,9 @@ const MngArticleListContainer = async () => {
   const articles = await fetchArticles(10);
   const users = await fetchUsers();
   return (
-    <div className='space-y-4 max-w-lg mx-auto pb-40'>
+    <div className='grid gap-4 max-w-lg mx-auto pb-40'>
       <MngHeader />
-      <MngArticleList articles={articles} users={users} />
+      <MngArticleList articles={articles} />
     </div>
   );
 };

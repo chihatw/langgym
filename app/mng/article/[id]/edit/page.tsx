@@ -7,16 +7,14 @@ type Props = {
 };
 
 const MngArticleEditPage = async ({ params: { id } }: Props) => {
+  if (typeof id === undefined) {
+    return <></>;
+  }
   const users = await fetchUsers();
   const article = await fetchArticleById(id);
 
   if (!article) return <></>;
-  return (
-    <div className='space-y-8'>
-      <div className='text-2xl font-extrabold'>Edit Article</div>
-      <ArticleForm article={article} users={users} />
-    </div>
-  );
+  return <ArticleForm article={article} users={users} title={'Edit Article'} />;
 };
 
 export default MngArticleEditPage;

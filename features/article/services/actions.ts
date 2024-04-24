@@ -16,7 +16,7 @@ function revalidatePath_article_list() {
 function revalidatePath_article(id: number) {
   revalidatePath('/');
   revalidatePath(`/article/${id}`);
-  revalidatePath(`/mng/article/${id}/batchInput`);
+  revalidatePath(`/mng/article/${id}/sentences`);
   revalidatePath(`/mng/article/${id}/edit`);
   revalidatePath(`/mng/article/${id}/print`);
   revalidatePath(`/mng/article/${id}/upload`);

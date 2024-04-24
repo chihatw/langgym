@@ -15,7 +15,7 @@ const GroupATop = async ({ uid }: Props) => {
         <BorderLabel label='アクセント問題' />
         <QuizListContainer uid={uid} />
       </div>
-      {/* todo GroupATop に反応練習を表示 */}
+      {/* todo add Workouts to "GroupATop"  */}
     </div>
   );
 };

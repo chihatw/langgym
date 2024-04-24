@@ -49,6 +49,13 @@ export type Database = {
             referencedRelation: "articles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "article_marks_articleid_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       article_pitch_quiz_answer_rows: {
@@ -223,6 +230,13 @@ export type Database = {
             referencedRelation: "articles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       article_recorded_assignments: {
@@ -260,6 +274,13 @@ export type Database = {
             columns: ["articleId"]
             isOneToOne: false
             referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_article_recorded_assinments_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles_view"
             referencedColumns: ["id"]
           },
         ]
@@ -348,6 +369,13 @@ export type Database = {
             referencedRelation: "articles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "public_sentences_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       todos: {
@@ -421,6 +449,129 @@ export type Database = {
         }
         Relationships: []
       }
+      workout_items: {
+        Row: {
+          chinese: string
+          created_at: string
+          id: number
+          index: number
+          japanese: string
+          pitchStr: string
+          workoutId: number
+        }
+        Insert: {
+          chinese: string
+          created_at?: string
+          id?: number
+          index: number
+          japanese: string
+          pitchStr: string
+          workoutId: number
+        }
+        Update: {
+          chinese?: string
+          created_at?: string
+          id?: number
+          index?: number
+          japanese?: string
+          pitchStr?: string
+          workoutId?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_workout_items_workoutId_fkey"
+            columns: ["workoutId"]
+            isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_workout_items_workoutId_fkey"
+            columns: ["workoutId"]
+            isOneToOne: false
+            referencedRelation: "workouts_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workout_record_rows: {
+        Row: {
+          created_at: string
+          id: number
+          index: number
+          workoutItemId: number
+          workoutRecordId: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          index: number
+          workoutItemId: number
+          workoutRecordId: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          index?: number
+          workoutItemId?: number
+          workoutRecordId?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_workout_record_rows_workoutItemId_fkey"
+            columns: ["workoutItemId"]
+            isOneToOne: false
+            referencedRelation: "workout_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_workout_record_rows_workoutRecordId_fkey"
+            columns: ["workoutRecordId"]
+            isOneToOne: false
+            referencedRelation: "workout_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workout_records: {
+        Row: {
+          audioPath: string
+          created_at: string
+          duration: number
+          id: number
+          workoutId: number
+        }
+        Insert: {
+          audioPath: string
+          created_at?: string
+          duration: number
+          id?: number
+          workoutId: number
+        }
+        Update: {
+          audioPath?: string
+          created_at?: string
+          duration?: number
+          id?: number
+          workoutId?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_workout_records_workoutId_fkey"
+            columns: ["workoutId"]
+            isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_workout_records_workoutId_fkey"
+            columns: ["workoutId"]
+            isOneToOne: false
+            referencedRelation: "workouts_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workout_second_audio_paths: {
         Row: {
           id: number
@@ -438,6 +589,44 @@ export type Database = {
           shuffledIds?: number[]
         }
         Relationships: []
+      }
+      workouts: {
+        Row: {
+          created_at: string
+          id: number
+          isDev: boolean
+          isReview: boolean
+          targetBPM: number
+          title: string
+          uid: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          isDev?: boolean
+          isReview?: boolean
+          targetBPM: number
+          title: string
+          uid?: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          isDev?: boolean
+          isReview?: boolean
+          targetBPM?: number
+          title?: string
+          uid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_workouts_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -555,6 +744,13 @@ export type Database = {
             referencedRelation: "article_pitch_quiz_answer_view"
             referencedColumns: ["articleId"]
           },
+          {
+            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       article_pitch_quizzes_view: {
@@ -585,7 +781,35 @@ export type Database = {
             referencedColumns: ["articleId"]
           },
           {
+            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles_view"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "users_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      articles_view: {
+        Row: {
+          audioPath: string | null
+          created_at: string | null
+          date: string | null
+          display: string | null
+          id: number | null
+          isShowAccents: boolean | null
+          title: string | null
+          uid: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "articles_uid_fkey"
             columns: ["uid"]
             isOneToOne: false
             referencedRelation: "users"
@@ -634,6 +858,34 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "article_pitch_quiz_answer_view"
             referencedColumns: ["articleId"]
+          },
+          {
+            foreignKeyName: "public_sentences_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workouts_view: {
+        Row: {
+          created_at: string | null
+          display: string | null
+          id: number | null
+          isDev: boolean | null
+          isReview: boolean | null
+          targetBPM: number | null
+          title: string | null
+          uid: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_workouts_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
           },
         ]
       }

@@ -10,12 +10,13 @@ import { blobToAudioBuffer } from '@/utils';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState, useTransition } from 'react';
 import BuildArticlePitchQuizButton from '../../../quiz/components/BuildArticlePitchQuizButton';
-import { Sentence, SentenceView } from '../../schema';
+import { Article, Sentence, SentenceView } from '../../schema';
 import { batchInsertSentences } from '../../services/actions';
 import { downloadAudioFile } from '../../services/client';
 import SentencesMonitor from './SentencesMonitor';
 
 type Props = {
+  article: Article;
   sentences: SentenceView[];
 };
 
@@ -26,7 +27,6 @@ type FormProps = {
   pitchStr: string;
   chinese: string;
   errMsg: string;
-  disabled: boolean;
   audioBuffer: AudioBuffer | null;
 };
 
@@ -37,11 +37,10 @@ const INITIAL_STATE: FormProps = {
   pitchStr: '',
   chinese: '',
   errMsg: '',
-  disabled: true,
   audioBuffer: null,
 };
 
-const ButchInputForm = ({ sentences }: Props) => {
+const SentencesForm = ({ sentences, article }: Props) => {
   const router = useRouter();
 
   const [value, setValue] = useState(INITIAL_STATE);
@@ -49,15 +48,12 @@ const ButchInputForm = ({ sentences }: Props) => {
   const [isPending, startTransigion] = useTransition();
 
   const result = useMemo(() => buildResult(value), [value]);
-  const sentence = useMemo(() => sentences.at(0), [sentences]);
 
   useEffect(() => {
-    if (!sentence) return;
-
     const newValue = buildNewValue(sentences);
     setOriginalValue(newValue);
 
-    const { audioPath } = sentence;
+    const { audioPath } = article;
 
     if (!audioPath) {
       setValue(newValue);
@@ -72,23 +68,18 @@ const ButchInputForm = ({ sentences }: Props) => {
         setValue({ ...newValue, audioBuffer });
       })();
     }
-  }, [sentences, sentence]);
+  }, [sentences, article]);
 
   const action = async () => {
-    if (!sentence) return;
-
-    const { articleId } = sentence;
-    if (!articleId) return;
-
     const _sentences: Omit<Sentence, 'id' | 'created_at'>[] = result.map(
       (item, line) => ({
         ...item,
         line,
-        articleId,
+        articleId: article.id,
       })
     );
     startTransigion(async () => {
-      const errMsg = await batchInsertSentences(articleId, _sentences);
+      const errMsg = await batchInsertSentences(article.id, _sentences);
       if (errMsg) {
         setValue((prev) => ({ ...prev, errMsg }));
         return;
@@ -98,92 +89,97 @@ const ButchInputForm = ({ sentences }: Props) => {
   };
 
   return (
-    <div className='grid gap-y-4'>
-      <Textarea
-        placeholder='Japanese'
-        value={value.japanese}
-        onChange={(e) => {
-          setValue((prev) => ({
-            ...prev,
-            japanese: e.target.value,
-            errMsg: '',
-            disabled: !e.target.value || !prev.original || !prev.pitchStr,
-          }));
-        }}
-      />
-      <Textarea
-        placeholder='Original'
-        value={value.original}
-        onChange={(e) => {
-          setValue((prev) => ({
-            ...prev,
-            original: e.target.value,
-            errMsg: '',
-            disabled: !prev.japanese || !e.target.value || !prev.pitchStr,
-          }));
-        }}
-      />
-      <Textarea
-        placeholder='_PitchStr'
-        value={value._pitchStr}
-        onChange={(e) => {
-          const pitchStr = markLongVowel(removeMarks(e.target.value));
-          setValue((prev) => ({
-            ...prev,
-            _pitchStr: e.target.value,
-            pitchStr,
-            errMsg: '',
-            disabled: !prev.japanese || !prev.original || !pitchStr,
-          }));
-        }}
-      />
-      <Textarea
-        placeholder='PitchStr'
-        value={value.pitchStr}
-        onChange={(e) => {
-          setValue((prev) => ({
-            ...prev,
-            pitchStr: e.target.value,
-            errMsg: '',
-            disabled: !prev.japanese || !prev.original || !e.target.value,
-          }));
-        }}
-      />
-      <Textarea
-        placeholder='Chinese'
-        value={value.chinese}
-        onChange={(e) => {
-          setValue((prev) => ({
-            ...prev,
-            chinese: e.target.value,
-            errMsg: '',
-          }));
-        }}
-      />
-      {result.length ? (
-        <SentencesMonitor
-          result={result}
-          audioBuffer={value.audioBuffer}
-          sentences={sentences}
+    <div className='grid gap-8'>
+      <div className='text-2xl font-extrabold'>Sentences Form</div>
+      <div className='text-2xl font-extrabold'>{article.title}</div>
+      <div className='grid gap-y-4'>
+        <Textarea
+          placeholder='Japanese'
+          value={value.japanese}
+          onChange={(e) => {
+            setValue((prev) => ({
+              ...prev,
+              japanese: e.target.value,
+              errMsg: '',
+            }));
+          }}
         />
-      ) : null}
-      <SubmitServerActionButton
-        action={action}
-        isPending={isPending}
-        disabled={value.disabled || isSameValue(value, originalValue)}
-        errMsg={value.errMsg}
-      >
-        Submit
-      </SubmitServerActionButton>
+        <Textarea
+          placeholder='Original'
+          value={value.original}
+          onChange={(e) => {
+            setValue((prev) => ({
+              ...prev,
+              original: e.target.value,
+              errMsg: '',
+            }));
+          }}
+        />
+        <Textarea
+          placeholder='_PitchStr'
+          value={value._pitchStr}
+          onChange={(e) => {
+            const pitchStr = markLongVowel(removeMarks(e.target.value));
+            setValue((prev) => ({
+              ...prev,
+              _pitchStr: e.target.value,
+              pitchStr,
+              errMsg: '',
+            }));
+          }}
+        />
+        <Textarea
+          placeholder='PitchStr'
+          value={value.pitchStr}
+          onChange={(e) => {
+            setValue((prev) => ({
+              ...prev,
+              pitchStr: e.target.value,
+              errMsg: '',
+            }));
+          }}
+        />
+        <Textarea
+          placeholder='Chinese'
+          value={value.chinese}
+          onChange={(e) => {
+            setValue((prev) => ({
+              ...prev,
+              chinese: e.target.value,
+              errMsg: '',
+            }));
+          }}
+        />
+        {result.length ? (
+          <SentencesMonitor
+            result={result}
+            audioBuffer={value.audioBuffer}
+            sentences={sentences}
+          />
+        ) : null}
+        <SubmitServerActionButton
+          action={action}
+          isPending={isPending}
+          disabled={
+            !value.japanese ||
+            !value.original ||
+            !value.pitchStr ||
+            isSameValue(value, originalValue)
+          }
+          errMsg={value.errMsg}
+        >
+          Submit
+        </SubmitServerActionButton>
 
-      {!!sentences.length ? (
-        <BuildArticlePitchQuizButton sentences={sentences} />
-      ) : null}
+        {!!sentences.length ? (
+          <BuildArticlePitchQuizButton sentences={sentences} />
+        ) : null}
+      </div>
     </div>
   );
 };
 
-export default ButchInputForm;
+export default SentencesForm;
 
 function buildResult(value: FormProps) {
   const result: {
@@ -223,7 +219,7 @@ function buildNewValue(sentences: SentenceView[]) {
     pitchStr: _pitchStr.join('\n'),
     chinese: _chinese.join('\n'),
     errMsg: '',
-    disabled: false,
+    // disabled: false,
     audioBuffer: null,
   };
   return newValue;

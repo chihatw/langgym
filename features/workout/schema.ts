@@ -16,3 +16,49 @@ export interface WorkoutFirst {
   pitchStr: string;
   chinese: string;
 }
+
+export interface Workout {
+  id: number;
+  uid: string;
+  title: string;
+  isReview: boolean;
+  targetBPM: number;
+  isDev: boolean;
+  created_at: Date;
+}
+
+export interface WorkoutView {
+  id: number | null;
+  uid: string | null;
+  display: string | null;
+  title: string | null;
+  isReview: boolean | null;
+  targetBPM: number | null;
+  isDev: boolean | null;
+  created_at: Date | null;
+}
+
+export interface WorkoutItem {
+  id: number;
+  index: number;
+  japanese: string;
+  pitchStr: string;
+  chinese: string;
+  workoutId: number;
+  created_at: Date;
+}
+
+export interface WorkoutRecord {
+  id: number;
+  workoutId: number;
+  duration: number;
+  audioPath: string;
+  created_at: Date;
+}
+
+export interface WorkoutRecordRow {
+  id: number;
+  workoutRecordId: number;
+  index: number;
+  workoutItemId: number;
+}

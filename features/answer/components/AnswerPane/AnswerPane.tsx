@@ -9,7 +9,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { ArticlePitchQuizAnswerRowView } from '../../schema';
 import WrongAnswer from './WrongAnswer';
 
-// todo answer は何に使っている？
 type Props = {
   score: number;
   answerRows: ArticlePitchQuizAnswerRowView[];

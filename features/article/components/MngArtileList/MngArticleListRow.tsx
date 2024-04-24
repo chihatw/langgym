@@ -12,25 +12,24 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useOptimistic } from 'react';
-import { Article } from '../../schema';
+import { ArticleView } from '../../schema';
 import {
   deleteArticle,
   updateArticleIsShowAccents,
 } from '../../services/actions';
 
 type Props = {
-  display: string;
-  article: Article;
+  article: ArticleView;
   removeArticle: (id: number) => void;
 };
 
-const MngArticleListRow = ({ article, removeArticle, display }: Props) => {
+const MngArticleListRow = ({ article, removeArticle }: Props) => {
   return (
-    <div className='border-b border-black/20 px-2 py-1 text-sm grid grid-cols-[auto,1fr,auto] justify-between items-center gap-y-2'>
-      <div className='pr-2 text-xs font-extralight text-gray-500'>
-        {display}
+    <div className='border-b border-black/20 px-2 py-1 text-sm grid grid-cols-[60px,1fr,auto] justify-between items-center gap-y-2'>
+      <div className='pr-2 text-xs font-extralight text-gray-500 whitespace-nowrap overflow-hidden'>
+        {article.display}
       </div>
-      <div>{article.title}</div>
+      <div className='overflow-hidden whitespace-nowrap'>{article.title}</div>
       <div className='flex flex-nowrap'>
         <Link
           href={`/mng/article/${article.id}/edit`}
@@ -39,7 +38,7 @@ const MngArticleListRow = ({ article, removeArticle, display }: Props) => {
           <Edit2 className='h-5 w-5' />
         </Link>
         <Link
-          href={`/mng/article/${article.id}/batchInput`}
+          href={`/mng/article/${article.id}/sentences`}
           className={buttonVariants({ size: 'icon', variant: 'ghost' })}
         >
           <AlignJustify className='h-5 w-5' />
@@ -62,7 +61,7 @@ const MngArticleListRow = ({ article, removeArticle, display }: Props) => {
         </Link>
         <ShowAccentsToggle article={article} />
         <RemoveArticleButton
-          articleId={article.id}
+          articleId={article.id!}
           removeArticle={removeArticle}
         />
       </div>
@@ -72,15 +71,15 @@ const MngArticleListRow = ({ article, removeArticle, display }: Props) => {
 
 export default MngArticleListRow;
 
-const ShowAccentsToggle = ({ article }: { article: Article }) => {
+const ShowAccentsToggle = ({ article }: { article: ArticleView }) => {
   const [optValue, setOptValue] = useOptimistic<boolean, boolean>(
-    article.isShowAccents,
+    article.isShowAccents!,
     (_, newValue) => newValue
   );
 
   const action = async () => {
     setOptValue(!optValue);
-    updateArticleIsShowAccents(article.id, !optValue);
+    updateArticleIsShowAccents(article.id!, !optValue);
   };
   return (
     <form action={action}>
@@ -103,7 +102,10 @@ const RemoveArticleButton = ({
   removeArticle: (value: number) => void;
 }) => {
   const action = () => {
+    // local
     removeArticle(articleId);
+
+    // remote
     deleteArticle(articleId);
   };
   return (

@@ -16,12 +16,10 @@ const MngQuizList = ({ quizzes }: Props) => {
   return (
     <div className='grid gap-y-4'>
       <div className='text-2xl font-extrabold'>Quiz List</div>
-      <div>
-        {opti_quizzes.map((quiz) => {
-          return (
-            <MngQuizListRow key={quiz.id} quiz={quiz} removeQuiz={removeQuiz} />
-          );
-        })}
+      <div className='grid'>
+        {opti_quizzes.map((quiz) => (
+          <MngQuizListRow key={quiz.id} quiz={quiz} removeQuiz={removeQuiz} />
+        ))}
       </div>
     </div>
   );

@@ -1,7 +1,4 @@
-import {
-  fetchArticleById,
-  fetchSentencesByArticleId,
-} from '@/features/article/services/server';
+import { fetchSentencesByArticleId } from '@/features/article/services/server';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 
 type Props = {
@@ -9,11 +6,7 @@ type Props = {
 };
 
 const PrintArticlePage = async ({ params: { id } }: Props) => {
-  const article = await fetchArticleById(id);
-
-  if (!article) return <></>;
-
-  const sentences = await fetchSentencesByArticleId(article.id);
+  const sentences = await fetchSentencesByArticleId(id);
 
   return (
     <div className='absolute top-8 left-0 w-screen min-h-screen flex justify-center'>

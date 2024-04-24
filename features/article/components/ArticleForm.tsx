@@ -29,14 +29,13 @@ import {
 import { Article } from '../schema';
 import { insertArticle, updateArticle } from '../services/actions';
 
-type Props = { users: AppUser[]; article?: Article };
+type Props = { users: AppUser[]; article?: Article; title: string };
 
 type FormProps = {
   uid: string;
   date: Date;
   title: string;
   errMsg: string;
-  disabled: boolean;
 };
 
 const INITIAL_STATE: FormProps = {
@@ -44,10 +43,9 @@ const INITIAL_STATE: FormProps = {
   date: new Date(),
   title: '',
   errMsg: '',
-  disabled: true,
 };
 
-const ArticleForm = ({ users, article }: Props) => {
+const ArticleForm = ({ users, article, title }: Props) => {
   const router = useRouter();
 
   const [value, setValue] = useState(INITIAL_STATE);
@@ -61,7 +59,6 @@ const ArticleForm = ({ users, article }: Props) => {
         date: new Date(article.date),
         title: article.title,
         errMsg: '',
-        disabled: false,
       });
     }, 0); // 遅らせないと select されない？
   }, [article]);
@@ -84,6 +81,7 @@ const ArticleForm = ({ users, article }: Props) => {
       router.push(`/?ts=${Date.now()}`);
     });
   };
+
   const update = () => {
     const item = {
       uid: value.uid,
@@ -101,60 +99,57 @@ const ArticleForm = ({ users, article }: Props) => {
     });
   };
 
-  const action = async (formData: FormData) => {
-    if (!article) {
-      create();
-    } else {
-      update();
-    }
+  const action = async () => {
+    !!article ? update() : create();
   };
 
   return (
-    <div className='grid gap-y-4'>
-      <Select
-        onValueChange={(value) => {
-          setValue((prev) => ({
-            ...prev,
-            uid: value,
-            errMst: '',
-            disabled: !value || !prev.title || !prev.date,
-          }));
-        }}
-        value={value.uid}
-      >
-        <SelectTrigger>
-          <SelectValue placeholder='user' />
-        </SelectTrigger>
-        <SelectContent>
-          {users.map((user) => (
-            <SelectItem key={user.id} value={user.uid}>
-              {user.display}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <DatePicker date={value.date} setValue={setValue} />
-      <Input
-        placeholder='title'
-        name='title'
-        value={value.title}
-        onChange={(e) =>
-          setValue((prev) => ({
-            ...prev,
-            title: e.target.value,
-            errMsg: '',
-            disabled: !prev.date || !prev.uid || !e.target.value,
-          }))
-        }
-      />
-      <SubmitServerActionButton
-        errMsg={value.errMsg}
-        disabled={value.disabled}
-        isPending={isPending}
-        action={action}
-      >
-        Submit
-      </SubmitServerActionButton>
+    <div className='grid gap-8 max-w-md mx-auto '>
+      <div className='text-2xl font-extrabold'>{title}</div>
+      <div className='grid gap-4'>
+        <Select
+          onValueChange={(value) => {
+            setValue((prev) => ({
+              ...prev,
+              uid: value,
+              errMst: '',
+            }));
+          }}
+          value={value.uid}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder='user' />
+          </SelectTrigger>
+          <SelectContent>
+            {users.map((user) => (
+              <SelectItem key={user.id} value={user.uid}>
+                {user.display}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <DatePicker date={value.date} setValue={setValue} />
+        <Input
+          placeholder='title'
+          name='title'
+          value={value.title}
+          onChange={(e) =>
+            setValue((prev) => ({
+              ...prev,
+              title: e.target.value,
+              errMsg: '',
+            }))
+          }
+        />
+        <SubmitServerActionButton
+          errMsg={value.errMsg}
+          disabled={!value.date || !value.uid || !value.title}
+          isPending={isPending}
+          action={action}
+        >
+          Submit
+        </SubmitServerActionButton>
+      </div>
     </div>
   );
 };

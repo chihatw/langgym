@@ -8,6 +8,17 @@ export interface Article {
   created_at: Date;
 }
 
+export interface ArticleView {
+  id: number | null;
+  uid: string | null;
+  display: string | null;
+  date: string | null;
+  title: string | null;
+  audioPath: string | null;
+  isShowAccents: boolean | null;
+  created_at: Date | null;
+}
+
 export interface Sentence {
   id: number;
   line: number;

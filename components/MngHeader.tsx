@@ -8,6 +8,7 @@ const items: { label: string; href: string }[] = [
   { label: 'articles', href: '/' },
   { label: 'quizzes', href: '/mng/quiz/list' },
   { label: 'answers', href: '/mng/answer/list' },
+  { label: 'workouts', href: '/mng/workout/list' },
 ];
 
 const MngHeader = (props: Props) => {
