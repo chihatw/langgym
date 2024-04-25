@@ -75,3 +75,22 @@ export interface WorkoutRecordRow {
   index: number;
   workoutItemId: number;
 }
+
+export interface WorkoutRecordRowView {
+  id: number | null;
+  workoutId: number | null;
+  title: string | null;
+  uid: string | null;
+  isDev: boolean | null;
+  isReview: boolean | null;
+  targetBPM: number | null;
+  workoutRecordId: number | null;
+  bpm: number | null;
+  audioPath: string | null;
+  index: number | null;
+  workoutItemId: number | null;
+  japanese: string | null;
+  pitchStr: string | null;
+  chinese: string | null;
+  created_at: Date | null;
+}

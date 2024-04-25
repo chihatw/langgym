@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from './ui/button';
 
 type Props = {
@@ -35,6 +35,12 @@ const AudioPlayButton = ({
   const audioContext = useMemo(() => new AudioContext(), []);
   const sourceNode = useRef<AudioBufferSourceNode | undefined>(undefined);
   const [isPlayng, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      stop();
+    };
+  }, []);
 
   const play = () => {
     const _sourceNode = audioContext.createBufferSource();

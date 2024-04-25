@@ -32,6 +32,7 @@ const WorkoutCheckAudioModal = ({ value, setValue }: Props) => {
   const [isPending, startTransition] = useTransition();
 
   const workoutItem = useMemo(() => value.items.at(0), [value]);
+
   const bpm = useMemo(() => {
     if (!value.audioBuffer || !workoutItem) return 0;
     let beats = value.items.reduce((acc, cur, index) => {
@@ -55,6 +56,7 @@ const WorkoutCheckAudioModal = ({ value, setValue }: Props) => {
       blob: null,
       audioBuffer: null,
       isChecking: false,
+      elapsedTime: 0,
     }));
   };
 

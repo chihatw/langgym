@@ -905,6 +905,70 @@ export type Database = {
           },
         ]
       }
+      workout_record_rows_view: {
+        Row: {
+          audioPath: string | null
+          bpm: number | null
+          chinese: string | null
+          created_at: string | null
+          id: number | null
+          index: number | null
+          isDev: boolean | null
+          isReview: boolean | null
+          japanese: string | null
+          pitchStr: string | null
+          targetBPM: number | null
+          title: string | null
+          uid: string | null
+          workoutId: number | null
+          workoutItemId: number | null
+          workoutRecordId: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_workout_items_workoutId_fkey"
+            columns: ["workoutId"]
+            isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_workout_items_workoutId_fkey"
+            columns: ["workoutId"]
+            isOneToOne: false
+            referencedRelation: "workouts_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_workout_record_rows_workoutItemId_fkey"
+            columns: ["workoutItemId"]
+            isOneToOne: false
+            referencedRelation: "workout_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_workout_record_rows_workoutItemId_fkey"
+            columns: ["workoutItemId"]
+            isOneToOne: false
+            referencedRelation: "workout_items_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_workout_record_rows_workoutRecordId_fkey"
+            columns: ["workoutRecordId"]
+            isOneToOne: false
+            referencedRelation: "workout_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_workouts_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workouts_view: {
         Row: {
           created_at: string | null

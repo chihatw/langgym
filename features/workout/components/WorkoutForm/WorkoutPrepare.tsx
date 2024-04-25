@@ -19,7 +19,7 @@ const WorkoutPrepare = ({ value, setValue }: Props) => {
       <Button
         onClick={() => setValue((prev) => ({ ...prev, state: 'record' }))}
       >
-        次へ
+        錄音
       </Button>
     </div>
   );

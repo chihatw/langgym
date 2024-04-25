@@ -4,6 +4,7 @@ import {
   WorkoutFirstAudioPath,
   WorkoutItemView,
   WorkoutRecord,
+  WorkoutRecordRowView,
   WorkoutSecondAudioPath,
   WorkoutView,
 } from '../schema';
@@ -87,15 +88,40 @@ export async function fetchWorkoutItemsByWorkoutId(
   workoutId: number
 ): Promise<WorkoutItemView[]> {
   const supabase = createSupabaseServerComponentClient();
+
   const { data, error } = await supabase
     .from('workout_items_view')
     .select()
-    .order('index')
-    .eq('workoutId', workoutId);
+    .eq('workoutId', workoutId)
+    .order('index');
+
   if (error) {
     console.log(error.message);
     return [];
   }
+
+  return data.map((item) => ({
+    ...item,
+    created_at: new Date(item.created_at!),
+  }));
+}
+
+export async function fetchWorkoutRecordRowsByWorkoutId(
+  id: number
+): Promise<WorkoutRecordRowView[]> {
+  const supabase = createSupabaseServerComponentClient();
+
+  const { data, error } = await supabase
+    .from('workout_record_rows_view')
+    .select()
+    .eq('workoutId', id)
+    .order('index');
+
+  if (error) {
+    console.log(error.message);
+    return [];
+  }
+
   return data.map((item) => ({
     ...item,
     created_at: new Date(item.created_at!),

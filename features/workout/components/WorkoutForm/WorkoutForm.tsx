@@ -1,15 +1,19 @@
 'use client';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
 import { shuffle } from '@/utils';
-import { useEffect, useMemo, useState } from 'react';
-import { WorkoutItemView } from '../../schema';
+import { TabsContent } from '@radix-ui/react-tabs';
+import { useEffect, useMemo, useOptimistic, useState } from 'react';
+import { WorkoutItemView, WorkoutRecordRowView } from '../../schema';
+import WorkoutArchive from './WorkoutArchive';
 import WorkoutPrepare from './WorkoutPrepare';
 import WorkoutRecord from './WorkoutRecord';
 
-type State = 'prepare' | 'record';
+type State = 'prepare' | 'record' | 'archive';
 
 type Props = {
   workoutItems: WorkoutItemView[];
+  recordRows: WorkoutRecordRowView[];
 };
 
 export type WorkoutFormProps = {
@@ -38,8 +42,13 @@ const INITIAL_STATE: WorkoutFormProps = {
   audio: null,
 };
 
-const WorkoutForm = ({ workoutItems }: Props) => {
+const WorkoutForm = ({ workoutItems, recordRows }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
+
+  const [optiRecordRows, removeRecord] = useOptimistic<
+    WorkoutRecordRowView[],
+    void
+  >(recordRows, (state) => []);
 
   const workoutItem = useMemo(() => workoutItems.at(0), [workoutItems]);
 
@@ -72,22 +81,43 @@ const WorkoutForm = ({ workoutItems }: Props) => {
           }))
         }
       >
-        <TabsList className='w-full grid grid-cols-2 h-6 text-xs bg-slate-200'>
+        <TabsList
+          className={cn(
+            'w-full grid grid-cols-2 h-6 text-xs bg-slate-200',
+            !!optiRecordRows.length ? 'grid-cols-3' : 'grid-cols-2'
+          )}
+        >
           <TabsTrigger value='prepare' className='h-4 text-xs'>
             清單
           </TabsTrigger>
           <TabsTrigger value='record' className='h-4 text-xs'>
             錄音
           </TabsTrigger>
+          {!!optiRecordRows.length ? (
+            <TabsTrigger value='archive' className='h-4 text-xs'>
+              記錄
+            </TabsTrigger>
+          ) : null}
         </TabsList>
+        <TabsContent value='prepare'>
+          <div className='pt-8'>
+            <WorkoutPrepare value={value} setValue={setValue} />
+          </div>
+        </TabsContent>
+        <TabsContent value='record'>
+          <div className='pt-4'>
+            <WorkoutRecord value={value} setValue={setValue} />
+          </div>
+        </TabsContent>
+        <TabsContent value='archive'>
+          <div className='pt-4'>
+            <WorkoutArchive
+              recordRows={optiRecordRows}
+              removeRecord={removeRecord}
+            />
+          </div>
+        </TabsContent>
       </Tabs>
-
-      {value.state === 'prepare' ? (
-        <WorkoutPrepare value={value} setValue={setValue} />
-      ) : null}
-      {value.state === 'record' ? (
-        <WorkoutRecord value={value} setValue={setValue} />
-      ) : null}
     </div>
   );
 };
