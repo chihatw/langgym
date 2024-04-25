@@ -525,6 +525,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "public_workout_record_rows_workoutItemId_fkey"
+            columns: ["workoutItemId"]
+            isOneToOne: false
+            referencedRelation: "workout_items_view"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "public_workout_record_rows_workoutRecordId_fkey"
             columns: ["workoutRecordId"]
             isOneToOne: false
@@ -536,22 +543,22 @@ export type Database = {
       workout_records: {
         Row: {
           audioPath: string
+          bpm: number
           created_at: string
-          duration: number
           id: number
           workoutId: number
         }
         Insert: {
           audioPath: string
+          bpm: number
           created_at?: string
-          duration: number
           id?: number
           workoutId: number
         }
         Update: {
           audioPath?: string
+          bpm?: number
           created_at?: string
-          duration?: number
           id?: number
           workoutId?: number
         }
@@ -864,6 +871,36 @@ export type Database = {
             columns: ["articleId"]
             isOneToOne: false
             referencedRelation: "articles_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workout_items_view: {
+        Row: {
+          chinese: string | null
+          created_at: string | null
+          id: number | null
+          index: number | null
+          isReview: boolean | null
+          japanese: string | null
+          pitchStr: string | null
+          targetBPM: number | null
+          title: string | null
+          workoutId: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_workout_items_workoutId_fkey"
+            columns: ["workoutId"]
+            isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_workout_items_workoutId_fkey"
+            columns: ["workoutId"]
+            isOneToOne: false
+            referencedRelation: "workouts_view"
             referencedColumns: ["id"]
           },
         ]

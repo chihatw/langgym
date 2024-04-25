@@ -48,10 +48,23 @@ export interface WorkoutItem {
   created_at: Date;
 }
 
+export interface WorkoutItemView {
+  id: number | null;
+  workoutId: number | null;
+  title: string | null;
+  isReview: boolean | null;
+  targetBPM: number | null;
+  index: number | null;
+  japanese: string | null;
+  pitchStr: string | null;
+  chinese: string | null;
+  created_at: Date | null;
+}
+
 export interface WorkoutRecord {
   id: number;
   workoutId: number;
-  duration: number;
+  bpm: number;
   audioPath: string;
   created_at: Date;
 }

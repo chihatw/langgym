@@ -1,6 +1,5 @@
 import QuizListAnswerRow from '@/features/answer/components/QuizListAnswerRow';
 import { ArticlePitchQuizAnswerRowView } from '@/features/answer/schema';
-import { Check } from 'lucide-react';
 import Link from 'next/link';
 import { ArticlePitchQuizView } from '../../schema';
 
@@ -21,24 +20,22 @@ const QuizListRow = ({ quiz, answerRows }: Props) => {
 
   return (
     <div className='p-5 bg-white/60 rounded-lg'>
-      <Link
-        href={`/quiz/${quiz.id}`}
-        className='flex gap-1 items-center hover:cursor-pointer'
-      >
+      <Link href={`/quiz/${quiz.id}`} className='hover:cursor-pointer'>
         <div>{quiz.title}</div>
-        {!!answerRows.length ? <Check className='text-[#52a2aa]' /> : null}
       </Link>
-      <div className='grid gap-1'>
-        {answers.map((answer) => (
-          <QuizListAnswerRow
-            key={answer.id!}
-            answer={answer}
-            answerRows={answerRows.filter(
-              (item) => item.answerId === answer.id
-            )}
-          />
-        ))}
-      </div>
+      {!!answers.length ? (
+        <div className='grid gap-1'>
+          {answers.map((answer) => (
+            <QuizListAnswerRow
+              key={answer.id!}
+              answer={answer}
+              answerRows={answerRows.filter(
+                (item) => item.answerId === answer.id
+              )}
+            />
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 };

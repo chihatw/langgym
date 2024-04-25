@@ -9,8 +9,8 @@ const Header = async () => {
   const user = await getUserFromServerSide();
 
   return (
-    <nav className='grid h-12 shadow print:hidden'>
-      <div className='container flex w-full items-center justify-between'>
+    <nav className='grid h-12 shadow print:hidden '>
+      <div className='flex items-center justify-between sm:mx-8 '>
         <Link
           href={'/'}
           className={buttonVariants({ variant: 'ghost', size: 'icon' })}

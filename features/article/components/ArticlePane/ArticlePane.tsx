@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { SentenceView } from '../../schema';
 import { downloadAudioFile } from '../../services/client';
 import { getYMDFromDateString } from '../../services/utils';
+import RecordPane from './RecordPane/RecordPane';
 import SentenceRow from './SentenceRow';
 
 type Props = {
@@ -62,11 +63,12 @@ const ArticlePane = ({ sentences }: Props) => {
       </div>
       <div className='grid gap-4'>
         {sentences.map((sentence, index) => (
-          <SentenceRow
-            key={index}
-            sentence={sentence}
-            audioBuffer={value.audioBuffer}
-          />
+          <div key={index} className='grid gap-2 bg-white/60 rounded p-4'>
+            <SentenceRow sentence={sentence} audioBuffer={value.audioBuffer} />
+            {sentence.isShowAccents ? (
+              <RecordPane sentence={sentence} audioBuffer={value.audioBuffer} />
+            ) : null}
+          </div>
         ))}
       </div>
     </div>

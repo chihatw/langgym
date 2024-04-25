@@ -1,5 +1,6 @@
 import BorderLabel from '@/components/BorderLabel';
 import QuizListContainer from '@/features/quiz/components/QuizList/QuizListContainer';
+import WorkoutListContainer from '@/features/workout/components/WorkoutList/WorkoutListContainer';
 import ArticleListContainer from '../features/article/components/ArticleList/ArticleListContainer';
 
 type Props = { uid: string };
@@ -15,7 +16,8 @@ const GroupATop = async ({ uid }: Props) => {
         <BorderLabel label='アクセント問題' />
         <QuizListContainer uid={uid} />
       </div>
-      {/* todo add Workouts to "GroupATop"  */}
+      <BorderLabel label='反応練習' />
+      <WorkoutListContainer uid={uid} />
     </div>
   );
 };

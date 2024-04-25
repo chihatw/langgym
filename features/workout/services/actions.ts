@@ -5,6 +5,8 @@ import {
   Workout,
   WorkoutFirstAudioPath,
   WorkoutItem,
+  WorkoutRecord,
+  WorkoutRecordRow,
   WorkoutSecondAudioPath,
 } from '../schema';
 
@@ -122,6 +124,67 @@ export async function batchInsertWorkoutItems(
   revalidatePath(`/mng/workout/${workoutId}/items`);
   revalidatePath(`/mng/workout/${workoutId}/edit`);
   return;
+}
+
+export async function insertWorkoutRecord(
+  record: Omit<WorkoutRecord, 'id' | 'created_at'>,
+  rows: Omit<WorkoutRecordRow, 'id' | 'workoutRecordId' | 'created_at'>[]
+) {
+  // workoutId に対して 既存の record があれば削除
+  // recordRow は cascade で削除される
+  const supabase = createSupabaseServerActionClient();
+  const { error: error_dr } = await supabase
+    .from('workout_records')
+    .delete()
+    .eq('workoutId', record.workoutId);
+
+  if (error_dr) {
+    console.log(error_dr.message);
+  }
+
+  // record の追加
+  const { data, error: error_r } = await supabase
+    .from('workout_records')
+    .insert(record)
+    .select()
+    .single();
+
+  if (error_r) {
+    console.log(error_r);
+  }
+  if (!data) return;
+
+  // rows の追加
+
+  const { error: error_rr } = await supabase
+    .from('workout_record_rows')
+    .insert(rows.map((row) => ({ ...row, workoutRecordId: data.id })));
+
+  if (error_rr) {
+    console.log(error_rr);
+    return;
+  }
+
+  revalidatePath('/');
+  revalidatePath(`/workout/${record.workoutId}`);
+  revalidatePath(`/mng/workout/list`);
+}
+
+export async function deleteWorkoutRecord(id: number) {
+  const supabase = createSupabaseServerActionClient();
+
+  const { error } = await supabase
+    .from('workout_records')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  revalidatePath('/');
+  revalidatePath(`/mng/workout/list`);
 }
 
 export async function insertWorkoutFirstAudioPath(

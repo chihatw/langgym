@@ -1,5 +1,5 @@
 import { fetchUsers } from '@/features/user/services/server';
-import WorkoutForm from '@/features/workout/components/WorkoutForm';
+import WorkoutEditForm from '@/features/workout/components/WorkoutEditForm';
 import { fetchWorkoutById } from '@/features/workout/services/server';
 
 type Props = {
@@ -15,7 +15,9 @@ const WorkoutEditPage = async ({ params: { id } }: Props) => {
 
   if (!workout) return <></>;
 
-  return <WorkoutForm users={users} title={'Edit Workout'} workout={workout} />;
+  return (
+    <WorkoutEditForm users={users} title={'Edit Workout'} workout={workout} />
+  );
 };
 
 export default WorkoutEditPage;
