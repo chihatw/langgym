@@ -323,6 +323,56 @@ export type Database = {
           },
         ]
       }
+      betterread: {
+        Row: {
+          articleId: number
+          created_at: string
+          id: number
+          uid: string
+        }
+        Insert: {
+          articleId: number
+          created_at?: string
+          id?: number
+          uid: string
+        }
+        Update: {
+          articleId?: number
+          created_at?: string
+          id?: number
+          uid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "betterread_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["articleId"]
+          },
+          {
+            foreignKeyName: "betterread_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "betterread_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "betterread_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sentences: {
         Row: {
           articleId: number
@@ -817,6 +867,48 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "articles_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      betterread_view: {
+        Row: {
+          articleId: number | null
+          chinese: string | null
+          id: number | null
+          japanese: string | null
+          line: number | null
+          pitchStr: string | null
+          title: string | null
+          uid: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "betterread_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "betterread_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["articleId"]
+          },
+          {
+            foreignKeyName: "betterread_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "betterread_uid_fkey"
             columns: ["uid"]
             isOneToOne: false
             referencedRelation: "users"
