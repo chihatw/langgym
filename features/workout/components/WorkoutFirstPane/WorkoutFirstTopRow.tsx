@@ -12,7 +12,10 @@ type Props = {
 const WorkoutFirstTopRow = ({ audioPaths }: Props) => {
   return (
     <div className='rounded bg-white/60 grid p-5'>
-      <Link href={`/`} className={cn(buttonVariants({ variant: 'link' }))}>
+      <Link
+        href={`/workout/1`}
+        className={cn(buttonVariants({ variant: 'link' }))}
+      >
         <div className='flex gap-1 items-center justify-center'>
           <div className='font-extrabold text-2xl text-slate-700  '>
             {WORKOUT_LABELS.at(0)}

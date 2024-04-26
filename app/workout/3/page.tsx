@@ -14,7 +14,7 @@ const WorkoutThirdPage = async (props: Props) => {
     <div className='grid gap-4 max-w-lg mx-auto pt-4 pb-40'>
       <Breadcrumb label={WORKOUT_LABELS.at(2)} />
       <WorkoutSecondPane
-        label={WORKOUT_LABELS.at(1)!}
+        label={WORKOUT_LABELS.at(2)!}
         items={WORKOUT_THIRD_ITEMS}
         workoutIndex={3}
         audioPath={audioPath}
