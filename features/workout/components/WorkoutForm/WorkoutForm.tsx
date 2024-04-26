@@ -83,7 +83,7 @@ const WorkoutForm = ({ workoutItems, recordRows }: Props) => {
       >
         <TabsList
           className={cn(
-            'w-full grid grid-cols-2 h-6 text-xs bg-slate-200',
+            'w-full grid h-6 text-xs bg-slate-200',
             !!optiRecordRows.length ? 'grid-cols-3' : 'grid-cols-2'
           )}
         >
