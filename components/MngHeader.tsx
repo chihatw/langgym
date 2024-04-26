@@ -9,6 +9,7 @@ const items: { label: string; href: string }[] = [
   { label: 'quizzes', href: '/mng/quiz/list' },
   { label: 'answers', href: '/mng/answer/list' },
   { label: 'workouts', href: '/mng/workout/list' },
+  { label: 'draft', href: '/mng/draft' },
   { label: 'pitch table', href: '/mng/pitchtable' },
 ];
 
