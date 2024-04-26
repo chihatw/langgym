@@ -9,11 +9,12 @@ const items: { label: string; href: string }[] = [
   { label: 'quizzes', href: '/mng/quiz/list' },
   { label: 'answers', href: '/mng/answer/list' },
   { label: 'workouts', href: '/mng/workout/list' },
+  { label: 'pitch table', href: '/mng/pitchtable' },
 ];
 
 const MngHeader = (props: Props) => {
   return (
-    <div className='print:hidden space-x-2 mt-4'>
+    <div className='print:hidden flex gap-2 mt-4 flex-wrap'>
       {items.map((item, index) => (
         <Link
           href={item.href}
