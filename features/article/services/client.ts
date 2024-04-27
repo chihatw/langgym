@@ -3,15 +3,9 @@ import { createSupabaseClientComponentClient } from '@/lib/supabase';
 export async function uploadAudioFile(file: Blob, path: string) {
   const supabase = createSupabaseClientComponentClient();
 
-  // 既存のファイルを削除
-  const { error: error_d } = await supabase.storage
+  const { error } = await supabase.storage
     .from('audio')
-    .remove([path]);
-  if (error_d) {
-    return error_d.message;
-  }
-
-  const { error } = await supabase.storage.from('audio').upload(path, file);
+    .upload(path, file, { upsert: true });
   if (error) {
     return error.message;
   }

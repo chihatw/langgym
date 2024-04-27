@@ -1,14 +1,20 @@
-import { fetchBetterreadByUid } from '../services/server';
+import BorderLabel from '@/components/BorderLabel';
+import { fetchBetterreadImagePathByUid } from '../services/server';
 import Betterread from './Betterread';
 
 type Props = { uid: string };
 
 const BetterreadContainer = async ({ uid }: Props) => {
-  const betterread = await fetchBetterreadByUid(uid);
+  const imagePath = await fetchBetterreadImagePathByUid(uid);
 
-  if (!betterread) return <></>;
+  if (!imagePath) return <></>;
 
-  return <Betterread betterread={betterread} />;
+  return (
+    <div className='grid gap-4'>
+      <BorderLabel label='課前準備' />
+      <Betterread imagePath={imagePath} />
+    </div>
+  );
 };
 
 export default BetterreadContainer;

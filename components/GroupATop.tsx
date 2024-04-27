@@ -1,4 +1,3 @@
-import BorderLabel from '@/components/BorderLabel';
 import BetterreadContainer from '@/features/betterread/components/BetterreadContainer';
 import QuizListContainer from '@/features/quiz/components/QuizList/QuizListContainer';
 import WorkoutListContainer from '@/features/workout/components/WorkoutList/WorkoutListContainer';
@@ -9,22 +8,10 @@ type Props = { uid: string };
 const GroupATop = async ({ uid }: Props) => {
   return (
     <div className='grid gap-8 max-w-lg mx-auto pt-10 pb-40'>
-      <div className='grid gap-4'>
-        <BorderLabel label='作文' />
-        <ArticleListContainer uid={uid} />
-      </div>
-      <div className='grid gap-4'>
-        <BorderLabel label='アクセント問題' />
-        <QuizListContainer uid={uid} />
-      </div>
-      <div className='grid gap-4'>
-        <BorderLabel label='反応練習' />
-        <WorkoutListContainer uid={uid} />
-      </div>
-      <div className='grid gap-4'>
-        <BorderLabel label='課前準備' />
-        <BetterreadContainer uid={uid} />
-      </div>
+      <ArticleListContainer uid={uid} />
+      <QuizListContainer uid={uid} />
+      <WorkoutListContainer uid={uid} />
+      <BetterreadContainer uid={uid} />
     </div>
   );
 };

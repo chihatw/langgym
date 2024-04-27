@@ -1,3 +1,4 @@
+import BorderLabel from '@/components/BorderLabel';
 import {
   fetchWorkoutRecordsByWorkoutIds,
   fetchWorkoutsByUid,
@@ -13,7 +14,14 @@ const WorkoutListContainer = async ({ uid }: Props) => {
     workouts.map((item) => item.id)
   );
 
-  return <WorkoutList workoutRecords={workoutRecords} workouts={workouts} />;
+  if (!workouts.length) return <></>;
+
+  return (
+    <div className='grid gap-4'>
+      <BorderLabel label='反応練習' />
+      <WorkoutList workoutRecords={workoutRecords} workouts={workouts} />
+    </div>
+  );
 };
 
 export default WorkoutListContainer;

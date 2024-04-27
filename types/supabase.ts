@@ -373,6 +373,45 @@ export type Database = {
           },
         ]
       }
+      betterread_image_paths: {
+        Row: {
+          betterreadId: number
+          created_at: string
+          id: number
+          imagePath: string
+          index: number
+        }
+        Insert: {
+          betterreadId: number
+          created_at?: string
+          id?: number
+          imagePath: string
+          index: number
+        }
+        Update: {
+          betterreadId?: number
+          created_at?: string
+          id?: number
+          imagePath?: string
+          index?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "betterread_image_paths_betterreadid_fkey"
+            columns: ["betterreadId"]
+            isOneToOne: false
+            referencedRelation: "betterread"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "betterread_image_paths_betterreadid_fkey"
+            columns: ["betterreadId"]
+            isOneToOne: false
+            referencedRelation: "betterread_image_paths_view"
+            referencedColumns: ["betterreadId"]
+          },
+        ]
+      }
       sentences: {
         Row: {
           articleId: number
@@ -874,14 +913,15 @@ export type Database = {
           },
         ]
       }
-      betterread_view: {
+      betterread_image_paths_view: {
         Row: {
           articleId: number | null
+          betterreadId: number | null
           chinese: string | null
-          id: number | null
+          created_at: string | null
+          imagePath: string | null
+          index: number | null
           japanese: string | null
-          line: number | null
-          pitchStr: string | null
           title: string | null
           uid: string | null
         }

@@ -5,13 +5,22 @@ export interface BetterRead {
   created_at: Date;
 }
 
-export interface BetterReadView {
-  id: number | null;
+export interface BetterReadImagePath {
+  id: number;
+  betterreadId: number;
+  index: number;
+  imagePath: string;
+  created_at: Date;
+}
+
+export interface BetterReadImagePathView {
+  betterreadId: number | null;
   uid: string | null;
   articleId: number | null;
   title: string | null;
-  line: number | null;
+  index: number | null;
   japanese: string | null;
-  pitchStr: string | null;
   chinese: string | null;
+  imagePath: string | null;
+  created_at: Date | null;
 }

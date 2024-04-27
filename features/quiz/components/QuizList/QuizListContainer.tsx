@@ -1,3 +1,4 @@
+import BorderLabel from '@/components/BorderLabel';
 import { fetchAnswerRowsbyQuizIds } from '@/features/answer/services/server';
 import { fetchArticlePitchQuizzesByUid } from '../../services/server';
 import QuizList from './QuizList';
@@ -11,7 +12,15 @@ const QuizListContainer = async ({ uid }: Props) => {
   const answerRows = await fetchAnswerRowsbyQuizIds(
     quizzes.map(({ id }) => id!)
   );
-  return <QuizList quizzes={quizzes} answerRows={answerRows} />;
+
+  if (!quizzes.length) return <></>;
+
+  return (
+    <div className='grid gap-4'>
+      <BorderLabel label='アクセント問題' />
+      <QuizList quizzes={quizzes} answerRows={answerRows} />
+    </div>
+  );
 };
 
 export default QuizListContainer;
