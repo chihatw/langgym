@@ -10,7 +10,6 @@ export async function fetchUsers() {
   }
 
   const users: AppUser[] = data.map((item) => ({
-    id: item.id,
     uid: item.uid,
     display: item.display,
     created_at: new Date(item.created_at).getTime(),

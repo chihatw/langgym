@@ -122,7 +122,7 @@ const ArticleForm = ({ users, article, title }: Props) => {
           </SelectTrigger>
           <SelectContent>
             {users.map((user) => (
-              <SelectItem key={user.id} value={user.uid}>
+              <SelectItem key={user.uid} value={user.uid}>
                 {user.display}
               </SelectItem>
             ))}

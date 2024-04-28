@@ -544,26 +544,23 @@ export type Database = {
         Row: {
           created_at: string
           display: string
-          id: number
           uid: string
         }
         Insert: {
           created_at?: string
           display: string
-          id?: number
           uid: string
         }
         Update: {
           created_at?: string
           display?: string
-          id?: number
           uid?: string
         }
         Relationships: [
           {
             foreignKeyName: "users_uid_fkey"
             columns: ["uid"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -935,7 +932,7 @@ export type Database = {
           {
             foreignKeyName: "users_uid_fkey"
             columns: ["uid"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },

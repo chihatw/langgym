@@ -108,7 +108,7 @@ const WorkoutForm = ({ users, title, workout }: Props) => {
           </SelectTrigger>
           <SelectContent>
             {users.map((user) => (
-              <SelectItem key={user.id} value={user.uid}>
+              <SelectItem key={user.uid} value={user.uid}>
                 {user.display}
               </SelectItem>
             ))}
