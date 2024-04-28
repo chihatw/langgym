@@ -5,7 +5,7 @@ export async function fetchUsers() {
   const supabase = createSupabaseServerComponentClient();
   const { data, error } = await supabase.from('users').select('*');
   if (!data) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
 

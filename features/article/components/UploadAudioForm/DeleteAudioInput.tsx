@@ -24,14 +24,14 @@ const DeleteAudioInput = ({ articleId, setValue }: Props) => {
       // delete storage
       const errMsg = await deleteAudioFile(path);
       if (errMsg) {
-        console.log(errMsg);
+        console.error(errMsg);
         return;
       }
 
       // update remote Article
       const _errMsg = await updateArticleAudioPath(articleId, '');
       if (_errMsg) {
-        console.log(_errMsg);
+        console.error(_errMsg);
         return;
       }
     });

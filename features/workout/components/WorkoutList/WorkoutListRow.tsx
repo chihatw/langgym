@@ -46,7 +46,7 @@ const WorkoutListRow = ({ workout, record, removeWorkoutRecords }: Props) => {
     // storage
     const errMsg = await deleteAudioFile(record.audioPath);
     if (errMsg) {
-      console.log(errMsg);
+      console.error(errMsg);
     }
 
     // local

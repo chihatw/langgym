@@ -14,7 +14,7 @@ export async function insertBetterreadImagePath(
     .eq('index', imagePath.index);
 
   if (error_d) {
-    console.log(error_d);
+    console.error(error_d.message);
   }
 
   // 追加
@@ -23,7 +23,7 @@ export async function insertBetterreadImagePath(
     .insert(imagePath);
 
   if (error) {
-    console.log(error);
+    console.error(error.message);
   }
 }
 
@@ -40,7 +40,7 @@ export async function deleteBetterreadImagePath(
     .eq('index', index);
 
   if (error) {
-    console.log(error);
+    console.error(error.message);
   }
 }
 
@@ -69,7 +69,7 @@ export async function getImageUrl(path: string): Promise<string> {
     .from('image')
     .createSignedUrl(path, 60);
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return '';
   }
 

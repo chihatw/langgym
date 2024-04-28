@@ -51,7 +51,7 @@ const UploadForm = ({ imagePath }: Props) => {
     const errMsg = await uploadImageFile(file, path);
 
     if (errMsg) {
-      console.log(errMsg);
+      console.error(errMsg);
       return;
     }
 
@@ -81,7 +81,7 @@ const UploadForm = ({ imagePath }: Props) => {
     // storage
     const errMsg = await deleteImageFile(path);
     if (errMsg) {
-      console.log(errMsg);
+      console.error(errMsg);
     }
 
     // local

@@ -31,7 +31,6 @@ const RealtimeModal = ({ uid, isOpen }: Props) => {
         (payload) => {
           const newRecord = payload.new;
           const { uid: _uid, isOpen } = newRecord;
-          console.log('updated', { uid, _uid, isOpen });
           if (uid === _uid) {
             setValue((prev) => ({ ...prev, isOpen }));
           }

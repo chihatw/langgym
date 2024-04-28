@@ -37,7 +37,7 @@ const RecordModalCheckPane = ({ value, setValue, sentence }: Props) => {
 
       const errMsg = await uploadAudioFile(value.blob, audioPath);
       if (errMsg) {
-        console.log(errMsg);
+        console.error(errMsg);
         return;
       }
       const _errMsg = await upsertArticleRecordedAssignment(articleId, {
@@ -46,7 +46,7 @@ const RecordModalCheckPane = ({ value, setValue, sentence }: Props) => {
         audioPath,
       });
       if (_errMsg) {
-        console.log(_errMsg);
+        console.error(_errMsg);
         return;
       }
 

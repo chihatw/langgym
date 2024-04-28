@@ -14,7 +14,7 @@ export async function fetchBetterreadImagePathByUid(
     .single();
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return;
   }
 
@@ -40,7 +40,7 @@ export async function fetchBetterreadImagePathsById(
     .order('index');
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
 

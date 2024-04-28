@@ -89,7 +89,7 @@ export async function deleteWorkout(id: number) {
   const { error } = await supabase.from('workouts').delete().eq('id', id);
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return;
   }
 
@@ -139,7 +139,7 @@ export async function insertWorkoutRecord(
     .eq('workoutId', record.workoutId);
 
   if (error_dr) {
-    console.log(error_dr.message);
+    console.error(error_dr.message);
   }
 
   // record の追加
@@ -150,7 +150,7 @@ export async function insertWorkoutRecord(
     .single();
 
   if (error_r) {
-    console.log(error_r);
+    console.error(error_r.message);
   }
   if (!data) return;
 
@@ -161,7 +161,7 @@ export async function insertWorkoutRecord(
     .insert(rows.map((row) => ({ ...row, workoutRecordId: data.id })));
 
   if (error_rr) {
-    console.log(error_rr);
+    console.error(error_rr.message);
     return;
   }
 
@@ -179,7 +179,7 @@ export async function deleteWorkoutRecord(id: number) {
     .eq('id', id);
 
   if (error) {
-    console.log(error);
+    console.error(error.message);
     return;
   }
 
@@ -234,7 +234,7 @@ export async function deleteWorkoutFirstAudioPathByItemId(itemId: number) {
     .eq('itemId', itemId);
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return;
   }
 
@@ -251,7 +251,7 @@ export async function deleteWorkoutSecondAudioPath(id: number) {
     .eq('id', id);
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return;
   }
 

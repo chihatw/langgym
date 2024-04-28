@@ -71,7 +71,7 @@ const ArticleMarksForm = ({ audioBuffer, sentences }: Props) => {
     startTransition(async () => {
       const errMsg = await batchInsertArticleMarks(articleId, newArticleMarks);
       if (errMsg) {
-        console.log(errMsg);
+        console.error(errMsg);
         return;
       }
       router.push('/');

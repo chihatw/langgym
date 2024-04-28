@@ -52,7 +52,7 @@ const ImagePane = ({ imagePath }: Props) => {
     // storage
     const errMsg = await deleteImageFile(path);
     if (errMsg) {
-      console.log(errMsg);
+      console.error(errMsg);
     }
 
     // local

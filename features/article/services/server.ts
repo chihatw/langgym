@@ -9,7 +9,7 @@ export async function fetchArticles(limit: number): Promise<ArticleView[]> {
     .order('created_at', { ascending: false })
     .limit(limit);
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
   return data.map((item) => ({
@@ -27,7 +27,7 @@ export async function fetchArticlesByUid(uid: string): Promise<Article[]> {
     .order('created_at', { ascending: false })
     .eq('uid', uid);
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
   return data.map((item) => ({
@@ -47,7 +47,7 @@ export async function fetchArticleById(
     .order('created_at', { ascending: false })
     .eq('id', id);
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return;
   }
 
@@ -69,7 +69,7 @@ export async function fetchSentencesByArticleId(
     .order('line')
     .eq('articleId', articleId);
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
   return data.map((item) => ({

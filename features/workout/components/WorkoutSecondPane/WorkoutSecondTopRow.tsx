@@ -42,7 +42,7 @@ const WorkoutSecondTopRow = ({ href, label, audioPath }: Props) => {
     // storage
     const errMsg = await deleteAudioFile(audioPath!.path);
     if (errMsg) {
-      console.log(errMsg);
+      console.error(errMsg);
       return;
     }
 

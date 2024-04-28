@@ -19,7 +19,7 @@ const WorkoutSecondStorageMonitor = ({ value, setValue }: Props) => {
     // storage
     const errMsg = await deleteAudioFile(value.storage!.path);
     if (errMsg) {
-      console.log(errMsg);
+      console.error(errMsg);
       return;
     }
 

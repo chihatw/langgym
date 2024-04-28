@@ -23,7 +23,7 @@ const WorkoutFirstAudioMonitor = ({ itemId, audioBuffer }: Props) => {
     // delete storage
     const errMsg = await deleteAudioFile(`workout/1/${itemId}.mp3`);
     if (errMsg) {
-      console.log(errMsg);
+      console.error(errMsg);
       return;
     }
     // remote state

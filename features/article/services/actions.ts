@@ -63,7 +63,7 @@ export async function deleteArticle(id: number) {
   const supabase = createSupabaseServerActionClient();
   const { error } = await supabase.from('articles').delete().eq('id', id);
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return;
   }
   revalidatePath_article_list();

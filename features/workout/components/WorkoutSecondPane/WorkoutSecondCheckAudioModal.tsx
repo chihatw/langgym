@@ -37,7 +37,7 @@ const WorkoutSecondCheckAudioModal = ({ value, setValue }: Props) => {
 
       const errMsg = await uploadAudioFile(value.blob, audioPath);
       if (errMsg) {
-        console.log(errMsg);
+        console.error(errMsg);
         return;
       }
 

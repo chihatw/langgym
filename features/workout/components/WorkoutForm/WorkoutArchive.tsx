@@ -56,7 +56,7 @@ const WorkoutArchive = ({ recordRows, removeRecord }: Props) => {
     // storage
     const errMsg = await deleteAudioFile(recordRow.audioPath!);
     if (errMsg) {
-      console.log(errMsg);
+      console.error(errMsg);
     }
 
     // local

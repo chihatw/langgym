@@ -16,7 +16,7 @@ export async function fetchAnswers(
     .limit(limit);
 
   if (error) {
-    console.log(error);
+    console.error(error.message);
     return [];
   }
 
@@ -41,7 +41,7 @@ export async function fetchAnswerRowsbyAnswerIds(
     .order('line');
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
 
@@ -64,7 +64,7 @@ export async function fetchAnswerRowsbyQuizIds(
     .order('line');
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
 

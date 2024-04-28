@@ -16,7 +16,7 @@ export async function fetchWorkouts(): Promise<WorkoutView[]> {
     .select()
     .order('created_at', { ascending: false });
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
   return data.map((item) => ({
@@ -34,7 +34,7 @@ export async function fetchWorkoutsByUid(uid: string): Promise<Workout[]> {
     .eq('isDev', false)
     .order('created_at');
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
   return data.map((item) => ({
@@ -54,7 +54,7 @@ export async function fetchWorkoutRecordsByWorkoutIds(
     .in('workoutId', workoutIds);
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
 
@@ -75,7 +75,7 @@ export async function fetchWorkoutById(
     .single();
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return;
   }
 
@@ -96,7 +96,7 @@ export async function fetchWorkoutItemsByWorkoutId(
     .order('index');
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
 
@@ -118,7 +118,7 @@ export async function fetchWorkoutRecordRowsByWorkoutId(
     .order('index');
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
 
@@ -142,7 +142,7 @@ export async function fetchWorkoutFirstAudioPaths(): Promise<
     .select();
 
   if (error) {
-    console.log(error);
+    console.error(error.message);
     return [];
   }
 
@@ -161,7 +161,7 @@ export async function fetchWorkoutSecondAudioPath(
     .eq('path', `workout/${workoutIndex}.mp3`)
     .single();
   if (error) {
-    console.log(error);
+    console.error(error.message);
     return;
   }
   return data;

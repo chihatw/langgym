@@ -11,7 +11,7 @@ export async function fetchArticlePitchQuizzes(
     .order('created_at', { ascending: false })
     .limit(limit);
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
 
@@ -35,7 +35,7 @@ export async function fetchArticlePitchQuizzesByUid(
     .order('created_at', { ascending: false });
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
 
@@ -59,7 +59,7 @@ export async function fetchArticlePitchQuizQuestions(
     .order('line');
 
   if (error) {
-    console.log(error);
+    console.error(error.message);
     return [];
   }
 

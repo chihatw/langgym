@@ -15,7 +15,7 @@ export async function downloadAudioFile(path: string) {
   const supabase = createSupabaseClientComponentClient();
   const { data, error } = await supabase.storage.from('audio').download(path);
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
   }
 
   return data;

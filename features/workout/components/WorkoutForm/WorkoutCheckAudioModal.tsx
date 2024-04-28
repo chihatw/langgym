@@ -70,7 +70,7 @@ const WorkoutCheckAudioModal = ({ value, setValue }: Props) => {
       // storage
       const errMsg = await uploadAudioFile(value.blob, audioPath);
       if (errMsg) {
-        console.log(errMsg);
+        console.error(errMsg);
         return;
       }
 

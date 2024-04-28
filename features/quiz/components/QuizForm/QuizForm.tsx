@@ -84,7 +84,7 @@ const QuizForm = ({ questions, redirectPath }: Props) => {
     startTransition(async () => {
       const { errMsg, answerId } = await insertQuizAnswers(quizId, rows);
       if (errMsg) {
-        console.log(errMsg);
+        console.error(errMsg);
         return;
       }
       if (!answerId) return;
