@@ -438,6 +438,29 @@ export type Database = {
           },
         ]
       }
+      page_states: {
+        Row: {
+          pageState: string
+          uid: string
+        }
+        Insert: {
+          pageState: string
+          uid: string
+        }
+        Update: {
+          pageState?: string
+          uid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_states_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sentences: {
         Row: {
           articleId: number
@@ -977,6 +1000,22 @@ export type Database = {
             foreignKeyName: "betterread_uid_fkey"
             columns: ["uid"]
             isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      page_states_view: {
+        Row: {
+          display: string | null
+          pageState: string | null
+          uid: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_states_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
