@@ -5,8 +5,9 @@ import { Textarea } from '@/components/ui/textarea';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState, useTransition } from 'react';
-import { Workout, WorkoutItem } from '../schema';
-import { batchInsertWorkoutItems } from '../services/actions';
+import PitchTableTabs from '../../../pitchTable/components/PitchTableTabs';
+import { Workout, WorkoutItem } from '../../schema';
+import { batchInsertWorkoutItems } from '../../services/actions';
 
 type Props = { items: any[]; workout: Workout };
 
@@ -77,7 +78,6 @@ const WorkoutItemsForm = ({ items, workout }: Props) => {
 
   return (
     <div className='grid gap-8'>
-      <div className='text-2xl font-extrabold'>Workout Items Form</div>
       <div className='text-2xl font-extrabold'>{workout.title}</div>
       <div className='grid gap-y-4'>
         <Textarea
@@ -95,6 +95,7 @@ const WorkoutItemsForm = ({ items, workout }: Props) => {
           Submit
         </SubmitServerActionButton>
       </div>
+      <PitchTableTabs lines={result} />
     </div>
   );
 };

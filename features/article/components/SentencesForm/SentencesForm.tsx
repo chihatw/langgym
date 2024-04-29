@@ -90,7 +90,6 @@ const SentencesForm = ({ sentences, article }: Props) => {
 
   return (
     <div className='grid gap-8'>
-      <div className='text-2xl font-extrabold'>Sentences Form</div>
       <div className='text-2xl font-extrabold'>{article.title}</div>
       <div className='grid gap-y-4'>
         <Textarea

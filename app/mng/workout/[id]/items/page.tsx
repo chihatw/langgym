@@ -1,4 +1,4 @@
-import WorkoutItemsForm from '@/features/workout/components/WorkoutItemsForm';
+import WorkoutItemsForm from '@/features/workout/components/WorkoutItemsForm/WorkoutItemsForm';
 import {
   fetchWorkoutById,
   fetchWorkoutItemsByWorkoutId,

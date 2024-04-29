@@ -10,7 +10,6 @@ const items: { label: string; href: string }[] = [
   { label: 'answers', href: '/mng/answer/list' },
   { label: 'workouts', href: '/mng/workout/list' },
   { label: 'draft', href: '/mng/draft' },
-  { label: 'pitch table', href: '/mng/pitchtable' },
   { label: 'real time', href: '/mng/realtime' },
 ];
 
