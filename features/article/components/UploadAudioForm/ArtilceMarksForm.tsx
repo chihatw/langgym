@@ -30,7 +30,7 @@ const ArticleMarksForm = ({ audioBuffer, sentences }: Props) => {
   const sentence = useMemo(() => sentences.at(0), [sentences]);
 
   useEffect(() => {
-    if (sentences.length) {
+    if (sentences.every((s) => !!s.start && !!s.end)) {
       setMarks(
         sentences.map(({ start, end }) => ({ start: start!, end: end! }))
       );
@@ -43,6 +43,7 @@ const ArticleMarksForm = ({ audioBuffer, sentences }: Props) => {
       channelData,
       silentDuration
     );
+
     setMarks(marks);
   }, [audioBuffer, silentDuration, sentences]);
 
@@ -119,7 +120,11 @@ const ArticleMarksForm = ({ audioBuffer, sentences }: Props) => {
       <Button size={'icon'} onClick={playAudio} className='w-full'>
         <Play />
       </Button>
-      <ArticleMarksMonitor sentences={sentences} audioBuffer={audioBuffer} />
+      <ArticleMarksMonitor
+        sentences={sentences}
+        audioBuffer={audioBuffer}
+        marks={marks}
+      />
       <SubmitServerActionButton
         action={action}
         isPending={isPending}

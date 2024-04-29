@@ -24,7 +24,6 @@ export function buildMarks(
     const volume = channelData[i * (audioBuffer!.sampleRate * STEP)];
     return Math.abs(volume) < 0.001 ? 0 : volume;
   });
-
   let start = -1;
   let tmpEnd = -1;
 

@@ -7,9 +7,10 @@ import { SentenceView } from '../../schema';
 type Props = {
   sentences: SentenceView[];
   audioBuffer: AudioBuffer;
+  marks: { start: number; end: number }[];
 };
 
-const ArticleMarksMonitor = ({ sentences, audioBuffer }: Props) => {
+const ArticleMarksMonitor = ({ sentences, audioBuffer, marks }: Props) => {
   return (
     <div className='space-y-4'>
       {sentences.map((sentence, index) => (
@@ -17,6 +18,7 @@ const ArticleMarksMonitor = ({ sentences, audioBuffer }: Props) => {
           key={index}
           sentence={sentence}
           audioBuffer={audioBuffer}
+          mark={marks.at(index)!}
         />
       ))}
     </div>
@@ -26,9 +28,11 @@ const ArticleMarksMonitor = ({ sentences, audioBuffer }: Props) => {
 export default ArticleMarksMonitor;
 
 const ArticleMarkMonitorRow = ({
+  mark,
   sentence,
   audioBuffer,
 }: {
+  mark?: { start: number; end: number };
   sentence: SentenceView;
   audioBuffer: AudioBuffer;
 }) => {
@@ -50,7 +54,8 @@ const ArticleMarkMonitorRow = ({
     sourceNode.start(0, start, end - start);
   };
 
-  const { pitchStr, start, end } = sentence;
+  const { start, end } = mark || { start: 0, end: 0 };
+  const { pitchStr } = sentence;
 
   return (
     <div className='p-2 bg-white/60 rounded'>
