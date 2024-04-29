@@ -2,6 +2,8 @@
 
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import PageSwitch from '@/features/pageState/components/PageSwitch';
+import { SpeedWorkout } from '@/features/speedWorkout/schema';
+import { WorkoutItemView } from '@/features/workout/schema';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import { updateOpenIsOpen } from '../services/client';
@@ -10,6 +12,8 @@ type Props = {
   uid: string;
   isOpen: boolean;
   pageState: string;
+  workoutItems: WorkoutItemView[];
+  speedWorkout: SpeedWorkout | undefined;
 };
 
 type FormProps = {
@@ -20,7 +24,13 @@ const INITIAL_STATE: FormProps = {
   isOpen: false,
 };
 
-const RealtimeModal = ({ uid, isOpen, pageState }: Props) => {
+const RealtimeModal = ({
+  uid,
+  isOpen,
+  pageState,
+  workoutItems,
+  speedWorkout,
+}: Props) => {
   const [value, setValue] = useState({ ...INITIAL_STATE, isOpen });
 
   useEffect(() => {
@@ -61,7 +71,12 @@ const RealtimeModal = ({ uid, isOpen, pageState }: Props) => {
       }}
     >
       <DialogContent className='min-w-full h-screen bg-slate-200 overflow-scroll'>
-        <PageSwitch uid={uid} pageState={pageState} />
+        <PageSwitch
+          uid={uid}
+          pageState={pageState}
+          speedWorkout={speedWorkout}
+          workoutItems={workoutItems}
+        />
       </DialogContent>
     </Dialog>
   );

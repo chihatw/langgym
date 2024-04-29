@@ -516,6 +516,42 @@ export type Database = {
           },
         ]
       }
+      speed_workout: {
+        Row: {
+          checkedIndexes: number[]
+          id: number
+          isRunning: boolean
+          selectedId: number
+        }
+        Insert: {
+          checkedIndexes?: number[]
+          id?: number
+          isRunning?: boolean
+          selectedId: number
+        }
+        Update: {
+          checkedIndexes?: number[]
+          id?: number
+          isRunning?: boolean
+          selectedId?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "speed_workout_selectedid_fkey"
+            columns: ["selectedId"]
+            isOneToOne: false
+            referencedRelation: "workouts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "speed_workout_selectedid_fkey"
+            columns: ["selectedId"]
+            isOneToOne: false
+            referencedRelation: "workouts_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       todos: {
         Row: {
           completed: boolean | null

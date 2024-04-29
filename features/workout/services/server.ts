@@ -84,6 +84,23 @@ export async function fetchWorkoutById(
   return { ...data, created_at: new Date(data.created_at!) };
 }
 
+export async function fetchWorkoutItems(): Promise<WorkoutItemView[]> {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('workout_items_view')
+    .select()
+    .order('index');
+  if (error) {
+    console.error(error.message);
+    return [];
+  }
+
+  return data.map((item) => ({
+    ...item,
+    created_at: new Date(item.created_at!),
+  }));
+}
+
 export async function fetchWorkoutItemsByWorkoutId(
   workoutId: number
 ): Promise<WorkoutItemView[]> {

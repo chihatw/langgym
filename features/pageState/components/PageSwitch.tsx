@@ -1,9 +1,17 @@
 'use client';
 
+import SpeedWorkoutForm from '@/features/speedWorkout/components/SpeedWorkoutForm';
+import { SpeedWorkout } from '@/features/speedWorkout/schema';
+import { WorkoutItemView } from '@/features/workout/schema';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 
-type Props = { uid: string; pageState: string };
+type Props = {
+  uid: string;
+  pageState: string;
+  speedWorkout: SpeedWorkout | undefined;
+  workoutItems: WorkoutItemView[];
+};
 
 type FormProps = {
   pageState: string;
@@ -13,7 +21,7 @@ const INITIAL_STATE: FormProps = {
   pageState: 'blank',
 };
 
-const PageSwitch = ({ uid, pageState }: Props) => {
+const PageSwitch = ({ uid, pageState, workoutItems, speedWorkout }: Props) => {
   const [value, setValue] = useState({ ...INITIAL_STATE, pageState });
 
   useEffect(() => {
@@ -40,7 +48,12 @@ const PageSwitch = ({ uid, pageState }: Props) => {
 
   switch (value.pageState) {
     case 'sokudokuRenshu':
-      return <div>速読練習</div>;
+      return (
+        <SpeedWorkoutForm
+          workoutItems={workoutItems}
+          speedWorkout={speedWorkout}
+        />
+      );
     case 'sokudokuCue':
       return <div>速読キュー</div>;
     case 'paperCups':
