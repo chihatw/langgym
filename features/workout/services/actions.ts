@@ -203,7 +203,7 @@ export async function insertWorkoutFirstAudioPath(
   }
 
   revalidatePath('/');
-  revalidatePath('/workout/1');
+  revalidatePath('/workout/10001');
 }
 
 export async function insertWorkoutSecondAudioPath(
@@ -221,8 +221,8 @@ export async function insertWorkoutSecondAudioPath(
   }
 
   revalidatePath('/');
-  revalidatePath('/workout/2');
-  revalidatePath('/workout/3');
+  revalidatePath('/workout/10002');
+  revalidatePath('/workout/10003');
 }
 
 export async function deleteWorkoutFirstAudioPathByItemId(itemId: number) {
@@ -239,7 +239,7 @@ export async function deleteWorkoutFirstAudioPathByItemId(itemId: number) {
   }
 
   revalidatePath('/');
-  revalidatePath('/workout/1');
+  revalidatePath('/workout/10001');
 }
 
 export async function deleteWorkoutSecondAudioPath(id: number) {
@@ -256,6 +256,6 @@ export async function deleteWorkoutSecondAudioPath(id: number) {
   }
 
   revalidatePath('/');
-  revalidatePath('/workout/2');
-  revalidatePath('/workout/3');
+  revalidatePath('/workout/10002');
+  revalidatePath('/workout/10003');
 }

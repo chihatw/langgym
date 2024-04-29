@@ -47,6 +47,7 @@ const ArticleMarksForm = ({ audioBuffer, sentences }: Props) => {
     setMarks(marks);
   }, [audioBuffer, silentDuration, sentences]);
 
+  // todo やっつけすぎる stop も必要
   const playAudio = () => {
     const start = marks.at(0)?.start || 0;
     const end = marks.at(-1)?.end || audioBuffer.duration;

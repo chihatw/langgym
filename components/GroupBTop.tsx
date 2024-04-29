@@ -23,12 +23,12 @@ const GroupBTop = async (props: Props) => {
         <div className='grid gap-4'>
           <WorkoutFirstTopRow audioPaths={workoutFirstAudioPaths} />
           <WorkoutSecondTopRow
-            href='/workout/2'
+            href='/workout/10002'
             label={WORKOUT_LABELS.at(1)}
             audioPath={workoutSecondAudioPath}
           />
           <WorkoutSecondTopRow
-            href='/workout/3'
+            href='/workout/10003'
             label={WORKOUT_LABELS.at(2)}
             audioPath={workoutThirdAudioPath}
           />

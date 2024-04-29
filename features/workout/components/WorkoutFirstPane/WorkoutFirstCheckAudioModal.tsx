@@ -33,7 +33,7 @@ const WorkoutFirstCheckAudioModal = ({ value, item, setValue }: Props) => {
 
       if (!value.blob) return;
 
-      const audioPath = `workout/1/${id}.mp3`;
+      const audioPath = `workout/10001/${id}.mp3`;
 
       const errMsg = await uploadAudioFile(value.blob, audioPath);
       if (errMsg) {

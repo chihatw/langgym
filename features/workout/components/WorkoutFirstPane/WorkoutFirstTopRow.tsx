@@ -13,7 +13,7 @@ const WorkoutFirstTopRow = ({ audioPaths }: Props) => {
   return (
     <div className='rounded bg-white/60 grid p-5'>
       <Link
-        href={`/workout/1`}
+        href={`/workout/10001`}
         className={cn(buttonVariants({ variant: 'link' }))}
       >
         <div className='flex gap-1 items-center justify-center'>

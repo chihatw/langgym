@@ -21,7 +21,7 @@ const WorkoutFirstAudioMonitor = ({ itemId, audioBuffer }: Props) => {
     remove();
 
     // delete storage
-    const errMsg = await deleteAudioFile(`workout/1/${itemId}.mp3`);
+    const errMsg = await deleteAudioFile(`workout/10001/${itemId}.mp3`);
     if (errMsg) {
       console.error(errMsg);
       return;
