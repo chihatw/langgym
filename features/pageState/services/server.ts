@@ -12,3 +12,19 @@ export async function fetchPageStates(): Promise<PageStateView[]> {
   }
   return data;
 }
+
+export async function fetchPageStateByUid(uid: string): Promise<string> {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('page_states')
+    .select()
+    .eq('uid', uid)
+    .single();
+
+  if (error) {
+    console.error(error.message);
+    return '';
+  }
+
+  return data.pageState;
+}

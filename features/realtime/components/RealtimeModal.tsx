@@ -1,6 +1,7 @@
 'use client';
 
 import { Dialog, DialogContent } from '@/components/ui/dialog';
+import PageSwitch from '@/features/pageState/components/PageSwitch';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import { updateOpenIsOpen } from '../services/client';
@@ -8,6 +9,7 @@ import { updateOpenIsOpen } from '../services/client';
 type Props = {
   uid: string;
   isOpen: boolean;
+  pageState: string;
 };
 
 type FormProps = {
@@ -18,25 +20,29 @@ const INITIAL_STATE: FormProps = {
   isOpen: false,
 };
 
-const RealtimeModal = ({ uid, isOpen }: Props) => {
+const RealtimeModal = ({ uid, isOpen, pageState }: Props) => {
   const [value, setValue] = useState({ ...INITIAL_STATE, isOpen });
 
   useEffect(() => {
     const supabase = createSupabaseClientComponentClient();
-    supabase
+    const channel = supabase
       .channel('watch opens')
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'opens' },
         (payload) => {
-          const newRecord = payload.new;
-          const { uid: _uid, isOpen } = newRecord;
+          const updated = payload.new;
+          const { uid: _uid, isOpen } = updated;
           if (uid === _uid) {
             setValue((prev) => ({ ...prev, isOpen }));
           }
         }
       )
       .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [uid]);
 
   const handleClose = async () => {
@@ -55,7 +61,7 @@ const RealtimeModal = ({ uid, isOpen }: Props) => {
       }}
     >
       <DialogContent className='min-w-full h-screen bg-slate-200 overflow-scroll'>
-        hello
+        <PageSwitch uid={uid} pageState={pageState} />
       </DialogContent>
     </Dialog>
   );
