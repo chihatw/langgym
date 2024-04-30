@@ -1,5 +1,6 @@
 'use client';
 
+import SpeedWorkoutCueForm from '@/features/speedWorkout/components/SpeedWorkoutCueForm/SpeedWorkoutCueForm';
 import SpeedWorkoutForm from '@/features/speedWorkout/components/SpeedWorkoutForm';
 import { SpeedWorkout } from '@/features/speedWorkout/schema';
 import { WorkoutItemView } from '@/features/workout/schema';
@@ -55,7 +56,12 @@ const PageSwitch = ({ uid, pageState, workoutItems, speedWorkout }: Props) => {
         />
       );
     case 'sokudokuCue':
-      return <div>速読キュー</div>;
+      return (
+        <SpeedWorkoutCueForm
+          speedWorkout={speedWorkout}
+          workoutItems={workoutItems}
+        />
+      );
     case 'paperCups':
       return <div>紙コップ</div>;
     case 'ga_wo_ni':

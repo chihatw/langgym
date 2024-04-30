@@ -1,6 +1,6 @@
 export interface SpeedWorkout {
   id: number;
-  selectedId: number;
+  selectedId: number | null;
   isRunning: boolean;
-  checkedIndexes: number[];
+  selectedItemId: number | null;
 }

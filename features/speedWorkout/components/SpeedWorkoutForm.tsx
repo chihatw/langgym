@@ -15,8 +15,8 @@ type Props = {
 const SpeedWorkoutForm = ({ workoutItems, speedWorkout }: Props) => {
   const [value, setValue] = useState<SpeedWorkout>({
     id: 0,
-    selectedId: 0,
-    checkedIndexes: [],
+    selectedId: null,
+    selectedItemId: null,
     isRunning: false,
   });
 
@@ -40,8 +40,8 @@ const SpeedWorkoutForm = ({ workoutItems, speedWorkout }: Props) => {
         { event: 'UPDATE', schema: 'public', table: 'speed_workout' },
         (payload) => {
           const updated = payload.new;
-          const { id, checkedIndexes, isRunning, selectedId } = updated;
-          setValue({ id, checkedIndexes, isRunning, selectedId });
+          const { id, selectedItemId, isRunning, selectedId } = updated;
+          setValue({ id, selectedItemId, isRunning, selectedId });
         }
       )
       .subscribe();
@@ -67,16 +67,16 @@ const SpeedWorkoutForm = ({ workoutItems, speedWorkout }: Props) => {
   return (
     <div className='flex justify-center mt-6 items-center'>
       <div className='grid gap-20'>
-        <div className='text-center text-gray-700 text-4xl p-0 font-extralight'>
+        <div className='text-center text-gray-700 text-4xl font-extralight'>
           {selectedWorkoutItems?.at(0)?.title}
         </div>
 
-        <div className='flex justify-center'>
+        {/* <div className='flex justify-center'>
           <SpeedWorkoutCounter
             value={value}
             selectedWorkoutItems={selectedWorkoutItems}
           />
-        </div>
+        </div> */}
         <div className='flex justify-center'>
           <Button
             size='icon'
@@ -98,24 +98,24 @@ const SpeedWorkoutForm = ({ workoutItems, speedWorkout }: Props) => {
 
 export default SpeedWorkoutForm;
 
-const SpeedWorkoutCounter = ({
-  value,
-  selectedWorkoutItems,
-}: {
-  value: SpeedWorkout;
-  selectedWorkoutItems: WorkoutItemView[];
-}) => {
-  return (
-    <div className='flex items-center'>
-      <div>
-        <span className='font-lato text-[90px] font-[900] text-gray-700'>
-          {value.checkedIndexes.length}
-        </span>
-        <span className='font-lato text-[48px] font-[900] text-gray-700'>{`/${
-          selectedWorkoutItems.length *
-          (selectedWorkoutItems.at(0)?.isReview ? 2 : 1)
-        }`}</span>
-      </div>
-    </div>
-  );
-};
+// const SpeedWorkoutCounter = ({
+//   value,
+//   selectedWorkoutItems,
+// }: {
+//   value: SpeedWorkout;
+//   selectedWorkoutItems: WorkoutItemView[];
+// }) => {
+//   return (
+//     <div className='flex items-center'>
+//       <div>
+//         <span className='font-lato text-[90px] font-[900] text-gray-700'>
+//           {value.checkedIndexes.length}
+//         </span>
+//         <span className='font-lato text-[48px] font-[900] text-gray-700'>{`/${
+//           selectedWorkoutItems.length *
+//           (selectedWorkoutItems.at(0)?.isReview ? 2 : 1)
+//         }`}</span>
+//       </div>
+//     </div>
+//   );
+// };

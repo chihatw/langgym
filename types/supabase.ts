@@ -518,22 +518,22 @@ export type Database = {
       }
       speed_workout: {
         Row: {
-          checkedIndexes: number[]
           id: number
           isRunning: boolean
-          selectedId: number
+          selectedId: number | null
+          selectedItemId: number | null
         }
         Insert: {
-          checkedIndexes?: number[]
           id?: number
           isRunning?: boolean
-          selectedId: number
+          selectedId?: number | null
+          selectedItemId?: number | null
         }
         Update: {
-          checkedIndexes?: number[]
           id?: number
           isRunning?: boolean
-          selectedId?: number
+          selectedId?: number | null
+          selectedItemId?: number | null
         }
         Relationships: [
           {
@@ -548,6 +548,20 @@ export type Database = {
             columns: ["selectedId"]
             isOneToOne: false
             referencedRelation: "workouts_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "speed_workout_selectedItemId_fkey"
+            columns: ["selectedItemId"]
+            isOneToOne: false
+            referencedRelation: "workout_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "speed_workout_selectedItemId_fkey"
+            columns: ["selectedItemId"]
+            isOneToOne: false
+            referencedRelation: "workout_items_view"
             referencedColumns: ["id"]
           },
         ]

@@ -26,9 +26,9 @@ type FormProps = SpeedWorkout;
 
 const INITIAL_STATE: FormProps = {
   id: 0,
-  selectedId: 0,
+  selectedId: null,
   isRunning: false,
-  checkedIndexes: [],
+  selectedItemId: null,
 };
 
 const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
@@ -112,7 +112,10 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
   return (
     <div className='grid gap-4'>
       <div className='text-xs font-extrabold'>Speed Workout</div>
-      <Select value={value.selectedId.toString()} onValueChange={handleSelect}>
+      <Select
+        value={value.selectedId ? value.selectedId.toString() : ''}
+        onValueChange={handleSelect}
+      >
         <SelectTrigger>
           <SelectValue placeholder='workout' />
         </SelectTrigger>
@@ -125,7 +128,7 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
         </SelectContent>
       </Select>
       <Button onClick={handleClick}>
-        {value.isRunning ? 'Running' : 'Pause'}
+        {value.isRunning ? 'Pause' : 'Play'}
       </Button>
       {selectedWorkoutItems ? (
         <div className='grid gap-4'>
