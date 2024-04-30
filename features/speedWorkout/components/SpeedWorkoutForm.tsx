@@ -12,13 +12,18 @@ type Props = {
   workoutItems: WorkoutItemView[];
 };
 
+type FormProps = SpeedWorkout & { checkedItemIds: number[] };
+
+const INITIAL_STATE: FormProps = {
+  id: 0,
+  selectedId: null,
+  selectedItemId: null,
+  isRunning: false,
+  checkedItemIds: [],
+};
+
 const SpeedWorkoutForm = ({ workoutItems, speedWorkout }: Props) => {
-  const [value, setValue] = useState<SpeedWorkout>({
-    id: 0,
-    selectedId: null,
-    selectedItemId: null,
-    isRunning: false,
-  });
+  const [value, setValue] = useState(INITIAL_STATE);
 
   const selectedWorkoutItems = useMemo(
     () => workoutItems.filter((i) => i.workoutId === value.selectedId),
@@ -27,7 +32,7 @@ const SpeedWorkoutForm = ({ workoutItems, speedWorkout }: Props) => {
 
   useEffect(() => {
     if (!speedWorkout) return;
-    setValue(speedWorkout);
+    setValue((prev) => ({ ...prev, ...speedWorkout }));
   }, [speedWorkout]);
 
   useEffect(() => {
@@ -41,7 +46,20 @@ const SpeedWorkoutForm = ({ workoutItems, speedWorkout }: Props) => {
         (payload) => {
           const updated = payload.new;
           const { id, selectedItemId, isRunning, selectedId } = updated;
-          setValue({ id, selectedItemId, isRunning, selectedId });
+
+          let checkedItemIds: number[] = [];
+          if (isRunning && selectedItemId) {
+            checkedItemIds = [...value.checkedItemIds, selectedItemId];
+          }
+
+          setValue((prev) => ({
+            ...prev,
+            id,
+            selectedItemId,
+            isRunning,
+            selectedId,
+            checkedItemIds,
+          }));
         }
       )
       .subscribe();
@@ -49,7 +67,7 @@ const SpeedWorkoutForm = ({ workoutItems, speedWorkout }: Props) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [value]);
 
   const handleClick = () => {
     const updatedValue = !value.isRunning;
@@ -65,19 +83,19 @@ const SpeedWorkoutForm = ({ workoutItems, speedWorkout }: Props) => {
   };
 
   return (
-    <div className='flex justify-center mt-6 items-center'>
-      <div className='grid gap-20'>
+    <div className='flex justify-center mt-6 '>
+      <div className='grid gap-8 grid-rows-[auto,auto,1fr]'>
         <div className='text-center text-gray-700 text-4xl font-extralight'>
           {selectedWorkoutItems?.at(0)?.title}
         </div>
 
-        {/* <div className='flex justify-center'>
+        <div className='flex justify-center'>
           <SpeedWorkoutCounter
             value={value}
             selectedWorkoutItems={selectedWorkoutItems}
           />
-        </div> */}
-        <div className='flex justify-center'>
+        </div>
+        <div className='flex justify-center pt-8'>
           <Button
             size='icon'
             variant='ghost'
@@ -91,6 +109,7 @@ const SpeedWorkoutForm = ({ workoutItems, speedWorkout }: Props) => {
             )}
           </Button>
         </div>
+        <div />
       </div>
     </div>
   );
@@ -98,24 +117,23 @@ const SpeedWorkoutForm = ({ workoutItems, speedWorkout }: Props) => {
 
 export default SpeedWorkoutForm;
 
-// const SpeedWorkoutCounter = ({
-//   value,
-//   selectedWorkoutItems,
-// }: {
-//   value: SpeedWorkout;
-//   selectedWorkoutItems: WorkoutItemView[];
-// }) => {
-//   return (
-//     <div className='flex items-center'>
-//       <div>
-//         <span className='font-lato text-[90px] font-[900] text-gray-700'>
-//           {value.checkedIndexes.length}
-//         </span>
-//         <span className='font-lato text-[48px] font-[900] text-gray-700'>{`/${
-//           selectedWorkoutItems.length *
-//           (selectedWorkoutItems.at(0)?.isReview ? 2 : 1)
-//         }`}</span>
-//       </div>
-//     </div>
-//   );
-// };
+const SpeedWorkoutCounter = ({
+  value,
+  selectedWorkoutItems,
+}: {
+  value: FormProps;
+  selectedWorkoutItems: WorkoutItemView[];
+}) => {
+  return (
+    <div className='flex items-center'>
+      <div>
+        <span className='font-lato text-[90px] font-[900] text-gray-700'>
+          {value.checkedItemIds.length}
+        </span>
+        <span className='font-lato text-[48px] font-[900] text-gray-700'>{`/${
+          selectedWorkoutItems.length * 2
+        }`}</span>
+      </div>
+    </div>
+  );
+};

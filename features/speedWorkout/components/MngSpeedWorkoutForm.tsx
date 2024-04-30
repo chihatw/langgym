@@ -10,6 +10,7 @@ import {
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 import { WorkoutItemView } from '@/features/workout/schema';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { cn } from '@/lib/utils';
 import { useEffect, useMemo, useState } from 'react';
 import { SpeedWorkout } from '../schema';
 import {
@@ -57,7 +58,7 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
       setValue(INITIAL_STATE);
       return;
     }
-    setValue(speedWorkout);
+    setValue((prev) => ({ ...prev, ...speedWorkout }));
   }, [speedWorkout]);
 
   // subscribe
@@ -74,8 +75,13 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
         },
         (preload) => {
           const updated = preload.new;
-          const { isRunning } = updated;
-          setValue((prev) => ({ ...prev, isRunning }));
+          const { isRunning, selectedItemId } = updated;
+
+          setValue((prev) => ({
+            ...prev,
+            isRunning,
+            selectedItemId,
+          }));
         }
       )
       .subscribe();
@@ -83,7 +89,7 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [value]);
 
   const handleSelect = (value: string) => {
     if (!speedWorkout) return;
@@ -103,7 +109,7 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
     const isRunning = !value.isRunning;
 
     // local
-    setValue((prev) => ({ ...prev, isRunning }));
+    setValue((prev) => ({ ...prev, isRunning, checkedItemIds: [] }));
 
     // remote
     updateSpeedWorkoutIsRunning(speedWorkout.id, isRunning);
@@ -127,6 +133,7 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
           ))}
         </SelectContent>
       </Select>
+
       <Button onClick={handleClick}>
         {value.isRunning ? 'Pause' : 'Play'}
       </Button>
@@ -135,7 +142,10 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
           {selectedWorkoutItems.map((item) => (
             <div
               key={item.id!}
-              className='text-xs p-2 rounded bg-white/60 grid gap-1'
+              className={cn(
+                'text-xs p-2 rounded grid gap-1 bg-white/60',
+                value.selectedItemId === item.id ? 'border border-red-500' : ''
+              )}
             >
               <div>{item.japanese}</div>
               <div className='text-[#52a2aa]'>{item.chinese}</div>

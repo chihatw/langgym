@@ -4,11 +4,9 @@ import SpeedWorkoutCueForm from '@/features/speedWorkout/components/SpeedWorkout
 import SpeedWorkoutForm from '@/features/speedWorkout/components/SpeedWorkoutForm';
 import { SpeedWorkout } from '@/features/speedWorkout/schema';
 import { WorkoutItemView } from '@/features/workout/schema';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 
 type Props = {
-  uid: string;
   pageState: string;
   speedWorkout: SpeedWorkout | undefined;
   workoutItems: WorkoutItemView[];
@@ -22,30 +20,15 @@ const INITIAL_STATE: FormProps = {
   pageState: 'blank',
 };
 
-const PageSwitch = ({ uid, pageState, workoutItems, speedWorkout }: Props) => {
-  const [value, setValue] = useState({ ...INITIAL_STATE, pageState });
+const PageSwitch = ({ pageState, workoutItems, speedWorkout }: Props) => {
+  const [value, setValue] = useState({
+    ...INITIAL_STATE,
+    pageState,
+  });
 
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
-    const channel = supabase
-      .channel('page state')
-      .on(
-        'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'page_states' },
-        (payload) => {
-          const updated = payload.new;
-          const { uid: _uid, pageState } = updated;
-          if (uid === _uid) {
-            setValue((prev) => ({ ...prev, pageState }));
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [uid]);
+    setValue((prev) => ({ ...prev, pageState }));
+  }, [pageState]);
 
   switch (value.pageState) {
     case 'sokudokuRenshu':

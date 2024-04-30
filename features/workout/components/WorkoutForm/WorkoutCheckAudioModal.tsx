@@ -114,7 +114,7 @@ const WorkoutCheckAudioModal = ({ value, setValue }: Props) => {
         setValue((prev) => ({ ...prev, isChecking: false, elapsedTime: 0 }));
       }}
     >
-      <DialogContent className='max-h-screen overflow-scroll'>
+      <DialogContent className='max-h-screen overflow-scroll　pb-80'>
         <div className='grid'>
           <div className='grid grid-cols-[1fr,auto,1fr] items-end gap-2'>
             <div />

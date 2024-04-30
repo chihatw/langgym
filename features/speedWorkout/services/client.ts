@@ -22,7 +22,7 @@ export async function updateSpeedWorkoutIsRunning(
   const supabase = createSupabaseClientComponentClient();
   const { error } = await supabase
     .from('speed_workout')
-    .update({ isRunning })
+    .update({ isRunning, selectedItemId: null })
     .eq('id', id);
 
   if (error) {

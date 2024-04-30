@@ -412,42 +412,19 @@ export type Database = {
           },
         ]
       }
-      opens: {
-        Row: {
-          display: string
-          isOpen: boolean
-          uid: string
-        }
-        Insert: {
-          display?: string
-          isOpen?: boolean
-          uid: string
-        }
-        Update: {
-          display?: string
-          isOpen?: boolean
-          uid?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "opens_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       page_states: {
         Row: {
+          isOpen: boolean
           pageState: string
           uid: string
         }
         Insert: {
+          isOpen?: boolean
           pageState: string
           uid: string
         }
         Update: {
+          isOpen?: boolean
           pageState?: string
           uid?: string
         }
@@ -519,18 +496,21 @@ export type Database = {
       speed_workout: {
         Row: {
           id: number
+          isOpen: boolean
           isRunning: boolean
           selectedId: number | null
           selectedItemId: number | null
         }
         Insert: {
           id?: number
+          isOpen?: boolean
           isRunning?: boolean
           selectedId?: number | null
           selectedItemId?: number | null
         }
         Update: {
           id?: number
+          isOpen?: boolean
           isRunning?: boolean
           selectedId?: number | null
           selectedItemId?: number | null
@@ -1055,6 +1035,7 @@ export type Database = {
       page_states_view: {
         Row: {
           display: string | null
+          isOpen: boolean | null
           pageState: string | null
           uid: string | null
         }

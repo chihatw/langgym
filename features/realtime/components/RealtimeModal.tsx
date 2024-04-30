@@ -2,36 +2,40 @@
 
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import PageSwitch from '@/features/pageState/components/PageSwitch';
+import { PageStateView } from '@/features/pageState/schema';
+import { updatePageStateIsOpen } from '@/features/pageState/services/client';
 import { SpeedWorkout } from '@/features/speedWorkout/schema';
 import { WorkoutItemView } from '@/features/workout/schema';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
-import { updateOpenIsOpen } from '../services/client';
 
 type Props = {
   uid: string;
-  isOpen: boolean;
-  pageState: string;
+  pageState: PageStateView;
   workoutItems: WorkoutItemView[];
-  speedWorkout: SpeedWorkout | undefined;
+  speedWorkout: SpeedWorkout;
 };
 
 type FormProps = {
   isOpen: boolean;
+  pageState: string;
 };
 
 const INITIAL_STATE: FormProps = {
   isOpen: false,
+  pageState: 'blank',
 };
 
 const RealtimeModal = ({
   uid,
-  isOpen,
   pageState,
   workoutItems,
   speedWorkout,
 }: Props) => {
-  const [value, setValue] = useState({ ...INITIAL_STATE, isOpen });
+  const [value, setValue] = useState({
+    ...INITIAL_STATE,
+    isOpen: pageState.isOpen,
+  });
 
   useEffect(() => {
     const supabase = createSupabaseClientComponentClient();
@@ -39,12 +43,12 @@ const RealtimeModal = ({
       .channel('watch opens')
       .on(
         'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'opens' },
+        { event: 'UPDATE', schema: 'public', table: 'page_states' },
         (payload) => {
           const updated = payload.new;
-          const { uid: _uid, isOpen } = updated;
+          const { uid: _uid, isOpen, pageState } = updated;
           if (uid === _uid) {
-            setValue((prev) => ({ ...prev, isOpen }));
+            setValue((prev) => ({ ...prev, isOpen, pageState }));
           }
         }
       )
@@ -59,12 +63,12 @@ const RealtimeModal = ({
     // local
     setValue((prev) => ({ ...prev, isOpen: false }));
     // remote
-    updateOpenIsOpen(uid, false);
+    updatePageStateIsOpen(uid, false);
   };
 
   return (
     <Dialog
-      open={value.isOpen}
+      open={value.isOpen!}
       onOpenChange={(isOpen) => {
         if (isOpen) return;
         handleClose();
@@ -72,8 +76,7 @@ const RealtimeModal = ({
     >
       <DialogContent className='min-w-full h-screen bg-slate-200 overflow-scroll'>
         <PageSwitch
-          uid={uid}
-          pageState={pageState}
+          pageState={value.pageState}
           speedWorkout={speedWorkout}
           workoutItems={workoutItems}
         />

@@ -1,5 +1,4 @@
 import GroupATop from '@/components/GroupATop';
-import GroupBTop from '@/components/GroupBTop';
 import MngArticleListContainer from '@/features/article/components/MngArtileList/MngArticleListContainer';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 import { getUserGroup } from '@/features/auth/services/utils';
@@ -17,7 +16,7 @@ export default async function Home() {
     case 'a':
       return <GroupATop uid={user.id} />;
     case 'b':
-      return <GroupBTop />;
+      return <div className='text-center pt-10'>到期了</div>;
     default:
       return <></>;
   }

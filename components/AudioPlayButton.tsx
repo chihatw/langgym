@@ -45,6 +45,7 @@ const AudioPlayButton = ({
   const play = () => {
     const _sourceNode = audioContext.createBufferSource();
     _sourceNode.buffer = audioBuffer;
+    console.log('play', { audioBuffer });
     _sourceNode.connect(audioContext.destination);
 
     //　停止処理
