@@ -74,7 +74,7 @@ const RealtimeModal = ({
         handleClose();
       }}
     >
-      <DialogContent className='min-w-full h-screen bg-slate-200 overflow-scroll'>
+      <DialogContent className='min-w-full h-screen bg-slate-200 overflow-scroll pb-80 pt-20'>
         <PageSwitch
           pageState={value.pageState}
           speedWorkout={speedWorkout}
