@@ -5,7 +5,6 @@ import { getYMDFromDateString } from '../../services/utils';
 
 const ArticleListRow = ({ article }: { article: Article }) => {
   const { year, month, day } = getYMDFromDateString(article.date);
-  console.log(article);
   return (
     <Link
       href={`/article/${article.id}`}

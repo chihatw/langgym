@@ -14,15 +14,6 @@ type Props = {
   audioBuffer: AudioBuffer | null;
 };
 
-// 描画と関係ない変数
-type RefProps = {
-  mediaRecorder: MediaRecorder | undefined;
-};
-
-const INITIAL_REF: RefProps = {
-  mediaRecorder: undefined,
-};
-
 const RecordModal = ({ value, setValue, sentence, audioBuffer }: Props) => {
   return (
     <Dialog
@@ -34,23 +25,22 @@ const RecordModal = ({ value, setValue, sentence, audioBuffer }: Props) => {
           open: false,
           blob: null,
           audioBuffer: null,
+          isRecording: false,
         }));
       }}
     >
       <DialogTrigger asChild>trigger</DialogTrigger>
-      <DialogContent>
-        <div className='grid gap-8'>
-          <SentenceRow sentence={sentence} audioBuffer={audioBuffer} />
-          {!value.audioBuffer ? (
-            <RecordModalRecordPane value={value} setValue={setValue} />
-          ) : (
-            <RecordModalCheckPane
-              value={value}
-              setValue={setValue}
-              sentence={sentence}
-            />
-          )}
-        </div>
+      <DialogContent className='grid gap-8 overflow-scroll py-20 max-h-[calc(100vh-80px)]'>
+        <SentenceRow sentence={sentence} audioBuffer={audioBuffer} />
+        {!value.audioBuffer ? (
+          <RecordModalRecordPane value={value} setValue={setValue} />
+        ) : (
+          <RecordModalCheckPane
+            value={value}
+            setValue={setValue}
+            sentence={sentence}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );
