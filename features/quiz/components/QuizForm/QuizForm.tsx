@@ -3,6 +3,7 @@
 import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { ArticlePitchQuizAnswerRow } from '@/features/answer/schema';
 import { insertQuizAnswers } from '@/features/answer/services/actions';
+import { updateArticleIsShowAccents } from '@/features/article/services/actions';
 import { downloadAudioFile } from '@/features/article/services/client';
 import { ACCENT_MARK, FULL_SPACE } from '@/features/pitchLine/constants';
 import {
@@ -79,15 +80,21 @@ const QuizForm = ({ questions, redirectPath }: Props) => {
     >[] = value.inputPitchStrs.map((pitchStr, line) => ({ pitchStr, line }));
     const question = questions.at(0);
     if (!question) return;
-    const { quizId } = question;
-    if (!quizId) return;
+    const { quizId, articleId } = question;
+    if (!quizId || !articleId) return;
+
     startTransition(async () => {
+      // remote
       const { errMsg, answerId } = await insertQuizAnswers(quizId, rows);
       if (errMsg) {
         console.error(errMsg);
         return;
       }
       if (!answerId) return;
+
+      // aritlce の isShowPitches も変更
+      await updateArticleIsShowAccents(articleId, true);
+
       router.push(`${redirectPath}/${answerId}`);
     });
   };
