@@ -1,6 +1,7 @@
 'use client';
 
 import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { BetterReadImagePathView } from '@/features/betterread/schema';
 import PageSwitch from '@/features/pageState/components/PageSwitch';
 import { PageStateView } from '@/features/pageState/schema';
 import { updatePageStateIsOpen } from '@/features/pageState/services/client';
@@ -13,7 +14,8 @@ type Props = {
   uid: string;
   pageState: PageStateView;
   workoutItems: WorkoutItemView[];
-  speedWorkout: SpeedWorkout;
+  speedWorkout: SpeedWorkout | undefined;
+  betterreadImagePaths: BetterReadImagePathView[];
 };
 
 type FormProps = {
@@ -31,6 +33,7 @@ const RealtimeModal = ({
   pageState,
   workoutItems,
   speedWorkout,
+  betterreadImagePaths,
 }: Props) => {
   const [value, setValue] = useState({
     ...INITIAL_STATE,
@@ -79,6 +82,7 @@ const RealtimeModal = ({
           pageState={value.pageState}
           speedWorkout={speedWorkout}
           workoutItems={workoutItems}
+          betterreadImagePaths={betterreadImagePaths}
         />
       </DialogContent>
     </Dialog>

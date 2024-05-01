@@ -1,5 +1,7 @@
 'use client';
 
+import BetterreadView from '@/features/betterread/components/BetterreadView/BetterreadView';
+import { BetterReadImagePathView } from '@/features/betterread/schema';
 import SpeedWorkoutCueForm from '@/features/speedWorkout/components/SpeedWorkoutCueForm/SpeedWorkoutCueForm';
 import SpeedWorkoutForm from '@/features/speedWorkout/components/SpeedWorkoutForm';
 import { SpeedWorkout } from '@/features/speedWorkout/schema';
@@ -10,6 +12,7 @@ type Props = {
   pageState: string;
   speedWorkout: SpeedWorkout | undefined;
   workoutItems: WorkoutItemView[];
+  betterreadImagePaths: BetterReadImagePathView[];
 };
 
 type FormProps = {
@@ -20,7 +23,12 @@ const INITIAL_STATE: FormProps = {
   pageState: 'blank',
 };
 
-const PageSwitch = ({ pageState, workoutItems, speedWorkout }: Props) => {
+const PageSwitch = ({
+  pageState,
+  workoutItems,
+  speedWorkout,
+  betterreadImagePaths,
+}: Props) => {
   const [value, setValue] = useState({
     ...INITIAL_STATE,
     pageState,
@@ -56,7 +64,7 @@ const PageSwitch = ({ pageState, workoutItems, speedWorkout }: Props) => {
     case 'pitches':
       return <div>ピッチ</div>;
     case 'betterread':
-      return <div>課前準備</div>;
+      return <BetterreadView betterreadImagePaths={betterreadImagePaths} />;
     case 'blank':
       return <></>;
     default:

@@ -1,6 +1,32 @@
 import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
 import { BetterReadImagePathView } from '../schema';
 
+export async function fetchBetterreadImagePathsByArticleId(
+  articleId: number
+): Promise<BetterReadImagePathView[]> {
+  const supabase = createSupabaseServerComponentClient();
+
+  const { data, error } = await supabase
+    .from('betterread_image_paths_view')
+    .select()
+    .eq('articleId', articleId)
+    .order('index');
+
+  if (error) {
+    console.error(error.message);
+    return [];
+  }
+
+  if (!data) {
+    return [];
+  }
+
+  return data.map((item) => ({
+    ...item,
+    created_at: new Date(item.created_at!),
+  }));
+}
+
 export async function fetchBetterreadImagePathByUid(
   uid: string
 ): Promise<BetterReadImagePathView | undefined> {
