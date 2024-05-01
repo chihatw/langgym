@@ -43,6 +43,7 @@ const MngPaperCupForm = ({ params }: Props) => {
     if (!params) return;
     // local
     const newCue = updateCue(input, value.cue);
+
     const newParams = serializePaperCupParams(input);
 
     setValue((prev) => ({ ...prev, ...input, cue: newCue }));

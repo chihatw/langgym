@@ -101,7 +101,6 @@ const SpeedWorkoutCueForm = ({ speedWorkout, workoutItems }: Props) => {
     if (!speedWorkout) return;
 
     // remote
-    console.log(speedWorkout.id, itemId);
     updateSpeedWorkoutSelectedItemId(speedWorkout.id, itemId);
 
     // local

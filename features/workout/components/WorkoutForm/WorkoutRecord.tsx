@@ -72,8 +72,6 @@ const WorkoutRecord = ({ value, setValue }: Props) => {
     const audioBuffer = await blobToAudioBuffer(blob);
     if (!audioBuffer) return;
 
-    console.log('workout record', { blob, audioBuffer });
-
     setValue((prev) => ({
       ...prev,
       blob,

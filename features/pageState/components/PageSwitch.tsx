@@ -2,6 +2,8 @@
 
 import BetterreadView from '@/features/betterread/components/BetterreadView/BetterreadView';
 import { BetterReadImagePathView } from '@/features/betterread/schema';
+import PaperCupForm from '@/features/paperCup/components/PaperCupForm';
+import { PaperCupParams } from '@/features/paperCup/schema';
 import SpeedWorkoutCueForm from '@/features/speedWorkout/components/SpeedWorkoutCueForm/SpeedWorkoutCueForm';
 import SpeedWorkoutForm from '@/features/speedWorkout/components/SpeedWorkoutForm';
 import { SpeedWorkout } from '@/features/speedWorkout/schema';
@@ -12,6 +14,7 @@ type Props = {
   pageState: string;
   speedWorkout: SpeedWorkout | undefined;
   workoutItems: WorkoutItemView[];
+  paperCupParams: PaperCupParams | undefined;
   betterreadImagePaths: BetterReadImagePathView[];
 };
 
@@ -27,6 +30,7 @@ const PageSwitch = ({
   pageState,
   workoutItems,
   speedWorkout,
+  paperCupParams,
   betterreadImagePaths,
 }: Props) => {
   const [value, setValue] = useState({
@@ -54,7 +58,7 @@ const PageSwitch = ({
         />
       );
     case 'paperCups':
-      return <div>紙コップ</div>;
+      return <PaperCupForm params={paperCupParams} />;
     case 'ga_wo_ni':
       return <div>がをに</div>;
     case 'record':

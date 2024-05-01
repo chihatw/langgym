@@ -17,24 +17,26 @@ import {
 } from '../schema';
 
 export function buildPaperCupBooleanParams(params: string) {
-  const result = INITIAL_PARAMS;
+  const result = { ...INITIAL_PARAMS };
   params.split('').forEach((value) => {
     const item = Object.entries(PARAM_CODES).find(
       ([_key, _value]) => _value === value
     );
     if (item) {
-      result[item.at(0)! as keyof PaperCupBooleanParams] = true;
+      const [_key, _value] = item;
+      result[_key as keyof PaperCupBooleanParams] = true;
     }
   });
   return result;
 }
 
 export function serializePaperCupParams(value: PaperCupBooleanParams) {
-  return Object.entries(value).reduce((acc, [key, value]) => {
+  return Object.entries(value).reduce((acc, [_key, _value]) => {
     // value が false なら終了
-    if (!value) return acc;
-    const code = PARAM_CODES[key];
-    if (!code) return code;
+    if (!_value) return acc;
+    const code = PARAM_CODES[_key];
+
+    if (!code) return acc;
     return acc + code;
   }, '');
 }

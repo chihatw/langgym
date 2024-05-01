@@ -5,6 +5,7 @@ import { BetterReadImagePathView } from '@/features/betterread/schema';
 import PageSwitch from '@/features/pageState/components/PageSwitch';
 import { PageStateView } from '@/features/pageState/schema';
 import { updatePageStateIsOpen } from '@/features/pageState/services/client';
+import { PaperCupParams } from '@/features/paperCup/schema';
 import { SpeedWorkout } from '@/features/speedWorkout/schema';
 import { WorkoutItemView } from '@/features/workout/schema';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
@@ -15,6 +16,7 @@ type Props = {
   pageState: PageStateView;
   workoutItems: WorkoutItemView[];
   speedWorkout: SpeedWorkout | undefined;
+  paperCupParams: PaperCupParams | undefined;
   betterreadImagePaths: BetterReadImagePathView[];
 };
 
@@ -33,6 +35,7 @@ const RealtimeModal = ({
   pageState,
   workoutItems,
   speedWorkout,
+  paperCupParams,
   betterreadImagePaths,
 }: Props) => {
   const [value, setValue] = useState({
@@ -82,6 +85,7 @@ const RealtimeModal = ({
           pageState={value.pageState}
           speedWorkout={speedWorkout}
           workoutItems={workoutItems}
+          paperCupParams={paperCupParams}
           betterreadImagePaths={betterreadImagePaths}
         />
       </DialogContent>
