@@ -41,7 +41,7 @@ const QuizListRow = ({ quiz, answerRows }: Props) => {
           </div>
           <a
             href={`/assets/${quiz.articleId}.pdf`}
-            download={`${quiz.articleId}.pdf`}
+            download={`${quiz.display}.pdf`}
             className={cn(
               buttonVariants(),
               'flex gap-2 items-center cursor-pointer'
