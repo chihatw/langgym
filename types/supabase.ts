@@ -438,6 +438,27 @@ export type Database = {
           },
         ]
       }
+      paper_cup_params: {
+        Row: {
+          created_at: string
+          cue: string
+          id: number
+          params: string
+        }
+        Insert: {
+          created_at?: string
+          cue?: string
+          id?: number
+          params?: string
+        }
+        Update: {
+          created_at?: string
+          cue?: string
+          id?: number
+          params?: string
+        }
+        Relationships: []
+      }
       sentences: {
         Row: {
           articleId: number
