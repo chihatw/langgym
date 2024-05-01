@@ -73,11 +73,7 @@ const WorkoutArchive = ({ recordRows, removeRecord }: Props) => {
         <div className={cn('text-8xl font-extrabold', lato.className)}>
           {recordRow.bpm}
         </div>
-        <div
-          className={cn('text-slate-700 font-extralight pb-2', lato.className)}
-        >
-          bpm
-        </div>
+        <div className={cn('text-slate-700  pb-2', lato.className)}>bpm</div>
       </div>
       {!!audioBuffer ? (
         <div className='grid grid-cols-[1fr,auto] gap-1 items-center'>

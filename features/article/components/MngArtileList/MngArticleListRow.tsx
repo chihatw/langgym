@@ -26,7 +26,7 @@ type Props = {
 const MngArticleListRow = ({ article, removeArticle }: Props) => {
   return (
     <div className='border-b border-black/20 px-2 py-1 text-sm grid grid-cols-[60px,1fr,auto] justify-between items-center gap-y-2'>
-      <div className='pr-2 text-xs font-extralight text-gray-500 whitespace-nowrap overflow-hidden'>
+      <div className='pr-2 text-xs  text-gray-500 whitespace-nowrap overflow-hidden'>
         {article.display}
       </div>
       <div className='overflow-hidden whitespace-nowrap'>{article.title}</div>

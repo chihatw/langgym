@@ -13,9 +13,7 @@ const PrintArticlePage = async ({ params: { id } }: Props) => {
       <div className='bg-white w-[180mm] space-y-4'>
         {sentences.map((sentence, index) => (
           <div key={sentence.id} className='grid grid-cols-[auto,1fr] mr-8'>
-            <div className='pl-4 pt-4 text-xs w-8 font-extralight'>
-              {index + 1}
-            </div>
+            <div className='pl-4 pt-4 text-xs w-8 '>{index + 1}</div>
             <div className='border-b pb-2'>
               <SentencePitchLine pitchStr={sentence.pitchStr!} />
             </div>

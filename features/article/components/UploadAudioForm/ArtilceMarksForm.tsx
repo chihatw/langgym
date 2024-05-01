@@ -106,7 +106,7 @@ const ArticleMarksForm = ({ audioBuffer, sentences }: Props) => {
         </div>
       </div>
       <div>
-        <div className='text-xs text-gray-500 font-extralight'>
+        <div className='text-xs text-gray-500 '>
           <div>{silentDuration}</div>
           <div>{`${marks.length} / ${sentences.length}`}</div>
         </div>

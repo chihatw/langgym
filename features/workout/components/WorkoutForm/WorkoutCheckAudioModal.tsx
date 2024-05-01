@@ -123,12 +123,7 @@ const WorkoutCheckAudioModal = ({ value, setValue }: Props) => {
             >
               {bpm}
             </div>
-            <div
-              className={cn(
-                'text-slate-700 font-extralight pb-2',
-                lato.className
-              )}
-            >
+            <div className={cn('text-slate-700  pb-2', lato.className)}>
               bpm
             </div>
           </div>

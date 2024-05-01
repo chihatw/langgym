@@ -141,7 +141,7 @@ const SpeedWorkoutCueForm = ({ speedWorkout, workoutItems }: Props) => {
   return (
     <div className='flex justify-center mt-6 '>
       <div className='grid gap-8 grid-rows-[auto,auto,1fr]'>
-        <div className='text-center text-gray-700 text-4xl font-extralight'>
+        <div className='text-center text-gray-700 text-4xl '>
           {selectedWorkout?.title}
         </div>
         {value.isRunning ? (

@@ -51,14 +51,14 @@ const WelcomPage = () => {
       {props.time < WAITING_TIME ? (
         <>
           <div className='font-extrabold text-4xl'>Thank you!!</div>
-          <div className='font-extralight text-2xl'>
+          <div className=' text-2xl'>
             <span>Now Loading</span>
             <span className='absolute'>{props.points}</span>
           </div>
         </>
       ) : (
         <>
-          <div className='font-extralight text-gray-500 text-4xl'>
+          <div className=' text-gray-500 text-4xl'>
             <span>Sorry...</span>
             <br />
             <span>Something wrong.</span>

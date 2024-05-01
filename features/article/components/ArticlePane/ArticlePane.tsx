@@ -52,7 +52,7 @@ const ArticlePane = ({ sentences }: Props) => {
     <div className='grid gap-8'>
       <div className='grid gap-2'>
         <div className='text-2xl font-extrabold'>{title}</div>
-        <div className='text-xs font-extralight'>{`${year}年${month}月${day}日`}</div>
+        <div className='text-xs '>{`${year}年${month}月${day}日`}</div>
         {isShowAccents && value.audioBuffer && start && end ? (
           <AudioSlider
             start={start}

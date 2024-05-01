@@ -182,9 +182,7 @@ const WorkoutRecord = ({ value, setValue }: Props) => {
                 value.isRecording ? 'bg-red-500' : 'bg-white'
               )}
             />
-            <div
-              className={cn('flex text-8xl font-extralight ', lato.className)}
-            >
+            <div className={cn('flex text-8xl  ', lato.className)}>
               <div>{seconds}</div>
               <div>.</div>
               <div>{one_tenth_seconds}</div>

@@ -10,7 +10,7 @@ type Props = {
 
 const Breadcrumb = ({ label, labels, hrefs }: Props) => {
   return (
-    <div className={'flex items-center text-slate-500 font-extralight'}>
+    <div className={'flex items-center text-slate-500 '}>
       <Link
         href={'/'}
         className={cn(buttonVariants({ variant: 'ghost' }), 'mx-0 px-0')}

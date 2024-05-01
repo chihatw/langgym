@@ -63,7 +63,7 @@ const WorkoutListRow = ({ workout, record, removeWorkoutRecords }: Props) => {
             <div>{workout.title}</div>
             {workout.isReview ? <div>復習</div> : null}
           </div>
-          <div className='grid grid-cols-[auto,48px,1fr,auto,48px,1fr] items-center text-xs  text-slate-500 font-extralight'>
+          <div className='grid grid-cols-[auto,48px,1fr,auto,48px,1fr] items-center text-xs  text-slate-500 '>
             <div>目標BPM</div>
             <div className='text-xl text-end'>{workout.targetBPM}</div>
             <div />
