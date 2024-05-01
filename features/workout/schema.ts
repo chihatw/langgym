@@ -94,3 +94,14 @@ export interface WorkoutRecordRowView {
   chinese: string | null;
   created_at: Date | null;
 }
+
+export type WorkoutResult = Pick<
+  WorkoutRecordRowView,
+  | 'workoutId'
+  | 'title'
+  | 'targetBPM'
+  | 'audioPath'
+  | 'bpm'
+  | 'created_at'
+  | 'workoutRecordId'
+>;

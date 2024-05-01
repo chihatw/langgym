@@ -20,12 +20,17 @@ const AnswerPane = ({ answerRows, score }: Props) => {
   const row = useMemo(() => answerRows.at(0), [answerRows]);
 
   useEffect(() => {
-    if (!row) return;
-    if (!row.hasAudio) return;
+    if (!row || !row.hasAudio) {
+      setAudioBuffer(null);
+      return;
+    }
 
     (async () => {
       const blob = await downloadAudioFile(row.audioPath!);
-      if (!blob) return;
+      if (!blob) {
+        setAudioBuffer(null);
+        return;
+      }
 
       const audioBuffer = await blobToAudioBuffer(blob);
 

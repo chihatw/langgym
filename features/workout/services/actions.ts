@@ -95,6 +95,7 @@ export async function deleteWorkout(id: number) {
 
   revalidatePath('/');
   revalidatePath('/mng/workout/list');
+  revalidatePath('/mng/result/list');
   return;
 }
 
@@ -168,6 +169,7 @@ export async function insertWorkoutRecord(
   revalidatePath('/');
   revalidatePath(`/workout/${record.workoutId}`);
   revalidatePath(`/mng/workout/list`);
+  revalidatePath(`/mng/result/list`);
 }
 
 export async function deleteWorkoutRecord(id: number) {
@@ -185,6 +187,7 @@ export async function deleteWorkoutRecord(id: number) {
 
   revalidatePath('/');
   revalidatePath(`/mng/workout/list`);
+  revalidatePath(`/mng/result/list`);
 }
 
 export async function insertWorkoutFirstAudioPath(
