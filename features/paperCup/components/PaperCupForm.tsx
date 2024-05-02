@@ -5,26 +5,25 @@ import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { RefreshCcw } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { PaperCupCueObj, PaperCupParams } from '../schema';
-import { updatePaperCupParams } from '../services/client';
+import { fetchPaperCupParams, updatePaperCupParams } from '../services/client';
 import {
   buildCueObject,
   buildPaperCupBooleanParams,
   updateCue,
 } from '../services/utils';
 
-type Props = { params: PaperCupParams | undefined };
+type Props = {};
 
-type FormProps = {
-  cue: string;
-  params: string;
-};
+type FormProps = PaperCupParams;
 
 const INITIAL_STATE: FormProps = {
+  id: 0,
   cue: '',
   params: '',
+  created_at: new Date(),
 };
 
-const PaperCupForm = ({ params }: Props) => {
+const PaperCupForm = ({}: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
 
   const { cueObj, booleanParams } = useMemo(() => {
@@ -36,14 +35,14 @@ const PaperCupForm = ({ params }: Props) => {
     };
   }, [value]);
 
-  // from RSC
+  // initialize
   useEffect(() => {
-    if (!params) {
-      setValue((prev) => ({ ...prev, ...INITIAL_STATE }));
-      return;
-    }
-    setValue((prev) => ({ ...prev, ...params }));
-  }, [params]);
+    (async () => {
+      const params = await fetchPaperCupParams();
+      if (!params) return;
+      setValue(params);
+    })();
+  }, []);
 
   // subscribe
   useEffect(() => {
@@ -68,7 +67,7 @@ const PaperCupForm = ({ params }: Props) => {
   }, []);
 
   const handleClick = () => {
-    if (!booleanParams || !params) return;
+    if (!booleanParams) return;
 
     const newCue = updateCue(booleanParams, value.cue);
 
@@ -76,7 +75,7 @@ const PaperCupForm = ({ params }: Props) => {
     setValue((prev) => ({ ...prev, cue: newCue }));
 
     // remote
-    updatePaperCupParams(params.id, value.params, newCue);
+    updatePaperCupParams(value.id, value.params, newCue);
   };
 
   return (
@@ -123,7 +122,7 @@ const CuePane = ({ cueObj }: { cueObj: PaperCupCueObj }) => {
 
 const CueCard = ({ label, pitchStr }: { label: string; pitchStr: string }) => {
   return (
-    <div className='h-12  grid grid-cols-2 items-center rounded-lg  pr-2 bg-white/60 min-w-[320px]'>
+    <div className='min-h-12  grid grid-cols-2 items-center rounded-lg  pr-2 bg-white/60 min-w-[320px]'>
       <div className='text-center'>{label}</div>
       <div className='flex justify-center'>
         <SentencePitchLine pitchStr={pitchStr} />

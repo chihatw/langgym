@@ -80,7 +80,7 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
           setValue((prev) => ({
             ...prev,
             isRunning,
-            selectedItemId,
+            selectedItemId: selectedItemId, // null を反映させるため
           }));
         }
       )

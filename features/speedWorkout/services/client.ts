@@ -1,4 +1,22 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { SpeedWorkout } from '../schema';
+
+export async function fetchSpeedWorkout(): Promise<SpeedWorkout | undefined> {
+  const supabase = createSupabaseClientComponentClient();
+
+  const { data, error } = await supabase
+    .from('speed_workout')
+    .select()
+    .limit(1)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  return data;
+}
 
 export async function updateSpeedWorkoutSelectedId(
   id: number,

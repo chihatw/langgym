@@ -1,18 +1,21 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { WorkoutItemView } from '@/features/workout/schema';
+import { fetchWorkoutItems } from '@/features/workout/services/client';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { PlayCircle, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { SpeedWorkout } from '../schema';
-import { updateSpeedWorkoutIsRunning } from '../services/client';
+import {
+  fetchSpeedWorkout,
+  updateSpeedWorkoutIsRunning,
+} from '../services/client';
 
-type Props = {
-  speedWorkout: SpeedWorkout | undefined;
-  workoutItems: WorkoutItemView[];
+type Props = {};
+
+type FormProps = SpeedWorkout & { workoutItems: WorkoutItemView[] } & {
+  checkedItemIds: number[];
 };
-
-type FormProps = SpeedWorkout & { checkedItemIds: number[] };
 
 const INITIAL_STATE: FormProps = {
   id: 0,
@@ -20,21 +23,38 @@ const INITIAL_STATE: FormProps = {
   selectedItemId: null,
   isRunning: false,
   checkedItemIds: [],
+  workoutItems: [],
 };
 
-const SpeedWorkoutForm = ({ workoutItems, speedWorkout }: Props) => {
+const SpeedWorkoutForm = ({}: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
 
   const selectedWorkoutItems = useMemo(
-    () => workoutItems.filter((i) => i.workoutId === value.selectedId),
-    [workoutItems, value]
+    () => value.workoutItems.filter((i) => i.workoutId === value.selectedId),
+    [value]
   );
 
+  // initialize
   useEffect(() => {
-    if (!speedWorkout) return;
-    setValue((prev) => ({ ...prev, ...speedWorkout }));
-  }, [speedWorkout]);
+    (async () => {
+      const speedWorkout = await fetchSpeedWorkout();
+      if (!speedWorkout) {
+        setValue(INITIAL_STATE);
+        return;
+      }
+      setValue((prev) => ({ ...prev, ...speedWorkout }));
+    })();
+  }, []);
 
+  // initialize
+  useEffect(() => {
+    (async () => {
+      const workoutItems = await fetchWorkoutItems();
+      setValue((prev) => ({ ...prev, workoutItems }));
+    })();
+  }, []);
+
+  // subscribe
   useEffect(() => {
     const supabase = createSupabaseClientComponentClient();
 
@@ -79,7 +99,7 @@ const SpeedWorkoutForm = ({ workoutItems, speedWorkout }: Props) => {
     }));
 
     // remote
-    updateSpeedWorkoutIsRunning(speedWorkout?.id!, updatedValue);
+    updateSpeedWorkoutIsRunning(value.id, updatedValue);
   };
 
   return (

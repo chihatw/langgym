@@ -1,6 +1,6 @@
 import BetterreadContainer from '@/features/betterread/components/BetterreadContainer';
 import QuizListContainer from '@/features/quiz/components/QuizList/QuizListContainer';
-import RealtimeModalContainer from '@/features/realtime/components/RealtimeModalContainer';
+import RealtimeModal from '@/features/realtime/components/RealtimeModal';
 import WorkoutListContainer from '@/features/workout/components/WorkoutList/WorkoutListContainer';
 import ArticleListContainer from '../features/article/components/ArticleList/ArticleListContainer';
 
@@ -13,7 +13,7 @@ const GroupATop = async ({ uid }: Props) => {
       <QuizListContainer uid={uid} />
       <WorkoutListContainer uid={uid} />
       <BetterreadContainer uid={uid} />
-      <RealtimeModalContainer uid={uid} />
+      <RealtimeModal />
     </div>
   );
 };

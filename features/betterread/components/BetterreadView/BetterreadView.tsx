@@ -1,18 +1,54 @@
 'use client';
-import Image from 'next/image';
+import { fetchLatestArticleByUid } from '@/features/article/services/client';
+import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 import { BetterReadImagePathView } from '../../schema';
-import { getImageUrl } from '../../services/client';
+import { fetchBetterreadImagePathsByArticleId } from '../../services/client';
+import ImageContainer from './ImageContainer';
 
-type Props = {
+type Props = {};
+
+type FormProps = {
   betterreadImagePaths: BetterReadImagePathView[];
 };
 
-const BetterreadView = ({ betterreadImagePaths }: Props) => {
+const INITIAL_STATE: FormProps = {
+  betterreadImagePaths: [],
+};
+
+const BetterreadView = ({}: Props) => {
+  const [value, setValue] = useState(INITIAL_STATE);
+
+  // initialize
+  useEffect(() => {
+    (async () => {
+      const supabase = createSupabaseClientComponentClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        setValue(INITIAL_STATE);
+        return;
+      }
+
+      const article = await fetchLatestArticleByUid(user.id);
+      if (!article) {
+        setValue(INITIAL_STATE);
+        return;
+      }
+
+      const betterreadImagePaths = await fetchBetterreadImagePathsByArticleId(
+        article.id
+      );
+      setValue((prev) => ({ ...prev, betterreadImagePaths }));
+    })();
+  }, []);
+
   return (
     <div className='flex justify-center mt-6 '>
       <div className='grid gap-8 pt-10'>
-        {betterreadImagePaths.map((line, index) => (
+        {value.betterreadImagePaths.map((line, index) => (
           <div className='flex gap-4' key={index}>
             <div className='basis-2 text-right text-xs'>{line.index! + 1}</div>
             <div className='flex-1 space-y-2'>
@@ -31,45 +67,3 @@ const BetterreadView = ({ betterreadImagePaths }: Props) => {
 };
 
 export default BetterreadView;
-
-type FormProps = {
-  imageSrc: string;
-};
-
-const INITIAL_STATE: FormProps = {
-  imageSrc: '',
-};
-
-const ImageContainer = ({ imagePath }: { imagePath: string }) => {
-  const [value, setValue] = useState(INITIAL_STATE);
-
-  useEffect(() => {
-    if (!imagePath) {
-      setValue((prev) => ({ ...prev, imageSrc: '' }));
-      return;
-    }
-
-    (async () => {
-      const url = await getImageUrl(imagePath);
-      setValue((prev) => ({
-        ...prev,
-        imageSrc: url,
-      }));
-    })();
-  }, [imagePath]);
-
-  if (!value.imageSrc) return null;
-
-  return (
-    <div className='grid gap-2 rounded-lg bg-white bg-opacity-60 p-3'>
-      <Image
-        src={value.imageSrc}
-        alt=''
-        className='rounded-lg'
-        width={512}
-        height={512}
-        sizes='(max-width: 768px) 100vw, (max-height: 1200px) 50vw, 50vw'
-      />
-    </div>
-  );
-};

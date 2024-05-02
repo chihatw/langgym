@@ -1,20 +1,22 @@
 'use client';
 import { Workout, WorkoutItemView } from '@/features/workout/schema';
+import { fetchWorkoutItems } from '@/features/workout/services/client';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { useEffect, useMemo, useState } from 'react';
 import { SpeedWorkout } from '../../schema';
-import { updateSpeedWorkoutSelectedItemId } from '../../services/client';
+import {
+  fetchSpeedWorkout,
+  updateSpeedWorkoutSelectedItemId,
+} from '../../services/client';
 import FirstRoundList from './FirstRoundList';
 import LastRoundList from './LastRoundList';
 
-type Props = {
-  speedWorkout: SpeedWorkout | undefined;
-  workoutItems: WorkoutItemView[];
-};
+type Props = {};
 
 export type SpeedWorkoutCueFormProps = SpeedWorkout & {
   checkedItemIds: number[];
   isLastRound: boolean;
+  workoutItems: WorkoutItemView[];
 };
 
 const INITIAL_STATE: SpeedWorkoutCueFormProps = {
@@ -24,14 +26,15 @@ const INITIAL_STATE: SpeedWorkoutCueFormProps = {
   selectedItemId: null,
   checkedItemIds: [],
   isLastRound: false,
+  workoutItems: [],
 };
 
-const SpeedWorkoutCueForm = ({ speedWorkout, workoutItems }: Props) => {
+const SpeedWorkoutCueForm = ({}: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
 
   const selectedWorkoutItems = useMemo(() => {
-    return workoutItems.filter((i) => i.workoutId === value.selectedId);
-  }, [value.selectedId, workoutItems]);
+    return value.workoutItems.filter((i) => i.workoutId === value.selectedId);
+  }, [value]);
 
   const selectedWorkout = useMemo<
     Pick<Workout, 'title' | 'id' | 'isReview'> | undefined
@@ -49,15 +52,25 @@ const SpeedWorkoutCueForm = ({ speedWorkout, workoutItems }: Props) => {
     };
   }, [selectedWorkoutItems]);
 
-  // from RSC
+  // initialize
   useEffect(() => {
-    if (!speedWorkout) return;
+    (async () => {
+      const speedWorkout = await fetchSpeedWorkout();
+      if (!speedWorkout) {
+        setValue(INITIAL_STATE);
+        return;
+      }
+      setValue((prev) => ({ ...prev, ...speedWorkout }));
+    })();
+  }, []);
 
-    setValue((prev) => ({
-      ...prev,
-      ...speedWorkout,
-    }));
-  }, [speedWorkout]);
+  // initialize
+  useEffect(() => {
+    (async () => {
+      const workoutItems = await fetchWorkoutItems();
+      setValue((prev) => ({ ...prev, workoutItems }));
+    })();
+  }, []);
 
   // subscribe
   useEffect(() => {
@@ -98,10 +111,8 @@ const SpeedWorkoutCueForm = ({ speedWorkout, workoutItems }: Props) => {
   }, [value]);
 
   const handleClick = (itemId: number) => {
-    if (!speedWorkout) return;
-
     // remote
-    updateSpeedWorkoutSelectedItemId(speedWorkout.id, itemId);
+    updateSpeedWorkoutSelectedItemId(value.id, itemId);
 
     // local
 

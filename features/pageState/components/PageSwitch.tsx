@@ -1,21 +1,13 @@
 'use client';
 
 import BetterreadView from '@/features/betterread/components/BetterreadView/BetterreadView';
-import { BetterReadImagePathView } from '@/features/betterread/schema';
 import PaperCupForm from '@/features/paperCup/components/PaperCupForm';
-import { PaperCupParams } from '@/features/paperCup/schema';
 import SpeedWorkoutCueForm from '@/features/speedWorkout/components/SpeedWorkoutCueForm/SpeedWorkoutCueForm';
 import SpeedWorkoutForm from '@/features/speedWorkout/components/SpeedWorkoutForm';
-import { SpeedWorkout } from '@/features/speedWorkout/schema';
-import { WorkoutItemView } from '@/features/workout/schema';
 import { useEffect, useState } from 'react';
 
 type Props = {
   pageState: string;
-  speedWorkout: SpeedWorkout | undefined;
-  workoutItems: WorkoutItemView[];
-  paperCupParams: PaperCupParams | undefined;
-  betterreadImagePaths: BetterReadImagePathView[];
 };
 
 type FormProps = {
@@ -26,13 +18,7 @@ const INITIAL_STATE: FormProps = {
   pageState: 'blank',
 };
 
-const PageSwitch = ({
-  pageState,
-  workoutItems,
-  speedWorkout,
-  paperCupParams,
-  betterreadImagePaths,
-}: Props) => {
+const PageSwitch = ({ pageState }: Props) => {
   const [value, setValue] = useState({
     ...INITIAL_STATE,
     pageState,
@@ -44,21 +30,11 @@ const PageSwitch = ({
 
   switch (value.pageState) {
     case 'sokudokuRenshu':
-      return (
-        <SpeedWorkoutForm
-          workoutItems={workoutItems}
-          speedWorkout={speedWorkout}
-        />
-      );
+      return <SpeedWorkoutForm />;
     case 'sokudokuCue':
-      return (
-        <SpeedWorkoutCueForm
-          speedWorkout={speedWorkout}
-          workoutItems={workoutItems}
-        />
-      );
+      return <SpeedWorkoutCueForm />;
     case 'paperCups':
-      return <PaperCupForm params={paperCupParams} />;
+      return <PaperCupForm />;
     case 'ga_wo_ni':
       return <div>がをに</div>;
     case 'record':
@@ -68,7 +44,7 @@ const PageSwitch = ({
     case 'pitches':
       return <div>ピッチ</div>;
     case 'betterread':
-      return <BetterreadView betterreadImagePaths={betterreadImagePaths} />;
+      return <BetterreadView />;
     case 'blank':
       return <></>;
     default:
