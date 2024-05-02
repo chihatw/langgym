@@ -1,4 +1,5 @@
 'use client';
+import MngPaneContainer from '@/components/MngPaneContainer';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -116,47 +117,50 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
   };
 
   return (
-    <div className='grid gap-4'>
-      <div className='text-xs font-extrabold'>Speed Workout</div>
-      <Select
-        value={value.selectedId ? value.selectedId.toString() : ''}
-        onValueChange={handleSelect}
-      >
-        <SelectTrigger>
-          <SelectValue placeholder='workout' />
-        </SelectTrigger>
-        <SelectContent>
-          {workouts.map((workout, index) => (
-            <SelectItem key={index} value={workout.id!.toString()}>
-              {workout.title}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+    <MngPaneContainer label='Speed Workout'>
+      <div className='grid gap-4'>
+        <Select
+          value={value.selectedId ? value.selectedId.toString() : ''}
+          onValueChange={handleSelect}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder='workout' />
+          </SelectTrigger>
+          <SelectContent>
+            {workouts.map((workout, index) => (
+              <SelectItem key={index} value={workout.id!.toString()}>
+                {workout.title}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-      <Button onClick={handleClick}>
-        {value.isRunning ? 'Pause' : 'Play'}
-      </Button>
-      {selectedWorkoutItems ? (
-        <div className='grid gap-4'>
-          {selectedWorkoutItems.map((item) => (
-            <div
-              key={item.id!}
-              className={cn(
-                'text-xs p-2 rounded grid gap-1 bg-white/60',
-                value.selectedItemId === item.id ? 'border border-red-500' : ''
-              )}
-            >
-              <div>{item.japanese}</div>
-              <div className='text-[#52a2aa]'>{item.chinese}</div>
-              <div className='p-2 rounded bg-slate-200'>
-                <SentencePitchLine pitchStr={item.pitchStr!} />
+        <Button onClick={handleClick}>
+          {value.isRunning ? 'Pause' : 'Play'}
+        </Button>
+        {selectedWorkoutItems ? (
+          <div className='grid gap-4'>
+            {selectedWorkoutItems.map((item) => (
+              <div
+                key={item.id!}
+                className={cn(
+                  'text-xs p-2 rounded grid gap-1 bg-white/60',
+                  value.selectedItemId === item.id
+                    ? 'border border-red-500'
+                    : ''
+                )}
+              >
+                <div>{item.japanese}</div>
+                <div className='text-[#52a2aa]'>{item.chinese}</div>
+                <div className='p-2 rounded bg-slate-200'>
+                  <SentencePitchLine pitchStr={item.pitchStr!} />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      ) : null}
-    </div>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    </MngPaneContainer>
   );
 };
 

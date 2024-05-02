@@ -459,6 +459,51 @@ export type Database = {
         }
         Relationships: []
       }
+      record_params: {
+        Row: {
+          created_at: string
+          id: number
+          pitchStr: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          pitchStr: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          pitchStr?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      records: {
+        Row: {
+          created_at: string
+          id: number
+          path: string
+          pitchStr: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          path: string
+          pitchStr: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          path?: string
+          pitchStr?: string
+          title?: string
+        }
+        Relationships: []
+      }
       sentences: {
         Row: {
           articleId: number

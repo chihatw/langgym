@@ -2,6 +2,7 @@
 
 import BetterreadView from '@/features/betterread/components/BetterreadView/BetterreadView';
 import PaperCupForm from '@/features/paperCup/components/PaperCupForm';
+import RecordForm from '@/features/record/components/RecordForm';
 import SpeedWorkoutCueForm from '@/features/speedWorkout/components/SpeedWorkoutCueForm/SpeedWorkoutCueForm';
 import SpeedWorkoutForm from '@/features/speedWorkout/components/SpeedWorkoutForm';
 import { useEffect, useState } from 'react';
@@ -38,7 +39,7 @@ const PageSwitch = ({ pageState }: Props) => {
     case 'ga_wo_ni':
       return <div>がをに</div>;
     case 'record':
-      return <div>録音</div>;
+      return <RecordForm />;
     case 'note':
       return <div>ノート</div>;
     case 'pitches':

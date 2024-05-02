@@ -53,3 +53,11 @@ export async function deleteAudioFile(path: string) {
     return error.message;
   }
 }
+
+export async function deleteAudioFiles(paths: string[]) {
+  const supabase = createSupabaseClientComponentClient();
+  const { error } = await supabase.storage.from('audio').remove(paths);
+  if (error) {
+    console.error(error.message);
+  }
+}

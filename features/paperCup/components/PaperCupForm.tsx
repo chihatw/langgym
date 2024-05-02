@@ -79,21 +79,19 @@ const PaperCupForm = ({}: Props) => {
   };
 
   return (
-    <div className='mx-auto max-w-md'>
-      <div className='grid gap-2'>
-        <div className='my-4 h-[300px]'>
-          {cueObj ? <CuePane cueObj={cueObj} /> : null}
-        </div>
-        <div className='text-center'>
-          <Button
-            size='icon'
-            variant='ghost'
-            className='h-24 w-24 rounded-full'
-            onClick={handleClick}
-          >
-            <RefreshCcw className='h-24 w-24' />
-          </Button>
-        </div>
+    <div className='mx-auto max-w-md flex flex-col w-full gap-2'>
+      <div className='my-4 h-[300px]'>
+        {cueObj ? <CuePane cueObj={cueObj} /> : null}
+      </div>
+      <div className='text-center'>
+        <Button
+          size='icon'
+          variant='ghost'
+          className='h-24 w-24 rounded-full'
+          onClick={handleClick}
+        >
+          <RefreshCcw className='h-24 w-24' />
+        </Button>
       </div>
     </div>
   );

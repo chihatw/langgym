@@ -3,6 +3,7 @@ import { fetchPageStates } from '@/features/pageState/services/server';
 import MngPaperCupForm from '@/features/paperCup/components/MngPaperCupForm/MngPaperCupForm';
 import { fetchPaperCupParams } from '@/features/paperCup/services/server';
 import MngOpenForm from '@/features/realtime/components/MngOpenForm';
+import MngRecordForm from '@/features/record/components/MngRecordForm';
 
 import MngSpeedWorkoutForm from '@/features/speedWorkout/components/MngSpeedWorkoutForm';
 import { fetchSpeedWorkout } from '@/features/speedWorkout/services/server';
@@ -25,6 +26,7 @@ const page = async (props: Props) => {
         workoutItems={workoutItems}
       />
       <MngPaperCupForm params={paperCupParams} />
+      <MngRecordForm />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 'use client';
 
+import MngPaneContainer from '@/components/MngPaneContainer';
 import { Button } from '@/components/ui/button';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 import { RefreshCcw } from 'lucide-react';
@@ -65,25 +66,26 @@ const MngPaperCupForm = ({ params }: Props) => {
   };
 
   return (
-    <div className='grid gap-4'>
-      <div className='text-xs font-extrabold'>Paper Cup</div>
-      <div className='grid grid-cols-[1fr,auto] items-center'>
-        <div className='flex gap-2'>
-          {cueObj.header.pitchStr ? (
-            <SentencePitchLine pitchStr={cueObj.header.pitchStr} />
-          ) : null}
-          {cueObj.nouns.map((noun, index) => (
-            <SentencePitchLine key={index} pitchStr={noun.pitchStr} />
-          ))}
-          <SentencePitchLine pitchStr={cueObj.verb.pitchStr} />
+    <MngPaneContainer label='Paper Cup'>
+      <div className='grid gap-4'>
+        <div className='grid grid-cols-[1fr,auto] items-center'>
+          <div className='flex gap-2'>
+            {cueObj.header.pitchStr ? (
+              <SentencePitchLine pitchStr={cueObj.header.pitchStr} />
+            ) : null}
+            {cueObj.nouns.map((noun, index) => (
+              <SentencePitchLine key={index} pitchStr={noun.pitchStr} />
+            ))}
+            <SentencePitchLine pitchStr={cueObj.verb.pitchStr} />
+          </div>
+          <Button size='icon' variant={'ghost'} onClick={handleUpdateCue}>
+            <RefreshCcw />
+          </Button>
         </div>
-        <Button size='icon' variant={'ghost'} onClick={handleUpdateCue}>
-          <RefreshCcw />
-        </Button>
+        <PatternSwitches value={value} handleUpdate={handleUpdate} />
+        <PatternList value={value} />
       </div>
-      <PatternSwitches value={value} handleUpdate={handleUpdate} />
-      <PatternList value={value} />
-    </div>
+    </MngPaneContainer>
   );
 };
 

@@ -35,11 +35,14 @@ const RecordModalCheckPane = ({ value, setValue, sentence }: Props) => {
 
       const audioPath = `assignments/${articleId!}/${line!}.mp3`;
 
+      // storage
       const errMsg = await uploadAudioFile(value.blob, audioPath);
       if (errMsg) {
         console.error(errMsg);
         return;
       }
+
+      // remote
       const _errMsg = await upsertArticleRecordedAssignment(articleId, {
         articleId,
         line,
@@ -50,6 +53,7 @@ const RecordModalCheckPane = ({ value, setValue, sentence }: Props) => {
         return;
       }
 
+      // local
       setValue((prev) => ({
         ...prev,
         blob: null,
