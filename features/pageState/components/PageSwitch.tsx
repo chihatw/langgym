@@ -3,6 +3,7 @@
 import BetterreadView from '@/features/betterread/components/BetterreadView/BetterreadView';
 import NoteForm from '@/features/note/components/NoteForm';
 import PaperCupForm from '@/features/paperCup/components/PaperCupForm';
+import PitchesForm from '@/features/pitches/components/PitchesForm';
 import RecordForm from '@/features/record/components/RecordForm';
 import SpeedWorkoutCueForm from '@/features/speedWorkout/components/SpeedWorkoutCueForm/SpeedWorkoutCueForm';
 import SpeedWorkoutForm from '@/features/speedWorkout/components/SpeedWorkoutForm';
@@ -45,7 +46,7 @@ const PageSwitch = ({ pageState }: Props) => {
       return <NoteForm />;
     case 'pitches':
       // todo pitches
-      return <div>ピッチ</div>;
+      return <PitchesForm />;
     case 'betterread':
       return <BetterreadView />;
     case 'blank':

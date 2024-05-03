@@ -492,6 +492,39 @@ export type Database = {
         }
         Relationships: []
       }
+      pitches: {
+        Row: {
+          id: number
+          japanese: string
+          pitchStr: string
+        }
+        Insert: {
+          id?: number
+          japanese: string
+          pitchStr: string
+        }
+        Update: {
+          id?: number
+          japanese?: string
+          pitchStr?: string
+        }
+        Relationships: []
+      }
+      pitches_user: {
+        Row: {
+          id: number
+          pitchStr: string
+        }
+        Insert: {
+          id?: number
+          pitchStr: string
+        }
+        Update: {
+          id?: number
+          pitchStr?: string
+        }
+        Relationships: []
+      }
       record_params: {
         Row: {
           created_at: string

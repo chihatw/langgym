@@ -7,6 +7,11 @@ import PageStateForm from '@/features/pageState/components/PageStateForm';
 import { fetchPageStates } from '@/features/pageState/services/server';
 import MngPaperCupForm from '@/features/paperCup/components/MngPaperCupForm/MngPaperCupForm';
 import { fetchPaperCupParams } from '@/features/paperCup/services/server';
+import MngPitchesForm from '@/features/pitches/components/MngPitchesForm';
+import {
+  fetchPitches,
+  fetchPitchesUser,
+} from '@/features/pitches/services/server';
 import MngOpenForm from '@/features/realtime/components/MngOpenForm';
 import MngRecordForm from '@/features/record/components/MngRecordForm';
 import {
@@ -28,6 +33,8 @@ const page = async (props: Props) => {
   const records = await fetchRecords();
   const note = await fetchNote();
   const noteAudioPaths = await fetchNoteAudioPaths();
+  const pitches = await fetchPitches();
+  const pitchesUser = await fetchPitchesUser();
 
   return (
     <div className='grid gap-8'>
@@ -44,6 +51,7 @@ const page = async (props: Props) => {
         noteAudioPaths={noteAudioPaths}
       />
       <MngRecordForm recordParams={recordParams} records={records} />
+      <MngPitchesForm pitches={pitches} pitchesUser={pitchesUser} />
     </div>
   );
 };
