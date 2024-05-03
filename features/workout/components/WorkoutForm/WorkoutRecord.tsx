@@ -166,7 +166,7 @@ const WorkoutRecord = ({ value, setValue }: Props) => {
     setValue((prev) => ({ ...prev, index: prev.index + 1 }));
   };
 
-  if (!workoutItem) return <></>;
+  if (!workoutItem) return null;
 
   return (
     <>

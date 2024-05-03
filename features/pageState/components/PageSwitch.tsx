@@ -1,6 +1,7 @@
 'use client';
 
 import BetterreadView from '@/features/betterread/components/BetterreadView/BetterreadView';
+import NoteForm from '@/features/note/components/NoteForm';
 import PaperCupForm from '@/features/paperCup/components/PaperCupForm';
 import RecordForm from '@/features/record/components/RecordForm';
 import SpeedWorkoutCueForm from '@/features/speedWorkout/components/SpeedWorkoutCueForm/SpeedWorkoutCueForm';
@@ -41,13 +42,14 @@ const PageSwitch = ({ pageState }: Props) => {
     case 'record':
       return <RecordForm />;
     case 'note':
-      return <div>ノート</div>;
+      return <NoteForm />;
     case 'pitches':
+      // todo pitches
       return <div>ピッチ</div>;
     case 'betterread':
       return <BetterreadView />;
     case 'blank':
-      return <></>;
+      return null;
     default:
       return <div>{pageState}</div>;
   }

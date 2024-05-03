@@ -35,7 +35,7 @@ const QuizEditFormSentenceRow = ({
     });
   };
 
-  if (!lockedIndexes) return <></>;
+  if (!lockedIndexes) return null;
 
   return (
     <div className='p-2 rounded bg-white/60 space-y-1'>

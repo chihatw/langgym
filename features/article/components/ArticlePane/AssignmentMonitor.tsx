@@ -48,7 +48,7 @@ const AssignmentMonitor = ({
     }
   };
 
-  if (!optAudioBuffer) return <></>;
+  if (!optAudioBuffer) return null;
 
   return (
     <div>

@@ -6,7 +6,7 @@ import { getUserGroup } from '@/features/auth/services/utils';
 export default async function Home() {
   const user = await getUserFromServerSide();
 
-  if (!user) return <></>;
+  if (!user) return null;
 
   const userGroup = getUserGroup(user.email!);
 
@@ -18,6 +18,6 @@ export default async function Home() {
     case 'b':
       return <div className='text-center pt-10'>到期了</div>;
     default:
-      return <></>;
+      return null;
   }
 }

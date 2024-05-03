@@ -1,7 +1,7 @@
 type Props = {};
 
 const ManagementPage = async (props: Props) => {
-  return <></>;
+  return null;
 };
 
 export default ManagementPage;

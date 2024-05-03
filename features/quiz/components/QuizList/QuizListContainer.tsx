@@ -13,7 +13,7 @@ const QuizListContainer = async ({ uid }: Props) => {
     quizzes.map(({ id }) => id!)
   );
 
-  if (!quizzes.length) return <></>;
+  if (!quizzes.length) return null;
 
   return (
     <div className='grid gap-4'>

@@ -7,7 +7,7 @@ type Props = { uid: string };
 const BetterreadContainer = async ({ uid }: Props) => {
   const imagePath = await fetchBetterreadImagePathByUid(uid);
 
-  if (!imagePath) return <></>;
+  if (!imagePath) return null;
 
   return (
     <div className='grid gap-4'>

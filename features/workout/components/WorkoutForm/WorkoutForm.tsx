@@ -67,7 +67,7 @@ const WorkoutForm = ({ workoutItems, recordRows }: Props) => {
     });
   }, [workoutItems]);
 
-  if (!workoutItem) return <></>;
+  if (!workoutItem) return null;
   return (
     <div className='grid gap-4'>
       <div className='text-2xl font-extrabold'>{workoutItem.title}</div>

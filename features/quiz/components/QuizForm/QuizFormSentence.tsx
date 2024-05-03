@@ -19,7 +19,7 @@ const QuizFormSentence = ({
   handleClick,
 }: Props) => {
   const { line, hasAudio, start, end, lockedIndexes } = question;
-  if (line === null || !lockedIndexes) return <></>;
+  if (line === null || !lockedIndexes) return null;
   return (
     <div className='p-2 rounded bg-white/60 space-y-2'>
       <div className='text-xs font-extrabold'>{line + 1}</div>

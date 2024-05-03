@@ -48,7 +48,7 @@ const WorkoutArchive = ({ recordRows, removeRecord }: Props) => {
     })();
   }, [recordRow]);
 
-  if (!recordRow) return <></>;
+  if (!recordRow) return null;
 
   const action = async () => {
     if (!recordRow) return;

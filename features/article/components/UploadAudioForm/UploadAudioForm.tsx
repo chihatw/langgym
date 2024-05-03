@@ -40,9 +40,9 @@ const UploadAudioForm = ({ sentences }: Props) => {
     })();
   }, [sentence]);
 
-  if (!sentence) return <></>;
+  if (!sentence) return null;
   const { audioPath, articleId } = sentence;
-  if (articleId === null) return <></>;
+  if (articleId === null) return null;
 
   return (
     <div className='space-y-4'>

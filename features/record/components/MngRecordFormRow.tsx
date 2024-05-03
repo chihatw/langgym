@@ -39,7 +39,6 @@ const MngRecordFormRow = ({ record, handleRemoveRecord }: Props) => {
 
   const handleDelete = () => {
     // storage
-    console.log(record.path);
     deleteAudioFile(record.path);
 
     // remote

@@ -6,7 +6,7 @@ type Props = { uid: string };
 
 const ArticleListContainer = async ({ uid }: Props) => {
   const articles = await fetchArticlesByUid(uid);
-  if (!articles.length) return <></>;
+  if (!articles.length) return null;
 
   return (
     <div className='grid gap-4'>

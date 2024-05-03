@@ -38,7 +38,7 @@ const AnswerPane = ({ answerRows, score }: Props) => {
     })();
   }, [row]);
 
-  if (!row) return <></>;
+  if (!row) return null;
 
   return (
     <div className='grid gap-y-8'>

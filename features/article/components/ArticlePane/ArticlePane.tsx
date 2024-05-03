@@ -43,7 +43,7 @@ const ArticlePane = ({ sentences }: Props) => {
     })();
   }, [sentence]);
 
-  if (!sentence || !lastSentence) return <></>;
+  if (!sentence || !lastSentence) return null;
 
   const { title, isShowAccents, start } = sentence;
   const { end } = lastSentence;

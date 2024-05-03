@@ -14,7 +14,7 @@ const WorkoutListContainer = async ({ uid }: Props) => {
     workouts.map((item) => item.id)
   );
 
-  if (!workouts.length) return <></>;
+  if (!workouts.length) return null;
 
   return (
     <div className='grid gap-4'>

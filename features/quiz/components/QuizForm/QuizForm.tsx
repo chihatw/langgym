@@ -99,7 +99,7 @@ const QuizForm = ({ questions, redirectPath }: Props) => {
     });
   };
 
-  if (!question) return <></>;
+  if (!question) return null;
   const { title } = question;
 
   return (

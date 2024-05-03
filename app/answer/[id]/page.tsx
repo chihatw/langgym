@@ -10,7 +10,7 @@ type Props = {
 const AnswerPage = async ({ params: { id } }: Props) => {
   const answerRows = await fetchAnswerRowsbyAnswerIds([id]);
 
-  if (!answerRows.length) return <></>;
+  if (!answerRows.length) return null;
 
   const score = buildArticlePitchQuizScore(answerRows);
 

@@ -8,14 +8,15 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Record, RecordParams } from '../schema';
 import {
   deleteRecords,
-  fetchRecordParams,
-  fetchRecords,
   updateRecordParamsPitchStr,
   updateRecordParamsTitle,
 } from '../services/client';
 import MngRecordFormRow from './MngRecordFormRow';
 
-type Props = {};
+type Props = {
+  records: Record[];
+  recordParams: RecordParams | undefined;
+};
 
 export type MngRecordFormProps = RecordParams & {
   records: Record[];
@@ -29,33 +30,26 @@ const INITIAL_STATE: MngRecordFormProps = {
   records: [],
 };
 
-const MngRecordForm = (props: Props) => {
+const MngRecordForm = ({ recordParams, records }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
 
   // initialize
   useEffect(() => {
-    (async () => {
-      const recordParams = await fetchRecordParams();
+    if (!recordParams) {
+      setValue(INITIAL_STATE);
+      return;
+    }
 
-      if (!recordParams) {
-        setValue(INITIAL_STATE);
-        return;
-      }
-
-      setValue((prev) => ({
-        ...prev,
-        ...recordParams,
-      }));
-    })();
-  }, []);
+    setValue((prev) => ({
+      ...prev,
+      ...recordParams,
+    }));
+  }, [recordParams]);
 
   // initialize
   useEffect(() => {
-    (async () => {
-      const records = await fetchRecords();
-      setValue((prev) => ({ ...prev, records }));
-    })();
-  }, []);
+    setValue((prev) => ({ ...prev, records }));
+  }, [records]);
 
   useEffect(() => {
     const supabase = createSupabaseClientComponentClient();

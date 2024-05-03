@@ -412,6 +412,39 @@ export type Database = {
           },
         ]
       }
+      note: {
+        Row: {
+          id: number
+          text: string
+        }
+        Insert: {
+          id?: number
+          text: string
+        }
+        Update: {
+          id?: number
+          text?: string
+        }
+        Relationships: []
+      }
+      note_audio_paths: {
+        Row: {
+          audioPath: string
+          id: number
+          index: number
+        }
+        Insert: {
+          audioPath: string
+          id?: number
+          index: number
+        }
+        Update: {
+          audioPath?: string
+          id?: number
+          index?: number
+        }
+        Relationships: []
+      }
       page_states: {
         Row: {
           isOpen: boolean

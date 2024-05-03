@@ -8,12 +8,12 @@ type Props = {
 
 const WorkoutEditPage = async ({ params: { id } }: Props) => {
   if (typeof id === undefined) {
-    return <></>;
+    return null;
   }
   const users = await fetchUsers();
   const workout = await fetchWorkoutById(id);
 
-  if (!workout) return <></>;
+  if (!workout) return null;
 
   return (
     <WorkoutEditForm users={users} title={'Edit Workout'} workout={workout} />

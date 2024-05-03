@@ -9,16 +9,16 @@ type Props = {
 
 const ArticlePage = async ({ params: { id } }: Props) => {
   const user = await getUserFromServerSide();
-  if (!user) return <></>;
+  if (!user) return null;
 
   const sentences = await fetchSentencesByArticleId(id);
   const sentence = sentences.at(0);
-  if (!sentence) return <></>;
+  if (!sentence) return null;
 
   const { uid } = sentence;
-  if (!uid) return <></>;
+  if (!uid) return null;
 
-  if (uid !== user.id) return <></>;
+  if (uid !== user.id) return null;
 
   return (
     <div className='grid gap-4 max-w-lg mx-auto pt-4 pb-40'>

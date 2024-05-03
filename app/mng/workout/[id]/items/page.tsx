@@ -9,7 +9,7 @@ type Props = { params: { id: number } };
 const WorkoutItemsPage = async ({ params: { id } }: Props) => {
   // workoutItems がない場合のため
   const workout = await fetchWorkoutById(id);
-  if (!workout) return <></>;
+  if (!workout) return null;
 
   const workoutItems = await fetchWorkoutItemsByWorkoutId(id);
 
