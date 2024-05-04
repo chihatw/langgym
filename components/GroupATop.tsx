@@ -1,4 +1,5 @@
 import BetterreadContainer from '@/features/betterread/components/BetterreadContainer';
+import PathnameLog from '@/features/log/components/PathnameLog';
 import QuizListContainer from '@/features/quiz/components/QuizList/QuizListContainer';
 import RealtimeModal from '@/features/realtime/components/RealtimeModal';
 import WorkoutListContainer from '@/features/workout/components/WorkoutList/WorkoutListContainer';
@@ -14,6 +15,7 @@ const GroupATop = async ({ uid }: Props) => {
       <WorkoutListContainer uid={uid} />
       <BetterreadContainer uid={uid} />
       <RealtimeModal />
+      <PathnameLog uid={uid} />
     </div>
   );
 };

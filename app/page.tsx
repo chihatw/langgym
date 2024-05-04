@@ -14,9 +14,8 @@ export default async function Home() {
     case 'admin':
       return <MngArticleListContainer />;
     case 'a':
+      // pathnamelog を設置
       return <GroupATop uid={user.id} />;
-    case 'b':
-      return <div className='text-center pt-10'>到期了</div>;
     default:
       return null;
   }

@@ -492,6 +492,38 @@ export type Database = {
         }
         Relationships: []
       }
+      pathname_logs: {
+        Row: {
+          created_at: string
+          id: number
+          pathname: string
+          removed_at: string | null
+          uid: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          pathname: string
+          removed_at?: string | null
+          uid: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          pathname?: string
+          removed_at?: string | null
+          uid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pathname_logs_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pitches: {
         Row: {
           id: number
@@ -1349,7 +1381,13 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      update_pathname_log: {
+        Args: {
+          _uid: string
+          _pathname: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

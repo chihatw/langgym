@@ -101,3 +101,24 @@ export async function fetchSentencesByArticleId(
     created_at: new Date(item.created_at!),
   }));
 }
+
+export async function fetchSentencesByArticleId_Uid(
+  articleId: number,
+  uid: string
+): Promise<SentenceView[]> {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('sentences_view')
+    .select()
+    .eq('articleId', articleId)
+    .eq('uid', uid)
+    .order('line');
+  if (error) {
+    console.error(error.message);
+    return [];
+  }
+  return data.map((item) => ({
+    ...item,
+    created_at: new Date(item.created_at!),
+  }));
+}

@@ -1,4 +1,6 @@
 import Breadcrumb from '@/components/Breadcrumb';
+import { getUserFromServerSide } from '@/features/auth/services/server';
+import PathnameLog from '@/features/log/components/PathnameLog';
 import WorkoutForm from '@/features/workout/components/WorkoutForm/WorkoutForm';
 import {
   fetchWorkoutItemsByWorkoutId,
@@ -10,13 +12,22 @@ type Props = {
 };
 
 const WorkoutPage = async ({ params: { id } }: Props) => {
+  const user = await getUserFromServerSide();
+  if (!user) return null;
+
   const workoutItems = await fetchWorkoutItemsByWorkoutId(id);
   const workoutRecordRows = await fetchWorkoutRecordRowsByWorkoutId(id);
   return (
-    <div className='grid gap-4 max-w-lg mx-auto pt-4 pb-40'>
-      <Breadcrumb label='反応練習' />
-      <WorkoutForm workoutItems={workoutItems} recordRows={workoutRecordRows} />
-    </div>
+    <>
+      <div className='grid gap-4 max-w-lg mx-auto pt-4 pb-40'>
+        <Breadcrumb label='反応練習' />
+        <WorkoutForm
+          workoutItems={workoutItems}
+          recordRows={workoutRecordRows}
+        />
+      </div>
+      <PathnameLog uid={user.id} />
+    </>
   );
 };
 
