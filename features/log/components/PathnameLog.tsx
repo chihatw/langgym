@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
+import { insertPathnameLog, updatePathnameLog } from '../services/client';
 
 type Props = { uid: string | null };
 
@@ -9,12 +10,10 @@ const PathnameLog = ({ uid }: Props) => {
   const pathname = usePathname();
 
   useEffect(() => {
-    // debug
-    // insertPathnameLog(uid, pathname);
+    insertPathnameLog(uid, pathname);
 
     return () => {
-      // debug
-      // updatePathnameLog(uid, pathname);
+      updatePathnameLog(uid, pathname);
     };
   }, [pathname, uid]);
 

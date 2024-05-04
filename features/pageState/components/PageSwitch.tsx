@@ -45,7 +45,6 @@ const PageSwitch = ({ pageState }: Props) => {
     case 'note':
       return <NoteForm />;
     case 'pitches':
-      // todo pitches
       return <PitchesForm />;
     case 'betterread':
       return <BetterreadView />;
