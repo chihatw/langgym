@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useOptimistic } from 'react';
-import { ArticleView } from '../../schema';
+import { ArticleView, SentenceView } from '../../schema';
 import {
   deleteArticle,
   updateArticleIsShowAccents,
@@ -20,16 +20,25 @@ import {
 
 type Props = {
   article: ArticleView;
+  sentences: SentenceView[];
   removeArticle: (id: number) => void;
 };
 
-const MngArticleListRow = ({ article, removeArticle }: Props) => {
+const MngArticleListRow = ({ article, sentences, removeArticle }: Props) => {
   return (
     <div className='border-b border-black/20 px-2 py-1 text-sm grid grid-cols-[60px,1fr,auto] justify-between items-center gap-y-2'>
       <div className='pr-2 text-xs  text-gray-500 whitespace-nowrap overflow-hidden'>
         {article.display}
       </div>
-      <div className='overflow-hidden whitespace-nowrap'>{article.title}</div>
+      <div className='flex items-center justify-between pr-2'>
+        <div className='overflow-hidden whitespace-nowrap'>{article.title}</div>
+        <div className='text-xs'>
+          <span>
+            {sentences.filter((s) => s.articleRecordedAssignmentId).length}
+          </span>
+          /<span>{sentences.length}</span>
+        </div>
+      </div>
       <div className='flex flex-nowrap'>
         <Link
           href={`/mng/article/${article.id}/edit`}

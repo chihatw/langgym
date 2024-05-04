@@ -102,6 +102,23 @@ export async function fetchSentencesByArticleId(
   }));
 }
 
+export async function fetchSentencesByArticleIds(articleIds: number[]) {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('sentences_view')
+    .select()
+    .order('line')
+    .in('articleId', articleIds);
+  if (error) {
+    console.error(error.message);
+    return [];
+  }
+  return data.map((item) => ({
+    ...item,
+    created_at: new Date(item.created_at!),
+  }));
+}
+
 export async function fetchSentencesByArticleId_Uid(
   articleId: number,
   uid: string

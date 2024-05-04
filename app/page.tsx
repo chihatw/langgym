@@ -1,5 +1,5 @@
 import GroupATop from '@/components/GroupATop';
-import MngArticleListContainer from '@/features/article/components/MngArtileList/MngArticleListContainer';
+import MngArticleListLoader from '@/features/article/components/MngArtileList/MngArticleListLoader';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 import { getUserGroup } from '@/features/auth/services/utils';
 
@@ -12,7 +12,7 @@ export default async function Home() {
 
   switch (userGroup) {
     case 'admin':
-      return <MngArticleListContainer />;
+      return <MngArticleListLoader />;
     case 'a':
       // pathnamelog を設置
       return <GroupATop uid={user.id} />;

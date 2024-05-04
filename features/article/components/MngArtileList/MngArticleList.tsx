@@ -2,14 +2,15 @@
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import { useOptimistic } from 'react';
-import { ArticleView } from '../../schema';
+import { ArticleView, SentenceView } from '../../schema';
 import MngArticleListRow from './MngArticleListRow';
 
 type Props = {
   articles: ArticleView[];
+  sentences: SentenceView[];
 };
 
-const MngArticleList = ({ articles }: Props) => {
+const MngArticleList = ({ articles, sentences }: Props) => {
   const [opti_articles, removeArticle] = useOptimistic<ArticleView[], number>(
     articles,
     (state, id) => state.filter((item) => item.id !== id)
@@ -28,6 +29,7 @@ const MngArticleList = ({ articles }: Props) => {
             key={article.id}
             article={article}
             removeArticle={removeArticle}
+            sentences={sentences.filter((s) => s.articleId === article.id)}
           />
         ))}
       </div>

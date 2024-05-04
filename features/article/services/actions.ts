@@ -160,6 +160,7 @@ export async function upsertArticleRecordedAssignment(
   if (error) {
     return error.message;
   }
+  revalidatePath('/'); // mng article list に反映させる
   revalidatePath(`/article/${articleId}`);
 }
 

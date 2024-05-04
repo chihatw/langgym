@@ -14,7 +14,7 @@ import { Article, Sentence, SentenceView } from '../../schema';
 import { batchInsertSentences } from '../../services/actions';
 
 import { downloadAudioFile } from '@/features/storage/services/client';
-import SentencesMonitor from './SentencesMonitor';
+import SentencesFormMonitorRow from './SentencesFormMonitorRow';
 
 type Props = {
   article: Article;
@@ -151,11 +151,17 @@ const SentencesForm = ({ sentences, article }: Props) => {
           }}
         />
         {result.length ? (
-          <SentencesMonitor
-            result={result}
-            audioBuffer={value.audioBuffer}
-            sentences={sentences}
-          />
+          <div className='space-y-4'>
+            {result.map((line, index) => (
+              <SentencesFormMonitorRow
+                key={index}
+                result={line}
+                index={index}
+                sentence={sentences.at(index)}
+                audioBuffer={value.audioBuffer}
+              />
+            ))}
+          </div>
         ) : null}
         <SubmitServerActionButton
           action={action}
