@@ -26,7 +26,6 @@ type Props = {};
 
 const page = async (props: Props) => {
   const pageStates = await fetchPageStates();
-  console.log({ pageStates });
   const speedWorkout = await fetchSpeedWorkout();
   const workoutItems = await fetchWorkoutItems();
   const paperCupParams = await fetchPaperCupParams();

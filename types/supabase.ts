@@ -514,15 +514,7 @@ export type Database = {
           removed_at?: string | null
           uid?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "pathname_logs_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       pitches: {
         Row: {
@@ -1381,13 +1373,21 @@ export type Database = {
       }
     }
     Functions: {
-      update_pathname_log: {
-        Args: {
-          _uid: string
-          _pathname: string
-        }
-        Returns: undefined
-      }
+      update_pathname_log:
+        | {
+            Args: {
+              _uid: string
+              _pathname: string
+            }
+            Returns: undefined
+          }
+        | {
+            Args: {
+              _uid: string
+              _pathname: string
+            }
+            Returns: undefined
+          }
     }
     Enums: {
       [_ in never]: never
