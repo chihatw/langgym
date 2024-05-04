@@ -66,7 +66,7 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
   useEffect(() => {
     const supabase = createSupabaseClientComponentClient();
     const channel = supabase
-      .channel('speed workout')
+      .channel('speed workout mng speed workout form')
       .on(
         'postgres_changes',
         {

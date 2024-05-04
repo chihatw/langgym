@@ -51,17 +51,17 @@ const MngRecordForm = ({ recordParams, records }: Props) => {
     setValue((prev) => ({ ...prev, records }));
   }, [records]);
 
+  // subscribe
   useEffect(() => {
     const supabase = createSupabaseClientComponentClient();
 
     const channel = supabase
-      .channel('records')
+      .channel('records mng record form')
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'records' },
         (preload) => {
           const inserted = preload.new;
-
           const { id, title, pitchStr, path, created_at } = inserted;
           setValue((prev) => ({
             ...prev,

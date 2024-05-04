@@ -50,7 +50,7 @@ const RealtimeModal = ({ uid }: Props) => {
   useEffect(() => {
     const supabase = createSupabaseClientComponentClient();
     const channel = supabase
-      .channel('watch opens')
+      .channel('page states realtime modal')
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'page_states' },

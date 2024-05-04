@@ -77,7 +77,7 @@ const SpeedWorkoutCueForm = ({}: Props) => {
     const supabase = createSupabaseClientComponentClient();
 
     const channel = supabase
-      .channel('speed workout')
+      .channel('speed workout speed workout cue form')
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'speed_workout' },

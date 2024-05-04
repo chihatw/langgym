@@ -50,7 +50,7 @@ const MngNoteForm = ({ note, records, noteAudioPaths }: Props) => {
     const supabase = createSupabaseClientComponentClient();
 
     const channel = supabase
-      .channel('records')
+      .channel('records mng note form')
       .on(
         'postgres_changes',
         {
@@ -60,7 +60,6 @@ const MngNoteForm = ({ note, records, noteAudioPaths }: Props) => {
         },
         (preload) => {
           const inserted = preload.new;
-
           const { id, title, pitchStr, path, created_at } = inserted;
           setValue((prev) => ({
             ...prev,
