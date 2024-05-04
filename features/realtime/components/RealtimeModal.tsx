@@ -9,7 +9,7 @@ import {
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
 
-type Props = {};
+type Props = { uid: string };
 
 type FormProps = {
   uid: string;
@@ -23,22 +23,15 @@ const INITIAL_STATE: FormProps = {
   pageState: 'blank',
 };
 
-const RealtimeModal = ({}: Props) => {
+const RealtimeModal = ({ uid }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
 
   // initialize
   useEffect(() => {
     (async () => {
       const supabase = createSupabaseClientComponentClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        setValue(INITIAL_STATE);
-        return;
-      }
 
-      const pageState = await fetchPageStateByUid(user.id);
+      const pageState = await fetchPageStateByUid(uid);
       if (!pageState) {
         setValue(INITIAL_STATE);
         return;
@@ -46,12 +39,12 @@ const RealtimeModal = ({}: Props) => {
 
       setValue((prev) => ({
         ...prev,
-        uid: user.id,
+        uid,
         isOpen: pageState.isOpen!,
         pageState: pageState.pageState!,
       }));
     })();
-  }, []);
+  }, [uid]);
 
   // subscibe
   useEffect(() => {
@@ -63,8 +56,8 @@ const RealtimeModal = ({}: Props) => {
         { event: 'UPDATE', schema: 'public', table: 'page_states' },
         (payload) => {
           const updated = payload.new;
-          const { uid, isOpen, pageState } = updated;
-          if (value.uid === uid) {
+          const { uid: _uid, isOpen, pageState } = updated;
+          if (uid === _uid) {
             setValue((prev) => ({ ...prev, isOpen, pageState }));
           }
         }
@@ -74,7 +67,7 @@ const RealtimeModal = ({}: Props) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [value]);
+  }, [value, uid]);
 
   const handleClose = async () => {
     // local

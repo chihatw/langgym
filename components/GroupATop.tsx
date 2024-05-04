@@ -14,7 +14,7 @@ const GroupATop = async ({ uid }: Props) => {
       <QuizListContainer uid={uid} />
       <WorkoutListContainer uid={uid} />
       <BetterreadContainer uid={uid} />
-      <RealtimeModal />
+      <RealtimeModal uid={uid} />
       <PathnameLog uid={uid} />
     </div>
   );
