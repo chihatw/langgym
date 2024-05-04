@@ -1373,21 +1373,13 @@ export type Database = {
       }
     }
     Functions: {
-      update_pathname_log:
-        | {
-            Args: {
-              _uid: string
-              _pathname: string
-            }
-            Returns: undefined
-          }
-        | {
-            Args: {
-              _uid: string
-              _pathname: string
-            }
-            Returns: undefined
-          }
+      update_pathname_log: {
+        Args: {
+          _uid: string
+          _pathname: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
