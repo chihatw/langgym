@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { downloadAudioFile } from '@/features/article/services/client';
+import { downloadAudioFile } from '@/features/storage/services/client';
 import { blobToAudioBuffer } from '@/utils';
 import { useEffect, useState } from 'react';
 import { SentenceView } from '../../../schema';

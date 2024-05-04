@@ -1,8 +1,9 @@
 'use client';
 
 import AudioSlider from '@/components/AudioSlider';
-import { downloadAudioFile } from '@/features/article/services/client';
+
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
+import { downloadAudioFile } from '@/features/storage/services/client';
 import { blobToAudioBuffer } from '@/utils';
 import { Check } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';

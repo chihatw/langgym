@@ -5,7 +5,8 @@ import { Input } from '@/components/ui/input';
 import { blobToAudioBuffer } from '@/utils';
 import { Dispatch, SetStateAction, useState, useTransition } from 'react';
 import { updateArticleAudioPath } from '../../services/actions';
-import { uploadAudioFile } from '../../services/client';
+
+import { uploadAudioFile } from '@/features/storage/services/client';
 import { UploadAudioFormProps } from './UploadAudioForm';
 
 type Props = {

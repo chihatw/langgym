@@ -4,12 +4,12 @@ import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { ArticlePitchQuizAnswerRow } from '@/features/answer/schema';
 import { insertQuizAnswers } from '@/features/answer/services/actions';
 import { updateArticleIsShowAccents } from '@/features/article/services/actions';
-import { downloadAudioFile } from '@/features/article/services/client';
 import { ACCENT_MARK, FULL_SPACE } from '@/features/pitchLine/constants';
 import {
   buildNewPitchStr,
   getAccentIndex,
 } from '@/features/pitchLine/services/utils';
+import { downloadAudioFile } from '@/features/storage/services/client';
 import { blobToAudioBuffer } from '@/utils';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState, useTransition } from 'react';

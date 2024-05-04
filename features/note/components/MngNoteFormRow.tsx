@@ -7,9 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { downloadAudioFile } from '@/features/article/services/client';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 import { Record } from '@/features/record/schema';
+import { downloadAudioFile } from '@/features/storage/services/client';
 import { blobToAudioBuffer } from '@/utils';
 import { useEffect, useState } from 'react';
 import { deleteNoteAudioPath, upsertNoteAudioPath } from '../services/client';

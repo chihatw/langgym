@@ -2,8 +2,9 @@ import AudioPlayButton from '@/components/AudioPlayButton';
 import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { uploadAudioFile } from '@/features/article/services/client';
+
 import { calcBeatCount, calcBpm } from '@/features/pitchLine/services/utils';
+import { uploadAudioFile } from '@/features/storage/services/client';
 import { cn } from '@/lib/utils';
 import { PauseCircle, Play } from 'lucide-react';
 import { Lato } from 'next/font/google';

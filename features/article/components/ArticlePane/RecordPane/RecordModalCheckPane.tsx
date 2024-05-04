@@ -4,7 +4,8 @@ import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Button } from '@/components/ui/button';
 import { SentenceView } from '@/features/article/schema';
 import { upsertArticleRecordedAssignment } from '@/features/article/services/actions';
-import { uploadAudioFile } from '@/features/article/services/client';
+
+import { uploadAudioFile } from '@/features/storage/services/client';
 import { PauseCircle, Play } from 'lucide-react';
 import { Dispatch, SetStateAction, useTransition } from 'react';
 import { RecordFormProps } from './RecordPane';

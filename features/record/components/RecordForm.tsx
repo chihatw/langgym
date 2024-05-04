@@ -2,8 +2,9 @@
 
 import AudioPlayButton from '@/components/AudioPlayButton';
 import { Button } from '@/components/ui/button';
-import { uploadAudioFile } from '@/features/article/services/client';
+
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
+import { uploadAudioFile } from '@/features/storage/services/client';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
 import { blobToAudioBuffer } from '@/utils';

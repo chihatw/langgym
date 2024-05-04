@@ -1,10 +1,11 @@
 import AudioSlider from '@/components/AudioSlider';
 import { Button } from '@/components/ui/button';
+
+import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 import {
   deleteAudioFile,
   downloadAudioFile,
-} from '@/features/article/services/client';
-import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
+} from '@/features/storage/services/client';
 import { blobToAudioBuffer } from '@/utils';
 import { Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';

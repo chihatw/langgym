@@ -3,7 +3,8 @@ import AudioSlider from '@/components/AudioSlider';
 import { blobToAudioBuffer } from '@/utils';
 import { useEffect, useMemo, useState } from 'react';
 import { SentenceView } from '../../schema';
-import { downloadAudioFile } from '../../services/client';
+
+import { downloadAudioFile } from '@/features/storage/services/client';
 import { getYMDFromDateString } from '../../services/utils';
 import RecordPane from './RecordPane/RecordPane';
 import SentenceRow from './SentenceRow';

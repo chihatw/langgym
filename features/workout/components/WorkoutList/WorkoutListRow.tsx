@@ -1,10 +1,11 @@
 'use client';
 import AudioSlider from '@/components/AudioSlider';
 import { Button } from '@/components/ui/button';
+
 import {
   deleteAudioFile,
   downloadAudioFile,
-} from '@/features/article/services/client';
+} from '@/features/storage/services/client';
 import { blobToAudioBuffer } from '@/utils';
 import { Trash2 } from 'lucide-react';
 import Link from 'next/link';

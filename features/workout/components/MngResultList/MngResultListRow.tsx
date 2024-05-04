@@ -1,10 +1,11 @@
 'use client';
 import AudioSlider from '@/components/AudioSlider';
 import { Button } from '@/components/ui/button';
+
 import {
   deleteAudioFile,
   downloadAudioFile,
-} from '@/features/article/services/client';
+} from '@/features/storage/services/client';
 import { blobToAudioBuffer } from '@/utils';
 import { formatDistance } from 'date-fns';
 import { ja } from 'date-fns/locale';

@@ -2,10 +2,10 @@
 
 import AudioSlider from '@/components/AudioSlider';
 import { Button } from '@/components/ui/button';
+import { deleteAudioFile } from '@/features/storage/services/client';
 import { CassetteTape, Trash2 } from 'lucide-react';
 import { useOptimistic } from 'react';
 import { deleteArticleRecordedAssignment } from '../../services/actions';
-import { deleteAudioFile } from '../../services/client';
 
 type Props = {
   line: number;

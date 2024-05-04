@@ -1,5 +1,9 @@
 'use client';
 import { Button } from '@/components/ui/button';
+import {
+  deleteImageFile,
+  uploadImageFile,
+} from '@/features/storage/services/client';
 import { X } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
@@ -7,9 +11,7 @@ import { ChangeEvent, useState } from 'react';
 import { BetterReadImagePath, BetterReadImagePathView } from '../../schema';
 import {
   deleteBetterreadImagePath,
-  deleteImageFile,
   insertBetterreadImagePath,
-  uploadImageFile,
 } from '../../services/client';
 
 // navigator 使用

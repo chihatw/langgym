@@ -4,12 +4,12 @@ import { X } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-import { BetterReadImagePathView } from '../../schema';
 import {
-  deleteBetterreadImagePath,
   deleteImageFile,
   getImageUrl,
-} from '../../services/client';
+} from '@/features/storage/services/client';
+import { BetterReadImagePathView } from '../../schema';
+import { deleteBetterreadImagePath } from '../../services/client';
 import UploadForm from './UploadForm';
 
 type Props = {

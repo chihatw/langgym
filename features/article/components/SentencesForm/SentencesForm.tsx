@@ -12,7 +12,8 @@ import { useEffect, useMemo, useState, useTransition } from 'react';
 import BuildArticlePitchQuizButton from '../../../quiz/components/BuildArticlePitchQuizButton';
 import { Article, Sentence, SentenceView } from '../../schema';
 import { batchInsertSentences } from '../../services/actions';
-import { downloadAudioFile } from '../../services/client';
+
+import { downloadAudioFile } from '@/features/storage/services/client';
 import SentencesMonitor from './SentencesMonitor';
 
 type Props = {

@@ -1,7 +1,7 @@
 'use client';
+import { getImageUrl } from '@/features/storage/services/client';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { getImageUrl } from '../../services/client';
 
 type Props = {
   imagePath: string;

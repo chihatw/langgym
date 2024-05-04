@@ -2,7 +2,8 @@
 import MngPaneContainer from '@/components/MngPaneContainer';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { deleteAudioFiles } from '@/features/article/services/client';
+
+import { deleteAudioFiles } from '@/features/storage/services/client';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Record, RecordParams } from '../schema';
