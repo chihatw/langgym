@@ -1,10 +1,12 @@
+import { getUserFromServerSide } from '@/features/auth/services/server';
+import { getUserGroup } from '@/features/auth/services/utils';
+
 export default async function Home() {
-  // const user = await getUserFromServerSide();
+  const user = await getUserFromServerSide();
 
-  // if (!user) return null;
+  if (!user) return null;
 
-  // debug
-  // const userGroup = getUserGroup(user.email!);
+  const userGroup = getUserGroup(user.email!);
 
   return <div>under constraction</div>;
 
