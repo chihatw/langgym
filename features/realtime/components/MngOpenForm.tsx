@@ -1,61 +1,143 @@
 'use client';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
+import { updateRemoteLoginTrigger } from '@/features/auth/services/client';
 import { PageStateView } from '@/features/pageState/schema';
 import { updatePageStateIsOpen } from '@/features/pageState/services/client';
+import { PathnameLogView } from '@/features/pathnameLog/schema';
+import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { useEffect, useState } from 'react';
+import MngOpenFormRow from './MngOpenFormRow';
 
-type Props = { pageStates: PageStateView[] };
+type Props = { pageStates: PageStateView[]; pathnameLogs: PathnameLogView[] };
 
-type FormProps = {
-  opens: { [uid: string]: boolean };
+export type MngOpenFormProps = {
+  pageStates: PageStateView[];
+  pathnameLogs: PathnameLogView[];
 };
 
-const INITIAL_STATE: FormProps = {
-  opens: {},
+const INITIAL_STATE: MngOpenFormProps = {
+  pageStates: [],
+  pathnameLogs: [],
 };
 
-const MngOpenForm = ({ pageStates }: Props) => {
+const MngOpenForm = ({ pageStates, pathnameLogs }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
 
   useEffect(() => {
-    const _opens = pageStates.reduce((acc, cur) => {
-      return { ...acc, [cur.uid!]: cur.isOpen! };
-    }, {} as { [uid: string]: boolean });
-
-    setValue((prev) => ({ ...prev, opens: _opens }));
+    setValue((prev) => ({ ...prev, pageStates }));
   }, [pageStates]);
 
-  const handleChange = async (uid: string, isOpen: boolean) => {
+  // initialize
+  useEffect(() => {
+    setValue((prev) => ({ ...prev, pathnameLogs }));
+  }, [pathnameLogs]);
+
+  // subscribe
+  useEffect(() => {
+    const supabase = createSupabaseClientComponentClient();
+    const channel = supabase
+      .channel('pathname logs')
+
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'pathname_logs' },
+        (preload) => {
+          const updated = preload.new;
+          const { uid, removed_at } = updated;
+          setValue((prev) => {
+            const target = prev.pathnameLogs.map((item) => {
+              if (item.uid !== uid) {
+                return item;
+              }
+
+              return {
+                ...item,
+                removed_at: new Date(removed_at),
+              };
+            });
+
+            return {
+              ...prev,
+              pathnameLogs: target,
+            };
+          });
+        }
+      )
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'pathname_logs' },
+        (preload) => {
+          const { created_at, pathname, uid } = preload.new;
+          setValue((prev) => {
+            const target = prev.pathnameLogs.map((item) => {
+              if (item.uid !== uid) {
+                return item;
+              }
+
+              return {
+                ...item,
+                created_at: new Date(created_at),
+                removed_at: null,
+                pathname,
+              };
+            });
+
+            return {
+              ...prev,
+              pathnameLogs: target,
+            };
+          });
+        }
+      )
+
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  const handleChange = (uid: string, isOpen: boolean) => {
     // local
-    setValue((prev) => ({
-      ...prev,
-      opens: {
-        ...prev.opens,
-        [uid]: isOpen,
-      },
-    }));
+    setValue((prev) => {
+      return {
+        ...prev,
+        pageStates: prev.pageStates.map((item) => {
+          if (uid !== item.uid) {
+            return item;
+          }
+          return { ...item, isOpen };
+        }),
+      };
+    });
     // remote
     updatePageStateIsOpen(uid, isOpen);
+  };
+
+  const handleRemoteLogin = () => {
+    updateRemoteLoginTrigger();
   };
 
   return (
     <div className='grid gap-4'>
       <div className='text-xs font-extrabold'>Is Open</div>
+      <div>
+        <Button
+          className='h-auto w-auto p-0'
+          variant={'ghost'}
+          onClick={handleRemoteLogin}
+        >
+          Remote Log in
+        </Button>
+      </div>
       <div className='grid gap-4'>
-        {pageStates.map((line, index) => (
-          <div
+        {value.pageStates.map((_, index) => (
+          <MngOpenFormRow
             key={index}
-            className='p-2 rounded bg-white/60 grid grid-cols-[48px,auto,auto,1fr] gap-2 items-center'
-          >
-            <div className='text-xs font-extrabold'>{line.display}</div>
-            <Checkbox
-              checked={value.opens[line.uid!]}
-              onCheckedChange={(checked) =>
-                handleChange(line.uid!, checked as boolean)
-              }
-            />
-            <div className='text-xs'>is open</div>
-          </div>
+            index={index}
+            value={value}
+            handleChange={handleChange}
+          />
         ))}
       </div>
     </div>

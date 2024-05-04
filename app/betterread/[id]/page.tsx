@@ -2,7 +2,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 import BetterreadForm from '@/features/betterread/components/BetterreadForm/BetterreadForm';
 import { fetchBetterreadImagePathsById } from '@/features/betterread/services/server';
-import PathnameLog from '@/features/log/components/PathnameLog';
+import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
 
 type Props = { params: { id: number } };
 

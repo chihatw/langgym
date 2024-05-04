@@ -1,6 +1,6 @@
 import Breadcrumb from '@/components/Breadcrumb';
 import { getUserFromServerSide } from '@/features/auth/services/server';
-import PathnameLog from '@/features/log/components/PathnameLog';
+import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
 import QuizForm from '@/features/quiz/components/QuizForm/QuizForm';
 import { fetchArticlePitchQuizQuestions } from '@/features/quiz/services/server';
 

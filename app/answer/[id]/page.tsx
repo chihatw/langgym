@@ -3,7 +3,7 @@ import AnswerPane from '@/features/answer/components/AnswerPane/AnswerPane';
 import { fetchAnswerRowsbyAnswerIds } from '@/features/answer/services/server';
 import { buildArticlePitchQuizScore } from '@/features/answer/services/utils';
 import { getUserFromServerSide } from '@/features/auth/services/server';
-import PathnameLog from '@/features/log/components/PathnameLog';
+import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
 
 type Props = {
   params: { id: number };

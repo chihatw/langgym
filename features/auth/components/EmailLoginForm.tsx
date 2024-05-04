@@ -2,10 +2,11 @@
 
 import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Input } from '@/components/ui/input';
-import PathnameLog from '@/features/log/components/PathnameLog';
+import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
+import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { isValidEmail } from '@/utils';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState, useTransition } from 'react';
+import { useCallback, useEffect, useState, useTransition } from 'react';
 import { signInWithEmailAndPassword } from '../services/actions';
 
 type Props = {};
@@ -27,23 +28,19 @@ const EmailLoginForm = (props: Props) => {
 
   const searchParams = useSearchParams();
 
-  const email = searchParams.get('email');
-  const password = searchParams.get('password');
-  const uid = searchParams.get('uid');
-
   const [value, setValue] = useState(INITIAL_STATE);
   const [isPending, startTransition] = useTransition();
 
-  // initialize
+  // initialize with searchParams
   useEffect(() => {
     setValue((prev) => ({
       ...prev,
-      email: email || '',
-      password: password || '',
+      email: searchParams.get('email') || '',
+      password: searchParams.get('password') || '',
     }));
-  }, [email, password]);
+  }, [searchParams]);
 
-  const action = async () => {
+  const login = useCallback(() => {
     startTransition(async () => {
       const errMsg = await signInWithEmailAndPassword(
         value.email,
@@ -56,6 +53,29 @@ const EmailLoginForm = (props: Props) => {
       }
       router.push('/');
     });
+  }, [router, value.email, value.password]);
+
+  // subscribe
+  useEffect(() => {
+    const supabase = createSupabaseClientComponentClient();
+    const channel = supabase
+      .channel('remote login trigger')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'remote_login_trigger' },
+        () => {
+          login();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [login]);
+
+  const action = async () => {
+    login();
   };
 
   return (
@@ -96,7 +116,7 @@ const EmailLoginForm = (props: Props) => {
           Login
         </SubmitServerActionButton>
       </div>
-      <PathnameLog uid={uid} />
+      <PathnameLog uid={searchParams.get('uid')} />
     </>
   );
 };

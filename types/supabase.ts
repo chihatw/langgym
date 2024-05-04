@@ -594,6 +594,21 @@ export type Database = {
         }
         Relationships: []
       }
+      remote_login_trigger: {
+        Row: {
+          id: number
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          updated_at: string
+        }
+        Update: {
+          id?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       sentences: {
         Row: {
           articleId: number
@@ -1205,6 +1220,24 @@ export type Database = {
           },
         ]
       }
+      pathname_logs_view: {
+        Row: {
+          created_at: string | null
+          display: string | null
+          pathname: string | null
+          removed_at: string | null
+          uid: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sentences_view: {
         Row: {
           articleId: number | null
@@ -1378,6 +1411,10 @@ export type Database = {
           _uid: string
           _pathname: string
         }
+        Returns: undefined
+      }
+      update_remote_login_trigger: {
+        Args: Record<PropertyKey, never>
         Returns: undefined
       }
     }

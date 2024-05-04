@@ -2,7 +2,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import ArticlePane from '@/features/article/components/ArticlePane/ArticlePane';
 import { fetchSentencesByArticleId_Uid } from '@/features/article/services/server';
 import { getUserFromServerSide } from '@/features/auth/services/server';
-import PathnameLog from '@/features/log/components/PathnameLog';
+import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
 
 type Props = {
   params: { id: number };
