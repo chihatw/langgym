@@ -412,6 +412,24 @@ export type Database = {
           },
         ]
       }
+      canvas: {
+        Row: {
+          id: number
+          xPos: number
+          yPos: number
+        }
+        Insert: {
+          id?: number
+          xPos?: number
+          yPos?: number
+        }
+        Update: {
+          id?: number
+          xPos?: number
+          yPos?: number
+        }
+        Relationships: []
+      }
       note: {
         Row: {
           id: number

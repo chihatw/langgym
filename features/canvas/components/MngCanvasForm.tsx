@@ -1,18 +1,23 @@
 'use client';
 
 import MngPaneContainer from '@/components/MngPaneContainer';
-import { MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
+import { updateCanvasXPosYPos } from '../services/client';
 
 type Props = {};
 
 type FormProps = {
   xPos: number;
   yPos: number;
+  isActive: boolean;
+  canvasRect: { top: number; left: number } | undefined;
 };
 
 const INITIAL_STATE: FormProps = {
   xPos: 0,
   yPos: 0,
+  isActive: false,
+  canvasRect: undefined,
 };
 
 const RECT_SIZE = 10;
@@ -21,9 +26,21 @@ const MngCanvasForm = (props: Props) => {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [value, setValue] = useState(INITIAL_STATE);
 
-  const rect = useMemo(() => {
-    return canvas.current?.getBoundingClientRect();
-  }, [canvas]);
+  // スクロール時に canvas の位置を設定する
+  useEffect(() => {
+    window.addEventListener('scroll', () => {
+      const rect = canvas.current?.getBoundingClientRect();
+      setValue((prev) => ({
+        ...prev,
+        canvasRect: rect
+          ? {
+              top: rect.top,
+              left: rect.left,
+            }
+          : undefined,
+      }));
+    });
+  }, []);
 
   // 点の描画
   useEffect(() => {
@@ -40,28 +57,58 @@ const MngCanvasForm = (props: Props) => {
     );
   }, [value]);
 
+  const handleMouseDown = (
+    e: MouseEvent<HTMLCanvasElement, globalThis.MouseEvent>
+  ) => {
+    if (!value.canvasRect) return;
+    const xPos = Math.max(e.clientX - value.canvasRect!.left, 0);
+    const yPos = Math.max(e.clientY - value.canvasRect!.top, 0);
+
+    // local
+    setValue((prev) => ({ ...prev, isActive: true, xPos, yPos }));
+
+    // remote
+    updateCanvasXPosYPos(xPos, yPos);
+  };
+
+  const handleMouseUp = () => {
+    setValue((prev) => ({ ...prev, isActive: false }));
+  };
+
   const handleMouseMove = (
     e: MouseEvent<HTMLCanvasElement, globalThis.MouseEvent>
   ) => {
-    if (!rect) return;
+    if (!value.canvasRect || !value.isActive) return;
+
+    const xPos = Math.max(e.clientX - value.canvasRect!.left, 0);
+    const yPos = Math.max(e.clientY - value.canvasRect!.top, 0);
+
+    // local
     setValue((prev) => ({
       ...prev,
-      xPos: Math.max(e.clientX - rect.left, 0),
-      yPos: Math.max(e.clientY - rect.top, 0),
+      xPos,
+      yPos,
     }));
+
+    // remote
+    updateCanvasXPosYPos(xPos, yPos);
   };
 
   return (
     <MngPaneContainer label='Canvas'>
       <div className='grid gap-4'>
         <div className='text-2xl font-extrabold'>Canvas</div>
-        <pre className='text-[10px]'>{JSON.stringify(value, null, 2)}</pre>
+        <pre className='text-[10px] select-none'>
+          {JSON.stringify(value, null, 2)}
+        </pre>
         <canvas
           ref={canvas}
           width={512}
           height={320}
           className='bg-white'
           onMouseMove={handleMouseMove}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
         ></canvas>
       </div>
     </MngPaneContainer>
