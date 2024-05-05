@@ -1,7 +1,7 @@
 'use client';
 
 import MngPaneContainer from '@/components/MngPaneContainer';
-import { MouseEvent, useMemo, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 type Props = {};
 
@@ -15,6 +15,8 @@ const INITIAL_STATE: FormProps = {
   yPos: 0,
 };
 
+const RECT_SIZE = 10;
+
 const MngCanvasForm = (props: Props) => {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [value, setValue] = useState(INITIAL_STATE);
@@ -22,6 +24,21 @@ const MngCanvasForm = (props: Props) => {
   const rect = useMemo(() => {
     return canvas.current?.getBoundingClientRect();
   }, [canvas]);
+
+  // 点の描画
+  useEffect(() => {
+    if (!canvas.current) return;
+    const ctx = canvas.current.getContext('2d');
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
+    ctx.fillStyle = 'rgb(200,0,0)';
+    ctx.fillRect(
+      value.xPos - RECT_SIZE / 2,
+      value.yPos - RECT_SIZE / 2,
+      RECT_SIZE,
+      RECT_SIZE
+    );
+  }, [value]);
 
   const handleMouseMove = (
     e: MouseEvent<HTMLCanvasElement, globalThis.MouseEvent>
@@ -38,14 +55,14 @@ const MngCanvasForm = (props: Props) => {
     <MngPaneContainer label='Canvas'>
       <div className='grid gap-4'>
         <div className='text-2xl font-extrabold'>Canvas</div>
-        <pre className='text-xs'>{JSON.stringify(value, null, 2)}</pre>
+        <pre className='text-[10px]'>{JSON.stringify(value, null, 2)}</pre>
         <canvas
           ref={canvas}
           width={512}
           height={320}
           className='bg-white'
           onMouseMove={handleMouseMove}
-        />
+        ></canvas>
       </div>
     </MngPaneContainer>
   );
