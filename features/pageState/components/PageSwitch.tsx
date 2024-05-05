@@ -1,6 +1,7 @@
 'use client';
 
 import BetterreadView from '@/features/betterread/components/BetterreadView/BetterreadView';
+import CanvasForm from '@/features/canvas/components/CanvasForm';
 import NoteForm from '@/features/note/components/NoteForm';
 import PaperCupForm from '@/features/paperCup/components/PaperCupForm';
 import PitchesForm from '@/features/pitches/components/PitchesForm';
@@ -48,6 +49,8 @@ const PageSwitch = ({ pageState }: Props) => {
       return <PitchesForm />;
     case 'betterread':
       return <BetterreadView />;
+    case 'canvas':
+      return <CanvasForm />;
     case 'blank':
       return null;
     default:

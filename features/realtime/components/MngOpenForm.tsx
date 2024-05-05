@@ -5,6 +5,7 @@ import { PageStateView } from '@/features/pageState/schema';
 import { updatePageStateIsOpen } from '@/features/pageState/services/client';
 import { PathnameLogView } from '@/features/pathnameLog/schema';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import MngOpenFormRow from './MngOpenFormRow';
 
@@ -21,6 +22,7 @@ const INITIAL_STATE: MngOpenFormProps = {
 };
 
 const MngOpenForm = ({ pageStates, pathnameLogs }: Props) => {
+  const router = useRouter();
   const [value, setValue] = useState(INITIAL_STATE);
 
   useEffect(() => {

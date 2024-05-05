@@ -7,6 +7,7 @@ import {
   updatePageStateIsOpen,
 } from '@/features/pageState/services/client';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 type Props = { uid: string };
@@ -24,13 +25,12 @@ const INITIAL_STATE: FormProps = {
 };
 
 const RealtimeModal = ({ uid }: Props) => {
+  const router = useRouter();
   const [value, setValue] = useState(INITIAL_STATE);
 
   // initialize
   useEffect(() => {
     (async () => {
-      const supabase = createSupabaseClientComponentClient();
-
       const pageState = await fetchPageStateByUid(uid);
       if (!pageState) {
         setValue(INITIAL_STATE);
@@ -53,7 +53,12 @@ const RealtimeModal = ({ uid }: Props) => {
       .channel('page states realtime modal')
       .on(
         'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'page_states' },
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'page_states',
+          filter: `uid=eq.${uid}`,
+        },
         (payload) => {
           const updated = payload.new;
           const { uid: _uid, isOpen, pageState } = updated;

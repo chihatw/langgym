@@ -2,13 +2,13 @@
 
 import MngPaneContainer from '@/components/MngPaneContainer';
 import { MouseEvent, useEffect, useRef, useState } from 'react';
+import { RECT_SIZE } from '../constants';
+import { Canvas } from '../schema';
 import { updateCanvasXPosYPos } from '../services/client';
 
 type Props = {};
 
-type FormProps = {
-  xPos: number;
-  yPos: number;
+type FormProps = Canvas & {
   isActive: boolean;
   canvasRect: { top: number; left: number } | undefined;
 };
@@ -19,8 +19,6 @@ const INITIAL_STATE: FormProps = {
   isActive: false,
   canvasRect: undefined,
 };
-
-const RECT_SIZE = 10;
 
 const MngCanvasForm = (props: Props) => {
   const canvas = useRef<HTMLCanvasElement>(null);

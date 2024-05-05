@@ -9,9 +9,5 @@ export const PAGES: { [key: string]: string } = {
   sokudokuSolo: '速読ソロ',
   pitches: 'ピッチ',
   betterread: '課前準備',
-};
-
-export const USERS: { [key: string]: string } = {
-  lisan: '李さん',
-  kousan: '黄さん',
+  canvas: 'キャンバス',
 };

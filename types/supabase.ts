@@ -785,24 +785,6 @@ export type Database = {
           },
         ]
       }
-      workout_first_audio_paths: {
-        Row: {
-          id: number
-          itemId: number
-          path: string
-        }
-        Insert: {
-          id?: number
-          itemId: number
-          path: string
-        }
-        Update: {
-          id?: number
-          itemId?: number
-          path?: string
-        }
-        Relationships: []
-      }
       workout_items: {
         Row: {
           chinese: string
@@ -932,24 +914,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      workout_second_audio_paths: {
-        Row: {
-          id: number
-          path: string
-          shuffledIds: number[]
-        }
-        Insert: {
-          id?: number
-          path: string
-          shuffledIds: number[]
-        }
-        Update: {
-          id?: number
-          path?: string
-          shuffledIds?: number[]
-        }
-        Relationships: []
       }
       workouts: {
         Row: {
