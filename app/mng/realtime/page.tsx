@@ -1,3 +1,4 @@
+import MngCanvasForm from '@/features/canvas/components/MngCanvasForm';
 import MngNoteForm from '@/features/note/components/MngNoteForm';
 import {
   fetchNote,
@@ -54,6 +55,7 @@ const page = async (props: Props) => {
       />
       <MngRecordForm recordParams={recordParams} records={records} />
       <MngPitchesForm pitches={pitches} pitchesUser={pitchesUser} />
+      <MngCanvasForm />
     </div>
   );
 };
