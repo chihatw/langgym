@@ -3,11 +3,9 @@ import { createSupabaseServerActionClient } from '@/lib/supabase/actions';
 import { revalidatePath } from 'next/cache';
 import {
   Workout,
-  WorkoutFirstAudioPath,
   WorkoutItem,
   WorkoutRecord,
   WorkoutRecordRow,
-  WorkoutSecondAudioPath,
 } from '../schema';
 
 function revalidatePath_workout(id: number) {
@@ -188,77 +186,4 @@ export async function deleteWorkoutRecord(id: number) {
   revalidatePath('/');
   revalidatePath(`/mng/workout/list`);
   revalidatePath(`/mng/result/list`);
-}
-
-export async function insertWorkoutFirstAudioPath(
-  item: Omit<WorkoutFirstAudioPath, 'id'>
-) {
-  const supabase = createSupabaseServerActionClient();
-
-  const { error } = await supabase
-    .from('workout_first_audio_paths')
-    .insert(item)
-    .select()
-    .single();
-
-  if (error) {
-    return error.message;
-  }
-
-  revalidatePath('/');
-  revalidatePath('/workout/10001');
-}
-
-export async function insertWorkoutSecondAudioPath(
-  item: Omit<WorkoutSecondAudioPath, 'id'>
-) {
-  const supabase = createSupabaseServerActionClient();
-  const { error } = await supabase
-    .from('workout_second_audio_paths')
-    .insert(item)
-    .select()
-    .single();
-
-  if (error) {
-    return error.message;
-  }
-
-  revalidatePath('/');
-  revalidatePath('/workout/10002');
-  revalidatePath('/workout/10003');
-}
-
-export async function deleteWorkoutFirstAudioPathByItemId(itemId: number) {
-  const supabase = createSupabaseServerActionClient();
-
-  const { error } = await supabase
-    .from('workout_first_audio_paths')
-    .delete()
-    .eq('itemId', itemId);
-
-  if (error) {
-    console.error(error.message);
-    return;
-  }
-
-  revalidatePath('/');
-  revalidatePath('/workout/10001');
-}
-
-export async function deleteWorkoutSecondAudioPath(id: number) {
-  const supabase = createSupabaseServerActionClient();
-
-  const { error } = await supabase
-    .from('workout_second_audio_paths')
-    .delete()
-    .eq('id', id);
-
-  if (error) {
-    console.error(error.message);
-    return;
-  }
-
-  revalidatePath('/');
-  revalidatePath('/workout/10002');
-  revalidatePath('/workout/10003');
 }
