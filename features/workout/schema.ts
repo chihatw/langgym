@@ -51,6 +51,8 @@ export interface WorkoutItem {
 export interface WorkoutItemView {
   id: number | null;
   workoutId: number | null;
+  uid: string | null;
+  display: string | null;
   title: string | null;
   isReview: boolean | null;
   targetBPM: number | null;

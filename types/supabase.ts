@@ -1280,6 +1280,7 @@ export type Database = {
         Row: {
           chinese: string | null
           created_at: string | null
+          display: string | null
           id: number | null
           index: number | null
           isReview: boolean | null
@@ -1287,6 +1288,7 @@ export type Database = {
           pitchStr: string | null
           targetBPM: number | null
           title: string | null
+          uid: string | null
           workoutId: number | null
         }
         Relationships: [
@@ -1302,6 +1304,13 @@ export type Database = {
             columns: ["workoutId"]
             isOneToOne: false
             referencedRelation: "workouts_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_workouts_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]

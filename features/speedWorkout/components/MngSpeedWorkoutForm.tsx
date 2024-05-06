@@ -44,8 +44,15 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
         return acc;
       }
 
-      return [...acc, { id: cur.workoutId!, title: cur.title! }];
-    }, [] as { id: number; title: string }[]);
+      return [
+        ...acc,
+        {
+          id: cur.workoutId!,
+          title: cur.title!,
+          display: cur.display!,
+        },
+      ];
+    }, [] as { id: number; title: string; display: string }[]);
   }, [workoutItems]);
 
   const selectedWorkoutItems = useMemo(
@@ -129,12 +136,11 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
           <SelectContent>
             {workouts.map((workout, index) => (
               <SelectItem key={index} value={workout.id!.toString()}>
-                {workout.title}
+                {`${workout.display} ${workout.title}`}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-
         <Button onClick={handleClick}>
           {value.isRunning ? 'Pause' : 'Play'}
         </Button>
