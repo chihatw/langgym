@@ -2,6 +2,7 @@
 import { Button, buttonVariants } from '@/components/ui/button';
 import {
   AlignJustify,
+  Archive,
   Edit2,
   Eye,
   EyeOff,
@@ -15,6 +16,7 @@ import { useOptimistic } from 'react';
 import { ArticleView, SentenceView } from '../../schema';
 import {
   deleteArticle,
+  updateArticleIsArchived,
   updateArticleIsShowAccents,
 } from '../../services/actions';
 
@@ -69,6 +71,7 @@ const MngArticleListRow = ({ article, sentences, removeArticle }: Props) => {
           <Printer className='h-5 w-5' />
         </Link>
         <ShowAccentsToggle article={article} />
+        <ArchiveToggle article={article} />
         <RemoveArticleButton
           articleId={article.id!}
           removeArticle={removeArticle}
@@ -97,6 +100,30 @@ const ShowAccentsToggle = ({ article }: { article: ArticleView }) => {
           <Eye className='h-5 w-5' />
         ) : (
           <EyeOff className='h-5 w-5' />
+        )}
+      </Button>
+    </form>
+  );
+};
+
+const ArchiveToggle = ({ article }: { article: ArticleView }) => {
+  const [optValue, setOptValue] = useOptimistic<boolean, boolean>(
+    article.isArchived!,
+    (_, newValue) => newValue
+  );
+
+  const action = async () => {
+    setOptValue(!optValue);
+    updateArticleIsArchived(article.id!, !optValue);
+  };
+
+  return (
+    <form action={action}>
+      <Button size={'icon'} variant={'ghost'} type='submit'>
+        {optValue ? (
+          <Archive className='h-5 w-5' />
+        ) : (
+          <Archive className='h-5 w-5 text-transparent' />
         )}
       </Button>
     </form>

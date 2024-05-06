@@ -5,7 +5,7 @@ import ArticleList from './ArticleList';
 
 type Props = { uid: string };
 
-const ArticleListContainer = async ({ uid }: Props) => {
+const ArticleListLoader = async ({ uid }: Props) => {
   const articles = await fetchArticlesByUid(uid);
   if (!articles.length)
     return (
@@ -22,4 +22,4 @@ const ArticleListContainer = async ({ uid }: Props) => {
   );
 };
 
-export default ArticleListContainer;
+export default ArticleListLoader;

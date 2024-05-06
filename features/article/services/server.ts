@@ -49,7 +49,8 @@ export async function fetchArticlesByUid(uid: string): Promise<Article[]> {
     .from('articles')
     .select('*')
     .order('created_at', { ascending: false })
-    .eq('uid', uid);
+    .eq('uid', uid)
+    .eq('isArchived', false);
   if (error) {
     console.error(error.message);
     return [];

@@ -291,6 +291,7 @@ export type Database = {
           created_at: string
           date: string
           id: number
+          isArchived: boolean
           isShowAccents: boolean
           title: string
           uid: string
@@ -300,6 +301,7 @@ export type Database = {
           created_at?: string
           date: string
           id?: number
+          isArchived?: boolean
           isShowAccents?: boolean
           title: string
           uid: string
@@ -309,6 +311,7 @@ export type Database = {
           created_at?: string
           date?: string
           id?: number
+          isArchived?: boolean
           isShowAccents?: boolean
           title?: string
           uid?: string
@@ -1128,6 +1131,7 @@ export type Database = {
           date: string | null
           display: string | null
           id: number | null
+          isArchived: boolean | null
           isShowAccents: boolean | null
           title: string | null
           uid: string | null
@@ -1230,6 +1234,7 @@ export type Database = {
           date: string | null
           end: number | null
           id: number | null
+          isArchived: boolean | null
           isShowAccents: boolean | null
           japanese: string | null
           line: number | null

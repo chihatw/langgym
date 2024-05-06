@@ -111,6 +111,19 @@ export async function updateArticleIsShowAccents(
   return;
 }
 
+export async function updateArticleIsArchived(id: number, isArchived: boolean) {
+  const supabase = createSupabaseServerActionClient();
+  const { error } = await supabase
+    .from('articles')
+    .update({ isArchived })
+    .eq('id', id);
+  if (error) {
+    return error.message;
+  }
+  revalidatePath_article(id);
+  return;
+}
+
 export async function updateArticleAudioPath(id: number, audioPath: string) {
   const supabase = createSupabaseServerActionClient();
   const { error } = await supabase

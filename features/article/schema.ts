@@ -16,6 +16,7 @@ export interface ArticleView {
   title: string | null;
   audioPath: string | null;
   isShowAccents: boolean | null;
+  isArchived: boolean | null;
   created_at: Date | null;
 }
 
@@ -38,6 +39,7 @@ export interface SentenceView {
   title: string | null;
   audioPath: string | null;
   isShowAccents: boolean | null;
+  isArchived: boolean | null;
   start: number | null;
   end: number | null;
   line: number | null;
