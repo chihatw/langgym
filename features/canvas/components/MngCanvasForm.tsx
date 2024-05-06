@@ -10,35 +10,17 @@ type Props = {};
 
 type FormProps = Canvas & {
   isActive: boolean;
-  canvasRect: { top: number; left: number } | undefined;
 };
 
 const INITIAL_STATE: FormProps = {
   xPos: 0,
   yPos: 0,
   isActive: false,
-  canvasRect: undefined,
 };
 
 const MngCanvasForm = (props: Props) => {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [value, setValue] = useState(INITIAL_STATE);
-
-  // スクロール時に canvas の位置を設定する
-  useEffect(() => {
-    window.addEventListener('scroll', () => {
-      const rect = canvas.current?.getBoundingClientRect();
-      setValue((prev) => ({
-        ...prev,
-        canvasRect: rect
-          ? {
-              top: rect.top,
-              left: rect.left,
-            }
-          : undefined,
-      }));
-    });
-  }, []);
 
   // 点の描画
   useEffect(() => {
@@ -58,9 +40,8 @@ const MngCanvasForm = (props: Props) => {
   const handleMouseDown = (
     e: MouseEvent<HTMLCanvasElement, globalThis.MouseEvent>
   ) => {
-    if (!value.canvasRect) return;
-    const xPos = Math.max(e.clientX - value.canvasRect!.left, 0);
-    const yPos = Math.max(e.clientY - value.canvasRect!.top, 0);
+    const xPos = Math.max(e.nativeEvent.offsetX, 0);
+    const yPos = Math.max(e.nativeEvent.offsetY, 0);
 
     // local
     setValue((prev) => ({ ...prev, isActive: true, xPos, yPos }));
@@ -76,10 +57,10 @@ const MngCanvasForm = (props: Props) => {
   const handleMouseMove = (
     e: MouseEvent<HTMLCanvasElement, globalThis.MouseEvent>
   ) => {
-    if (!value.canvasRect || !value.isActive) return;
+    if (!value.isActive) return;
 
-    const xPos = Math.max(e.clientX - value.canvasRect!.left, 0);
-    const yPos = Math.max(e.clientY - value.canvasRect!.top, 0);
+    const xPos = Math.max(e.nativeEvent.offsetX, 0);
+    const yPos = Math.max(e.nativeEvent.offsetY, 0);
 
     // local
     setValue((prev) => ({
