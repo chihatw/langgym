@@ -1,4 +1,6 @@
 export interface Canvas {
-  xPos: number;
-  yPos: number;
+  x: number;
+  y: number;
+  label: string;
+  color: string;
 }

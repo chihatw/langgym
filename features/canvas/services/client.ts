@@ -17,12 +17,19 @@ export async function fetchCanvas(): Promise<Canvas | undefined> {
   return data;
 }
 
-export async function updateCanvasXPosYPos(xPos: number, yPos: number) {
+export async function updateBoxXY(x: number, y: number) {
   const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase
-    .from('canvas')
-    .update({ xPos, yPos })
-    .eq('id', 1);
+  const { error } = await supabase.from('canvas').update({ x, y }).eq('id', 1);
+
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+}
+
+export async function updateBoxLabel(label: string) {
+  const supabase = createSupabaseClientComponentClient();
+  const { error } = await supabase.from('canvas').update({ label }).eq('id', 1);
 
   if (error) {
     console.error(error.message);

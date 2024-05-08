@@ -1,4 +1,5 @@
-import MngCanvasForm from '@/features/canvas/components/MngCanvasForm';
+import MngCanvasForm from '@/features/canvas/components/MngCanvasFormContainer';
+import { fetchCanvas } from '@/features/canvas/services/server';
 import MngNoteForm from '@/features/note/components/MngNoteForm';
 import {
   fetchNote,
@@ -38,6 +39,7 @@ const page = async (props: Props) => {
   const pitches = await fetchPitches();
   const pitchesUser = await fetchPitchesUser();
   const pathnameLogs = await fetchPathnameLogs();
+  const canvas = await fetchCanvas();
 
   return (
     <div className='grid gap-8'>
@@ -55,7 +57,7 @@ const page = async (props: Props) => {
       />
       <MngRecordForm recordParams={recordParams} records={records} />
       <MngPitchesForm pitches={pitches} pitchesUser={pitchesUser} />
-      <MngCanvasForm />
+      <MngCanvasForm canvas={canvas} />
     </div>
   );
 };

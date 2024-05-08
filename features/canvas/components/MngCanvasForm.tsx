@@ -1,96 +1,108 @@
 'use client';
 
-import MngPaneContainer from '@/components/MngPaneContainer';
-import { MouseEvent, useEffect, useRef, useState } from 'react';
-import { RECT_SIZE } from '../constants';
+import { Input } from '@/components/ui/input';
+import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
+import { Box } from '../class/Box';
+import { Field } from '../class/Field';
 import { Canvas } from '../schema';
-import { updateCanvasXPosYPos } from '../services/client';
 
-type Props = {};
+type Props = { canvas: Canvas | undefined };
 
-type FormProps = Canvas & {
-  isActive: boolean;
-};
+type FormProps = { initializing: boolean; label: string };
 
 const INITIAL_STATE: FormProps = {
-  xPos: 0,
-  yPos: 0,
-  isActive: false,
+  initializing: true,
+  label: '',
 };
 
-const MngCanvasForm = (props: Props) => {
-  const canvas = useRef<HTMLCanvasElement>(null);
+type RefProps = {
+  dpr: number;
+  box: Box;
+  field: Field;
+};
+
+const INITIAL_REF: RefProps = {
+  dpr: (() => {
+    if (typeof window === 'undefined') return 1;
+    return window.devicePixelRatio || 1;
+  })(),
+  box: new Box('', 'green'),
+  field: new Field(),
+};
+
+// MngPaneContainer で children が 表示/非表示の切り替えがあるので、層を分ける
+const MngCanvasForm = ({ canvas: data }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
+  const canvas = useRef<HTMLCanvasElement>(null);
+  const ref = useRef(INITIAL_REF);
 
-  // 点の描画
+  // initializing
   useEffect(() => {
-    if (!canvas.current) return;
-    const ctx = canvas.current.getContext('2d');
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
-    ctx.fillStyle = 'rgb(200,0,0)';
-    ctx.fillRect(
-      value.xPos - RECT_SIZE / 2,
-      value.yPos - RECT_SIZE / 2,
-      RECT_SIZE,
-      RECT_SIZE
-    );
-  }, [value]);
+    if (!data || !value.initializing) return;
+    const { field, box } = ref.current;
+    const { label } = data;
 
-  const handleMouseDown = (
-    e: MouseEvent<HTMLCanvasElement, globalThis.MouseEvent>
-  ) => {
-    const xPos = Math.max(e.nativeEvent.offsetX, 0);
-    const yPos = Math.max(e.nativeEvent.offsetY, 0);
+    // Set Canvas
+    field.setCanvas(canvas.current!);
+    field.add(box);
+    field.start();
 
-    // local
-    setValue((prev) => ({ ...prev, isActive: true, xPos, yPos }));
+    // Set remote value
+    box.label = label;
+    setValue({ initializing: false, label });
+  }, [data, value]);
 
-    // remote
-    updateCanvasXPosYPos(xPos, yPos);
-  };
-
-  const handleMouseUp = () => {
-    setValue((prev) => ({ ...prev, isActive: false }));
+  const handleChangeLabel = (e: ChangeEvent<HTMLInputElement>) => {
+    const label = e.target.value;
+    const { box } = ref.current;
+    box.label = label;
+    setValue((prev) => ({ ...prev, label }));
+    box.updateLabel(box.label);
   };
 
   const handleMouseMove = (
     e: MouseEvent<HTMLCanvasElement, globalThis.MouseEvent>
   ) => {
-    if (!value.isActive) return;
+    const { offsetX: x, offsetY: y } = e.nativeEvent;
+    const { box } = ref.current;
+    box.getMousePos(x, y);
+  };
 
-    const xPos = Math.max(e.nativeEvent.offsetX, 0);
-    const yPos = Math.max(e.nativeEvent.offsetY, 0);
+  const handleMouseDown = (
+    e: MouseEvent<HTMLCanvasElement, globalThis.MouseEvent>
+  ) => {
+    const { offsetX: x, offsetY: y } = e.nativeEvent;
+    const { box } = ref.current;
+    box.grab(x, y);
+  };
 
-    // local
-    setValue((prev) => ({
-      ...prev,
-      xPos,
-      yPos,
-    }));
-
-    // remote
-    updateCanvasXPosYPos(xPos, yPos);
+  const handleMouseUp = () => {
+    const { box } = ref.current;
+    box.ungrab();
   };
 
   return (
-    <MngPaneContainer label='Canvas'>
-      <div className='grid gap-4'>
-        <div className='text-2xl font-extrabold'>Canvas</div>
-        <pre className='text-[10px] select-none'>
-          {JSON.stringify(value, null, 2)}
-        </pre>
+    <div className='grid gap-4'>
+      <Input
+        placeholder='label'
+        value={value.label}
+        onChange={handleChangeLabel}
+      />
+      <div className='w-[512px] h-[320px] overflow-hidden'>
         <canvas
           ref={canvas}
           width={512}
           height={320}
-          className='bg-white'
+          style={{
+            transform: `scale(1/${ref.current.dpr},1/${ref.current.dpr})`,
+          }}
+          className='bg-white origin-top-left'
           onMouseMove={handleMouseMove}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
         ></canvas>
       </div>
-    </MngPaneContainer>
+    </div>
   );
 };
 

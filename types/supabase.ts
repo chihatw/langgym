@@ -417,19 +417,25 @@ export type Database = {
       }
       canvas: {
         Row: {
+          color: string
           id: number
-          xPos: number
-          yPos: number
+          label: string
+          x: number
+          y: number
         }
         Insert: {
+          color?: string
           id?: number
-          xPos?: number
-          yPos?: number
+          label?: string
+          x?: number
+          y?: number
         }
         Update: {
+          color?: string
           id?: number
-          xPos?: number
-          yPos?: number
+          label?: string
+          x?: number
+          y?: number
         }
         Relationships: []
       }

@@ -1,33 +1,44 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
-import { useEffect, useRef, useState } from 'react';
-import { RECT_SIZE } from '../constants';
+import { useEffect, useRef } from 'react';
+import { Box } from '../class/Box';
+import { Field } from '../class/Field';
 import { fetchCanvas } from '../services/client';
 
 type Props = {};
 
-type FormProps = {
-  xPos: number;
-  yPos: number;
+type RefProps = {
+  initializing: boolean;
+  box: Box;
+  field: Field;
 };
 
-const INITIAL_STATE: FormProps = {
-  xPos: 0,
-  yPos: 0,
+const INITIAL_REF: RefProps = {
+  initializing: true,
+  box: new Box('hello', 'pink'),
+  field: new Field(),
 };
 
 const CanvasForm = (props: Props) => {
+  const ref = useRef(INITIAL_REF);
+
   const canvas = useRef<HTMLCanvasElement>(null);
-  const [value, setValue] = useState(INITIAL_STATE);
 
   // initialize
   useEffect(() => {
     (async () => {
-      const canvas = await fetchCanvas();
-      if (!canvas) {
-        setValue(INITIAL_STATE);
-        return;
-      }
-      setValue((prev) => ({ ...prev, ...canvas }));
+      const { field, box } = ref.current;
+      const data = await fetchCanvas();
+
+      // Set Canvas
+      field.setCanvas(canvas.current!);
+      field.add(box);
+      field.start();
+
+      if (!data) return;
+
+      box.pos = data;
+      box.label = data.label;
+      box.color = data.color;
     })();
   }, []);
 
@@ -45,9 +56,14 @@ const CanvasForm = (props: Props) => {
           filter: `id=eq.1`,
         },
         (preload) => {
+          const { box } = ref.current;
+
           const updated = preload.new;
-          const { xPos, yPos } = updated;
-          setValue((prev) => ({ ...prev, xPos, yPos }));
+          const { x, y, label, color } = updated;
+
+          box.pos = { x, y };
+          box.label = label;
+          box.color = color;
         }
       )
       .subscribe();
@@ -56,30 +72,16 @@ const CanvasForm = (props: Props) => {
     };
   }, []);
 
-  // 点の描画
-  useEffect(() => {
-    if (!canvas.current) return;
-    const ctx = canvas.current.getContext('2d');
-    if (!ctx) return;
-    ctx.clearRect(0, 0, canvas.current.width, canvas.current.height);
-    ctx.fillStyle = 'rgb(200,0,0)';
-    ctx.fillRect(
-      value.xPos - RECT_SIZE / 2,
-      value.yPos - RECT_SIZE / 2,
-      RECT_SIZE,
-      RECT_SIZE
-    );
-  }, [value]);
-
   return (
     <div className='grid gap-4 justify-center'>
-      <pre>{JSON.stringify(value, null, 2)}</pre>
-      <canvas
-        ref={canvas}
-        width={512}
-        height={320}
-        className='bg-white'
-      ></canvas>
+      <div className='w-[512px] h-[320px] overflow-hidden'>
+        <canvas
+          ref={canvas}
+          width={512}
+          height={320}
+          className='bg-white origin-top-left'
+        ></canvas>
+      </div>
     </div>
   );
 };
