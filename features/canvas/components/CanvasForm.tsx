@@ -2,20 +2,19 @@ import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { useEffect, useRef } from 'react';
 import { Box } from '../class/Box';
 import { Field } from '../class/Field';
+import { RECT } from '../constants';
 import { fetchCanvas } from '../services/client';
 
 type Props = {};
 
 type RefProps = {
-  initializing: boolean;
   box: Box;
   field: Field;
 };
 
 const INITIAL_REF: RefProps = {
-  initializing: true,
-  box: new Box('hello', 'pink'),
-  field: new Field(),
+  box: new Box('', 'green'),
+  field: new Field(RECT.width, RECT.height),
 };
 
 const CanvasForm = (props: Props) => {
@@ -26,19 +25,18 @@ const CanvasForm = (props: Props) => {
   // initialize
   useEffect(() => {
     (async () => {
-      const { field, box } = ref.current;
       const data = await fetchCanvas();
+      if (!data) return;
+
+      const { field, box } = ref.current;
+      const { label, x, y, color } = data;
 
       // Set Canvas
       field.setCanvas(canvas.current!);
       field.add(box);
       field.start();
 
-      if (!data) return;
-
-      box.pos = data;
-      box.label = data.label;
-      box.color = data.color;
+      box.setDataFromRemote(x, y, label, color);
     })();
   }, []);
 
@@ -61,9 +59,7 @@ const CanvasForm = (props: Props) => {
           const updated = preload.new;
           const { x, y, label, color } = updated;
 
-          box.pos = { x, y };
-          box.label = label;
-          box.color = color;
+          box.setDataFromRemote(x, y, label, color);
         }
       )
       .subscribe();
@@ -74,11 +70,14 @@ const CanvasForm = (props: Props) => {
 
   return (
     <div className='grid gap-4 justify-center'>
-      <div className='w-[512px] h-[320px] overflow-hidden'>
+      <div
+        style={{ width: RECT.width, height: RECT.height }}
+        className='overflow-hidden'
+      >
         <canvas
           ref={canvas}
-          width={512}
-          height={320}
+          width={RECT.width}
+          height={RECT.height}
           className='bg-white origin-top-left'
         ></canvas>
       </div>

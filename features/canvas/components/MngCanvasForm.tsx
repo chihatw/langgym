@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
 import { Box } from '../class/Box';
 import { Field } from '../class/Field';
+import { RECT } from '../constants';
 import { Canvas } from '../schema';
 
 type Props = { canvas: Canvas | undefined };
@@ -16,18 +17,13 @@ const INITIAL_STATE: FormProps = {
 };
 
 type RefProps = {
-  dpr: number;
   box: Box;
   field: Field;
 };
 
 const INITIAL_REF: RefProps = {
-  dpr: (() => {
-    if (typeof window === 'undefined') return 1;
-    return window.devicePixelRatio || 1;
-  })(),
   box: new Box('', 'green'),
-  field: new Field(),
+  field: new Field(RECT.width, RECT.height),
 };
 
 // MngPaneContainer で children が 表示/非表示の切り替えがあるので、層を分ける
@@ -47,7 +43,6 @@ const MngCanvasForm = ({ canvas: data }: Props) => {
     field.add(box);
     field.start();
 
-    // Set remote value
     box.label = label;
     setValue({ initializing: false, label });
   }, [data, value]);
@@ -55,9 +50,9 @@ const MngCanvasForm = ({ canvas: data }: Props) => {
   const handleChangeLabel = (e: ChangeEvent<HTMLInputElement>) => {
     const label = e.target.value;
     const { box } = ref.current;
-    box.label = label;
+
+    box.updateLabel(label);
     setValue((prev) => ({ ...prev, label }));
-    box.updateLabel(box.label);
   };
 
   const handleMouseMove = (
@@ -88,14 +83,14 @@ const MngCanvasForm = ({ canvas: data }: Props) => {
         value={value.label}
         onChange={handleChangeLabel}
       />
-      <div className='w-[512px] h-[320px] overflow-hidden'>
+      <div
+        style={{ width: RECT.width, height: RECT.height }}
+        className='overflow-hidden'
+      >
         <canvas
           ref={canvas}
-          width={512}
-          height={320}
-          style={{
-            transform: `scale(1/${ref.current.dpr},1/${ref.current.dpr})`,
-          }}
+          width={RECT.width}
+          height={RECT.height}
           className='bg-white origin-top-left'
           onMouseMove={handleMouseMove}
           onMouseDown={handleMouseDown}

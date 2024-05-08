@@ -22,29 +22,18 @@ export class Box {
     this.#dom = dom;
   }
 
-  get label() {
-    return this.#label;
-  }
-
-  get color() {
-    return this.#color;
-  }
-
   set dpr(dpr: number) {
     this.#dpr = dpr;
   }
 
-  set pos({ x, y }: { x: number; y: number }) {
-    this.#pos = { x, y };
-  }
-
   set label(label: string) {
-    console.log(label);
     this.#label = label;
     this.#dom!.textContent = label;
   }
 
-  set color(color: string) {
+  setDataFromRemote(x: number, y: number, label: string, color: string) {
+    this.#pos = { x, y };
+    this.#label = label;
     this.#color = color;
   }
 
@@ -67,6 +56,8 @@ export class Box {
   }
 
   updateLabel(label: string) {
+    this.#label = label;
+    this.#dom!.textContent = label;
     updateBoxLabel(label);
   }
 
