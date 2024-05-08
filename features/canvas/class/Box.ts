@@ -35,6 +35,7 @@ export class Box {
     this.#pos = { x, y };
     this.#label = label;
     this.#color = color;
+    this.#dom!.textContent = label;
   }
 
   getMousePos(mouseX: number, mouseY: number) {
@@ -126,9 +127,13 @@ function checkIsMouseOver(
 ) {
   const _x = pos.x / dpr;
   const _y = pos.y / dpr;
-  const left = _x > rect.x;
-  const right = _x < rect.x + rect.width;
-  const top = _y > rect.y;
-  const buttom = _y < rect.y + rect.height;
-  return [left, right, top, buttom].every(Boolean);
+
+  const isBetween_x = between(_x, rect.x, rect.x + rect.width);
+  const isBetween_y = between(_y, rect.y, rect.y + rect.height);
+
+  return isBetween_x && isBetween_y;
+}
+
+function between(target: number, min: number, max: number) {
+  return target >= min && target <= max;
 }

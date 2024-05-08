@@ -1,11 +1,12 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
-import { ChangeEvent, MouseEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Box } from '../class/Box';
-import { Field } from '../class/Field';
+import { DraggableField } from '../class/DraggableField';
 import { RECT } from '../constants';
 import { Canvas } from '../schema';
+import CanvasDom from './CanvasDom';
 
 type Props = { canvas: Canvas | undefined };
 
@@ -18,12 +19,12 @@ const INITIAL_STATE: FormProps = {
 
 type RefProps = {
   box: Box;
-  field: Field;
+  field: DraggableField;
 };
 
 const INITIAL_REF: RefProps = {
   box: new Box('', 'green'),
-  field: new Field(RECT.width, RECT.height),
+  field: new DraggableField(RECT.width, RECT.height),
 };
 
 // MngPaneContainer で children が 表示/非表示の切り替えがあるので、層を分ける
@@ -55,27 +56,6 @@ const MngCanvasForm = ({ canvas: data }: Props) => {
     setValue((prev) => ({ ...prev, label }));
   };
 
-  const handleMouseMove = (
-    e: MouseEvent<HTMLCanvasElement, globalThis.MouseEvent>
-  ) => {
-    const { offsetX: x, offsetY: y } = e.nativeEvent;
-    const { box } = ref.current;
-    box.getMousePos(x, y);
-  };
-
-  const handleMouseDown = (
-    e: MouseEvent<HTMLCanvasElement, globalThis.MouseEvent>
-  ) => {
-    const { offsetX: x, offsetY: y } = e.nativeEvent;
-    const { box } = ref.current;
-    box.grab(x, y);
-  };
-
-  const handleMouseUp = () => {
-    const { box } = ref.current;
-    box.ungrab();
-  };
-
   return (
     <div className='grid gap-4'>
       <Input
@@ -83,20 +63,7 @@ const MngCanvasForm = ({ canvas: data }: Props) => {
         value={value.label}
         onChange={handleChangeLabel}
       />
-      <div
-        style={{ width: RECT.width, height: RECT.height }}
-        className='overflow-hidden'
-      >
-        <canvas
-          ref={canvas}
-          width={RECT.width}
-          height={RECT.height}
-          className='bg-white origin-top-left'
-          onMouseMove={handleMouseMove}
-          onMouseDown={handleMouseDown}
-          onMouseUp={handleMouseUp}
-        ></canvas>
-      </div>
+      <CanvasDom ref={canvas} />
     </div>
   );
 };

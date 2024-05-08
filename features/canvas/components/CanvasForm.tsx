@@ -4,6 +4,7 @@ import { Box } from '../class/Box';
 import { Field } from '../class/Field';
 import { RECT } from '../constants';
 import { fetchCanvas } from '../services/client';
+import CanvasDom from './CanvasDom';
 
 type Props = {};
 
@@ -70,17 +71,7 @@ const CanvasForm = (props: Props) => {
 
   return (
     <div className='grid gap-4 justify-center'>
-      <div
-        style={{ width: RECT.width, height: RECT.height }}
-        className='overflow-hidden'
-      >
-        <canvas
-          ref={canvas}
-          width={RECT.width}
-          height={RECT.height}
-          className='bg-white origin-top-left'
-        ></canvas>
-      </div>
+      <CanvasDom ref={canvas} />
     </div>
   );
 };
