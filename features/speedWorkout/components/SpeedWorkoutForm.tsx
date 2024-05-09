@@ -106,7 +106,9 @@ const SpeedWorkoutForm = ({}: Props) => {
     <div className='flex justify-center mt-6 '>
       <div className='grid gap-8 grid-rows-[auto,auto,1fr]'>
         <div className='text-center text-gray-700 text-4xl '>
-          {selectedWorkoutItems?.at(0)?.title}
+          {`${selectedWorkoutItems?.at(0)?.display} ${
+            selectedWorkoutItems?.at(0)?.title
+          }`}
         </div>
 
         <div className='flex justify-center'>
