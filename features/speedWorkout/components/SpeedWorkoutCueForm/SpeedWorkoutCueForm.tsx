@@ -37,18 +37,20 @@ const SpeedWorkoutCueForm = ({}: Props) => {
   }, [value]);
 
   const selectedWorkout = useMemo<
-    Pick<Workout, 'title' | 'id' | 'isReview'> | undefined
+    | (Pick<Workout, 'title' | 'id' | 'isReview'> & { display: string })
+    | undefined
   >(() => {
     const temp = selectedWorkoutItems.at(0);
 
     if (!temp) return;
 
-    const { workoutId, title, isReview } = temp;
+    const { workoutId, title, isReview, display } = temp;
 
     return {
       id: workoutId!,
       title: title!,
       isReview: isReview!,
+      display: display!,
     };
   }, [selectedWorkoutItems]);
 
@@ -152,7 +154,7 @@ const SpeedWorkoutCueForm = ({}: Props) => {
     <div className='flex justify-center mt-6 '>
       <div className='grid gap-8 grid-rows-[auto,auto,1fr]'>
         <div className='text-center text-gray-700 text-4xl '>
-          {selectedWorkout?.title}
+          {`${selectedWorkout?.display} ${selectedWorkout?.title}`}
         </div>
         {value.isRunning ? (
           <div className='grid gap-10 grid-rows-[auto,1fr]'>
