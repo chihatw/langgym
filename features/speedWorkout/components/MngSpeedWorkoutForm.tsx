@@ -108,6 +108,8 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
     setValue((prev) => ({ ...prev, selectedId }));
 
     // remote
+
+    console.log('!');
     updateSpeedWorkoutSelectedId(speedWorkout.id, selectedId);
   };
 

@@ -118,7 +118,7 @@ export class Box {
       label,
       document,
       this.#splitBy,
-      true
+      false // debug
     );
     this.#width = dummyDOM.width;
     this.#height = dummyDOM.height;
