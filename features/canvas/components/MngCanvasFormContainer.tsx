@@ -8,7 +8,7 @@ type Props = { canvas: Canvas | undefined };
 
 const MngCanvasFormContainer = ({ canvas }: Props) => {
   return (
-    <MngPaneContainer label='Canvas'>
+    <MngPaneContainer label='Canvas' open>
       <div className='grid gap-4'>
         <div className='text-2xl font-extrabold'>Canvas</div>
         <MngCanvasForm canvas={canvas} />

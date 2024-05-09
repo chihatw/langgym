@@ -14,7 +14,7 @@ type RefProps = {
 };
 
 const INITIAL_REF: RefProps = {
-  box: new Box('', 'green'),
+  box: new Box(0, 0, '', 'green'),
   field: new Field(RECT.width, RECT.height),
 };
 

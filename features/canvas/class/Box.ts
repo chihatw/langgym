@@ -1,113 +1,127 @@
+import { BOX_SELECTED_COLOR } from '../constants';
 import { updateBoxLabel, updateBoxXY } from '../services/client';
+import { checkIsMouseOver } from '../services/utils';
+import { Char } from './Char';
+import { DummyDOM } from './DummyDOM';
 
 export class Box {
-  #label = '';
-  #color = '';
+  #x;
+  #y;
+  #color;
+  #isSelected = false;
 
-  #dom: null | HTMLDivElement = null;
-  #isGrabed = false;
+  #width = 0;
+  #height = 0;
+  #splitBy = 0; // 何文字目の"前"で区切るか
 
-  pos = { x: 0, y: 0 };
+  #chars: Char[] = [];
 
-  constructor(label: string, color: string) {
-    this.#label = label;
+  constructor(x: number, y: number, label: string, color: string) {
+    this.#x = x;
+    this.#y = y;
     this.#color = color;
-
-    const dom = createDummyDOM();
-    if (!dom) return;
-
-    dom.textContent = label;
-    this.#dom = dom;
+    this._updateChars(label);
   }
 
-  set label(label: string) {
-    this.#label = label;
-    this.#dom!.textContent = label;
+  setLabel(label: string) {
+    this._updateChars(label);
+  }
+
+  get x() {
+    return this.#x;
+  }
+
+  get y() {
+    return this.#y;
+  }
+
+  get chars() {
+    return this.#chars;
   }
 
   setDataFromRemote(x: number, y: number, label: string, color: string) {
-    this.pos = { x, y };
-    this.#label = label;
     this.#color = color;
-    this.#dom!.textContent = label;
+    this.#x = x;
+    this.#y = y;
+    this._updateChars(label);
   }
 
   updateLabel(label: string) {
-    this.#label = label;
-    this.#dom!.textContent = label;
+    this._updateChars(label);
+
+    // remote
     updateBoxLabel(label);
   }
 
   inBounds(x: number, y: number) {
-    const { width, height } = this.#dom!.getBoundingClientRect();
-    const result = checkIsMouseOver({ x, y }, { ...this.pos, width, height });
+    const result = checkIsMouseOver(
+      { x, y },
+      this.#x,
+      this.#y,
+      this.#width,
+      this.#height
+    );
     return result;
   }
 
+  // カーソルが何文字目の上にあるのかをチェック
+  splitBy(x: number, y: number) {
+    let splitBy = 0;
+    // 最後尾は除外
+    for (let i = 0; i < this.#chars.length - 1; i++) {
+      const char = this.#chars[i];
+      if (char.inBounds(x, y)) {
+        splitBy = i + 1;
+      }
+    }
+    if (this.#splitBy !== splitBy) {
+      this.#splitBy = splitBy;
+      this._updateChars();
+    }
+    return splitBy;
+  }
+
   select() {
-    this.#isGrabed = true;
+    this.#isSelected = true;
   }
 
   deselect() {
-    this.#isGrabed = false;
+    this.#isSelected = false;
   }
 
   dragging(x: number, y: number) {
-    this.pos = { x, y };
+    this.#x = x;
+    this.#y = y;
     updateBoxXY(x, y);
+
+    this._updateChars();
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = this.#isGrabed ? 'red' : this.#color;
+    ctx.fillStyle = this.#isSelected ? BOX_SELECTED_COLOR : this.#color;
+    ctx.fillRect(this.#x, this.#y, this.#width, this.#height);
 
-    const rect = this.#dom!.getBoundingClientRect();
-
-    ctx.fillRect(this.pos.x, this.pos.y, rect.width, rect.height);
-
-    ctx.font = '12px sans-serif';
-    ctx.fillStyle = 'white';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(
-      this.#label,
-      this.pos.x + rect.width / 2,
-      this.pos.y + rect.height / 2
-    );
-
-    ctx.strokeStyle = 'black';
-    ctx.strokeRect(this.pos.x, this.pos.y, rect.width, rect.height);
+    for (let i = 0; i < this.#chars.length; i++) {
+      const char = this.#chars[i];
+      char.draw(ctx, this.#splitBy === i + 1);
+    }
   }
-}
 
-function createDummyDOM() {
-  if (typeof document === 'undefined') return;
-  const dom = document.createElement('div');
-  dom.style.position = 'fixed';
-  dom.style.left = '0';
-  dom.style.backgroundColor = 'rgb(255 255 255 / 0.6)';
-  dom.style.padding = '0.5rem';
-  dom.style.margin = '0.5rem';
-  dom.style.height = '2.5rem';
-  dom.style.display = 'flex';
-  dom.style.alignItems = 'center';
-  dom.style.minWidth = '6rem';
-  dom.style.justifyContent = 'center';
-  dom.style.opacity = '0';
-  dom.style.top = '-9999';
-  document.body.appendChild(dom);
-  return dom;
-}
+  _updateChars(newLabel?: string) {
+    if (typeof document === 'undefined') return;
 
-function checkIsMouseOver(
-  pos: { x: number; y: number },
-  rect: { x: number; y: number; width: number; height: number }
-) {
-  const isBetween_x = between(pos.x, rect.x, rect.x + rect.width);
-  const isBetween_y = between(pos.y, rect.y, rect.y + rect.height);
+    const label = newLabel || this.#chars.map((char) => char.label).join('');
 
-  return isBetween_x && isBetween_y;
-}
-
-function between(target: number, min: number, max: number) {
-  return target >= min && target <= max;
+    const dummyDOM = new DummyDOM(
+      this.#x,
+      this.#y,
+      label,
+      document,
+      this.#splitBy,
+      true
+    );
+    this.#width = dummyDOM.width;
+    this.#height = dummyDOM.height;
+    this.#chars = dummyDOM.chars;
+  }
 }

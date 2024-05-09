@@ -7,10 +7,11 @@ import { Button } from './ui/button';
 type Props = {
   label: string;
   children: React.ReactNode;
+  open?: boolean;
 };
 
-const MngPaneContainer = ({ label, children }: Props) => {
-  const [open, setOpen] = useState(false);
+const MngPaneContainer = ({ label, children, open: _open = false }: Props) => {
+  const [open, setOpen] = useState(_open);
   return (
     <div className='grid gap-4'>
       <div>

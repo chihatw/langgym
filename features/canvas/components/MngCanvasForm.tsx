@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Box } from '../class/Box';
 import { DraggableField } from '../class/DraggableField';
-import { RECT } from '../constants';
+import { BG_COLOR, RECT } from '../constants';
 import { Canvas } from '../schema';
 import CanvasDom from './CanvasDom';
 
@@ -23,7 +23,7 @@ type RefProps = {
 };
 
 const INITIAL_REF: RefProps = {
-  box: new Box('', 'green'),
+  box: new Box(0, 0, '', BG_COLOR),
   field: new DraggableField(RECT.width, RECT.height),
 };
 
@@ -44,13 +44,15 @@ const MngCanvasForm = ({ canvas: data }: Props) => {
     field.add(box);
     field.redraw();
 
-    box.label = label;
+    box.setLabel(label);
     setValue({ initializing: false, label });
   }, [data, value]);
 
   const handleChangeLabel = (e: ChangeEvent<HTMLInputElement>) => {
     const label = e.target.value;
     const { box, field } = ref.current;
+
+    if (!box) throw Error();
 
     box.updateLabel(label);
     field.redraw();
