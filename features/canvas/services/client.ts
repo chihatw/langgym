@@ -19,7 +19,13 @@ export async function fetchCanvas(): Promise<Canvas | undefined> {
 
 export async function updateBoxXY(x: number, y: number) {
   const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase.from('canvas').update({ x, y }).eq('id', 1);
+  const { error } = await supabase
+    .from('canvas')
+    .update({
+      x: x >> 0,
+      y: y >> 0,
+    })
+    .eq('id', 1);
 
   if (error) {
     console.error(error.message);

@@ -1,15 +1,13 @@
 import { updateBoxLabel, updateBoxXY } from '../services/client';
 
 export class Box {
-  #pos = { x: 0, y: 0 };
   #label = '';
   #color = '';
 
   #dom: null | HTMLDivElement = null;
-  #dpr = 0;
-  #grab = { x: 0, y: 0 };
   #isGrabed = false;
-  #isMouseOver = false;
+
+  pos = { x: 0, y: 0 };
 
   constructor(label: string, color: string) {
     this.#label = label;
@@ -22,38 +20,16 @@ export class Box {
     this.#dom = dom;
   }
 
-  set dpr(dpr: number) {
-    this.#dpr = dpr;
-  }
-
   set label(label: string) {
     this.#label = label;
     this.#dom!.textContent = label;
   }
 
   setDataFromRemote(x: number, y: number, label: string, color: string) {
-    this.#pos = { x, y };
+    this.pos = { x, y };
     this.#label = label;
     this.#color = color;
     this.#dom!.textContent = label;
-  }
-
-  getMousePos(mouseX: number, mouseY: number) {
-    // マウスオーバーの確認
-    const { width, height } = this.#dom!.getBoundingClientRect();
-    this.#isMouseOver = checkIsMouseOver(
-      { x: mouseX, y: mouseY },
-      { ...this.#pos, width, height },
-      this.#dpr
-    );
-
-    // グラッブしていれば、位置を変更
-    if (this.#isGrabed) {
-      const x = Math.max(Math.round(mouseX / this.#dpr - this.#grab.x), 0);
-      const y = Math.max(Math.round(mouseY / this.#dpr - this.#grab.y), 0);
-      this.#pos = { x, y };
-      updateBoxXY(x, y);
-    }
   }
 
   updateLabel(label: string) {
@@ -62,29 +38,31 @@ export class Box {
     updateBoxLabel(label);
   }
 
-  grab(x: number, y: number) {
-    if (!this.#isMouseOver) return;
-
-    this.#isGrabed = true;
-
-    this.#grab.x = x / this.#dpr - this.#pos.x;
-    this.#grab.y = y / this.#dpr - this.#pos.y;
+  inBounds(x: number, y: number) {
+    const { width, height } = this.#dom!.getBoundingClientRect();
+    const result = checkIsMouseOver({ x, y }, { ...this.pos, width, height });
+    return result;
   }
 
-  ungrab() {
+  select() {
+    this.#isGrabed = true;
+  }
+
+  deselect() {
     this.#isGrabed = false;
   }
 
+  dragging(x: number, y: number) {
+    this.pos = { x, y };
+    updateBoxXY(x, y);
+  }
+
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = this.#isGrabed
-      ? 'red'
-      : this.#isMouseOver
-      ? 'purple'
-      : this.#color;
+    ctx.fillStyle = this.#isGrabed ? 'red' : this.#color;
 
     const rect = this.#dom!.getBoundingClientRect();
 
-    ctx.fillRect(this.#pos.x, this.#pos.y, rect.width, rect.height);
+    ctx.fillRect(this.pos.x, this.pos.y, rect.width, rect.height);
 
     ctx.font = '12px sans-serif';
     ctx.fillStyle = 'white';
@@ -92,12 +70,12 @@ export class Box {
     ctx.textBaseline = 'middle';
     ctx.fillText(
       this.#label,
-      this.#pos.x + rect.width / 2,
-      this.#pos.y + rect.height / 2
+      this.pos.x + rect.width / 2,
+      this.pos.y + rect.height / 2
     );
 
     ctx.strokeStyle = 'black';
-    ctx.strokeRect(this.#pos.x, this.#pos.y, rect.width, rect.height);
+    ctx.strokeRect(this.pos.x, this.pos.y, rect.width, rect.height);
   }
 }
 
@@ -122,14 +100,10 @@ function createDummyDOM() {
 
 function checkIsMouseOver(
   pos: { x: number; y: number },
-  rect: { x: number; y: number; width: number; height: number },
-  dpr: number
+  rect: { x: number; y: number; width: number; height: number }
 ) {
-  const _x = pos.x / dpr;
-  const _y = pos.y / dpr;
-
-  const isBetween_x = between(_x, rect.x, rect.x + rect.width);
-  const isBetween_y = between(_y, rect.y, rect.y + rect.height);
+  const isBetween_x = between(pos.x, rect.x, rect.x + rect.width);
+  const isBetween_y = between(pos.y, rect.y, rect.y + rect.height);
 
   return isBetween_x && isBetween_y;
 }

@@ -42,7 +42,7 @@ const MngCanvasForm = ({ canvas: data }: Props) => {
     // Set Canvas
     field.setCanvas(canvas.current!);
     field.add(box);
-    field.start();
+    field.redraw();
 
     box.label = label;
     setValue({ initializing: false, label });
@@ -50,9 +50,10 @@ const MngCanvasForm = ({ canvas: data }: Props) => {
 
   const handleChangeLabel = (e: ChangeEvent<HTMLInputElement>) => {
     const label = e.target.value;
-    const { box } = ref.current;
+    const { box, field } = ref.current;
 
     box.updateLabel(label);
+    field.redraw();
     setValue((prev) => ({ ...prev, label }));
   };
 
