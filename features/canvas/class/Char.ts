@@ -1,5 +1,4 @@
 import {
-  BG_COLOR,
   DIVIDER_COLOR,
   DIVIDER_DASH,
   DIVIDER_GAP,
@@ -15,8 +14,6 @@ export class Char {
   #y;
   #width;
   #height;
-  #color = BG_COLOR;
-
   #label;
 
   constructor(
@@ -49,8 +46,6 @@ export class Char {
   }
 
   draw(ctx: CanvasRenderingContext2D, hasLine: boolean) {
-    ctx.fillStyle = this.#color;
-    ctx.fillRect(this.#x, this.#y, this.#width, this.#height);
     ctx.font = `${FONT_SIZE} ${FONT_FAMILY}`;
 
     ctx.fillStyle = TEXT_COLOR;

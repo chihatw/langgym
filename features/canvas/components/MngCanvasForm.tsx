@@ -10,11 +10,18 @@ import CanvasDom from './CanvasDom';
 
 type Props = { canvas: Canvas | undefined };
 
-type FormProps = { initializing: boolean; label: string };
+type FormProps = {
+  initializing: boolean;
+  label: string;
+  splitBy: number;
+  selectedBoxId: string;
+};
 
 const INITIAL_STATE: FormProps = {
   initializing: true,
   label: '',
+  splitBy: -1,
+  selectedBoxId: '',
 };
 
 type RefProps = {
@@ -32,6 +39,7 @@ const MngCanvasForm = ({ canvas: data }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
   const canvas = useRef<HTMLCanvasElement>(null);
   const ref = useRef(INITIAL_REF);
+  const dummyDOM = useRef<HTMLDivElement>(null);
 
   // initializing
   useEffect(() => {
@@ -39,14 +47,20 @@ const MngCanvasForm = ({ canvas: data }: Props) => {
     const { field, box } = ref.current;
     const { label } = data;
 
+    // todo calc Box and Chars Size
+
     // Set Canvas
-    field.setCanvas(canvas.current!);
+    field.setCanvas(canvas.current!); // setCanvas をコンストラクタに入れては？
     field.add(box);
     field.redraw();
 
     box.setLabel(label);
-    setValue({ initializing: false, label });
+    setValue((prev) => ({ ...prev, initializing: false, label }));
   }, [data, value]);
+
+  const handleSplitBy = (splitBy: number) => {
+    setValue((prev) => ({ ...prev, splitBy }));
+  };
 
   const handleChangeLabel = (e: ChangeEvent<HTMLInputElement>) => {
     const label = e.target.value;
@@ -54,13 +68,17 @@ const MngCanvasForm = ({ canvas: data }: Props) => {
 
     if (!box) throw Error();
 
-    box.updateLabel(label);
+    box.updateLabel(label); // 直接 box を触るのではなく、feild に対する操作を挟む？
     field.redraw();
     setValue((prev) => ({ ...prev, label }));
   };
 
   return (
     <div className='grid gap-4'>
+      <div
+        ref={dummyDOM}
+        className='fixed z-10 top-0 left-0 p-[1rem] bg-slate-900 flex items-center text-white justify-center text-sm h-16 gap-8 min-w-24 font-sans'
+      />
       <Input
         placeholder='label'
         value={value.label}

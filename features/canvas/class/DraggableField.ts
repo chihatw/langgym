@@ -2,12 +2,18 @@ import { Box } from './Box';
 import { Char } from './Char';
 import { Field } from './Field';
 
+// Field を継承
 export class DraggableField extends Field {
   #selectedObj: Box | null = null;
   #selectedChar: Char | null = null;
   #dragObj: Box | null = null;
   #dragDX: number = 0;
   #dragDY: number = 0;
+  #handleSplitBy: ((index: number) => void) | undefined;
+
+  setHandleSplitBy(fn: (index: number) => void) {
+    this.#handleSplitBy = fn;
+  }
 
   setCanvas(canvas: HTMLCanvasElement) {
     super.setCanvas(canvas);

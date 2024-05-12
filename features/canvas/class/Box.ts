@@ -1,4 +1,3 @@
-import { BOX_SELECTED_COLOR } from '../constants';
 import { updateBoxLabel, updateBoxXY } from '../services/client';
 import { checkIsMouseOver } from '../services/utils';
 import { Char } from './Char';
@@ -98,8 +97,15 @@ export class Box {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = this.#isSelected ? BOX_SELECTED_COLOR : this.#color;
+    ctx.fillStyle = this.#color;
     ctx.fillRect(this.#x, this.#y, this.#width, this.#height);
+
+    if (this.#isSelected) {
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([]);
+      ctx.strokeRect(this.#x, this.#y, this.#width, this.#height);
+    }
 
     for (let i = 0; i < this.#chars.length; i++) {
       const char = this.#chars[i];
@@ -110,7 +116,10 @@ export class Box {
   _updateChars(newLabel?: string) {
     if (typeof document === 'undefined') return;
 
-    const label = newLabel || this.#chars.map((char) => char.label).join('');
+    const label =
+      typeof newLabel === 'undefined'
+        ? this.#chars.map((char) => char.label).join('')
+        : newLabel;
 
     const dummyDOM = new DummyDOM(
       this.#x,

@@ -8,6 +8,7 @@ export class Field {
   dpr = 0;
   objs: Box[] = [];
 
+  // コンストラクタで大きさを持つ
   constructor(width: number, height: number) {
     this.#rect = { width, height };
   }
