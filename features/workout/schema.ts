@@ -83,6 +83,7 @@ export interface WorkoutRecordRowView {
   workoutId: number | null;
   title: string | null;
   uid: string | null;
+  display: string | null;
   isDev: boolean | null;
   isReview: boolean | null;
   targetBPM: number | null;
@@ -100,6 +101,7 @@ export interface WorkoutRecordRowView {
 export type WorkoutResult = Pick<
   WorkoutRecordRowView,
   | 'workoutId'
+  | 'display'
   | 'title'
   | 'targetBPM'
   | 'audioPath'

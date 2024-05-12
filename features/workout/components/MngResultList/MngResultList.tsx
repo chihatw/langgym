@@ -23,6 +23,7 @@ const MngResultList = ({ recordRows }: Props) => {
         bpm,
         created_at,
         workoutRecordId,
+        display,
       } = cur;
       return [
         ...acc,
@@ -34,6 +35,7 @@ const MngResultList = ({ recordRows }: Props) => {
           bpm,
           created_at,
           workoutRecordId,
+          display,
         },
       ];
     }, [] as WorkoutResult[]);

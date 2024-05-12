@@ -1327,6 +1327,7 @@ export type Database = {
           bpm: number | null
           chinese: string | null
           created_at: string | null
+          display: string | null
           id: number | null
           index: number | null
           isDev: boolean | null
