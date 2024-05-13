@@ -87,7 +87,7 @@ export class DummyDOM {
 
     if (!visible) {
       this.#container.style.opacity = '0';
-      this.#container.style.top = '-9999';
+      this.#container.style.top = '-9999px';
     }
   }
   _createChildren(label: string, splitBy: number) {

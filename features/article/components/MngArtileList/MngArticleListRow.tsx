@@ -1,18 +1,21 @@
 'use client';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import {
   AlignJustify,
   Archive,
   Edit2,
   Eye,
   EyeOff,
+  FileCheck,
   FileVolume,
+  FileX,
   Printer,
   Trash2,
   UploadCloud,
 } from 'lucide-react';
 import Link from 'next/link';
-import { useOptimistic } from 'react';
+import { useEffect, useOptimistic, useState } from 'react';
 import { ArticleView, SentenceView } from '../../schema';
 import {
   deleteArticle,
@@ -26,7 +29,29 @@ type Props = {
   removeArticle: (id: number) => void;
 };
 
+type FormProps = {
+  isExistsFile: boolean;
+};
+
+const INITIAL_STATE: FormProps = {
+  isExistsFile: false,
+};
+
 const MngArticleListRow = ({ article, sentences, removeArticle }: Props) => {
+  const [value, setValue] = useState(INITIAL_STATE);
+
+  useEffect(() => {
+    const path = `/assets/${article.id}.pdf`;
+
+    (async () => {
+      const response = await fetch(path);
+
+      const isExistsFile = response.status === 200;
+
+      setValue((prev) => ({ ...prev, isExistsFile }));
+    })();
+  }, [article]);
+
   return (
     <div className='border-b border-black/20 px-2 py-1 text-sm grid grid-cols-[60px,1fr,auto] justify-between items-center gap-y-2'>
       <div className='pr-2 text-xs  text-gray-500 whitespace-nowrap overflow-hidden'>
@@ -41,22 +66,27 @@ const MngArticleListRow = ({ article, sentences, removeArticle }: Props) => {
           /<span>{sentences.length}</span>
         </div>
       </div>
-      <div className='flex flex-nowrap'>
+      <div className='flex flex-nowrap items-center gap-2'>
+        {value.isExistsFile ? (
+          <FileCheck className='h-5 w-5' />
+        ) : (
+          <FileX className='h-5 w-5 text-red-500' />
+        )}
         <Link
           href={`/mng/article/${article.id}/edit`}
-          className={buttonVariants({ size: 'icon', variant: 'ghost' })}
+          className={cn(buttonVariants({ variant: 'ghost' }), 'p-0 ')}
         >
           <Edit2 className='h-5 w-5' />
         </Link>
         <Link
           href={`/mng/article/${article.id}/sentences`}
-          className={buttonVariants({ size: 'icon', variant: 'ghost' })}
+          className={cn(buttonVariants({ variant: 'ghost' }), 'p-0 ')}
         >
           <AlignJustify className='h-5 w-5' />
         </Link>
         <Link
           href={`/mng/article/${article.id}/upload`}
-          className={buttonVariants({ size: 'icon', variant: 'ghost' })}
+          className={cn(buttonVariants({ variant: 'ghost' }), 'p-0 ')}
         >
           {article.audioPath ? (
             <FileVolume className='h-5 w-5' />
@@ -66,7 +96,7 @@ const MngArticleListRow = ({ article, sentences, removeArticle }: Props) => {
         </Link>
         <Link
           href={`/mng/article/${article.id}/print`}
-          className={buttonVariants({ size: 'icon', variant: 'ghost' })}
+          className={cn(buttonVariants({ variant: 'ghost' }), 'p-0 ')}
         >
           <Printer className='h-5 w-5' />
         </Link>
@@ -95,7 +125,7 @@ const ShowAccentsToggle = ({ article }: { article: ArticleView }) => {
   };
   return (
     <form action={action}>
-      <Button size={'icon'} variant={'ghost'} type='submit'>
+      <Button variant={'ghost'} type='submit' className='p-0'>
         {optValue ? (
           <Eye className='h-5 w-5' />
         ) : (
@@ -119,7 +149,7 @@ const ArchiveToggle = ({ article }: { article: ArticleView }) => {
 
   return (
     <form action={action}>
-      <Button size={'icon'} variant={'ghost'} type='submit'>
+      <Button variant={'ghost'} type='submit' className='p-0'>
         {optValue ? (
           <Archive className='h-5 w-5' />
         ) : (
@@ -146,7 +176,7 @@ const RemoveArticleButton = ({
   };
   return (
     <form action={action}>
-      <Button size={'icon'} variant={'ghost'} type='submit'>
+      <Button variant={'ghost'} type='submit' className='p-0'>
         <Trash2 className='h-5 w-5' />
       </Button>
     </form>

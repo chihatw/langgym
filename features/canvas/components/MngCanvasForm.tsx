@@ -24,14 +24,15 @@ const INITIAL_STATE: FormProps = {
   selectedBoxId: '',
 };
 
+// box は field に隠蔽する？
 type RefProps = {
-  box: Box;
-  field: DraggableField;
+  box: Box | null;
+  field: DraggableField | null;
 };
 
 const INITIAL_REF: RefProps = {
-  box: new Box(0, 0, '', BG_COLOR),
-  field: new DraggableField(RECT.width, RECT.height),
+  box: null,
+  field: null,
 };
 
 // MngPaneContainer で children が 表示/非表示の切り替えがあるので、層を分ける
@@ -44,10 +45,12 @@ const MngCanvasForm = ({ canvas: data }: Props) => {
   // initializing
   useEffect(() => {
     if (!data || !value.initializing) return;
-    const { field, box } = ref.current;
     const { label } = data;
-
     // todo calc Box and Chars Size
+    const field = new DraggableField(RECT.width, RECT.height);
+    const box = new Box(0, 0, '', BG_COLOR);
+
+    ref.current = { field, box };
 
     // Set Canvas
     field.setCanvas(canvas.current!); // setCanvas をコンストラクタに入れては？
@@ -66,7 +69,7 @@ const MngCanvasForm = ({ canvas: data }: Props) => {
     const label = e.target.value;
     const { box, field } = ref.current;
 
-    if (!box) throw Error();
+    if (!box || !field) throw Error();
 
     box.updateLabel(label); // 直接 box を触るのではなく、feild に対する操作を挟む？
     field.redraw();
