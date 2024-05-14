@@ -2,20 +2,20 @@ import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { useEffect, useRef } from 'react';
 import { Box } from '../class/Box';
 import { Field } from '../class/Field';
-import { RECT } from '../constants';
+import { BG_COLOR, RECT } from '../constants';
 import { fetchCanvas } from '../services/client';
 import CanvasDom from './CanvasDom';
 
 type Props = {};
 
 type RefProps = {
-  box: Box;
-  field: Field;
+  box: Box | null;
+  field: Field | null;
 };
 
 const INITIAL_REF: RefProps = {
-  box: new Box(0, 0, '', 'green'),
-  field: new Field(RECT.width, RECT.height),
+  box: null, // box も field の中に隠蔽する
+  field: null,
 };
 
 const CanvasForm = (props: Props) => {
@@ -26,18 +26,19 @@ const CanvasForm = (props: Props) => {
   // initialize
   useEffect(() => {
     (async () => {
+      if (!canvas.current) return;
       const data = await fetchCanvas();
       if (!data) return;
 
-      const { field, box } = ref.current;
-      const { label, x, y, color } = data;
+      const { label, x, y } = data;
 
-      // Set Canvas
-      field.setCanvas(canvas.current!);
+      const field = new Field(RECT.width, RECT.height, canvas.current);
+      const box = new Box(x, y, label, BG_COLOR);
+
+      ref.current = { field, box };
+
       field.add(box);
       field.start();
-
-      box.setDataFromRemote(x, y, label, color);
     })();
   }, []);
 
@@ -55,12 +56,17 @@ const CanvasForm = (props: Props) => {
           filter: `id=eq.1`,
         },
         (preload) => {
-          const { box } = ref.current;
-
           const updated = preload.new;
-          const { x, y, label, color } = updated;
+          const { x, y, label } = updated;
 
-          box.setDataFromRemote(x, y, label, color);
+          const { field } = ref.current;
+          if (!canvas.current || !field) return;
+
+          const box = new Box(x, y, label, BG_COLOR);
+          ref.current = { ...ref.current, box };
+
+          field.removeChildren();
+          field.add(box);
         }
       )
       .subscribe();

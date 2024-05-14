@@ -38,13 +38,6 @@ export class Box {
     return this.#chars;
   }
 
-  setDataFromRemote(x: number, y: number, label: string, color: string) {
-    this.#color = color;
-    this.#x = x;
-    this.#y = y;
-    this._updateChars(label);
-  }
-
   updateLabel(label: string) {
     this._updateChars(label);
 
@@ -131,6 +124,6 @@ export class Box {
     );
     this.#width = dummyDOM.width;
     this.#height = dummyDOM.height;
-    this.#chars = dummyDOM.chars;
+    // this.#chars = dummyDOM.chars;
   }
 }

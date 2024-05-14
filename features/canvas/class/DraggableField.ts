@@ -11,16 +11,16 @@ export class DraggableField extends Field {
   #dragDY: number = 0;
   #handleSplitBy: ((index: number) => void) | undefined;
 
-  setHandleSplitBy(fn: (index: number) => void) {
-    this.#handleSplitBy = fn;
-  }
-
-  setCanvas(canvas: HTMLCanvasElement) {
-    super.setCanvas(canvas);
+  constructor(width: number, height: number, canvas: HTMLCanvasElement) {
+    super(width, height, canvas);
 
     canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e, this));
     canvas.addEventListener('mouseup', (e) => this.handleMouseUp(e, this));
     canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e, this));
+  }
+
+  setHandleSplitBy(fn: (index: number) => void) {
+    this.#handleSplitBy = fn;
   }
 
   _findBoxInBounds(x: number, y: number) {
@@ -32,6 +32,9 @@ export class DraggableField extends Field {
   _findCharInBoundx(x: number, y: number) {
     for (let obj of this.objs) {
       const i = obj.splitBy(x, y);
+
+      if (this.#handleSplitBy) this.#handleSplitBy(i);
+
       return obj.chars[i - 1];
     }
   }

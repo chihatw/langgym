@@ -9,11 +9,9 @@ export class Field {
   objs: Box[] = [];
 
   // コンストラクタで大きさを設定
-  constructor(width: number, height: number) {
+  constructor(width: number, height: number, canvas: HTMLCanvasElement) {
     this.#rect = { width, height };
-  }
 
-  setCanvas(canvas: HTMLCanvasElement) {
     this.#canvas = canvas;
     this.#ctx = this.#canvas.getContext('2d');
 
@@ -36,6 +34,10 @@ export class Field {
 
   add(obj: Box) {
     this.objs.push(obj);
+  }
+
+  removeChildren() {
+    this.objs = [];
   }
 
   redraw() {
