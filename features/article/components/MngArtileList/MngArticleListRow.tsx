@@ -178,7 +178,7 @@ const PDFExists = ({ article }: { article: ArticleView }) => {
     })();
   }, [article]);
 
-  if (isExists) return <FileCheck className='h-5 w-5' />;
+  if (isExists) return <FileCheck className='h-3 w-3 bg-amber-500' />;
 
   return (
     <TooltipProvider>
