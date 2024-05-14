@@ -1,57 +1,50 @@
 import { Box } from './Box';
 
 export class Field {
-  #canvas: HTMLCanvasElement | null = null;
-  #ctx: CanvasRenderingContext2D | null = null;
-  #rect = { width: 0, height: 0 };
+  #ctx;
 
-  dpr = 0;
+  width;
+  height;
   objs: Box[] = [];
 
   // コンストラクタで大きさを設定
   constructor(width: number, height: number, canvas: HTMLCanvasElement) {
-    this.#rect = { width, height };
+    this.width = width;
+    this.height = height;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error();
+    this.#ctx = ctx;
+    this._unBlur(width, height, canvas, ctx);
+  }
 
-    this.#canvas = canvas;
-    this.#ctx = this.#canvas.getContext('2d');
+  // https://web.dev/articles/canvas-hidipi?hl=ja
+  _unBlur(
+    width: number,
+    height: number,
 
-    /**
-     * 文字をぼやけさせないため
-     */
-
-    // https://web.dev/articles/canvas-hidipi?hl=ja
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D
+  ) {
     const dpr = window.devicePixelRatio || 1;
-    this.dpr = dpr;
 
     // dpr に合わせて canvas の実体を拡大
-    canvas.width = this.#rect.width * this.dpr;
-    canvas.height = this.#rect.height * this.dpr;
-    this.#ctx?.scale(this.dpr, this.dpr);
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
 
     // canvas の見た目は transform で縮小して元の大きさに戻す
-    canvas.style.transform = `scale(${1 / this.dpr},${1 / this.dpr})`;
+    canvas.style.transform = `scale(${1 / dpr},${1 / dpr})`;
   }
 
-  add(obj: Box) {
-    this.objs.push(obj);
-  }
-
-  removeChildren() {
-    this.objs = [];
-  }
-
-  redraw() {
-    if (!this.#ctx || !this.#canvas) return;
-    this.#ctx.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
+  redraw(debug: string) {
+    if (!this.#ctx) throw new Error();
+    console.log(debug);
+    this.#ctx.clearRect(0, 0, this.width, this.height);
     for (let obj of this.objs) obj.draw(this.#ctx);
   }
 
   loop() {
-    this.redraw();
+    this.redraw('a');
     requestAnimationFrame(() => this.loop());
-  }
-
-  start() {
-    this.loop();
   }
 }

@@ -1,7 +1,7 @@
 import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
-import { Canvas } from '../schema';
+import { CanvasBox } from '../schema';
 
-export async function fetchCanvas(): Promise<Canvas | undefined> {
+export async function fetchCanvas(): Promise<CanvasBox | undefined> {
   const supabase = createSupabaseServerComponentClient();
 
   const { data, error } = await supabase

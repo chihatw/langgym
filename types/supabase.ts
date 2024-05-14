@@ -417,23 +417,23 @@ export type Database = {
       }
       canvas: {
         Row: {
-          color: string
           id: number
           label: string
+          splitBy: number
           x: number
           y: number
         }
         Insert: {
-          color?: string
           id?: number
           label?: string
+          splitBy?: number
           x?: number
           y?: number
         }
         Update: {
-          color?: string
           id?: number
           label?: string
+          splitBy?: number
           x?: number
           y?: number
         }

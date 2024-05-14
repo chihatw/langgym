@@ -157,7 +157,7 @@ const ArticleTitle = ({ title }: { title: string | null }) => {
 
 const Assinments = ({ sentences }: { sentences: SentenceView[] }) => {
   return (
-    <div className='text-xs text-end'>
+    <div className='text-xs text-end font-mono'>
       <span>
         {sentences.filter((s) => s.articleRecordedAssignmentId).length}
       </span>

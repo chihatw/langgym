@@ -1,7 +1,7 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
-import { Canvas } from '../schema';
+import { CanvasBox } from '../schema';
 
-export async function fetchCanvas(): Promise<Canvas | undefined> {
+export async function fetchCanvas(): Promise<CanvasBox | undefined> {
   const supabase = createSupabaseClientComponentClient();
   const { data, error } = await supabase
     .from('canvas')
@@ -17,15 +17,9 @@ export async function fetchCanvas(): Promise<Canvas | undefined> {
   return data;
 }
 
-export async function updateBoxXY(x: number, y: number) {
+export async function insertBox(box: CanvasBox) {
   const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase
-    .from('canvas')
-    .update({
-      x: x >> 0,
-      y: y >> 0,
-    })
-    .eq('id', 1);
+  const { error } = await supabase.from('canvas').insert(box);
 
   if (error) {
     console.error(error.message);
@@ -33,10 +27,51 @@ export async function updateBoxXY(x: number, y: number) {
   }
 }
 
-export async function updateBoxLabel(label: string) {
+export async function updateBoxXY(id: number, x: number, y: number) {
   const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase.from('canvas').update({ label }).eq('id', 1);
+  const { error } = await supabase
+    .from('canvas')
+    .update({
+      x: x >> 0, // SHIFT演算子による整数への変更 https://www.delftstack.com/ja/howto/javascript/javascript-float-to-int/
+      y: y >> 0,
+    })
+    .eq('id', id);
 
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+}
+
+export async function updateBoxLabel(id: number, label: string) {
+  const supabase = createSupabaseClientComponentClient();
+  const { error } = await supabase
+    .from('canvas')
+    .update({ label })
+    .eq('id', id);
+
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+}
+
+export async function updateSplitBy(id: number, splitBy: number) {
+  const supabase = createSupabaseClientComponentClient();
+  const { error } = await supabase
+    .from('canvas')
+    .update({ splitBy })
+    .eq('id', id);
+
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+}
+
+export async function deleteAllBoxes() {
+  const supabase = createSupabaseClientComponentClient();
+  const { error } = await supabase.from('canvas').delete().neq('id', 0);
   if (error) {
     console.error(error.message);
     return;

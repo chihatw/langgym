@@ -1,17 +1,14 @@
-'use client';
-
 import MngPaneContainer from '@/components/MngPaneContainer';
-import { Canvas } from '../schema';
 import MngCanvasForm from './MngCanvasForm';
 
-type Props = { canvas: Canvas | undefined };
+type Props = {};
 
-const MngCanvasFormContainer = ({ canvas }: Props) => {
+const MngCanvasFormContainer = ({}: Props) => {
   return (
     <MngPaneContainer label='Canvas' open>
       <div className='grid gap-4'>
         <div className='text-2xl font-extrabold'>Canvas</div>
-        <MngCanvasForm canvas={canvas} />
+        <MngCanvasForm />
       </div>
     </MngPaneContainer>
   );

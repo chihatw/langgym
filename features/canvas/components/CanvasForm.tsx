@@ -2,7 +2,7 @@ import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { useEffect, useRef } from 'react';
 import { Box } from '../class/Box';
 import { Field } from '../class/Field';
-import { BG_COLOR, RECT } from '../constants';
+import { RECT } from '../constants';
 import { fetchCanvas } from '../services/client';
 import CanvasDom from './CanvasDom';
 
@@ -33,12 +33,13 @@ const CanvasForm = (props: Props) => {
       const { label, x, y } = data;
 
       const field = new Field(RECT.width, RECT.height, canvas.current);
-      const box = new Box(x, y, label, BG_COLOR);
+      const box = new Box(x, y, label, 0);
 
       ref.current = { field, box };
 
-      field.add(box);
-      field.start();
+      field.objs = [box];
+      // field.add(box);
+      field.loop();
     })();
   }, []);
 
@@ -62,11 +63,12 @@ const CanvasForm = (props: Props) => {
           const { field } = ref.current;
           if (!canvas.current || !field) return;
 
-          const box = new Box(x, y, label, BG_COLOR);
+          const box = new Box(x, y, label, 0);
           ref.current = { ...ref.current, box };
 
-          field.removeChildren();
-          field.add(box);
+          field.objs = [box];
+          // field.removeChildren();
+          // field.add(box);
         }
       )
       .subscribe();

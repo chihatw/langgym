@@ -10,63 +10,62 @@ import {
 import { checkIsMouseOver } from '../services/utils';
 
 export class Char {
-  #x;
-  #y;
-  #width;
-  #height;
-  #label;
+  x;
+  y;
+  width;
+  height;
+  label;
+  index;
+  hasLine;
 
   constructor(
     x: number, // Field 基準の Box.offsetX + Box.left
     y: number,
     width: number,
     height: number,
-    label: string
+    label: string,
+    index: number,
+    hasLine: boolean
   ) {
-    this.#x = x;
-    this.#y = y;
-    this.#width = width;
-    this.#height = height;
-    this.#label = label;
-  }
-
-  get label() {
-    return this.#label;
+    this.x = x; // Field 基準の Box.x + char.left
+    this.y = y; // Field 基準の Box.y
+    this.width = width; // char.width
+    this.height = height; // Box.height
+    this.label = label;
+    this.index = index;
+    this.hasLine = hasLine;
   }
 
   inBounds(x: number, y: number) {
-    const result = checkIsMouseOver(
+    const isInSide = checkIsMouseOver(
       { x, y },
-      this.#x,
-      this.#y,
-      this.#width,
-      this.#height
+      this.x,
+      this.y,
+      this.width,
+      this.height
     );
-    return result;
+    this.hasLine = isInSide; // 運用では直後に dummyDOM 作成して、Char を新しく作り直しているので、ここでの代入は不要
+    return isInSide;
   }
 
-  draw(ctx: CanvasRenderingContext2D, hasLine: boolean) {
+  draw(ctx: CanvasRenderingContext2D) {
     ctx.font = `${FONT_SIZE} ${FONT_FAMILY}`;
 
     ctx.fillStyle = TEXT_COLOR;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(
-      this.#label,
-      this.#x + this.#width / 2,
-      this.#y + this.#height / 2
-    );
+    ctx.fillText(this.label, this.x + this.width / 2, this.y + this.height / 2);
 
-    if (!hasLine) return;
+    if (!this.hasLine) return;
 
-    const x = this.#x + this.#width + DIVIDER_GAP;
+    const right = this.x + this.width + DIVIDER_GAP;
 
     ctx.beginPath();
     ctx.lineWidth = DIVIDER_WIDTH;
     ctx.strokeStyle = DIVIDER_COLOR;
     ctx.setLineDash(DIVIDER_DASH);
-    ctx.moveTo(x, this.#y);
-    ctx.lineTo(x, this.#y + this.#height);
+    ctx.moveTo(right, this.y);
+    ctx.lineTo(right, this.y + this.height);
     ctx.stroke();
   }
 }

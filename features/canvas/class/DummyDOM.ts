@@ -6,75 +6,47 @@ import {
   FONT_FAMILY,
   FONT_SIZE,
 } from '../constants';
+import { CharDOM } from '../schema';
+
+const ID = 'dummyDOM';
 
 export class DummyDOM {
-  #x;
-  #y;
-  #container: HTMLDivElement;
   width: number;
   height: number;
+  label: string | null;
+  chars: CharDOM[];
+  splitBy: number;
 
-  constructor(
-    x: number,
-    y: number,
-    label: string,
-    document: Document,
-    splitBy: number,
-    visible?: boolean
-  ) {
-    this.#x = x;
-    this.#y = y;
-
-    // 重複防止
-    const old = document.querySelector('#dummyDOM');
-    if (old) old.remove();
+  constructor(label: string, splitBy: number) {
+    this.label = label;
+    this.splitBy = splitBy;
 
     const container = document.createElement('div');
-    this.#container = container;
 
-    container.id = 'dummyDOM';
-    this._setContainerStyle(visible, container);
+    container.id = ID;
+    this._setContainerStyle(container);
     this._createChildren(label, splitBy, document, container);
     document.body.appendChild(container);
 
     this.width = container.getBoundingClientRect().width;
     this.height = container.getBoundingClientRect().height;
 
-    const chars: HTMLDivElement[] = [];
+    const chars: CharDOM[] = [];
     for (const child of container.children) {
       for (const char of child.children) {
-        chars.push(char as HTMLDivElement);
+        const charDiv = char as HTMLDivElement;
+        const { left, width } = charDiv.getBoundingClientRect();
+        chars.push({ label: charDiv.textContent, left, width });
       }
     }
+    this.chars = chars;
 
-    console.log(chars);
+    // 計算後はDOMを破棄
+    const dom = document.querySelector(`#${ID}`);
+    if (dom) dom.remove();
   }
 
-  // get chars() {
-  //   // 高さは親と同じに
-  //   const { height } = this.#container.getBoundingClientRect();
-
-  //   const chars: Char[] = [];
-  //   const middles = this.#container.children;
-
-  //   for (let middle of middles) {
-  //     const children = middle.children;
-  //     for (let child of children) {
-  //       const { left, width } = child.getBoundingClientRect();
-  //       const char = new Char(
-  //         this.#x + left, // Field 基準の Box.offsetX + Box.left
-  //         this.#y,
-  //         width,
-  //         height,
-  //         child.textContent || ''
-  //       );
-  //       chars.push(char);
-  //     }
-  //   }
-  //   return chars;
-  // }
-
-  _setContainerStyle(visible: boolean | undefined, container: HTMLDivElement) {
+  _setContainerStyle(container: HTMLDivElement) {
     container.style.position = 'fixed';
     container.style.left = '0';
     container.style.backgroundColor = CANVAS_COLOR;
@@ -88,10 +60,9 @@ export class DummyDOM {
     container.style.minWidth = BOX_MIN_WIDTH;
     container.style.fontFamily = FONT_FAMILY;
 
-    if (!visible) {
-      container.style.opacity = '0';
-      container.style.top = '-9999px';
-    }
+    // 表示を隠す
+    container.style.opacity = '0';
+    container.style.top = '-9999px';
   }
   _createChildren(
     label: string,
