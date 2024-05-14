@@ -1,17 +1,13 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { CanvasBox } from '../schema';
 
-export async function fetchCanvas(): Promise<CanvasBox | undefined> {
+export async function fetchCanvas(): Promise<CanvasBox[]> {
   const supabase = createSupabaseClientComponentClient();
-  const { data, error } = await supabase
-    .from('canvas')
-    .select()
-    .eq('id', 1)
-    .single();
+  const { data, error } = await supabase.from('canvas').select();
 
   if (error) {
     console.error(error.message);
-    return;
+    return [];
   }
 
   return data;
@@ -72,6 +68,15 @@ export async function updateSplitBy(id: number, splitBy: number) {
 export async function deleteAllBoxes() {
   const supabase = createSupabaseClientComponentClient();
   const { error } = await supabase.from('canvas').delete().neq('id', 0);
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+}
+
+export async function deleteBox(id: number) {
+  const supabase = createSupabaseClientComponentClient();
+  const { error } = await supabase.from('canvas').delete().eq('id', id);
   if (error) {
     console.error(error.message);
     return;

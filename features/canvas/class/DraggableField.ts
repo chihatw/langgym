@@ -9,16 +9,16 @@ export class DraggableField extends Field {
   #dragDY: number = 0;
 
   isSplitted = false;
-  #handleSetLabel;
+  #handleSetSelectedObj;
 
   constructor(
     width: number,
     height: number,
     canvas: HTMLCanvasElement,
-    handleSetLabel: (label: string) => void
+    handleSetSelectedObj: (obj: Box | null) => void
   ) {
     super(width, height, canvas);
-    this.#handleSetLabel = handleSetLabel;
+    this.#handleSetSelectedObj = handleSetSelectedObj;
     window.addEventListener('contextmenu', (e) => e.preventDefault());
     canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e, this));
     canvas.addEventListener('mouseup', (e) => this.handleMouseUp(e, this));
@@ -48,7 +48,7 @@ export class DraggableField extends Field {
       // 選択済みのオブジェクトを再選択した場合、選択を解除して終了
       if (this.selectObj.id === obj.id) {
         this.selectObj = null;
-        this.#handleSetLabel('');
+        this.#handleSetSelectedObj(null);
         return;
       }
     }
@@ -56,7 +56,7 @@ export class DraggableField extends Field {
     // それ以外の場合
     this.selectObj = obj;
     this.selectObj.select();
-    this.#handleSetLabel(this.selectObj.label);
+    this.#handleSetSelectedObj(this.selectObj);
   }
 
   grab(obj: Box, dragDX: number, dragDY: number) {
@@ -71,6 +71,12 @@ export class DraggableField extends Field {
   ungrab() {
     if (this.#dragObj) this.#dragObj.ungrab();
     this.#dragObj = null;
+  }
+
+  delete(obj: Box) {
+    this.selectObj = null;
+    this.objs = this.objs.filter((o) => o.id !== obj.id);
+    this.redraw('delete box');
   }
 
   updateLabel(label: string) {
@@ -110,6 +116,16 @@ export class DraggableField extends Field {
     const _x = x / dpr;
     const _y = y / dpr;
     const obj = _this._findBoxInBounds(_x, _y); // ポインターの下にあるオブジェクトを抽出
+
+    if (!obj) {
+      if (_this.selectObj) {
+        _this.selectObj.deselect();
+        _this.selectObj = null;
+        _this.#handleSetSelectedObj(null);
+        _this.redraw('deselect');
+        return;
+      }
+    }
 
     // 右クリックの場合は、select
     const isRightClick = e.button === 2;

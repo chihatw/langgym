@@ -6,17 +6,17 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Box } from '../class/Box';
 import { DraggableField } from '../class/DraggableField';
 import { RECT } from '../constants';
-import { deleteAllBoxes } from '../services/client';
+import { deleteAllBoxes, deleteBox } from '../services/client';
 import CanvasDom from './CanvasDom';
 
 type Props = {};
 
 type FormProps = {
-  label: string;
+  selectedObj: Box | null;
 };
 
 const INITIAL_STATE: FormProps = {
-  label: '',
+  selectedObj: null,
 };
 
 type RefProps = {
@@ -41,8 +41,11 @@ const MngCanvasForm = ({}: Props) => {
       RECT.width,
       RECT.height,
       canvas.current,
-      (label: string) => {
-        setValue((prev) => ({ ...prev, label }));
+      (obj: Box | null) => {
+        setValue((prev) => ({
+          ...prev,
+          selectedObj: obj,
+        }));
       }
     );
     ref.current = { field };
@@ -60,23 +63,48 @@ const MngCanvasForm = ({}: Props) => {
   const handleChangeLabel = (e: ChangeEvent<HTMLInputElement>) => {
     const label = e.target.value;
     const { field } = ref.current;
-
     if (!field) throw Error();
+
     if (!field.selectObj) return;
 
     field.updateLabel(label);
-    setValue((prev) => ({ ...prev, label }));
+    setValue((prev) => ({
+      ...prev,
+      selectedObj: field.selectObj,
+    }));
+  };
+
+  const handleDeleteBox = () => {
+    const { field } = ref.current;
+    if (!field) throw Error();
+
+    if (!value.selectedObj) throw new Error();
+
+    field.delete(value.selectedObj);
+
+    // local
+    setValue((prev) => ({ ...prev, selectedObj: null }));
+
+    // remote
+    deleteBox(value.selectedObj.id);
   };
 
   return (
     <div className='grid gap-4'>
       <Button onClick={handleAddBox}>Add New Box</Button>
+      <Button
+        disabled={!value.selectedObj}
+        variant={'destructive'}
+        onClick={handleDeleteBox}
+      >
+        Delete Selected Box
+      </Button>
       <Input
         placeholder='label'
-        value={value.label}
+        value={value.selectedObj?.label || ''}
         onChange={handleChangeLabel}
       />
-      <pre className='text-xs'>{JSON.stringify(value, null, 2)}</pre>
+      {/* <pre className='text-xs'>{JSON.stringify(value, null, 2)}</pre> */}
       <CanvasDom ref={canvas} />
     </div>
   );

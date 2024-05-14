@@ -38,13 +38,13 @@ export class Field {
 
   redraw(debug: string) {
     if (!this.#ctx) throw new Error();
-    console.log(debug);
+    if (debug !== 'loop') console.log(debug);
     this.#ctx.clearRect(0, 0, this.width, this.height);
     for (let obj of this.objs) obj.draw(this.#ctx);
   }
 
   loop() {
-    this.redraw('a');
+    this.redraw('loop');
     requestAnimationFrame(() => this.loop());
   }
 }

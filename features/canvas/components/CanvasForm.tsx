@@ -9,12 +9,10 @@ import CanvasDom from './CanvasDom';
 type Props = {};
 
 type RefProps = {
-  box: Box | null;
   field: Field | null;
 };
 
 const INITIAL_REF: RefProps = {
-  box: null, // box も field の中に隠蔽する
   field: null,
 };
 
@@ -26,19 +24,19 @@ const CanvasForm = (props: Props) => {
   // initialize
   useEffect(() => {
     (async () => {
-      if (!canvas.current) return;
-      const data = await fetchCanvas();
-      if (!data) return;
-
-      const { label, x, y } = data;
+      if (!canvas.current) throw new Error();
 
       const field = new Field(RECT.width, RECT.height, canvas.current);
-      const box = new Box(x, y, label, 0);
+      ref.current = { field };
 
-      ref.current = { field, box };
-
-      field.objs = [box];
-      // field.add(box);
+      const _boxes = await fetchCanvas();
+      const boxes: Box[] = [];
+      for (const _box of _boxes) {
+        const { label, x, y, id, splitBy } = _box;
+        const box = new Box(x, y, label, splitBy, id);
+        boxes.push(box);
+      }
+      field.objs = boxes;
       field.loop();
     })();
   }, []);
@@ -51,24 +49,56 @@ const CanvasForm = (props: Props) => {
       .on(
         'postgres_changes',
         {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'canvas',
+        },
+        (preload) => {
+          const inserted = preload.new;
+          const { x, y, label, id, splitBy } = inserted;
+
+          const { field } = ref.current;
+          if (!canvas.current || !field) throw new Error();
+
+          field.objs = [...field.objs, new Box(x, y, label, splitBy, id)];
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
           event: 'UPDATE',
           schema: 'public',
           table: 'canvas',
-          filter: `id=eq.1`,
         },
         (preload) => {
           const updated = preload.new;
-          const { x, y, label } = updated;
+          const { x, y, label, id, splitBy } = updated;
 
           const { field } = ref.current;
-          if (!canvas.current || !field) return;
+          if (!canvas.current || !field) throw new Error();
 
-          const box = new Box(x, y, label, 0);
-          ref.current = { ...ref.current, box };
+          field.objs = field.objs.map((obj) => {
+            if (obj.id !== id) {
+              return obj;
+            }
+            return new Box(x, y, label, splitBy, id);
+          });
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'canvas',
+        },
+        (preload) => {
+          const { id } = preload.old;
 
-          field.objs = [box];
-          // field.removeChildren();
-          // field.add(box);
+          const { field } = ref.current;
+          if (!canvas.current || !field) throw new Error();
+
+          field.objs = field.objs.filter((obj) => obj.id !== id);
         }
       )
       .subscribe();
