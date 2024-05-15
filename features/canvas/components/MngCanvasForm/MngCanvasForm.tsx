@@ -67,7 +67,7 @@ const MngCanvasForm = ({}: Props) => {
 
   return (
     <div className='grid gap-4'>
-      <AddBoxButton field={value.field} defaultLabel='こんにちは' />
+      <AddBoxButton field={value.field} defaultLabel='' />
       <DeleteBoxButton
         selectedObj={value.selectedObj}
         field={value.field}

@@ -1,4 +1,5 @@
 import { Box } from './Box';
+import { Line } from './Line';
 
 export class Field {
   #ctx;
@@ -6,6 +7,8 @@ export class Field {
   width;
   height;
   objs: Box[] = [];
+  drawingLine: Line | null = null;
+  connectedLines: Line[] = [];
 
   // コンストラクタで大きさを設定
   constructor(width: number, height: number, canvas: HTMLCanvasElement) {
@@ -38,9 +41,13 @@ export class Field {
 
   redraw(debug: string) {
     if (!this.#ctx) throw new Error();
+
     if (debug !== 'loop') console.log(debug);
+
     this.#ctx.clearRect(0, 0, this.width, this.height);
-    for (let obj of this.objs) obj.draw(this.#ctx);
+    for (const line of this.connectedLines) line.draw(this.#ctx);
+    if (this.drawingLine) this.drawingLine.draw(this.#ctx);
+    for (const obj of this.objs) obj.draw(this.#ctx);
   }
 
   loop() {
