@@ -79,19 +79,26 @@ export class Box {
     updateBoxXY(this.id, x, y);
   }
 
-  // どこで分割されているのかチェック
-  splitting(x: number, y: number) {
-    let splitBy = 0;
-    let splittedX = 0;
-
-    // 最後尾は除外
-    for (let i = 0; i < this.chars.length - 1; i++) {
+  // 座標がどの Char の上かチェック
+  indexOf(x: number, y: number) {
+    for (let i = 0; i < this.chars.length; i++) {
       const char = this.chars[i];
       // カーソルの下に char があれば、index + 1 を splitBy に代入
-      if (char.inBounds(x, y)) {
-        splitBy = char.index + 1;
-        splittedX = this.chars[i + 1].x;
-      }
+      if (char.inBounds(x, y)) return char.index;
+    }
+    return -1;
+  }
+
+  // どこで分割されているのかチェック
+  splitting(x: number, y: number) {
+    const index = this.indexOf(x, y);
+
+    let splitBy = 0;
+    let splittedX = 0;
+    // 最後尾は除外
+    if (index !== -1 && index < this.chars.length - 1) {
+      splitBy = index + 1;
+      splittedX = this.chars[splitBy].x;
     }
 
     // 分割が変更されている場合、大きさを再計算して、リモートも更新

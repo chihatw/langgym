@@ -24,4 +24,5 @@ export const MODE = {
   select: 'select',
   split: 'split',
   highlight: 'highlight',
+  connect: 'connect',
 };

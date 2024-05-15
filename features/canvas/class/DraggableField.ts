@@ -1,6 +1,7 @@
 import { MODE } from '../constants';
 import { Box } from './Box';
 import { Field } from './Field';
+import { Line } from './Line';
 
 export class DraggableField extends Field {
   mode: string = MODE.drag;
@@ -14,6 +15,9 @@ export class DraggableField extends Field {
   #highlights: { [boxId: number]: number[] } = {};
 
   #handleSetSelectedObj;
+
+  #connectStartObjId = 0;
+  #connectStartCharIndex = -1;
 
   constructor(
     width: number,
@@ -93,7 +97,6 @@ export class DraggableField extends Field {
         _this.#dragObj.dragging(_x - _this.#dragDX, _y - _this.#dragDY);
         _this.redraw('dragging');
         return;
-
       case MODE.split:
         let splitBy = 0;
         for (const obj of this.objs) {
@@ -106,7 +109,6 @@ export class DraggableField extends Field {
           _this.redraw('split');
         }
         return;
-
       case MODE.highlight:
         let highlights: { [boxId: number]: number[] } = {};
         for (const obj of this.objs) {
@@ -118,7 +120,29 @@ export class DraggableField extends Field {
           _this.redraw('highlight');
         }
         return;
+      case MODE.connect:
+        // start obj id , start char index がない場合は終了
+        if (!this.#connectStartObjId && this.#connectStartCharIndex === -1)
+          return;
 
+        const targetObj = this.objs.find(
+          (o) => o.id === this.#connectStartObjId
+        );
+        if (!targetObj) throw new Error();
+        const targetChar = targetObj.chars.at(this.#connectStartCharIndex);
+        if (!targetChar) throw new Error();
+
+        const line = new Line(
+          targetChar.x + targetChar.width / 2,
+          targetChar.y + targetChar.height / 2,
+          _x,
+          _y,
+          this.#connectStartObjId,
+          this.#connectStartCharIndex
+        );
+        _this.drawingLine = line;
+        _this.redraw('connect');
+        return;
       case MODE.select:
       default:
     }
@@ -173,7 +197,6 @@ export class DraggableField extends Field {
         obj.dehighlight();
         _this.redraw('grab');
         return;
-
       case MODE.select:
         // 下にオブジェクトがない、かつ選択オブジェクトもない場合、終了
         if (!obj && !_this.selectObj) return;
@@ -214,15 +237,96 @@ export class DraggableField extends Field {
         _this.mode = MODE.drag;
         _this.redraw('divide');
         return;
+      case MODE.connect:
+        // 下にオブジェクトがなければ、終了
+        if (!obj) return;
+
+        // 下に char がなければ、終了
+        const index = obj.indexOf(_x, _y);
+        if (index < 0) return;
+
+        // connectedLines に 含まれていれば、削除する
+        _this.connectedLines = _this.connectedLines.filter((l) => {
+          if (l.startObjId === obj.id || l.endObjId === obj.id) return false;
+          return true;
+        });
+
+        _this.#connectStartObjId = obj.id;
+        _this.#connectStartCharIndex = index;
+        return;
       default:
     }
   }
 
   handleMouseUp(e: MouseEvent, _this: DraggableField) {
-    if (_this.#dragObj) {
-      _this.ungrab();
-      _this.#dragObj = null;
-      _this.redraw('ungrab ');
+    const dpr = window.devicePixelRatio || 1;
+    const { offsetX: x, offsetY: y } = e;
+    const _x = x / dpr;
+    const _y = y / dpr;
+
+    const obj = _this._findBoxInBounds(_x, _y); // ポインターの下にあるオブジェクトを抽出
+    switch (_this.mode) {
+      case MODE.drag:
+        if (!_this.#dragObj) return;
+
+        // ドラッグしていたら、解除する
+        _this.ungrab();
+        _this.#dragObj = null;
+        _this.redraw('ungrab');
+        return;
+      case MODE.connect:
+        // start obj id か start char index がなければ終了
+        if (!_this.#connectStartObjId || _this.#connectStartCharIndex === -1)
+          return;
+
+        // オブジェクトがない、またはstartと同じ場合、　charIndex がない場合は、drawing line を消して終了
+        if (
+          !obj ||
+          obj.id === _this.#connectStartObjId ||
+          obj.indexOf(_x, _y) === -1
+        ) {
+          _this.#connectStartObjId = 0;
+          _this.#connectStartCharIndex = -1;
+          _this.drawingLine = null;
+          _this.redraw('remove drawing line');
+          return;
+        }
+
+        const index = obj.indexOf(_x, _y);
+
+        const startObj = _this.objs.find(
+          (o) => o.id === _this.#connectStartObjId
+        );
+        if (!startObj) throw new Error();
+
+        const startChar = startObj.chars.at(_this.#connectStartCharIndex);
+        if (!startChar) throw new Error();
+
+        const endChar = obj.chars.at(index);
+        if (!endChar) throw new Error();
+
+        const line = new Line(
+          startChar.x + startChar.width / 2,
+          startChar.y + startChar.height / 2,
+          endChar.x + endChar.width / 2,
+          endChar.y + endChar.height / 2,
+          _this.#connectStartObjId,
+          _this.#connectStartCharIndex,
+          obj.id,
+          index
+        );
+
+        // connectedLines を追加して
+        _this.connectedLines = [..._this.connectedLines, line];
+
+        // drawing line は削除する
+        _this.#connectStartObjId = 0;
+        _this.#connectStartCharIndex = -1;
+        _this.drawingLine = null;
+        _this.redraw('remove drawing line');
+        return;
+
+      default:
     }
   }
 }
