@@ -23,6 +23,7 @@ export class Box {
   #isGrabed = false;
   #isSelected = false;
   #splitBy = 0;
+  #highlights: number[] = [];
 
   constructor(
     x: number,
@@ -61,6 +62,16 @@ export class Box {
     return result;
   }
 
+  dragging(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+
+    this._setWidthHeightChars(this.label, 0);
+
+    // remote
+    updateBoxXY(this.id, x, y);
+  }
+
   // どこで分割されているのかチェック
   splitting(x: number, y: number) {
     let splitBy = 0;
@@ -85,6 +96,30 @@ export class Box {
     return this.#splitBy;
   }
 
+  // 追加だけ（削除はしない）
+  highlighting(x: number, y: number) {
+    let highlight: number | null = null;
+    for (let i = 0; i < this.chars.length; i++) {
+      const char = this.chars[i];
+      // カーソルの下に char があれば、highlight
+      if (char.inBounds_for_highlight(x, y)) {
+        highlight = char.index;
+      }
+    }
+
+    const result = [...this.#highlights];
+    if (typeof highlight === 'number') result.push(highlight);
+    // 重複をなくして、sort
+    this.#highlights = Array.from(new Set(result)).sort((a, b) => a - b);
+    this._setWidthHeightChars(this.label, this.#splitBy);
+    return this.#highlights;
+  }
+
+  dehighlight() {
+    this.#highlights = [];
+    this._setWidthHeightChars(this.label, this.#splitBy);
+  }
+
   grab() {
     this.#isGrabed = true;
   }
@@ -106,7 +141,8 @@ export class Box {
     y: number,
     height: number,
     charDOMs: CharDOM[],
-    splitBy: number
+    splitBy: number,
+    highlights?: number[]
   ) {
     const chars = charDOMs.map(
       (c, index) =>
@@ -117,7 +153,8 @@ export class Box {
           height,
           c.label || '',
           index,
-          index === splitBy - 1
+          index === splitBy - 1,
+          highlights ? highlights.includes(index) : false
         )
     );
     return chars;
@@ -132,18 +169,9 @@ export class Box {
       this.y,
       dummyDOM.height,
       dummyDOM.chars,
-      splitBy
+      splitBy,
+      this.#highlights
     );
-  }
-
-  dragging(x: number, y: number) {
-    this.x = x;
-    this.y = y;
-
-    this._setWidthHeightChars(this.label, 0);
-
-    // remote
-    updateBoxXY(this.id, x, y);
   }
 
   draw(ctx: CanvasRenderingContext2D) {

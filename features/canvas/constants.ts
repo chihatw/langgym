@@ -6,6 +6,7 @@ export const FONT_FAMILY = 'sans-serif';
 export const CANVAS_COLOR = 'rgba(255,255,255,0.6)';
 export const BG_COLOR = '#eeeeee';
 export const TEXT_COLOR = 'rgba(0,0,0,0.8)';
+export const HIGHLIGHT_TEXT_COLOR = 'red';
 
 export const BOX_SELECTED_COLOR = 'rgba(255,0,0,0.3)';
 
@@ -22,5 +23,4 @@ export const MODE = {
   drag: 'drag',
   select: 'select',
   split: 'split',
-  highlight: 'highlight',
 };

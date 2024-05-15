@@ -10,7 +10,8 @@ export class DraggableField extends Field {
   #dragDX: number = 0;
   #dragDY: number = 0;
 
-  #splitBy = 0; // カーソル下のボックス再描画チェックのため
+  #splitBy = 0;
+  #highlights: { [boxId: number]: number[] } = {};
 
   #handleSetSelectedObj;
 
@@ -34,37 +35,17 @@ export class DraggableField extends Field {
     }
   }
 
-  // mode === split の mousemove から呼び出される
-  _findCharInBoundx(x: number, y: number) {
-    for (let obj of this.objs) {
-      const splitBy = obj.splitting(x, y);
-      if (splitBy) {
-        return splitBy;
-      }
-    }
-    return 0;
-  }
-
   select(obj: Box) {
-    const selectSameObject = this.selectObj?.id === obj.id;
-
-    // 既存の selectObj は一旦解除
-    this.deselect();
-    // 選択済みのオブジェクトを再選択した場合、ここで終了
-    if (selectSameObject) return;
-
-    // それ以外の場合
     this.selectObj = obj;
     this.selectObj.select();
     this.#handleSetSelectedObj(this.selectObj);
   }
 
   deselect() {
-    if (this.selectObj) {
-      this.selectObj.deselect();
-      this.selectObj = null;
-      this.#handleSetSelectedObj(null);
-    }
+    if (!this.selectObj) return;
+    this.selectObj.deselect();
+    this.selectObj = null;
+    this.#handleSetSelectedObj(null);
   }
 
   grab(obj: Box, dragDX: number, dragDY: number) {
@@ -112,12 +93,28 @@ export class DraggableField extends Field {
           _this.redraw('dragging');
           return;
         }
+
+        let highlights: { [boxId: number]: number[] } = {};
+        for (const obj of this.objs) {
+          highlights[obj.id] = obj.highlighting(_x, _y);
+        }
+
+        if (JSON.stringify(this.#highlights) !== JSON.stringify(highlights)) {
+          this.#highlights = highlights;
+          _this.redraw('highlight');
+        }
         return;
+
       case MODE.split:
-        const splitBy = _this._findCharInBoundx(_x, _y);
+        let splitBy = 0;
+        for (const obj of this.objs) {
+          const _splitBY = obj.splitting(_x, _y);
+          if (_splitBY) splitBy = _splitBY;
+        }
+
         if (this.#splitBy !== splitBy) {
-          _this.redraw('split');
           this.#splitBy = splitBy;
+          _this.redraw('split');
         }
         return;
       case MODE.select:
@@ -135,28 +132,30 @@ export class DraggableField extends Field {
 
     switch (this.mode) {
       case MODE.drag:
-        if (obj) {
-          _this.grab(obj, _x - obj.x, _y - obj.y);
-          if (!_this.#dragObj) throw new Error();
-          _this.#dragObj.dragging(_x - _this.#dragDX, _y - _this.#dragDY);
-          _this.redraw('grab');
-          return;
-        }
+        // 下にオブジェクトがなければ終了
+        if (!obj) return;
+
+        // 選ばれたオブジェクトのハイライトをリセット
+        this.#highlights[obj.id] = [];
+        obj.dehighlight();
+
+        _this.grab(obj, _x - obj.x, _y - obj.y);
+        if (!_this.#dragObj) throw new Error();
+        _this.#dragObj.dragging(_x - _this.#dragDX, _y - _this.#dragDY);
+        _this.redraw('grab');
         return;
       case MODE.select:
-        if (!obj) {
-          if (_this.selectObj) {
-            _this.selectObj.deselect();
-            _this.selectObj = null;
-            _this.#handleSetSelectedObj(null);
-            _this.redraw('deselect');
-            return;
-          }
-        } else {
+        // 下にオブジェクトがない、かつ選択オブジェクトもない場合、終了
+        if (!obj && !_this.selectObj) return;
+
+        // 選択オブジェクトがあれば deselect()
+        if (_this.selectObj) _this.deselect();
+
+        // 下にオブジェクトがある、かつ選択オブジェクトと違う場合 select()
+        if (!!obj && (!_this.selectObj || _this.selectObj.id !== obj.id)) {
           _this.select(obj);
-          _this.redraw('select');
-          return;
         }
+        _this.redraw('select');
         return;
       case MODE.split:
         // todo split

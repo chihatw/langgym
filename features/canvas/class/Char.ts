@@ -5,6 +5,7 @@ import {
   DIVIDER_WIDTH,
   FONT_FAMILY,
   FONT_SIZE,
+  HIGHLIGHT_TEXT_COLOR,
   TEXT_COLOR,
 } from '../constants';
 import { checkIsMouseOver } from '../services/utils';
@@ -17,7 +18,7 @@ export class Char {
   label;
   index;
   hasLine;
-  isHighlight = false; // todo どこで設定？ constructor? method?
+  isHighlight; // constructor で設定
 
   constructor(
     x: number, // Field 基準の Box.offsetX + Box.left
@@ -26,7 +27,8 @@ export class Char {
     height: number,
     label: string,
     index: number,
-    hasLine: boolean
+    hasLine: boolean,
+    isHighlight: boolean
   ) {
     this.x = x; // Field 基準の Box.x + char.left
     this.y = y; // Field 基準の Box.y
@@ -35,6 +37,7 @@ export class Char {
     this.label = label;
     this.index = index;
     this.hasLine = hasLine;
+    this.isHighlight = isHighlight;
   }
 
   // mousemove -> Box.splitting() から呼び出される
@@ -46,14 +49,24 @@ export class Char {
       this.width,
       this.height
     );
-    this.hasLine = isInSide; // 運用では直後に dummyDOM 作成して、Char を新しく作り直しているので、ここでの代入は不要
+    return isInSide;
+  }
+
+  inBounds_for_highlight(x: number, y: number) {
+    const isInSide = checkIsMouseOver(
+      { x, y },
+      this.x,
+      this.y + 25, // 中央寄せ
+      this.width,
+      this.height - 50 // 64 から 文字の大きさ 14 だけ残す
+    );
     return isInSide;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
     ctx.font = `${FONT_SIZE} ${FONT_FAMILY}`;
 
-    ctx.fillStyle = TEXT_COLOR;
+    ctx.fillStyle = this.isHighlight ? HIGHLIGHT_TEXT_COLOR : TEXT_COLOR;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(this.label, this.x + this.width / 2, this.y + this.height / 2);
