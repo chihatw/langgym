@@ -18,4 +18,9 @@ export const BOX_MIN_WIDTH = '6rem';
 export const BOX_GAP = '2rem';
 export const BOX_HEIGHT = '4rem';
 
-export const MODE = { drag: 'drag', select: 'select', split: 'split' };
+export const MODE = {
+  drag: 'drag',
+  select: 'select',
+  split: 'split',
+  highlight: 'highlight',
+};

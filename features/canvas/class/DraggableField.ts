@@ -1,5 +1,6 @@
 import { MODE } from '../constants';
 import { Box } from './Box';
+import { Char } from './Char';
 import { Field } from './Field';
 
 export class DraggableField extends Field {
@@ -10,7 +11,7 @@ export class DraggableField extends Field {
   #dragDX: number = 0;
   #dragDY: number = 0;
 
-  #isSplitted = false;
+  #isSplitted: Char | undefined;
 
   #handleSetSelectedObj;
 
@@ -34,6 +35,7 @@ export class DraggableField extends Field {
     }
   }
 
+  // mode === split の mousemove から呼び出される
   _findCharInBoundx(x: number, y: number) {
     for (let obj of this.objs) {
       const char = obj.charInBounds(x, y);
@@ -114,10 +116,20 @@ export class DraggableField extends Field {
         return;
       case MODE.split:
         const char = _this._findCharInBoundx(_x, _y);
-        if (this.#isSplitted !== !!char) {
-          this.#isSplitted = !!char;
-          _this.redraw('split');
+
+        // 分割に変更があれば、再描画する
+        let hasChanged = false;
+        if (this.#isSplitted) {
+          hasChanged = !char || char.index !== this.#isSplitted.index;
+        } else {
+          hasChanged = !!char;
         }
+
+        if (hasChanged) {
+          _this.redraw('split');
+          this.#isSplitted = char;
+        }
+
         return;
       case MODE.select:
       default:

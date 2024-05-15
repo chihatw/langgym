@@ -22,7 +22,7 @@ export class Box {
 
   #isGrabed = false;
   #isSelected = false;
-  #charInBounds: null | Char = null;
+  #charInBounds: null | Char = null; // todo splitBy を持てばいいのでは？
 
   constructor(
     x: number,
@@ -61,6 +61,7 @@ export class Box {
     return result;
   }
 
+  // todo 仕事が多い？
   // カーソルが何文字目の上にあるのかをチェック
   charInBounds(x: number, y: number) {
     let charInBounds: null | Char = null;
@@ -73,8 +74,10 @@ export class Box {
       }
     }
 
+    // 現状から変更が必要か確認
     const hasChanged = this._checkHasChange(charInBounds);
 
+    // 変更が必要な場合、大きさを再計算して、
     if (hasChanged) {
       this.#charInBounds = charInBounds;
       const splitBy = this.#charInBounds ? this.#charInBounds.index + 1 : 0;

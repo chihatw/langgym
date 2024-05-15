@@ -17,6 +17,7 @@ export class Char {
   label;
   index;
   hasLine;
+  isHighlight = false; // todo どこで設定？ constructor? method?
 
   constructor(
     x: number, // Field 基準の Box.offsetX + Box.left
@@ -36,6 +37,7 @@ export class Char {
     this.hasLine = hasLine;
   }
 
+  // mousemove -> Box.charInBounds() から呼び出される
   inBounds(x: number, y: number) {
     const isInSide = checkIsMouseOver(
       { x, y },
