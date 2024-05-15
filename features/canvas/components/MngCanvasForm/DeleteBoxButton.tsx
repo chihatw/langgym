@@ -8,10 +8,10 @@ import { deleteBox } from '../../services/client';
 type Props = {
   field: DraggableField | null;
   selectedObj: Box | null;
-  deselect: () => void;
+  rerender: () => void;
 };
 
-const DeleteBoxButton = ({ field, selectedObj, deselect }: Props) => {
+const DeleteBoxButton = ({ field, selectedObj, rerender }: Props) => {
   const handleDeleteBox = () => {
     if (!field) throw Error();
 
@@ -21,7 +21,7 @@ const DeleteBoxButton = ({ field, selectedObj, deselect }: Props) => {
     field.delete(selectedObj);
 
     // local
-    deselect();
+    rerender();
 
     // remote
     deleteBox(selectedObj.id);

@@ -21,12 +21,10 @@ type Props = {};
 
 type FormProps = {
   field: DraggableField | null;
-  selectedObj: Box | null;
 };
 
 const INITIAL_STATE: FormProps = {
   field: null,
-  selectedObj: null,
 };
 
 // MngPaneContainer で children が 表示/非表示の切り替えがあるので、層を分ける
@@ -58,12 +56,12 @@ const MngCanvasForm = ({}: Props) => {
   }, []);
 
   const handleKeyDown = useCallback(
-    (event: globalThis.KeyboardEvent) => {
-      if (!event.metaKey) return;
+    (e: globalThis.KeyboardEvent) => {
+      if (!e.metaKey) return;
 
-      switch (event.key) {
+      switch (e.key) {
         case 'a':
-          event.preventDefault();
+          e.preventDefault();
           if (!value.field) throw Error();
           const box = new Box(
             (value.field.width - 96) / 2,
@@ -72,10 +70,17 @@ const MngCanvasForm = ({}: Props) => {
             0
           );
           value.field.objs = [...value.field.objs, box];
+          // obj が１つだけの場合は、それを選択して、Input にフォーカス
+          if (value.field.objs.length === 1) {
+            const targetObj = value.field.objs.at(0)!;
+            value.field.select(targetObj);
+            value.field.redraw('short cur select');
+            input.current?.focus();
+          }
           value.field.redraw('add box');
           break;
         case 'd':
-          event.preventDefault();
+          e.preventDefault();
           // canvas
           if (!value.field) throw new Error();
           value.field.updateMode(MODE.drag);
@@ -83,15 +88,24 @@ const MngCanvasForm = ({}: Props) => {
           setValue((prev) => ({ ...prev }));
           break;
         case 's':
-          event.preventDefault();
+          e.preventDefault();
           // canvas
           if (!value.field) throw new Error();
           value.field.updateMode(MODE.select);
+
+          // obj が１つだけの場合は、それを選択して、Input にフォーカス
+          if (value.field.objs.length === 1) {
+            const targetObj = value.field.objs.at(0)!;
+            value.field.select(targetObj);
+            value.field.redraw('short cur select');
+            input.current?.focus();
+          }
+
           // local
           setValue((prev) => ({ ...prev }));
           break;
         case 'e':
-          event.preventDefault();
+          e.preventDefault();
           // canvas
           if (!value.field) throw new Error();
           value.field.updateMode(MODE.split);
@@ -99,7 +113,7 @@ const MngCanvasForm = ({}: Props) => {
           setValue((prev) => ({ ...prev }));
           break;
         case 'h':
-          event.preventDefault();
+          e.preventDefault();
           // canvas
           if (!value.field) throw new Error();
           value.field.updateMode(MODE.highlight);
@@ -107,7 +121,7 @@ const MngCanvasForm = ({}: Props) => {
           setValue((prev) => ({ ...prev }));
           break;
         case 'c':
-          event.preventDefault();
+          e.preventDefault();
           // canvas
           if (!value.field) throw new Error();
           value.field.updateMode(MODE.connect);
@@ -115,11 +129,20 @@ const MngCanvasForm = ({}: Props) => {
           setValue((prev) => ({ ...prev }));
           break;
         case 'l':
-          event.preventDefault();
+          e.preventDefault();
           input.current?.focus();
           break;
+        case 'x':
+          e.preventDefault();
+          // delete
+          if (!value.field) throw new Error();
+          if (!value.field.selectObj) return;
+          value.field.delete(value.field.selectObj);
+          setValue((prev) => ({ ...prev, selectedObj: null }));
+
+          break;
         default:
-          console.log(event.key);
+          console.log(e.key);
       }
     },
     [value]
@@ -145,9 +168,9 @@ const MngCanvasForm = ({}: Props) => {
     <div className='grid gap-4'>
       <AddBoxButton field={value.field} defaultLabel='' />
       <DeleteBoxButton
-        selectedObj={value.selectedObj}
+        selectedObj={value.field?.selectObj || null}
         field={value.field}
-        deselect={() => setValue((prev) => ({ ...prev, selectedObj: null }))}
+        rerender={() => setValue((prev) => ({ ...prev }))}
       />
       <Select
         value={value.field?.mode || MODE.drag}
@@ -167,10 +190,37 @@ const MngCanvasForm = ({}: Props) => {
       <LabelInput
         ref={input}
         field={value.field}
-        selectedObj={value.selectedObj}
+        selectedObj={value.field?.selectObj || null}
         rerender={() => setValue((prev) => ({ ...prev }))}
       />
       <CanvasDom ref={canvas} mode={value.field?.mode} />
+      <div className='text-xs text-slate-400 grid gap-2'>
+        <div>Keyboard Short Cut:</div>
+        <div className='grid grid-cols-[24px,1fr] pl-4 gap-y-1'>
+          <div>⌘a</div>
+          <div>
+            <div>add new box</div>
+            <div>obj が1つの場合はそれを選択して Input をフォーカス</div>
+          </div>
+          <div>⌘d</div>
+          <div>drag mode</div>
+          <div>⌘s</div>
+          <div>
+            <div>select mode</div>
+            <div>obj が1つの場合はそれを選択して Input をフォーカス</div>
+          </div>
+          <div>⌘e</div>
+          <div>split mode</div>
+          <div>⌘h</div>
+          <div>highlight mode</div>
+          <div>⌘c</div>
+          <div>connect mode</div>
+          <div>⌘l</div>
+          <div>Input をフォーカス</div>
+          <div>⌘x</div>
+          <div>選択オブジェクトの削除</div>
+        </div>
+      </div>
     </div>
   );
 };
