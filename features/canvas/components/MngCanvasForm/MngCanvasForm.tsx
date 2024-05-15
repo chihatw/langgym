@@ -7,10 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box } from '../../class/Box';
 import { DraggableField } from '../../class/DraggableField';
-import { MODE, RECT } from '../../constants';
+import { MODE, MODE_SHORT_CUT_KEY, RECT } from '../../constants';
 import { deleteAllBoxes } from '../../services/client';
 import CanvasDom from '../CanvasDom';
 import AddBoxButton from './AddBoxButton';
@@ -33,6 +33,7 @@ const INITIAL_STATE: FormProps = {
 const MngCanvasForm = ({}: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
   const canvas = useRef<HTMLCanvasElement>(null);
+  const input = useRef<HTMLInputElement>(null);
 
   // initializing
   useEffect(() => {
@@ -55,6 +56,76 @@ const MngCanvasForm = ({}: Props) => {
     setValue((prev) => ({ ...prev, field }));
     field.redraw('initialize');
   }, []);
+
+  const handleKeyDown = useCallback(
+    (event: globalThis.KeyboardEvent) => {
+      if (!event.metaKey) return;
+
+      switch (event.key) {
+        case 'a':
+          event.preventDefault();
+          if (!value.field) throw Error();
+          const box = new Box(0, 0, '', 0);
+          value.field.objs = [...value.field.objs, box];
+          value.field.redraw('add box');
+          break;
+        case 'd':
+          event.preventDefault();
+          // canvas
+          if (!value.field) throw new Error();
+          value.field.updateMode(MODE.drag);
+          // local
+          setValue((prev) => ({ ...prev }));
+          break;
+        case 's':
+          event.preventDefault();
+          // canvas
+          if (!value.field) throw new Error();
+          value.field.updateMode(MODE.select);
+          // local
+          setValue((prev) => ({ ...prev }));
+          break;
+        case 'p':
+          event.preventDefault();
+          // canvas
+          if (!value.field) throw new Error();
+          value.field.updateMode(MODE.split);
+          // local
+          setValue((prev) => ({ ...prev }));
+          break;
+        case 'h':
+          event.preventDefault();
+          // canvas
+          if (!value.field) throw new Error();
+          value.field.updateMode(MODE.highlight);
+          // local
+          setValue((prev) => ({ ...prev }));
+          break;
+        case 'c':
+          event.preventDefault();
+          // canvas
+          if (!value.field) throw new Error();
+          value.field.updateMode(MODE.connect);
+          // local
+          setValue((prev) => ({ ...prev }));
+          break;
+        case 'l':
+          event.preventDefault();
+          input.current?.focus();
+          break;
+        default:
+          console.log(event.key);
+      }
+    },
+    [value]
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown]);
 
   const handleChangeMode = (mode: string) => {
     // canvas
@@ -83,12 +154,13 @@ const MngCanvasForm = ({}: Props) => {
         <SelectContent>
           {Object.entries(MODE).map(([key, value], index) => (
             <SelectItem value={key} key={index}>
-              {value}
+              {`${value} (${MODE_SHORT_CUT_KEY[value]})`}
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
       <LabelInput
+        ref={input}
         field={value.field}
         selectedObj={value.selectedObj}
         rerender={() => setValue((prev) => ({ ...prev }))}

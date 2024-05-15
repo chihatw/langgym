@@ -17,7 +17,7 @@ const AddBoxButton = ({ field, defaultLabel }: Props) => {
     field.redraw('add box');
   };
 
-  return <Button onClick={handleAddBox}>Add New Box</Button>;
+  return <Button onClick={handleAddBox}>Add New Box (⌘a)</Button>;
 };
 
 export default AddBoxButton;

@@ -1,7 +1,7 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, forwardRef } from 'react';
 import { Box } from '../../class/Box';
 import { DraggableField } from '../../class/DraggableField';
 
@@ -11,27 +11,32 @@ type Props = {
   rerender: () => void;
 };
 
-const LabelInput = ({ field, selectedObj, rerender }: Props) => {
-  const handleChangeLabel = (e: ChangeEvent<HTMLInputElement>) => {
-    const label = e.target.value;
-    if (!field || !field.selectObj) throw Error();
+const LabelInput = forwardRef<HTMLInputElement, Props>(
+  ({ field, selectedObj, rerender }, ref) => {
+    const handleChangeLabel = (e: ChangeEvent<HTMLInputElement>) => {
+      const label = e.target.value;
+      if (!field || !field.selectObj) throw Error();
 
-    // canvas
-    field.updateLabel(label);
+      // canvas
+      field.updateLabel(label);
 
-    // local
-    rerender();
-  };
+      // local
+      rerender();
+    };
 
-  return (
-    <Input
-      placeholder='label'
-      // value は field.selectedObj.label
-      value={selectedObj?.label || ''}
-      onChange={handleChangeLabel}
-      disabled={!selectedObj}
-    />
-  );
-};
+    return (
+      <Input
+        ref={ref}
+        placeholder='label'
+        // value は field.selectedObj.label
+        value={selectedObj?.label || ''}
+        onChange={handleChangeLabel}
+        disabled={!selectedObj}
+      />
+    );
+  }
+);
 
 export default LabelInput;
+
+LabelInput.displayName = 'LabelInput';

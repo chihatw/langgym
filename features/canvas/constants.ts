@@ -26,3 +26,11 @@ export const MODE = {
   highlight: 'highlight',
   connect: 'connect',
 };
+
+export const MODE_SHORT_CUT_KEY: { [key: string]: string } = {
+  drag: '⌘d',
+  select: '⌘s',
+  split: '⌘p',
+  highlight: '⌘h',
+  connect: '⌘c',
+};
