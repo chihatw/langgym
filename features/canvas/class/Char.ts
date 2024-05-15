@@ -37,7 +37,7 @@ export class Char {
     this.hasLine = hasLine;
   }
 
-  // mousemove -> Box.charInBounds() から呼び出される
+  // mousemove -> Box.splitting() から呼び出される
   inBounds(x: number, y: number) {
     const isInSide = checkIsMouseOver(
       { x, y },

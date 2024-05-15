@@ -22,7 +22,7 @@ export class Box {
 
   #isGrabed = false;
   #isSelected = false;
-  #charInBounds: null | Char = null; // todo splitBy を持てばいいのでは？
+  #splitBy = 0;
 
   constructor(
     x: number,
@@ -61,32 +61,28 @@ export class Box {
     return result;
   }
 
-  // todo 仕事が多い？
-  // カーソルが何文字目の上にあるのかをチェック
-  charInBounds(x: number, y: number) {
-    let charInBounds: null | Char = null;
+  // どこで分割されているのかチェック
+  splitting(x: number, y: number) {
+    let splitBy = 0;
+
     // 最後尾は除外
     for (let i = 0; i < this.chars.length - 1; i++) {
       const char = this.chars[i];
-
+      // カーソルの下に char があれば、index + 1 を splitBy に代入
       if (char.inBounds(x, y)) {
-        charInBounds = char;
+        splitBy = char.index + 1;
       }
     }
 
-    // 現状から変更が必要か確認
-    const hasChanged = this._checkHasChange(charInBounds);
-
-    // 変更が必要な場合、大きさを再計算して、
-    if (hasChanged) {
-      this.#charInBounds = charInBounds;
-      const splitBy = this.#charInBounds ? this.#charInBounds.index + 1 : 0;
-      this._setWidthHeightChars(this.label, splitBy);
+    // 分割が変更されている場合、大きさを再計算して、リモートも更新
+    if (this.#splitBy !== splitBy) {
+      this.#splitBy = splitBy;
+      this._setWidthHeightChars(this.label, this.#splitBy);
       // remote
-      updateSplitBy(this.id, splitBy);
+      updateSplitBy(this.id, this.#splitBy);
     }
 
-    return this.#charInBounds;
+    return this.#splitBy;
   }
 
   grab() {
@@ -103,20 +99,6 @@ export class Box {
 
   deselect() {
     this.#isSelected = false;
-  }
-
-  _checkHasChange(charInBounds: Char | null) {
-    let hasChanged = false;
-    if (this.#charInBounds) {
-      if (charInBounds) {
-        hasChanged = this.#charInBounds.index !== charInBounds.index;
-      } else {
-        hasChanged = true;
-      }
-    } else {
-      hasChanged = !!charInBounds;
-    }
-    return hasChanged;
   }
 
   _buildChars(
