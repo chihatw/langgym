@@ -1,6 +1,7 @@
 export const RECT = { width: 512, height: 320 };
 
 export const FONT_SIZE = '14px';
+export const FONT_HEIGHT = 14;
 export const FONT_FAMILY = 'sans-serif';
 
 export const CANVAS_COLOR = 'rgba(255,255,255,0.6)';
@@ -17,7 +18,7 @@ export const DIVIDER_GAP = 16;
 
 export const BOX_MIN_WIDTH = '6rem';
 export const BOX_GAP = '2rem';
-export const BOX_HEIGHT = '4rem';
+export const BOX_HEIGHT = '2rem'; // 24px
 
 export const MODE = {
   drag: 'drag',
@@ -30,7 +31,7 @@ export const MODE = {
 export const MODE_SHORT_CUT_KEY: { [key: string]: string } = {
   drag: '⌘d',
   select: '⌘s',
-  split: '⌘p',
+  split: '⌘e',
   highlight: '⌘h',
   connect: '⌘c',
 };

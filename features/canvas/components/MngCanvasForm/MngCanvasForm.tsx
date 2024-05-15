@@ -65,7 +65,12 @@ const MngCanvasForm = ({}: Props) => {
         case 'a':
           event.preventDefault();
           if (!value.field) throw Error();
-          const box = new Box(0, 0, '', 0);
+          const box = new Box(
+            (value.field.width - 96) / 2,
+            (value.field.height - 48) / 2,
+            '',
+            0
+          );
           value.field.objs = [...value.field.objs, box];
           value.field.redraw('add box');
           break;
@@ -85,7 +90,7 @@ const MngCanvasForm = ({}: Props) => {
           // local
           setValue((prev) => ({ ...prev }));
           break;
-        case 'p':
+        case 'e':
           event.preventDefault();
           // canvas
           if (!value.field) throw new Error();

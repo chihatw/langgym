@@ -37,6 +37,7 @@ export class Line {
   draw(ctx: CanvasRenderingContext2D) {
     ctx.beginPath();
     ctx.lineWidth = 4;
+    ctx.setLineDash([]);
     ctx.strokeStyle = 'rgba(0,0,0,0.2)';
     ctx.moveTo(this.startX, this.startY);
     ctx.lineTo(this.endX, this.endY);

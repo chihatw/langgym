@@ -4,6 +4,7 @@ import {
   DIVIDER_GAP,
   DIVIDER_WIDTH,
   FONT_FAMILY,
+  FONT_HEIGHT,
   FONT_SIZE,
   HIGHLIGHT_TEXT_COLOR,
   TEXT_COLOR,
@@ -40,6 +41,14 @@ export class Char {
     this.isHighlight = isHighlight;
   }
 
+  get centerX() {
+    return this.x + this.width / 2;
+  }
+
+  get centerY() {
+    return this.y + this.height / 2;
+  }
+
   // mousemove -> Box.splitting() から呼び出される
   inBounds(x: number, y: number) {
     const isInSide = checkIsMouseOver(
@@ -56,9 +65,9 @@ export class Char {
     const isInSide = checkIsMouseOver(
       { x, y },
       this.x,
-      this.y + 25, // 中央寄せ
+      this.y + (this.height - FONT_HEIGHT) / 2, // 垂直中央寄せ
       this.width,
-      this.height - 50 // 64 から 文字の大きさ 14 だけ残す
+      FONT_HEIGHT
     );
     return isInSide;
   }

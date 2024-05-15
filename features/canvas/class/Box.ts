@@ -50,6 +50,17 @@ export class Box {
       });
     }
   }
+  nthCenterX(index: number) {
+    const targetChar = this.chars.find((c) => c.index === index);
+    if (!targetChar) throw new Error();
+    return targetChar.centerX;
+  }
+
+  nthCenterY(index: number) {
+    const targetChar = this.chars.find((c) => c.index === index);
+    if (!targetChar) throw new Error();
+    return targetChar.centerY;
+  }
 
   updateLabel(label: string) {
     this.label = label;

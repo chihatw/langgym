@@ -12,7 +12,12 @@ type Props = {
 const AddBoxButton = ({ field, defaultLabel }: Props) => {
   const handleAddBox = () => {
     if (!field) throw Error();
-    const box = new Box(0, 0, defaultLabel, 0);
+    const box = new Box(
+      (field.width - 96) / 2,
+      (field.height - 48) / 2,
+      defaultLabel,
+      0
+    );
     field.objs = [...field.objs, box];
     field.redraw('add box');
   };
