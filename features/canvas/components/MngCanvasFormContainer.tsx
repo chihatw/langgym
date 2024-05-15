@@ -1,5 +1,5 @@
 import MngPaneContainer from '@/components/MngPaneContainer';
-import MngCanvasForm from './MngCanvasForm';
+import MngCanvasForm from './MngCanvasForm/MngCanvasForm';
 
 type Props = {};
 

@@ -1,14 +1,17 @@
+import { MODE } from '../constants';
 import { Box } from './Box';
 import { Field } from './Field';
 
 export class DraggableField extends Field {
+  mode: string = MODE.drag;
   selectObj: Box | null = null;
 
   #dragObj: Box | null = null;
   #dragDX: number = 0;
   #dragDY: number = 0;
 
-  isSplitted = false;
+  #isSplitted = false;
+
   #handleSetSelectedObj;
 
   constructor(
@@ -42,21 +45,25 @@ export class DraggableField extends Field {
   }
 
   select(obj: Box) {
-    if (this.selectObj) {
-      // 既存の selectObj は一旦解除
-      this.selectObj.deselect();
-      // 選択済みのオブジェクトを再選択した場合、選択を解除して終了
-      if (this.selectObj.id === obj.id) {
-        this.selectObj = null;
-        this.#handleSetSelectedObj(null);
-        return;
-      }
-    }
+    const selectSameObject = this.selectObj?.id === obj.id;
+
+    // 既存の selectObj は一旦解除
+    this.deselect();
+    // 選択済みのオブジェクトを再選択した場合、ここで終了
+    if (selectSameObject) return;
 
     // それ以外の場合
     this.selectObj = obj;
     this.selectObj.select();
     this.#handleSetSelectedObj(this.selectObj);
+  }
+
+  deselect() {
+    if (this.selectObj) {
+      this.selectObj.deselect();
+      this.selectObj = null;
+      this.#handleSetSelectedObj(null);
+    }
   }
 
   grab(obj: Box, dragDX: number, dragDY: number) {
@@ -85,72 +92,76 @@ export class DraggableField extends Field {
     this.redraw('update label');
   }
 
-  handleMouseMove(e: MouseEvent, _this: DraggableField) {
-    // selectedObj があれば、マウスムーブは無視
-    if (this.selectObj) return;
+  updateMode(mode: string) {
+    this.deselect();
+    this.mode = mode;
+    this.redraw('update mode');
+  }
 
+  handleMouseMove(e: MouseEvent, _this: DraggableField) {
     const dpr = window.devicePixelRatio || 1;
     const { offsetX: x, offsetY: y } = e;
     const _x = x / dpr;
     const _y = y / dpr;
 
-    if (_this.#dragObj) {
-      _this.#dragObj.dragging(_x - _this.#dragDX, _y - _this.#dragDY);
-      _this.redraw('dragging');
-      return;
-    }
-
-    const char = _this._findCharInBoundx(_x, _y);
-    if (this.isSplitted !== !!char) {
-      this.isSplitted = !!char;
-      _this.redraw('split');
+    switch (this.mode) {
+      case MODE.drag:
+        if (_this.#dragObj) {
+          _this.#dragObj.dragging(_x - _this.#dragDX, _y - _this.#dragDY);
+          _this.redraw('dragging');
+          return;
+        }
+        return;
+      case MODE.split:
+        const char = _this._findCharInBoundx(_x, _y);
+        if (this.#isSplitted !== !!char) {
+          this.#isSplitted = !!char;
+          _this.redraw('split');
+        }
+        return;
+      case MODE.select:
+      default:
     }
   }
 
   handleMouseDown(e: MouseEvent, _this: DraggableField) {
-    // isSplitted の場合は、マウスダウンは無視
-    if (this.isSplitted) return;
-
     const dpr = window.devicePixelRatio || 1;
     const { offsetX: x, offsetY: y } = e;
     const _x = x / dpr;
     const _y = y / dpr;
+
     const obj = _this._findBoxInBounds(_x, _y); // ポインターの下にあるオブジェクトを抽出
 
-    if (!obj) {
-      if (_this.selectObj) {
-        _this.selectObj.deselect();
-        _this.selectObj = null;
-        _this.#handleSetSelectedObj(null);
-        _this.redraw('deselect');
+    switch (this.mode) {
+      case MODE.drag:
+        if (obj) {
+          _this.grab(obj, _x - obj.x, _y - obj.y);
+          if (!_this.#dragObj) throw new Error();
+          _this.#dragObj.dragging(_x - _this.#dragDX, _y - _this.#dragDY);
+          _this.redraw('grab');
+          return;
+        }
         return;
-      }
-    }
-
-    // 右クリックの場合は、select
-    const isRightClick = e.button === 2;
-    if (isRightClick) {
-      if (obj) {
-        _this.select(obj);
-        _this.redraw('select');
+      case MODE.select:
+        if (!obj) {
+          if (_this.selectObj) {
+            _this.selectObj.deselect();
+            _this.selectObj = null;
+            _this.#handleSetSelectedObj(null);
+            _this.redraw('deselect');
+            return;
+          }
+        } else {
+          _this.select(obj);
+          _this.redraw('select');
+          return;
+        }
         return;
-      }
+      case MODE.split:
+        // todo split
+        return;
+      default:
     }
-
-    // それ以外の場合、grab
-    if (obj) {
-      _this.grab(obj, _x - obj.x, _y - obj.y);
-      if (!_this.#dragObj) throw new Error();
-      _this.#dragObj.dragging(_x - _this.#dragDX, _y - _this.#dragDY);
-      _this.redraw('grab');
-      return;
-    }
-
-    // if (_this.#dragObj) {
-    //   _this.ungrab();
-    //   _this.#dragObj = null;
-    //   _this.redraw('ungrab mouse down');
-    // }
   }
 
   handleMouseUp(e: MouseEvent, _this: DraggableField) {
