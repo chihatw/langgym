@@ -88,21 +88,10 @@ export class DraggableField extends Field {
 
     switch (this.mode) {
       case MODE.drag:
-        if (_this.#dragObj) {
-          _this.#dragObj.dragging(_x - _this.#dragDX, _y - _this.#dragDY);
-          _this.redraw('dragging');
-          return;
-        }
+        if (!_this.#dragObj) return;
 
-        let highlights: { [boxId: number]: number[] } = {};
-        for (const obj of this.objs) {
-          highlights[obj.id] = obj.highlighting(_x, _y);
-        }
-
-        if (JSON.stringify(this.#highlights) !== JSON.stringify(highlights)) {
-          this.#highlights = highlights;
-          _this.redraw('highlight');
-        }
+        _this.#dragObj.dragging(_x - _this.#dragDX, _y - _this.#dragDY);
+        _this.redraw('dragging');
         return;
 
       case MODE.split:
@@ -117,6 +106,19 @@ export class DraggableField extends Field {
           _this.redraw('split');
         }
         return;
+
+      case MODE.highlight:
+        let highlights: { [boxId: number]: number[] } = {};
+        for (const obj of this.objs) {
+          highlights[obj.id] = obj.highlighting(_x, _y);
+        }
+
+        if (JSON.stringify(this.#highlights) !== JSON.stringify(highlights)) {
+          this.#highlights = highlights;
+          _this.redraw('highlight');
+        }
+        return;
+
       case MODE.select:
       default:
     }
@@ -132,18 +134,46 @@ export class DraggableField extends Field {
 
     switch (this.mode) {
       case MODE.drag:
+        // 下にオブジェクトがない場合
+        if (!obj) {
+          // 選択がなければ、そのまま終了
+          if (!_this.selectObj) return;
+
+          // 選択があれば、deselect()
+          _this.deselect();
+          _this.redraw('grab');
+          return;
+        }
+
+        // 右クリックでなければ、grab()
+        if (e.button !== 2) {
+          _this.grab(obj, _x - obj.x, _y - obj.y);
+          if (!_this.#dragObj) throw new Error();
+          _this.#dragObj.dragging(_x - _this.#dragDX, _y - _this.#dragDY);
+          _this.redraw('grab');
+          return;
+        }
+
+        // 右クリックなら select()
+        // 下にオブジェクトがない、かつ選択オブジェクトもない場合、終了
+        if (!obj && !_this.selectObj) return;
+
+        // 下にオブジェクトがある、かつ選択オブジェクトと違う場合 select()
+        if (!!obj && (!_this.selectObj || _this.selectObj.id !== obj.id)) {
+          _this.select(obj);
+        }
+        _this.redraw('select');
+        return;
+      case MODE.highlight:
         // 下にオブジェクトがなければ終了
         if (!obj) return;
 
         // 選ばれたオブジェクトのハイライトをリセット
         this.#highlights[obj.id] = [];
         obj.dehighlight();
-
-        _this.grab(obj, _x - obj.x, _y - obj.y);
-        if (!_this.#dragObj) throw new Error();
-        _this.#dragObj.dragging(_x - _this.#dragDX, _y - _this.#dragDY);
         _this.redraw('grab');
         return;
+
       case MODE.select:
         // 下にオブジェクトがない、かつ選択オブジェクトもない場合、終了
         if (!obj && !_this.selectObj) return;
@@ -158,7 +188,31 @@ export class DraggableField extends Field {
         _this.redraw('select');
         return;
       case MODE.split:
-        // todo split
+        // splitBy が 0 または下にオブジェクトがなければ終了
+        if (!this.#splitBy || !obj) return;
+
+        // obj.divide();
+        const charSets = [
+          obj.label.substring(0, this.#splitBy),
+          obj.label.substring(this.#splitBy),
+        ];
+
+        // box を新しく２つ作成
+        const box1 = new Box(obj.x - 64, obj.y, charSets[0], 0);
+        const box2 = new Box(obj.splittedX, obj.y, charSets[1], 0);
+        _this.objs = [..._this.objs.filter((o) => o.id !== obj.id), box2, box1];
+
+        // 関連 highlights の削除
+        const clone = { ..._this.#highlights };
+        delete clone[obj.id];
+        _this.#highlights = clone;
+
+        // splitBy のリセット
+        _this.#splitBy = 0;
+
+        // mode を drag にしたいが、 React Component へ伝えられないまま
+        _this.mode = MODE.drag;
+        _this.redraw('divide');
         return;
       default:
     }

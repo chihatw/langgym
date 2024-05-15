@@ -23,4 +23,5 @@ export const MODE = {
   drag: 'drag',
   select: 'select',
   split: 'split',
+  highlight: 'highlight',
 };

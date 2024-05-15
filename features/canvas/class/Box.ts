@@ -19,6 +19,7 @@ export class Box {
   chars: Char[] = [];
   width = 0;
   height = 0;
+  splittedX = 0;
 
   #isGrabed = false;
   #isSelected = false;
@@ -40,7 +41,13 @@ export class Box {
     this._setWidthHeightChars(label, splitBy);
     if (!id) {
       // update remote
-      insertBox({ id: this.id, x, y, label, splitBy });
+      insertBox({
+        id: this.id,
+        x,
+        y,
+        label,
+        splitBy,
+      });
     }
   }
 
@@ -75,6 +82,7 @@ export class Box {
   // どこで分割されているのかチェック
   splitting(x: number, y: number) {
     let splitBy = 0;
+    let splittedX = 0;
 
     // 最後尾は除外
     for (let i = 0; i < this.chars.length - 1; i++) {
@@ -82,12 +90,14 @@ export class Box {
       // カーソルの下に char があれば、index + 1 を splitBy に代入
       if (char.inBounds(x, y)) {
         splitBy = char.index + 1;
+        splittedX = this.chars[i + 1].x;
       }
     }
 
     // 分割が変更されている場合、大きさを再計算して、リモートも更新
     if (this.#splitBy !== splitBy) {
       this.#splitBy = splitBy;
+      this.splittedX = splittedX;
       this._setWidthHeightChars(this.label, this.#splitBy);
       // remote
       updateSplitBy(this.id, this.#splitBy);
@@ -175,15 +185,20 @@ export class Box {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
+    let border = 'white';
+    if (this.#isGrabed) {
+      border = 'black';
+    } else if (this.#isSelected) {
+      border = 'red';
+    }
+
     ctx.fillStyle = BG_COLOR;
     ctx.fillRect(this.x, this.y, this.width, this.height);
 
-    if (this.#isGrabed || this.#isSelected) {
-      ctx.strokeStyle = this.#isSelected ? 'red' : 'black';
-      ctx.lineWidth = 1;
-      ctx.setLineDash([]);
-      ctx.strokeRect(this.x, this.y, this.width, this.height);
-    }
+    ctx.strokeStyle = border;
+    ctx.lineWidth = 1;
+    ctx.setLineDash([]);
+    ctx.strokeRect(this.x, this.y, this.width, this.height);
 
     for (let i = 0; i < this.chars.length; i++) {
       const char = this.chars[i];

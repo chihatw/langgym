@@ -13,9 +13,15 @@ export async function fetchCanvas(): Promise<CanvasBox[]> {
   return data;
 }
 
-export async function insertBox(box: CanvasBox) {
+export async function insertBox({ id, x, y, label, splitBy }: CanvasBox) {
   const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase.from('canvas').insert(box);
+  const { error } = await supabase.from('canvas').insert({
+    id,
+    x: x >> 0,
+    y: y >> 0,
+    label,
+    splitBy,
+  });
 
   if (error) {
     console.error(error.message);
