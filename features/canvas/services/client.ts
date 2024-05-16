@@ -1,5 +1,5 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
-import { CanvasBox } from '../schema';
+import { CanvasBox, CanvasLine } from '../schema';
 
 export async function fetchCanvas(): Promise<CanvasBox[]> {
   const supabase = createSupabaseClientComponentClient();
@@ -13,7 +13,14 @@ export async function fetchCanvas(): Promise<CanvasBox[]> {
   return data;
 }
 
-export async function insertBox({ id, x, y, label, splitBy }: CanvasBox) {
+export async function insertBox({
+  id,
+  x,
+  y,
+  label,
+  splitBy,
+  highlights,
+}: CanvasBox) {
   const supabase = createSupabaseClientComponentClient();
   const { error } = await supabase.from('canvas').insert({
     id,
@@ -21,6 +28,7 @@ export async function insertBox({ id, x, y, label, splitBy }: CanvasBox) {
     y: y >> 0,
     label,
     splitBy,
+    highlights,
   });
 
   if (error) {
@@ -71,9 +79,13 @@ export async function updateSplitBy(id: number, splitBy: number) {
   }
 }
 
-export async function deleteAllBoxes() {
+export async function updateHighlights(id: number, highlights: number[]) {
   const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase.from('canvas').delete().neq('id', 0);
+  const { error } = await supabase
+    .from('canvas')
+    .update({ highlights })
+    .eq('id', id);
+
   if (error) {
     console.error(error.message);
     return;
@@ -86,5 +98,100 @@ export async function deleteBox(id: number) {
   if (error) {
     console.error(error.message);
     return;
+  }
+}
+
+export async function insertLine({
+  id,
+  startX,
+  startY,
+  endX,
+  endY,
+  startObjId,
+  startCharIndex,
+  endObjId,
+  endCharIndex,
+}: CanvasLine) {
+  const supabase = createSupabaseClientComponentClient();
+  const { error } = await supabase.from('canvas_lines').insert({
+    id,
+    startX: startX >> 0,
+    startY: startY >> 0,
+    endX: endX >> 0,
+    endY: endY >> 0,
+    startObjId,
+    startCharIndex,
+    endObjId,
+    endCharIndex,
+  });
+
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+}
+
+export async function updateLine({
+  id,
+  startX,
+  startY,
+  endX,
+  endY,
+  startObjId,
+  startCharIndex,
+  endObjId,
+  endCharIndex,
+}: CanvasLine) {
+  const supabase = createSupabaseClientComponentClient();
+  const { error } = await supabase
+    .from('canvas_lines')
+    .update({
+      startX: startX >> 0,
+      startY: startY >> 0,
+      endX: endX >> 0,
+      endY: endY >> 0,
+      startObjId,
+      startCharIndex,
+      endObjId,
+      endCharIndex,
+    })
+    .eq('id', id);
+
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+}
+
+export async function deleteLine(id: number) {
+  const supabase = createSupabaseClientComponentClient();
+  const { error } = await supabase.from('canvas_lines').delete().eq('id', id);
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+}
+
+export async function clearCanvas() {
+  const supabase = createSupabaseClientComponentClient();
+  const { error } = await supabase.from('canvas').delete().neq('id', 0);
+  if (error) {
+    console.error(error.message);
+  }
+  const { error: error_l } = await supabase
+    .from('canvas_lines')
+    .delete()
+    .neq('id', 0);
+  if (error_l) {
+    console.error(error_l);
+  }
+
+  // channel.on delete でうまく subscribe できなかったために
+  const { error: error_all_delete } = await supabase
+    .from('canvas_all_delete')
+    .update({ updated_at: new Date().toISOString() })
+    .eq('id', 1);
+  if (error_all_delete) {
+    console.error(error_all_delete);
   }
 }

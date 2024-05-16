@@ -34,16 +34,16 @@ export const SHORT_CUT_KEY = {
   w: 'w',
   expand: 'e',
   r: 'r',
+  t: 't',
 
   addBox: 'a',
   select: 's',
   drag: 'd',
   highlight: 'f',
+  input: 'g',
 
   z: 'z',
   delete: 'x',
   connect: 'c',
   split: 'v',
-
-  input: 'i',
 };

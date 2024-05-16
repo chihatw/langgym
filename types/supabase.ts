@@ -417,6 +417,7 @@ export type Database = {
       }
       canvas: {
         Row: {
+          highlights: number[]
           id: number
           label: string
           splitBy: number
@@ -424,6 +425,7 @@ export type Database = {
           y: number
         }
         Insert: {
+          highlights?: number[]
           id?: number
           label?: string
           splitBy?: number
@@ -431,11 +433,63 @@ export type Database = {
           y?: number
         }
         Update: {
+          highlights?: number[]
           id?: number
           label?: string
           splitBy?: number
           x?: number
           y?: number
+        }
+        Relationships: []
+      }
+      canvas_all_delete: {
+        Row: {
+          id: number
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      canvas_lines: {
+        Row: {
+          endCharIndex: number | null
+          endObjId: number | null
+          endX: number
+          endY: number
+          id: number
+          startCharIndex: number
+          startObjId: number
+          startX: number
+          startY: number
+        }
+        Insert: {
+          endCharIndex?: number | null
+          endObjId?: number | null
+          endX: number
+          endY: number
+          id?: number
+          startCharIndex: number
+          startObjId: number
+          startX: number
+          startY: number
+        }
+        Update: {
+          endCharIndex?: number | null
+          endObjId?: number | null
+          endX?: number
+          endY?: number
+          id?: number
+          startCharIndex?: number
+          startObjId?: number
+          startX?: number
+          startY?: number
         }
         Relationships: []
       }

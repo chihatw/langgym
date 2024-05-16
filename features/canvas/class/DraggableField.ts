@@ -1,4 +1,10 @@
 import { FONT_HEIGHT, MODE } from '../constants';
+import {
+  deleteBox,
+  deleteLine,
+  insertLine,
+  updateLine,
+} from '../services/client';
 import { Box } from './Box';
 import { Field } from './Field';
 import { Line } from './Line';
@@ -80,9 +86,14 @@ export class DraggableField extends Field {
   updateLabel(label: string) {
     if (!this.selectObj) throw new Error();
     this.selectObj.updateLabel(label);
-    this.connectedLines = this.connectedLines.filter(
-      (l) => ![l.startObjId, l.endObjId!].includes(this.selectObj!.id)
-    );
+
+    // ハイライトは解除
+    this.selectObj.dehighlight();
+
+    const clone = { ...this.highlights };
+    delete clone[this.selectObj.id];
+    this.highlights = clone;
+
     this.redraw('update label');
   }
 
@@ -142,40 +153,7 @@ export class DraggableField extends Field {
         handleMouseDown_connect(_this, obj, _x, _y);
         return;
       case MODE.expand:
-        // 下にオブジェクトがなければ、終了
-        if (!obj) return;
-
-        // 下に char がなければ、終了
-        const index = obj.indexOf(_x, _y);
-        if (index < 0) return;
-
-        // のっていれば、新しいboxを作成
-        const box = new Box(
-          obj.x - FONT_HEIGHT / 2,
-          obj.y - FONT_HEIGHT / 2,
-          '',
-          0
-        );
-        _this.objs = [..._this.objs, box];
-        _this.grab(box, _x - box.x, _y - box.y);
-
-        // 新しいboxとcharをconnected line で結ぶ
-        // 新しいbox は char を持っていないので、 index: -1 , box の中心から線を延ばす
-        const line = new Line(
-          box.nthCenterX(-1),
-          box.nthCenterY(-1),
-          obj.nthCenterX(index),
-          obj.nthCenterY(index),
-          box.id,
-          -1,
-          obj.id,
-          index
-        );
-
-        // connectedLines を追加
-        _this.connectedLines = [..._this.connectedLines, line];
-        console.log(_this.connectedLines);
-        _this.redraw('expand');
+        handleMouseDown_expand(_this, obj, _x, _y);
         return;
       default:
     }
@@ -209,12 +187,18 @@ function handleMouseMove_drag(_this: DraggableField, _x: number, _y: number) {
 
   // recalc connectedLines
   _this.connectedLines = _this.connectedLines.map((l) => {
+    // 起点終点の変更がない場合
+    if (![l.startObjId, l.endObjId].includes(_this.dragObj!.id)) {
+      return l;
+    }
+
     const startObj = _this.objs.find((o) => o.id === l.startObjId);
     if (!startObj) throw new Error('no start obj');
     const endObj = _this.objs.find((o) => o.id === l.endObjId);
     if (!endObj) throw new Error('no end obj');
     if (typeof l.endCharIndex !== 'number') throw new Error('no endCharIndex');
-    return new Line(
+
+    const newLine = new Line(
       startObj.nthCenterX(l.startCharIndex),
       startObj.nthCenterY(l.startCharIndex),
       endObj.nthCenterX(l.endCharIndex),
@@ -225,6 +209,12 @@ function handleMouseMove_drag(_this: DraggableField, _x: number, _y: number) {
       l.endCharIndex,
       l.id
     );
+
+    // remote
+    updateLine(newLine);
+
+    // canvas
+    return newLine;
   });
 
   _this.redraw('dragging');
@@ -270,15 +260,42 @@ function handleMouseMove_connect(
   const targetObj = _this.objs.find((o) => o.id === _this.connectStartObjId);
   if (!targetObj) throw new Error();
 
+  // すでにdrawingLine がある場合
+  if (_this.drawingLine) {
+    const line = new Line(
+      targetObj.nthCenterX(_this.connectStartCharIndex), // index: -1 の時は box の中央　// 使いまわせる？
+      targetObj.nthCenterY(_this.connectStartCharIndex), // index: -1 の時は box の中央　// 使いまわせる？
+      _x,
+      _y,
+      _this.connectStartObjId, // 使いまわせる？
+      _this.connectStartCharIndex, // 使いまわせる？
+      null,
+      null,
+      _this.drawingLine.id
+    );
+    _this.drawingLine = line;
+    // remote
+    updateLine(line);
+
+    _this.redraw('connect');
+    return;
+  }
+
   const line = new Line(
     targetObj.nthCenterX(_this.connectStartCharIndex), // index: -1 の時は box の中央
     targetObj.nthCenterY(_this.connectStartCharIndex), // index: -1 の時は box の中央
     _x,
     _y,
     _this.connectStartObjId,
-    _this.connectStartCharIndex
+    _this.connectStartCharIndex,
+    null,
+    null
   );
+
   _this.drawingLine = line;
+  // remote
+  insertLine(line);
+
   _this.redraw('connect');
 }
 
@@ -345,9 +362,15 @@ function handleMouseDown_split(_this: DraggableField, obj: Box | undefined) {
   ];
 
   // box を新しく２つ作成
-  const box1 = new Box(obj.x - 64, obj.y, charSets[0], 0);
-  const box2 = new Box(obj.splittedX, obj.y, charSets[1], 0);
+  const box1 = new Box(obj.x - 64, obj.y, charSets[0], 0, []);
+  const box2 = new Box(obj.splittedX, obj.y, charSets[1], 0, []);
+
+  // 古いオブジェクトの削除
+  // local
   _this.objs = [..._this.objs.filter((o) => o.id !== obj.id), box2, box1];
+
+  // remote
+  deleteBox(obj.id);
 
   // connected line の更新
   _this.connectedLines = _this.connectedLines.map((l) => {
@@ -421,8 +444,13 @@ function handleMouseDown_connect(
 
   // connectedLines に 含まれていれば、削除する
   _this.connectedLines = _this.connectedLines.filter((l) => {
-    if (l.startObjId === obj.id || l.endObjId === obj.id) return false;
-    return true;
+    if (![l.startObjId, l.endObjId].includes(obj.id)) {
+      return true;
+    }
+    // remote フィルターで除外すると同時にリモートも削除
+    deleteLine(l.id);
+    // canvas
+    return false;
   });
 
   _this.connectStartObjId = obj.id;
@@ -447,7 +475,7 @@ function handleMouseUp_connect(
   // start obj id か start char index がなければ終了
   if (!_this.connectStartObjId || _this.connectStartCharIndex === -1) return;
 
-  // オブジェクトがない、またはstartと同じ場合、　charIndex がない場合は、drawing line を消して終了
+  // オブジェクトがない、またはstartと同じ場合、　charIndex がない場合、終了
   if (
     !obj ||
     obj.id === _this.connectStartObjId ||
@@ -455,6 +483,11 @@ function handleMouseUp_connect(
   ) {
     _this.connectStartObjId = 0;
     _this.connectStartCharIndex = -1;
+
+    // remote
+    if (_this.drawingLine) deleteLine(_this.drawingLine.id);
+
+    // canvas
     _this.drawingLine = null;
     _this.redraw('remove drawing line');
     return;
@@ -477,11 +510,65 @@ function handleMouseUp_connect(
   );
 
   // connectedLines を追加して
+  // canvas
   _this.connectedLines = [..._this.connectedLines, line];
+  // remote
+  insertLine(line);
 
   // drawing line は削除する
   _this.connectStartObjId = 0;
   _this.connectStartCharIndex = -1;
+
+  // remote
+  if (_this.drawingLine) deleteLine(_this.drawingLine.id);
+
+  // canvas
   _this.drawingLine = null;
   _this.redraw('remove drawing line');
+}
+
+function handleMouseDown_expand(
+  _this: DraggableField,
+  obj: Box | undefined,
+  _x: number,
+  _y: number
+) {
+  // 下にオブジェクトがなければ、終了
+  if (!obj) return;
+
+  // 下に char がなければ、終了
+  const index = obj.indexOf(_x, _y);
+  if (index < 0) return;
+
+  // のっていれば、新しいboxを作成
+  const box = new Box(
+    obj.x - FONT_HEIGHT / 2,
+    obj.y - FONT_HEIGHT / 2,
+    '',
+    0,
+    []
+  );
+  _this.objs = [..._this.objs, box];
+  _this.grab(box, _x - box.x, _y - box.y);
+
+  // 新しいboxとcharをconnected line で結ぶ
+  // 新しいbox は char を持っていないので、 index: -1 , box の中心から線を延ばす
+  const line = new Line(
+    box.nthCenterX(-1),
+    box.nthCenterY(-1),
+    obj.nthCenterX(index),
+    obj.nthCenterY(index),
+    box.id,
+    -1,
+    obj.id,
+    index
+  );
+
+  // connectedLines を追加
+  _this.connectedLines = [..._this.connectedLines, line];
+
+  // todo remote
+  insertLine(line);
+
+  _this.redraw('expand');
 }

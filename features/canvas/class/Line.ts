@@ -8,8 +8,8 @@ export class Line {
   endY;
   startObjId;
   startCharIndex;
-  endObjId: undefined | number;
-  endCharIndex: undefined | number;
+  endObjId;
+  endCharIndex;
 
   constructor(
     startX: number,
@@ -18,8 +18,8 @@ export class Line {
     endY: number,
     startObjId: number,
     startCharIndex: number,
-    endObjId?: number,
-    endCharIndex?: number,
+    endObjId: number | null,
+    endCharIndex: number | null,
     id?: number
   ) {
     const nanoid = customAlphabet('1234567890', 4);

@@ -5,6 +5,7 @@ import {
   insertBox,
   updateBoxLabel,
   updateBoxXY,
+  updateHighlights,
   updateSplitBy,
 } from '../services/client';
 import { checkIsMouseOver } from '../services/utils';
@@ -24,13 +25,14 @@ export class Box {
   #isGrabed = false;
   #isSelected = false;
   #splitBy = 0;
-  #highlights: number[] = [];
+  highlights: number[] = [];
 
   constructor(
     x: number,
     y: number,
     label: string,
     splitBy: number,
+    highlights: number[],
     id?: number
   ) {
     const nanoid = customAlphabet('1234567890', 4);
@@ -38,6 +40,7 @@ export class Box {
     this.x = x;
     this.y = y;
     this.label = label;
+    this.highlights = highlights;
     this._setWidthHeightChars(label, splitBy);
     if (!id) {
       // update remote
@@ -47,6 +50,7 @@ export class Box {
         y,
         label,
         splitBy,
+        highlights: [],
       });
     }
   }
@@ -60,7 +64,6 @@ export class Box {
 
   nthCenterY(index: number) {
     const targetChar = this.chars.find((c) => c.index === index);
-    console.log(targetChar);
     if (targetChar) return targetChar.centerY;
     // targetChar がない場合は box の中心を返す
     return this.y + this.height / 2;
@@ -139,17 +142,23 @@ export class Box {
       }
     }
 
-    const result = [...this.#highlights];
+    const result = [...this.highlights];
     if (typeof highlight === 'number') result.push(highlight);
     // 重複をなくして、sort
-    this.#highlights = Array.from(new Set(result)).sort((a, b) => a - b);
+    this.highlights = Array.from(new Set(result)).sort((a, b) => a - b);
     this._setWidthHeightChars(this.label, this.#splitBy);
-    return this.#highlights;
+
+    // remote
+    updateHighlights(this.id, this.highlights);
+    return this.highlights;
   }
 
   dehighlight() {
-    this.#highlights = [];
+    this.highlights = [];
     this._setWidthHeightChars(this.label, this.#splitBy);
+
+    // remote
+    updateHighlights(this.id, []);
   }
 
   grab() {
@@ -202,7 +211,7 @@ export class Box {
       dummyDOM.height,
       dummyDOM.chars,
       splitBy,
-      this.#highlights
+      this.highlights
     );
   }
 

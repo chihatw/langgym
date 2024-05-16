@@ -16,7 +16,8 @@ const AddBoxButton = ({ field, defaultLabel }: Props) => {
       (field.width - 96) / 2,
       (field.height - 48) / 2,
       defaultLabel,
-      0
+      0,
+      []
     );
     field.objs = [...field.objs, box];
     field.redraw('add box');

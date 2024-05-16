@@ -11,7 +11,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box } from '../../class/Box';
 import { DraggableField } from '../../class/DraggableField';
 import { MODE, RECT, SHORT_CUT_KEY } from '../../constants';
-import { deleteAllBoxes } from '../../services/client';
+import { clearCanvas, deleteBox } from '../../services/client';
 import CanvasDom from '../CanvasDom';
 import AddBoxButton from './AddBoxButton';
 import DeleteBoxButton from './DeleteBoxButton';
@@ -38,7 +38,7 @@ const MngCanvasForm = ({}: Props) => {
     if (!canvas.current) throw new Error();
 
     // 一旦白紙に
-    deleteAllBoxes();
+    clearCanvas();
 
     const field = new DraggableField(
       RECT.width,
@@ -67,7 +67,8 @@ const MngCanvasForm = ({}: Props) => {
             (value.field.width - 96) / 2,
             (value.field.height - 48) / 2,
             '',
-            0
+            0,
+            []
           );
           value.field.objs = [...value.field.objs, box];
           value.field.redraw('add box');
@@ -87,7 +88,6 @@ const MngCanvasForm = ({}: Props) => {
           value.field.updateMode(MODE.select);
 
           // obj が１つだけの場合は、それを選択して、Input にフォーカス
-          console.log(value.field.objs);
           if (value.field.objs.length === 1) {
             const targetObj = value.field.objs.at(0)!;
             value.field.select(targetObj);
@@ -141,7 +141,14 @@ const MngCanvasForm = ({}: Props) => {
           // delete
           if (!value.field) throw new Error();
           if (!value.field.selectObj) return;
+
+          // remote
+          deleteBox(value.field.selectObj.id);
+
+          // canvas
           value.field.delete(value.field.selectObj);
+
+          // local
           setValue((prev) => ({ ...prev, selectedObj: null }));
 
           break;
