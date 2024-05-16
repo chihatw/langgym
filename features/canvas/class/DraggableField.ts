@@ -1,4 +1,4 @@
-import { MODE } from '../constants';
+import { FONT_HEIGHT, MODE } from '../constants';
 import { Box } from './Box';
 import { Field } from './Field';
 import { Line } from './Line';
@@ -18,6 +18,8 @@ export class DraggableField extends Field {
 
   connectStartObjId = 0;
   connectStartCharIndex = -1;
+
+  expandObj: Box | null = null;
 
   constructor(
     width: number,
@@ -98,6 +100,7 @@ export class DraggableField extends Field {
 
     switch (this.mode) {
       case MODE.drag:
+      case MODE.expand:
         handleMouseMove_drag(_this, _x, _y);
         return;
       case MODE.split:
@@ -138,6 +141,42 @@ export class DraggableField extends Field {
       case MODE.connect:
         handleMouseDown_connect(_this, obj, _x, _y);
         return;
+      case MODE.expand:
+        // 下にオブジェクトがなければ、終了
+        if (!obj) return;
+
+        // 下に char がなければ、終了
+        const index = obj.indexOf(_x, _y);
+        if (index < 0) return;
+
+        // のっていれば、新しいboxを作成
+        const box = new Box(
+          obj.x - FONT_HEIGHT / 2,
+          obj.y - FONT_HEIGHT / 2,
+          '',
+          0
+        );
+        _this.objs = [..._this.objs, box];
+        _this.grab(box, _x - box.x, _y - box.y);
+
+        // 新しいboxとcharをconnected line で結ぶ
+        // 新しいbox は char を持っていないので、 index: -1 , box の中心から線を延ばす
+        const line = new Line(
+          box.nthCenterX(-1),
+          box.nthCenterY(-1),
+          obj.nthCenterX(index),
+          obj.nthCenterY(index),
+          box.id,
+          -1,
+          obj.id,
+          index
+        );
+
+        // connectedLines を追加
+        _this.connectedLines = [..._this.connectedLines, line];
+        console.log(_this.connectedLines);
+        _this.redraw('expand');
+        return;
       default:
     }
   }
@@ -151,6 +190,7 @@ export class DraggableField extends Field {
     const obj = _this._findBoxInBounds(_x, _y); // ポインターの下にあるオブジェクトを抽出
     switch (_this.mode) {
       case MODE.drag:
+      case MODE.expand:
         handleMouseUp_drag(_this);
         return;
       case MODE.connect:
@@ -166,7 +206,8 @@ function handleMouseMove_drag(_this: DraggableField, _x: number, _y: number) {
   if (!_this.dragObj) return;
 
   _this.dragObj.dragging(_x - _this.dragDX, _y - _this.dragDY);
-  // when dragging, have to recalc connected lines
+
+  // recalc connectedLines
   _this.connectedLines = _this.connectedLines.map((l) => {
     const startObj = _this.objs.find((o) => o.id === l.startObjId);
     if (!startObj) throw new Error('no start obj');
@@ -223,15 +264,15 @@ function handleMouseMove_connect(
   _x: number,
   _y: number
 ) {
-  // start obj id , start char index がない場合は終了
-  if (!_this.connectStartObjId && _this.connectStartCharIndex === -1) return;
+  // start obj id がない場合は終了
+  if (!_this.connectStartObjId) return;
 
   const targetObj = _this.objs.find((o) => o.id === _this.connectStartObjId);
   if (!targetObj) throw new Error();
 
   const line = new Line(
-    targetObj.nthCenterX(_this.connectStartCharIndex),
-    targetObj.nthCenterY(_this.connectStartCharIndex),
+    targetObj.nthCenterX(_this.connectStartCharIndex), // index: -1 の時は box の中央
+    targetObj.nthCenterY(_this.connectStartCharIndex), // index: -1 の時は box の中央
     _x,
     _y,
     _this.connectStartObjId,
@@ -259,24 +300,11 @@ function handleMouseDown_drag(
     return;
   }
 
-  // 右クリックでなければ、grab()
-  if (e.button !== 2) {
-    _this.grab(obj, _x - obj.x, _y - obj.y);
-    if (!_this.dragObj) throw new Error();
-    _this.dragObj.dragging(_x - _this.dragDX, _y - _this.dragDY);
-    _this.redraw('grab');
-    return;
-  }
-
-  // 右クリックなら select()
-  // 下にオブジェクトがない、かつ選択オブジェクトもない場合、終了
-  if (!obj && !_this.selectObj) return;
-
-  // 下にオブジェクトがある、かつ選択オブジェクトと違う場合 select()
-  if (!!obj && (!_this.selectObj || _this.selectObj.id !== obj.id)) {
-    _this.select(obj);
-  }
-  _this.redraw('select');
+  _this.grab(obj, _x - obj.x, _y - obj.y);
+  if (!_this.dragObj) throw new Error();
+  _this.dragObj.dragging(_x - _this.dragDX, _y - _this.dragDY);
+  _this.redraw('grab');
+  return;
 }
 
 function handleMouseDown_highlight(

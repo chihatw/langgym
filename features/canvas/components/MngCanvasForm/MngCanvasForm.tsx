@@ -10,7 +10,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box } from '../../class/Box';
 import { DraggableField } from '../../class/DraggableField';
-import { MODE, MODE_SHORT_CUT_KEY, RECT } from '../../constants';
+import { MODE, RECT, SHORT_CUT_KEY } from '../../constants';
 import { deleteAllBoxes } from '../../services/client';
 import CanvasDom from '../CanvasDom';
 import AddBoxButton from './AddBoxButton';
@@ -60,7 +60,7 @@ const MngCanvasForm = ({}: Props) => {
       if (!e.metaKey) return;
 
       switch (e.key) {
-        case 'a':
+        case SHORT_CUT_KEY.addBox:
           e.preventDefault();
           if (!value.field) throw Error();
           const box = new Box(
@@ -70,16 +70,9 @@ const MngCanvasForm = ({}: Props) => {
             0
           );
           value.field.objs = [...value.field.objs, box];
-          // obj が１つだけの場合は、それを選択して、Input にフォーカス
-          if (value.field.objs.length === 1) {
-            const targetObj = value.field.objs.at(0)!;
-            value.field.select(targetObj);
-            value.field.redraw('short cur select');
-            input.current?.focus();
-          }
           value.field.redraw('add box');
           break;
-        case 'd':
+        case SHORT_CUT_KEY.drag:
           e.preventDefault();
           // canvas
           if (!value.field) throw new Error();
@@ -87,24 +80,27 @@ const MngCanvasForm = ({}: Props) => {
           // local
           setValue((prev) => ({ ...prev }));
           break;
-        case 's':
+        case SHORT_CUT_KEY.select:
           e.preventDefault();
           // canvas
           if (!value.field) throw new Error();
           value.field.updateMode(MODE.select);
 
           // obj が１つだけの場合は、それを選択して、Input にフォーカス
+          console.log(value.field.objs);
           if (value.field.objs.length === 1) {
             const targetObj = value.field.objs.at(0)!;
             value.field.select(targetObj);
             value.field.redraw('short cur select');
-            input.current?.focus();
+
+            // 時間を空けないと、セレクトできない
+            setTimeout(() => input.current?.focus(), 100);
           }
 
           // local
           setValue((prev) => ({ ...prev }));
           break;
-        case 'e':
+        case SHORT_CUT_KEY.split:
           e.preventDefault();
           // canvas
           if (!value.field) throw new Error();
@@ -112,7 +108,7 @@ const MngCanvasForm = ({}: Props) => {
           // local
           setValue((prev) => ({ ...prev }));
           break;
-        case 'h':
+        case SHORT_CUT_KEY.highlight:
           e.preventDefault();
           // canvas
           if (!value.field) throw new Error();
@@ -120,7 +116,7 @@ const MngCanvasForm = ({}: Props) => {
           // local
           setValue((prev) => ({ ...prev }));
           break;
-        case 'c':
+        case SHORT_CUT_KEY.connect:
           e.preventDefault();
           // canvas
           if (!value.field) throw new Error();
@@ -128,11 +124,19 @@ const MngCanvasForm = ({}: Props) => {
           // local
           setValue((prev) => ({ ...prev }));
           break;
-        case 'l':
+        case SHORT_CUT_KEY.input:
           e.preventDefault();
           input.current?.focus();
           break;
-        case 'x':
+        case SHORT_CUT_KEY.expand:
+          e.preventDefault();
+          // canvas
+          if (!value.field) throw new Error();
+          value.field.updateMode(MODE.expand);
+          // local
+          setValue((prev) => ({ ...prev }));
+          break;
+        case SHORT_CUT_KEY.delete:
           e.preventDefault();
           // delete
           if (!value.field) throw new Error();
@@ -182,7 +186,9 @@ const MngCanvasForm = ({}: Props) => {
         <SelectContent>
           {Object.entries(MODE).map(([key, value], index) => (
             <SelectItem value={key} key={index}>
-              {`${value} (${MODE_SHORT_CUT_KEY[value]})`}
+              {`${value} (⌘${
+                SHORT_CUT_KEY[value as keyof typeof SHORT_CUT_KEY]
+              })`}
             </SelectItem>
           ))}
         </SelectContent>
@@ -196,29 +202,35 @@ const MngCanvasForm = ({}: Props) => {
       <CanvasDom ref={canvas} mode={value.field?.mode} />
       <div className='text-xs text-slate-400 grid gap-2'>
         <div>Keyboard Short Cut:</div>
-        <div className='grid grid-cols-[24px,1fr] pl-4 gap-y-1'>
-          <div>⌘a</div>
+        <div className='pl-4 grid gap-2'>
           <div>
+            <div>Mode Select</div>
+            <div className='pl-4 grid grid-cols-[24px,1fr] gap-y-1'>
+              <div>{`⌘${SHORT_CUT_KEY.drag}`}</div>
+              <div>drag</div>
+              <div>{`⌘${SHORT_CUT_KEY.split}`}</div>
+              <div>split</div>
+              <div>{`⌘${SHORT_CUT_KEY.highlight}`}</div>
+              <div>highlight</div>
+              <div>{`⌘${SHORT_CUT_KEY.connect}`}</div>
+              <div>connect</div>
+              <div>{`⌘${SHORT_CUT_KEY.expand}`}</div>
+              <div>expand</div>
+              <div>{`⌘${SHORT_CUT_KEY.select}`}</div>
+              <div>
+                <div>select</div>
+                <div>obj が1つの場合はそれを選択して Input をフォーカス</div>
+              </div>
+            </div>
+          </div>
+          <div className='grid grid-cols-[24px,1fr] gap-y-1'>
+            <div>{`⌘${SHORT_CUT_KEY.addBox}`}</div>
             <div>add new box</div>
-            <div>obj が1つの場合はそれを選択して Input をフォーカス</div>
+            <div>{`⌘${SHORT_CUT_KEY.input}`}</div>
+            <div>Input をフォーカス</div>
+            <div>{`⌘${SHORT_CUT_KEY.delete}`}</div>
+            <div>選択オブジェクトの削除</div>
           </div>
-          <div>⌘d</div>
-          <div>drag mode</div>
-          <div>⌘s</div>
-          <div>
-            <div>select mode</div>
-            <div>obj が1つの場合はそれを選択して Input をフォーカス</div>
-          </div>
-          <div>⌘e</div>
-          <div>split mode</div>
-          <div>⌘h</div>
-          <div>highlight mode</div>
-          <div>⌘c</div>
-          <div>connect mode</div>
-          <div>⌘l</div>
-          <div>Input をフォーカス</div>
-          <div>⌘x</div>
-          <div>選択オブジェクトの削除</div>
         </div>
       </div>
     </div>

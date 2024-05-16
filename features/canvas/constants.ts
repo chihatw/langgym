@@ -26,12 +26,24 @@ export const MODE = {
   split: 'split',
   highlight: 'highlight',
   connect: 'connect',
+  expand: 'expand',
 };
 
-export const MODE_SHORT_CUT_KEY: { [key: string]: string } = {
-  drag: '⌘d',
-  select: '⌘s',
-  split: '⌘e',
-  highlight: '⌘h',
-  connect: '⌘c',
+export const SHORT_CUT_KEY = {
+  q: 'q',
+  w: 'w',
+  expand: 'e',
+  r: 'r',
+
+  addBox: 'a',
+  select: 's',
+  drag: 'd',
+  highlight: 'f',
+
+  z: 'z',
+  delete: 'x',
+  connect: 'c',
+  split: 'v',
+
+  input: 'i',
 };

@@ -10,13 +10,15 @@ const CanvasDom = forwardRef<HTMLCanvasElement, Props>(({ mode }, ref) => {
   const bgColor = useMemo(() => {
     switch (mode) {
       case MODE.select:
-        return 'bg-pink-50';
+        return 'bg-pink-100';
       case MODE.split:
-        return 'bg-green-50';
+        return 'bg-green-100';
       case MODE.highlight:
-        return 'bg-yellow-50';
+        return 'bg-yellow-100';
       case MODE.connect:
-        return 'bg-purple-50';
+        return 'bg-purple-100';
+      case MODE.expand:
+        return 'bg-sky-100';
       default:
         return 'bg-white';
     }

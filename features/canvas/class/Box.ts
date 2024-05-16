@@ -50,16 +50,20 @@ export class Box {
       });
     }
   }
+
   nthCenterX(index: number) {
     const targetChar = this.chars.find((c) => c.index === index);
-    if (!targetChar) throw new Error();
-    return targetChar.centerX;
+    if (targetChar) return targetChar.centerX;
+    // targetChar がない場合は box の中心を返す
+    return this.x + this.width / 2;
   }
 
   nthCenterY(index: number) {
     const targetChar = this.chars.find((c) => c.index === index);
-    if (!targetChar) throw new Error();
-    return targetChar.centerY;
+    console.log(targetChar);
+    if (targetChar) return targetChar.centerY;
+    // targetChar がない場合は box の中心を返す
+    return this.y + this.height / 2;
   }
 
   updateLabel(label: string) {
