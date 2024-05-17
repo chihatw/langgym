@@ -1,8 +1,9 @@
 'use client';
 import { uploadImageFile } from '@/features/storage/services/client';
+import { nanoid } from 'nanoid';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import { BetterReadImagePath, BetterReadImagePathView } from '../../schema';
 import {
   deleteBetterreadImagePath,
@@ -23,17 +24,20 @@ type Props = {
 
 type FormProps = {
   imageSrc: string;
-  fileType: string;
 };
 
 const INITIAL_STATE: FormProps = {
   imageSrc: '',
-  fileType: '',
 };
 
 const UploadForm = ({ imagePath }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
   const form = useRef<HTMLFormElement>(null);
+
+  const temp = useMemo(() => {
+    if (!imagePath.imageUrl) return [];
+    return imagePath.imageUrl.split('/');
+  }, [imagePath]);
 
   // ファイルが選択された時
   // 本来ならば、server action にして revalidatePath をかけるべきだが、
@@ -48,7 +52,9 @@ const UploadForm = ({ imagePath }: Props) => {
     const file = files[0];
     const type = file.name.split('.').at(-1);
 
-    const path = `${imagePath.betterreadId}/${imagePath.index}.${type}`;
+    const path = `${imagePath.betterreadId}/${imagePath.index}_${nanoid(
+      6
+    )}.${type}`;
 
     // storege
     const imageUrl = await uploadImageFile(file, path);
@@ -63,7 +69,7 @@ const UploadForm = ({ imagePath }: Props) => {
     fileReader.readAsDataURL(file);
     fileReader.addEventListener('load', (e) => {
       const { result } = e.target!;
-      setValue({ imageSrc: result as string, fileType: type! });
+      setValue({ imageSrc: result as string });
     });
 
     // remote (revalidatePath はしない)
@@ -96,7 +102,7 @@ const UploadForm = ({ imagePath }: Props) => {
           priority={true}
         />
         <DeleteImageButton
-          path={`${imagePath.betterreadId}/${imagePath.index}.${value.fileType}`}
+          path={`${temp.at(-2)}/${temp.at(-1)}`}
           resetValue={() => setValue(INITIAL_STATE)}
           handleDelete={() =>
             deleteBetterreadImagePath(imagePath.betterreadId!, imagePath.index!)

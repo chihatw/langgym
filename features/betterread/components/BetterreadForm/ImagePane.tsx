@@ -14,8 +14,8 @@ type Props = {
 
 const ImagePane = ({ imagePath }: Props) => {
   const action = async () => {
-    const fileType = imagePath.imageUrl!.split('?').at(0)!.split('.').at(-1)!;
-    const path = `${imagePath.betterreadId}/${imagePath.index}.${fileType}`;
+    const temp = imagePath.imageUrl!.split('/');
+    const path = `${temp.at(-2)}/${temp.at(-1)}`;
 
     // storage
     const errMsg = await deleteImageFile(path);
