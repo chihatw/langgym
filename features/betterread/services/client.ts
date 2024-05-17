@@ -52,20 +52,3 @@ export async function fetchBetterreadImagePathsByArticleId(
     created_at: new Date(item.created_at!),
   }));
 }
-
-export async function deleteBetterreadImagePath(
-  betterreadId: number,
-  index: number
-) {
-  const supabase = createSupabaseClientComponentClient();
-
-  const { error } = await supabase
-    .from('betterread_image_paths')
-    .delete()
-    .eq('betterreadId', betterreadId)
-    .eq('index', index);
-
-  if (error) {
-    console.error(error.message);
-  }
-}

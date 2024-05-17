@@ -1,18 +1,15 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import {
-  deleteImageFile,
-  uploadImageFile,
-} from '@/features/storage/services/client';
-import { X } from 'lucide-react';
+import { uploadImageFile } from '@/features/storage/services/client';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { BetterReadImagePath, BetterReadImagePathView } from '../../schema';
 import {
   deleteBetterreadImagePath,
-  insertBetterreadImagePath,
-} from '../../services/client';
+  revalidateBetterread,
+} from '../../services/actions';
+import { insertBetterreadImagePath } from '../../services/client';
+import DeleteImageButton from './DeleteImageButton';
 
 // navigator 使用
 const SwitchInput = dynamic(
@@ -36,8 +33,12 @@ const INITIAL_STATE: FormProps = {
 
 const UploadForm = ({ imagePath }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
+  const form = useRef<HTMLFormElement>(null);
 
   // ファイルが選択された時
+  // 本来ならば、server action にして revalidatePath をかけるべきだが、
+  // handleChage に合わせて, form に値を設定して、requestSubmit をかけるのが面倒なので、
+  // insert は client で行って、 revalidatePath だけ server action を呼ぶ
   const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) {
@@ -72,25 +73,14 @@ const UploadForm = ({ imagePath }: Props) => {
         index: imagePath.index!,
         imageUrl,
       };
-    insertBetterreadImagePath(betterreadImagePath);
+    await insertBetterreadImagePath(betterreadImagePath);
 
-    // client でアップロードをして、revalidatePath はこのページが破棄される時に行う
-    // useEffect の return のなかで requestSubmit() する
+    // server action で revalidate
+    form.current!.requestSubmit();
   };
 
-  const handleRemove = async () => {
-    const path = `${imagePath.betterreadId}/${imagePath.index}.${value.fileType}`;
-    // storage
-    const errMsg = await deleteImageFile(path);
-    if (errMsg) {
-      console.error(errMsg);
-    }
-
-    // local
-    setValue(INITIAL_STATE);
-
-    // remote (revalidatePath なし。表示は local で変更されるので？)
-    deleteBetterreadImagePath(imagePath.betterreadId!, imagePath.index!);
+  const action = async () => {
+    revalidateBetterread(imagePath.betterreadId!);
   };
 
   if (value.imageSrc) {
@@ -103,20 +93,22 @@ const UploadForm = ({ imagePath }: Props) => {
           width={512}
           height={512}
           sizes='(max-width: 768px) 100vw, (max-height: 1200px) 50vw, 50vw'
+          priority={true}
+        />
+        <DeleteImageButton
+          path={`${imagePath.betterreadId}/${imagePath.index}.${value.fileType}`}
+          resetValue={() => setValue(INITIAL_STATE)}
+          handleDelete={() =>
+            deleteBetterreadImagePath(imagePath.betterreadId!, imagePath.index!)
+          }
         />
 
-        <Button
-          size='icon'
-          variant={'ghost'}
-          className='absolute right-2 top-2 bg-white text-red-500'
-          onClick={handleRemove}
-        >
-          <X />
-        </Button>
+        <form ref={form} action={action} />
       </div>
     );
   }
 
+  // form をこちらに追加すると、 null になる
   return <SwitchInput handleChange={handleChange} />;
 };
 

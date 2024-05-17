@@ -38,6 +38,7 @@ const ImagePane = ({ imagePath }: Props) => {
             width={512}
             height={512}
             sizes='(max-width: 768px) 100vw, (max-height: 1200px) 50vw, 50vw'
+            priority={true}
           />
 
           <form action={action}>

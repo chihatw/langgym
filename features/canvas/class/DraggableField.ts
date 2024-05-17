@@ -567,7 +567,7 @@ function handleMouseDown_expand(
   // connectedLines を追加
   _this.connectedLines = [..._this.connectedLines, line];
 
-  // todo remote
+  // remote
   insertLine(line);
 
   _this.redraw('expand');

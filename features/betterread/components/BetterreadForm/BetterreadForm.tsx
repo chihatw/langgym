@@ -1,5 +1,3 @@
-'use client';
-
 import { BetterReadImagePathView } from '../../schema';
 import BetterreadRow from './BetterreadRow';
 

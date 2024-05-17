@@ -2,6 +2,11 @@
 import { createSupabaseServerActionClient } from '@/lib/supabase/actions';
 import { revalidatePath } from 'next/cache';
 
+export async function revalidateBetterread(betterreadId: number) {
+  revalidatePath('/');
+  revalidatePath(`/betterread/${betterreadId}`);
+}
+
 export async function deleteBetterreadImagePath(
   betterreadId: number,
   index: number
@@ -17,6 +22,6 @@ export async function deleteBetterreadImagePath(
   if (error) {
     console.error(error.message);
   }
-
+  revalidatePath('/');
   revalidatePath(`/betterread/${betterreadId}`);
 }
