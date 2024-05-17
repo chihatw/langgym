@@ -1,10 +1,10 @@
 'use client';
 import { fetchLatestArticleByUid } from '@/features/article/services/client';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { BetterReadImagePathView } from '../../schema';
 import { fetchBetterreadImagePathsByArticleId } from '../../services/client';
-import ImageContainer from './ImageContainer';
 
 type Props = {};
 
@@ -46,17 +46,17 @@ const BetterreadView = ({}: Props) => {
   }, []);
 
   return (
-    <div className='flex justify-center mt-6 '>
-      <div className='grid gap-8 pt-10'>
+    <div className='flex justify-center '>
+      <div className='grid gap-8 pt-10 mt-6 max-w-lg'>
         {value.betterreadImagePaths.map((line, index) => (
-          <div className='flex gap-4' key={index}>
-            <div className='basis-2 text-right text-xs'>{line.index! + 1}</div>
-            <div className='flex-1 space-y-2'>
+          <div className='grid grid-cols-[8px,1fr] gap-4' key={index}>
+            <div className='text-right text-xs'>{line.index! + 1}</div>
+            <div className='grid gap-2'>
               <div className='text-sm font-extrabold'>{line.japanese}</div>
               <div className='text-xs text-green-600'>{line.chinese}</div>
               {/* 0行目 は表示しない */}
-              {!!line.index && line.imagePath ? (
-                <ImageContainer imagePath={line.imagePath} />
+              {!!line.index && line.imageUrl ? (
+                <ImageContainer imageUrl={line.imageUrl} />
               ) : null}
             </div>
           </div>
@@ -67,3 +67,18 @@ const BetterreadView = ({}: Props) => {
 };
 
 export default BetterreadView;
+
+const ImageContainer = ({ imageUrl }: { imageUrl: string }) => {
+  return (
+    <div className='grid gap-2 rounded-lg bg-white bg-opacity-60 p-3'>
+      <Image
+        src={imageUrl}
+        alt=''
+        className='rounded-lg'
+        width={512}
+        height={512}
+        sizes='(max-width: 768px) 100vw, (max-height: 1200px) 50vw, 50vw'
+      />
+    </div>
+  );
+};

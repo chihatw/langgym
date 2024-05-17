@@ -50,10 +50,10 @@ const UploadForm = ({ imagePath }: Props) => {
     const path = `${imagePath.betterreadId}/${imagePath.index}.${type}`;
 
     // storege
-    const errMsg = await uploadImageFile(file, path);
+    const imageUrl = await uploadImageFile(file, path);
 
-    if (errMsg) {
-      console.error(errMsg);
+    if (!imageUrl) {
+      console.error(`no image Url`);
       return;
     }
 
@@ -70,7 +70,7 @@ const UploadForm = ({ imagePath }: Props) => {
       {
         betterreadId: imagePath.betterreadId!,
         index: imagePath.index!,
-        imagePath: path,
+        imageUrl,
       };
     insertBetterreadImagePath(betterreadImagePath);
 
@@ -89,7 +89,7 @@ const UploadForm = ({ imagePath }: Props) => {
     // local
     setValue(INITIAL_STATE);
 
-    // remote (revalidatePath なし)
+    // remote (revalidatePath なし。表示は local で変更されるので？)
     deleteBetterreadImagePath(imagePath.betterreadId!, imagePath.index!);
   };
 

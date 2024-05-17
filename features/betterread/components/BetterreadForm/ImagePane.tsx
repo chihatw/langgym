@@ -2,52 +2,20 @@
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 
-import {
-  deleteImageFile,
-  getImageUrl,
-} from '@/features/storage/services/client';
+import { deleteImageFile } from '@/features/storage/services/client';
 import { BetterReadImagePathView } from '../../schema';
-import { deleteBetterreadImagePath } from '../../services/client';
+import { deleteBetterreadImagePath } from '../../services/actions';
 import UploadForm from './UploadForm';
 
 type Props = {
   imagePath: BetterReadImagePathView;
 };
 
-type FormProps = {
-  imageSrc: string;
-  fileType: string;
-};
-
-const INITIAL_STATE: FormProps = {
-  imageSrc: '',
-  fileType: '',
-};
-
 const ImagePane = ({ imagePath }: Props) => {
-  const [value, setValue] = useState(INITIAL_STATE);
-
-  useEffect(() => {
-    if (!imagePath.imagePath) {
-      setValue((prev) => ({ ...prev, imageSrc: '', storagePath: '' }));
-      return;
-    }
-
-    (async () => {
-      const url = await getImageUrl(imagePath.imagePath!);
-      const fileType = url.split('?').at(0)!.split('.').at(-1)!;
-      setValue((prev) => ({
-        ...prev,
-        imageSrc: url,
-        fileType,
-      }));
-    })();
-  }, [imagePath]);
-
-  const handleRemove = async () => {
-    const path = `${imagePath.betterreadId}/${imagePath.index}.${value.fileType}`;
+  const action = async () => {
+    const fileType = imagePath.imageUrl!.split('?').at(0)!.split('.').at(-1)!;
+    const path = `${imagePath.betterreadId}/${imagePath.index}.${fileType}`;
 
     // storage
     const errMsg = await deleteImageFile(path);
@@ -55,19 +23,16 @@ const ImagePane = ({ imagePath }: Props) => {
       console.error(errMsg);
     }
 
-    // local
-    setValue((prev) => ({ ...prev, imageSrc: '', fileType: '' }));
-
     // remote
     deleteBetterreadImagePath(imagePath.betterreadId!, imagePath.index!);
   };
 
   return (
     <div className='grid relative'>
-      {value.imageSrc ? (
+      {imagePath.imageUrl ? (
         <>
           <Image
-            src={value.imageSrc}
+            src={imagePath.imageUrl}
             alt=''
             className='rounded-lg'
             width={512}
@@ -75,14 +40,16 @@ const ImagePane = ({ imagePath }: Props) => {
             sizes='(max-width: 768px) 100vw, (max-height: 1200px) 50vw, 50vw'
           />
 
-          <Button
-            onClick={handleRemove}
-            size='icon'
-            variant={'ghost'}
-            className='absolute right-2 top-2 bg-white text-red-500'
-          >
-            <X />
-          </Button>
+          <form action={action}>
+            <Button
+              type='submit'
+              size='icon'
+              variant={'ghost'}
+              className='absolute right-2 top-2 bg-white text-red-500'
+            >
+              <X />
+            </Button>
+          </form>
         </>
       ) : (
         <UploadForm imagePath={imagePath} />

@@ -40,8 +40,14 @@ export async function uploadImageFile(file: Blob, path: string) {
     .from('image')
     .upload(path, file, { upsert: true });
   if (error) {
-    return error.message;
+    console.error(error.message);
+    return '';
   }
+
+  // url 取得
+  const { data } = await supabase.storage.from('image').getPublicUrl(path);
+  const imageUrl = data.publicUrl;
+  return imageUrl;
 }
 
 export async function deleteAudioFile(path: string) {

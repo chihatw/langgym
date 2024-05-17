@@ -9,7 +9,7 @@ export interface BetterReadImagePath {
   id: number;
   betterreadId: number;
   index: number;
-  imagePath: string;
+  imageUrl: string | null;
   created_at: Date;
 }
 
@@ -21,6 +21,6 @@ export interface BetterReadImagePathView {
   index: number | null;
   japanese: string | null;
   chinese: string | null;
-  imagePath: string | null;
+  imageUrl: string | null;
   created_at: Date | null;
 }

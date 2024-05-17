@@ -381,21 +381,21 @@ export type Database = {
           betterreadId: number
           created_at: string
           id: number
-          imagePath: string
+          imageUrl: string | null
           index: number
         }
         Insert: {
           betterreadId: number
           created_at?: string
           id?: number
-          imagePath: string
+          imageUrl?: string | null
           index: number
         }
         Update: {
           betterreadId?: number
           created_at?: string
           id?: number
-          imagePath?: string
+          imageUrl?: string | null
           index?: number
         }
         Relationships: [
@@ -1212,7 +1212,7 @@ export type Database = {
           betterreadId: number | null
           chinese: string | null
           created_at: string | null
-          imagePath: string | null
+          imageUrl: string | null
           index: number | null
           japanese: string | null
           title: string | null
