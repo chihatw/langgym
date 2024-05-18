@@ -21,6 +21,8 @@ export const BOX_GAP = '2rem';
 export const BOX_HEIGHT = '2rem'; // 24px
 
 export const MODE = {
+  new: 'new',
+  shift: 'shift',
   drag: 'drag',
   select: 'select',
   split: 'split',
@@ -28,6 +30,8 @@ export const MODE = {
   connect: 'connect',
   expand: 'expand',
 };
+
+export const INITIAL_MODE = MODE.new;
 
 export const SHORT_CUT_KEY = {
   q: 'q',

@@ -3,7 +3,7 @@
 import { Input } from '@/components/ui/input';
 import { ChangeEvent, forwardRef } from 'react';
 import { Box } from '../../class/Box';
-import { DraggableField } from '../../class/DraggableField';
+import { DraggableField } from '../../class/DraggableField/DraggableField';
 
 type Props = {
   field: DraggableField | null;

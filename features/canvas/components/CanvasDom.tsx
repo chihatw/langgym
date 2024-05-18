@@ -9,6 +9,11 @@ type Props = {
 const CanvasDom = forwardRef<HTMLCanvasElement, Props>(({ mode }, ref) => {
   const bgColor = useMemo(() => {
     switch (mode) {
+      case MODE.new:
+        return 'bg-red-300';
+      case MODE.shift:
+        return 'bg-blue-300';
+      // will delete?
       case MODE.select:
         return 'bg-pink-100';
       case MODE.split:
@@ -19,6 +24,7 @@ const CanvasDom = forwardRef<HTMLCanvasElement, Props>(({ mode }, ref) => {
         return 'bg-purple-100';
       case MODE.expand:
         return 'bg-sky-100';
+      // これは残す
       default:
         return 'bg-white';
     }

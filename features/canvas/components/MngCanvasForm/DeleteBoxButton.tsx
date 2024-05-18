@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Box } from '../../class/Box';
-import { DraggableField } from '../../class/DraggableField';
+import { DraggableField } from '../../class/DraggableField/DraggableField';
 import { deleteBox } from '../../services/client';
 
 type Props = {

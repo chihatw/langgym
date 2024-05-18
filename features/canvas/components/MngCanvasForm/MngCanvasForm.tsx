@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/select';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box } from '../../class/Box';
-import { DraggableField } from '../../class/DraggableField';
+import { DraggableField } from '../../class/DraggableField/DraggableField';
 import { MODE, RECT, SHORT_CUT_KEY } from '../../constants';
 import { clearCanvas, deleteBox } from '../../services/client';
 import CanvasDom from '../CanvasDom';
@@ -57,6 +57,17 @@ const MngCanvasForm = ({}: Props) => {
 
   const handleKeyDown = useCallback(
     (e: globalThis.KeyboardEvent) => {
+      if (e.key === 'Shift') {
+        e.preventDefault();
+        // local
+        if (!value.field) throw Error();
+        value.field.updateMode(MODE.shift);
+        // local rerender
+        setValue((prev) => ({ ...prev }));
+        return;
+      }
+
+      // will delete?
       if (!e.metaKey) return;
 
       switch (e.key) {
@@ -78,7 +89,7 @@ const MngCanvasForm = ({}: Props) => {
           // canvas
           if (!value.field) throw new Error();
           value.field.updateMode(MODE.drag);
-          // local
+          // local rerender
           setValue((prev) => ({ ...prev }));
           break;
         case SHORT_CUT_KEY.select:
@@ -159,12 +170,30 @@ const MngCanvasForm = ({}: Props) => {
     [value]
   );
 
+  const handleKeyUp = useCallback(
+    (e: globalThis.KeyboardEvent) => {
+      if (!value.field) throw Error();
+
+      // shift 以外の場合は処理しない
+      if (value.field.mode !== MODE.shift) return;
+
+      e.preventDefault();
+      // local
+      value.field.updateMode(MODE.new);
+      // local rerender
+      setValue((prev) => ({ ...prev }));
+    },
+    [value]
+  );
+
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keyup', handleKeyUp);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keyup', handleKeyUp);
     };
-  }, [handleKeyDown]);
+  }, [handleKeyDown, handleKeyUp]);
 
   const handleChangeMode = (mode: string) => {
     // canvas
