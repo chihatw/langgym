@@ -85,14 +85,6 @@ const MngCanvasForm = ({}: Props) => {
       if (!e.metaKey) return;
 
       switch (e.key) {
-        case SHORT_CUT_KEY.split:
-          e.preventDefault();
-          // canvas
-          if (!value.field) throw new Error();
-          value.field.updateMode(MODE.split);
-          // local
-          setValue((prev) => ({ ...prev }));
-          break;
         case SHORT_CUT_KEY.highlight:
           e.preventDefault();
           // canvas
@@ -190,8 +182,6 @@ const MngCanvasForm = ({}: Props) => {
           <div>
             <div>Mode Select</div>
             <div className='pl-4 grid grid-cols-[24px,1fr] gap-y-1'>
-              <div>{`⌘${SHORT_CUT_KEY.split}`}</div>
-              <div>split</div>
               <div>{`⌘${SHORT_CUT_KEY.highlight}`}</div>
               <div>highlight</div>
               <div>{`⌘${SHORT_CUT_KEY.connect}`}</div>

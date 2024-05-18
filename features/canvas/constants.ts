@@ -20,16 +20,34 @@ export const BOX_GAP = '2rem';
 export const BOX_HEIGHT = '2rem'; // 24px
 export const BOX_X_PADDING = 14;
 
+export const REDRAW = {
+  add: 'add',
+  select: 'select',
+  grab: 'grab',
+  dehighlight: 'dehighlight',
+  divide: 'divide',
+  expand: 'expand',
+  split: 'split',
+  dragging: 'dragging',
+  highlight: 'highlight',
+  connect: 'connect',
+};
+
 export const MODE = {
   new: 'new',
   shift: 'shift',
-  split: 'split',
   highlight: 'highlight',
   connect: 'connect',
   expand: 'expand',
 };
 
 export const INITIAL_MODE = MODE.new;
+
+export const SEGMENT = {
+  header: 'header',
+  body: 'body',
+  handle: 'handle',
+};
 
 export const SHORT_CUT_KEY = {
   q: 'q',
@@ -47,5 +65,5 @@ export const SHORT_CUT_KEY = {
   z: 'z',
   x: 'x',
   connect: 'c',
-  split: 'v',
+  v: 'v',
 };

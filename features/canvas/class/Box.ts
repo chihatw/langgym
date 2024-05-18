@@ -1,5 +1,5 @@
 import { customAlphabet } from 'nanoid';
-import { BG_COLOR, FONT_SIZE } from '../constants';
+import { BG_COLOR, FONT_SIZE, SEGMENT } from '../constants';
 import { CharDOM } from '../schema';
 import {
   insertBox,
@@ -56,12 +56,12 @@ export class Box {
   getSegment(x: number) {
     if (x < this.x || x > this.x + this.width) return '';
     if (x <= this.x + FONT_SIZE) {
-      return 'header';
+      return SEGMENT.header;
     }
     if (x <= this.x + this.width - FONT_SIZE) {
-      return 'body';
+      return SEGMENT.body;
     }
-    return 'handle';
+    return SEGMENT.handle;
   }
 
   nthCenterX(index: number) {

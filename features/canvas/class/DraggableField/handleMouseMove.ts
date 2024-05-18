@@ -1,4 +1,4 @@
-import { MODE } from '../../constants';
+import { MODE, REDRAW } from '../../constants';
 import { insertLine, updateLine } from '../../services/client';
 import { Line } from '../Line';
 import { DraggableField } from './DraggableField';
@@ -11,11 +11,13 @@ export function handleMouseMove(e: MouseEvent, field: DraggableField) {
 
   switch (field.mode) {
     case MODE.new:
+      handleMouseMove_new(field, _x, _y);
+      return;
+    case MODE.shift:
+      handleMouseMove_shift(field, _x, _y);
+      return;
     case MODE.expand:
       handleMouseMove_drag(field, _x, _y);
-      return;
-    case MODE.split:
-      handleMouseMove_split(field, _x, _y);
       return;
     case MODE.highlight:
       handleMouseMove_highlight(field, _x, _y);
@@ -27,47 +29,24 @@ export function handleMouseMove(e: MouseEvent, field: DraggableField) {
   }
 }
 
-function handleMouseMove_drag(field: DraggableField, _x: number, _y: number) {
-  if (!field.dragObj) return;
+function handleMouseMove_new(field: DraggableField, _x: number, _y: number) {
+  // ドラッグオブジェクトがある場合
+  if (field.dragObj) {
+    field.dragObj.dragging(_x - field.dragDX, _y - field.dragDY);
 
-  field.dragObj.dragging(_x - field.dragDX, _y - field.dragDY);
-
-  // recalc connectedLines
-  field.connectedLines = field.connectedLines.map((l) => {
-    // 起点終点の変更がない場合
-    if (![l.startObjId, l.endObjId].includes(field.dragObj!.id)) {
-      return l;
-    }
-
-    const startObj = field.objs.find((o) => o.id === l.startObjId);
-    if (!startObj) throw new Error('no start obj');
-    const endObj = field.objs.find((o) => o.id === l.endObjId);
-    if (!endObj) throw new Error('no end obj');
-    if (typeof l.endCharIndex !== 'number') throw new Error('no endCharIndex');
-
-    const newLine = new Line(
-      startObj.nthCenterX(l.startCharIndex),
-      startObj.nthCenterY(l.startCharIndex),
-      endObj.nthCenterX(l.endCharIndex),
-      endObj.nthCenterY(l.endCharIndex),
-      l.startObjId,
-      l.startCharIndex,
-      l.endObjId,
-      l.endCharIndex,
-      l.id
+    // recalc connectedLines
+    field.connectedLines = field.connectedLines.map((l) =>
+      _updateLine(l, field)
     );
+    field.redraw(REDRAW.dragging);
+    return;
+  }
 
-    // remote
-    updateLine(newLine);
-
-    // canvas
-    return newLine;
-  });
-
-  field.redraw('dragging');
+  // ドラッグオブジェクトがない場合
+  // todo connect / expand
 }
 
-function handleMouseMove_split(field: DraggableField, _x: number, _y: number) {
+function handleMouseMove_shift(field: DraggableField, _x: number, _y: number) {
   let splitBy = 0;
   for (const obj of field.objs) {
     const _splitBY = obj.splitting(_x, _y);
@@ -76,8 +55,18 @@ function handleMouseMove_split(field: DraggableField, _x: number, _y: number) {
 
   if (field.splitBy !== splitBy) {
     field.splitBy = splitBy;
-    field.redraw('split');
+    field.redraw(REDRAW.split);
   }
+}
+
+function handleMouseMove_drag(field: DraggableField, _x: number, _y: number) {
+  if (!field.dragObj) return;
+
+  field.dragObj.dragging(_x - field.dragDX, _y - field.dragDY);
+
+  // recalc connectedLines
+  field.connectedLines = field.connectedLines.map((l) => _updateLine(l, field));
+  field.redraw(REDRAW.dragging);
 }
 
 function handleMouseMove_highlight(
@@ -92,7 +81,7 @@ function handleMouseMove_highlight(
 
   if (JSON.stringify(field.highlights) !== JSON.stringify(highlights)) {
     field.highlights = highlights;
-    field.redraw('highlight');
+    field.redraw(REDRAW.highlight);
   }
 }
 
@@ -124,7 +113,7 @@ function handleMouseMove_connect(
     // remote
     updateLine(line);
 
-    field.redraw('connect');
+    field.redraw(REDRAW.connect);
     return;
   }
 
@@ -143,5 +132,36 @@ function handleMouseMove_connect(
   // remote
   insertLine(line);
 
-  field.redraw('connect');
+  field.redraw(REDRAW.connect);
+}
+
+function _updateLine(l: Line, field: DraggableField) {
+  // 起点終点の変更がない場合
+  if (![l.startObjId, l.endObjId].includes(field.dragObj!.id)) {
+    return l;
+  }
+
+  const startObj = field.objs.find((o) => o.id === l.startObjId);
+  if (!startObj) throw new Error('no start obj');
+  const endObj = field.objs.find((o) => o.id === l.endObjId);
+  if (!endObj) throw new Error('no end obj');
+  if (typeof l.endCharIndex !== 'number') throw new Error('no endCharIndex');
+
+  const newLine = new Line(
+    startObj.nthCenterX(l.startCharIndex),
+    startObj.nthCenterY(l.startCharIndex),
+    endObj.nthCenterX(l.endCharIndex),
+    endObj.nthCenterY(l.endCharIndex),
+    l.startObjId,
+    l.startCharIndex,
+    l.endObjId,
+    l.endCharIndex,
+    l.id
+  );
+
+  // remote
+  updateLine(newLine);
+
+  // canvas
+  return newLine;
 }
