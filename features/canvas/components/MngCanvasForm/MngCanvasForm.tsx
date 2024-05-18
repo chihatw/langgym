@@ -101,14 +101,6 @@ const MngCanvasForm = ({}: Props) => {
           // local
           setValue((prev) => ({ ...prev }));
           break;
-        case SHORT_CUT_KEY.expand:
-          e.preventDefault();
-          // canvas
-          if (!value.field) throw new Error();
-          value.field.updateMode(MODE.expand);
-          // local
-          setValue((prev) => ({ ...prev }));
-          break;
         default:
           console.log(e.key);
       }
@@ -186,8 +178,6 @@ const MngCanvasForm = ({}: Props) => {
               <div>highlight</div>
               <div>{`⌘${SHORT_CUT_KEY.connect}`}</div>
               <div>connect</div>
-              <div>{`⌘${SHORT_CUT_KEY.expand}`}</div>
-              <div>expand</div>
             </div>
           </div>
         </div>

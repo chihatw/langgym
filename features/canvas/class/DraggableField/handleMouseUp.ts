@@ -13,8 +13,7 @@ export function handleMouseUp(e: MouseEvent, _this: DraggableField) {
   const obj = _this._findBoxInBounds(_x, _y); // ポインターの下にあるオブジェクトを抽出
   switch (_this.mode) {
     case MODE.new:
-    case MODE.expand:
-      handleMouseUp_drag(_this);
+      handleMouseUp_new(_this);
       return;
     case MODE.connect:
       handleMouseUp_connect(_this, obj, _x, _y);
@@ -24,7 +23,7 @@ export function handleMouseUp(e: MouseEvent, _this: DraggableField) {
   }
 }
 
-function handleMouseUp_drag(_this: DraggableField) {
+function handleMouseUp_new(_this: DraggableField) {
   if (!_this.dragObj) return;
 
   // ドラッグしていたら、解除する

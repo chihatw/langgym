@@ -25,9 +25,6 @@ export function handleMouseDown(e: MouseEvent, field: DraggableField) {
     case MODE.connect:
       handleMouseDown_connect(field, obj, _x, _y);
       return;
-    case MODE.expand:
-      handleMouseDown_expand(field, obj, _x, _y);
-      return;
     default:
   }
 }
@@ -62,7 +59,42 @@ function handleMouseDown_new(
       field.redraw(REDRAW.select);
       return;
     case SEGMENT.body:
-      // todo mousedown connect / expand;
+      // 下に char がなければ、終了
+      const index = obj.indexOf(_x, _y);
+      if (index < 0) return;
+
+      // 新しいboxを作成
+      const box = new Box(
+        obj.x - FONT_SIZE / 2,
+        obj.y - FONT_SIZE / 2,
+        '',
+        0,
+        []
+      );
+      field.objs = [...field.objs, box];
+      field.grab(box, _x - box.x, _y - box.y);
+
+      // 新しいboxとcharをconnected line で結ぶ
+      // 新しいbox は char を持っていないので、 index: -1 , box の中心から線を延ばす
+      const line = new Line(
+        box.nthCenterX(-1),
+        box.nthCenterY(-1),
+        obj.nthCenterX(index),
+        obj.nthCenterY(index),
+        box.id,
+        -1,
+        obj.id,
+        index
+      );
+
+      // connectedLines を追加
+      field.connectedLines = [...field.connectedLines, line];
+
+      // remote
+      insertLine(line);
+
+      field.redraw(REDRAW.expand);
+
       return;
     case SEGMENT.handle:
       // 選択オブジェクトがあれば deselect()
@@ -155,6 +187,8 @@ function handleMouseDown_highlight(
   field.redraw(REDRAW.dehighlight);
 }
 
+// todo connect は char 固定（start は最後尾。 end は先頭）
+// line line を arrow にする
 function handleMouseDown_connect(
   field: DraggableField,
   obj: Box | undefined,
@@ -181,46 +215,6 @@ function handleMouseDown_connect(
 
   field.connectStartObjId = obj.id;
   field.connectStartCharIndex = index;
-}
-
-function handleMouseDown_expand(
-  field: DraggableField,
-  obj: Box | undefined,
-  _x: number,
-  _y: number
-) {
-  // 下にオブジェクトがなければ、終了
-  if (!obj) return;
-
-  // 下に char がなければ、終了
-  const index = obj.indexOf(_x, _y);
-  if (index < 0) return;
-
-  // のっていれば、新しいboxを作成
-  const box = new Box(obj.x - FONT_SIZE / 2, obj.y - FONT_SIZE / 2, '', 0, []);
-  field.objs = [...field.objs, box];
-  field.grab(box, _x - box.x, _y - box.y);
-
-  // 新しいboxとcharをconnected line で結ぶ
-  // 新しいbox は char を持っていないので、 index: -1 , box の中心から線を延ばす
-  const line = new Line(
-    box.nthCenterX(-1),
-    box.nthCenterY(-1),
-    obj.nthCenterX(index),
-    obj.nthCenterY(index),
-    box.id,
-    -1,
-    obj.id,
-    index
-  );
-
-  // connectedLines を追加
-  field.connectedLines = [...field.connectedLines, line];
-
-  // remote
-  insertLine(line);
-
-  field.redraw(REDRAW.expand);
 }
 
 function _selectObjForInput(field: DraggableField, obj: Box) {

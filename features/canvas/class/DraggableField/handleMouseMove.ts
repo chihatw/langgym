@@ -16,9 +16,6 @@ export function handleMouseMove(e: MouseEvent, field: DraggableField) {
     case MODE.shift:
       handleMouseMove_shift(field, _x, _y);
       return;
-    case MODE.expand:
-      handleMouseMove_drag(field, _x, _y);
-      return;
     case MODE.highlight:
       handleMouseMove_highlight(field, _x, _y);
       return;
@@ -57,16 +54,6 @@ function handleMouseMove_shift(field: DraggableField, _x: number, _y: number) {
     field.splitBy = splitBy;
     field.redraw(REDRAW.split);
   }
-}
-
-function handleMouseMove_drag(field: DraggableField, _x: number, _y: number) {
-  if (!field.dragObj) return;
-
-  field.dragObj.dragging(_x - field.dragDX, _y - field.dragDY);
-
-  // recalc connectedLines
-  field.connectedLines = field.connectedLines.map((l) => _updateLine(l, field));
-  field.redraw(REDRAW.dragging);
 }
 
 function handleMouseMove_highlight(

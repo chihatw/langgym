@@ -38,7 +38,6 @@ export const MODE = {
   shift: 'shift',
   highlight: 'highlight',
   connect: 'connect',
-  expand: 'expand',
 };
 
 export const INITIAL_MODE = MODE.new;
@@ -52,7 +51,7 @@ export const SEGMENT = {
 export const SHORT_CUT_KEY = {
   q: 'q',
   w: 'w',
-  expand: 'e',
+  e: 'e',
   r: 'r',
   t: 't',
 
