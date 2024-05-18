@@ -23,7 +23,6 @@ export function handleMouseMove(e: MouseEvent, field: DraggableField) {
     case MODE.connect:
       handleMouseMove_connect(field, _x, _y);
       return;
-    case MODE.select:
     default:
   }
 }

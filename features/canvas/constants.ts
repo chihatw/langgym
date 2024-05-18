@@ -23,7 +23,6 @@ export const BOX_X_PADDING = 14;
 export const MODE = {
   new: 'new',
   shift: 'shift',
-  select: 'select',
   split: 'split',
   highlight: 'highlight',
   connect: 'connect',
@@ -39,11 +38,11 @@ export const SHORT_CUT_KEY = {
   r: 'r',
   t: 't',
 
-  addBox: 'a',
-  select: 's',
+  a: 'a',
+  s: 's',
   d: 'd',
   highlight: 'f',
-  input: 'g',
+  g: 'g',
 
   z: 'z',
   delete: 'x',

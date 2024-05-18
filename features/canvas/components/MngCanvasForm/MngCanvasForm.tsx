@@ -50,12 +50,18 @@ const MngCanvasForm = ({}: Props) => {
           ...prev,
           selectedObj: obj,
         }));
-      }
+      },
+      () => focusInput()
     );
     setValue((prev) => ({ ...prev, field }));
     field.redraw('initialize');
     initializing.current = false;
   }, [value]);
+
+  const focusInput = () => {
+    console.log('focus');
+    input.current?.focus();
+  };
 
   const handleKeyDown = useCallback(
     (e: globalThis.KeyboardEvent) => {
@@ -63,6 +69,9 @@ const MngCanvasForm = ({}: Props) => {
         if (!value.field) throw Error();
         // new モード以外は処理しない
         if (value.field.mode !== MODE.new) return;
+
+        // input をできる状態の時は処理しない
+        if (!!value.field.selectObj) return;
 
         e.preventDefault();
 
@@ -77,25 +86,6 @@ const MngCanvasForm = ({}: Props) => {
       if (!e.metaKey) return;
 
       switch (e.key) {
-        case SHORT_CUT_KEY.select:
-          e.preventDefault();
-          // canvas
-          if (!value.field) throw new Error();
-          value.field.updateMode(MODE.select);
-
-          // obj が１つだけの場合は、それを選択して、Input にフォーカス
-          if (value.field.objs.length === 1) {
-            const targetObj = value.field.objs.at(0)!;
-            value.field.select(targetObj);
-            value.field.redraw('short cur select');
-
-            // 時間を空けないと、セレクトできない
-            setTimeout(() => input.current?.focus(), 100);
-          }
-
-          // local
-          setValue((prev) => ({ ...prev }));
-          break;
         case SHORT_CUT_KEY.split:
           e.preventDefault();
           // canvas
@@ -119,10 +109,6 @@ const MngCanvasForm = ({}: Props) => {
           value.field.updateMode(MODE.connect);
           // local
           setValue((prev) => ({ ...prev }));
-          break;
-        case SHORT_CUT_KEY.input:
-          e.preventDefault();
-          input.current?.focus();
           break;
         case SHORT_CUT_KEY.expand:
           e.preventDefault();
@@ -234,18 +220,9 @@ const MngCanvasForm = ({}: Props) => {
               <div>connect</div>
               <div>{`⌘${SHORT_CUT_KEY.expand}`}</div>
               <div>expand</div>
-              <div>{`⌘${SHORT_CUT_KEY.select}`}</div>
-              <div>
-                <div>select</div>
-                <div>obj が1つの場合はそれを選択して Input をフォーカス</div>
-              </div>
             </div>
           </div>
           <div className='grid grid-cols-[24px,1fr] gap-y-1'>
-            <div>{`⌘${SHORT_CUT_KEY.addBox}`}</div>
-            <div>add new box</div>
-            <div>{`⌘${SHORT_CUT_KEY.input}`}</div>
-            <div>Input をフォーカス</div>
             <div>{`⌘${SHORT_CUT_KEY.delete}`}</div>
             <div>選択オブジェクトの削除</div>
           </div>

@@ -16,21 +16,24 @@ export class DraggableField extends Field {
   splitBy = 0;
   highlights: { [boxId: number]: number[] } = {};
 
-  #handleSetSelectedObj;
-
   connectStartObjId = 0;
   connectStartCharIndex = -1;
 
   expandObj: Box | null = null;
 
+  handleSetSelectedObj;
+  focusInput;
+
   constructor(
     width: number,
     height: number,
     canvas: HTMLCanvasElement,
-    handleSetSelectedObj: (obj: Box | null) => void
+    handleSetSelectedObj: (obj: Box | null) => void,
+    focusInput: () => void
   ) {
     super(width, height, canvas);
-    this.#handleSetSelectedObj = handleSetSelectedObj;
+    this.handleSetSelectedObj = handleSetSelectedObj;
+    this.focusInput = focusInput;
 
     canvas.addEventListener('mousedown', (e) => handleMouseDown(e, this));
     canvas.addEventListener('mouseup', (e) => handleMouseUp(e, this));
@@ -46,14 +49,14 @@ export class DraggableField extends Field {
   select(obj: Box) {
     this.selectObj = obj;
     this.selectObj.select();
-    this.#handleSetSelectedObj(this.selectObj);
+    this.handleSetSelectedObj(this.selectObj);
   }
 
   deselect() {
     if (!this.selectObj) return;
     this.selectObj.deselect();
     this.selectObj = null;
-    this.#handleSetSelectedObj(null);
+    this.handleSetSelectedObj(null);
   }
 
   grab(obj: Box, dragDX: number, dragDY: number) {

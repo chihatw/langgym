@@ -13,9 +13,6 @@ const CanvasDom = forwardRef<HTMLCanvasElement, Props>(({ mode }, ref) => {
         return 'bg-red-300';
       case MODE.shift:
         return 'bg-blue-300';
-      // will delete?
-      case MODE.select:
-        return 'bg-pink-100';
       case MODE.split:
         return 'bg-green-100';
       case MODE.highlight:

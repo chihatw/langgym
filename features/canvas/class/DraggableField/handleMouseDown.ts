@@ -19,9 +19,6 @@ export function handleMouseDown(e: MouseEvent, field: DraggableField) {
     case MODE.highlight:
       handleMouseDown_highlight(field, obj);
       return;
-    case MODE.select:
-      handleMouseDown_select(field, obj);
-      return;
     case MODE.split:
       handleMouseDown_split(field, obj);
       return;
@@ -45,22 +42,31 @@ function handleMouseDown_new(
   if (!obj) {
     const box = new Box(_x, _y, '', 0, []);
     field.objs = [...field.objs, box];
+
+    _selectObjForInput(field, box);
     field.redraw('add');
     return;
   }
 
-  // todo
+  // 選択オブジェクトがあれば deselect()
+  if (field.selectObj) field.deselect();
+
   const segment = obj.getSegment(_x);
+
+  // todo
   switch (segment) {
     case 'header':
-      // 文字を入力可能にする
-      // mode shift の時は、delete box
+      // 選択オブジェクトと同じ場合、終了
+      if (field.selectObj?.id === obj.id) return;
+
+      _selectObjForInput(field, obj);
+      field.redraw('select');
+      // todo mode shift の時は、delete box
       return;
     case 'body':
       // connect / expand
       return;
     case 'handle':
-      //  drag
       field.grab(obj, _x - obj.x, _y - obj.y);
 
       if (!field.dragObj) throw new Error();
@@ -70,31 +76,6 @@ function handleMouseDown_new(
       return;
     default:
   }
-}
-
-// will delete
-function handleMouseDown_drag(
-  field: DraggableField,
-  obj: Box | undefined,
-  _x: number,
-  _y: number
-) {
-  // 下にオブジェクトがない場合
-  if (!obj) {
-    // 選択がなければ、そのまま終了
-    if (!field.selectObj) return;
-
-    // 選択があれば、deselect()
-    field.deselect();
-    field.redraw('grab');
-    return;
-  }
-
-  field.grab(obj, _x - obj.x, _y - obj.y);
-  if (!field.dragObj) throw new Error();
-  field.dragObj.dragging(_x - field.dragDX, _y - field.dragDY);
-  field.redraw('grab');
-  return;
 }
 
 function handleMouseDown_highlight(
@@ -268,4 +249,14 @@ function handleMouseDown_expand(
   insertLine(line);
 
   field.redraw('expand');
+}
+
+function _selectObjForInput(field: DraggableField, obj: Box) {
+  // 文字を入力可能にする
+  field.select(obj);
+
+  // input に focus する
+  setTimeout(() => {
+    field.focusInput();
+  }, 200);
 }

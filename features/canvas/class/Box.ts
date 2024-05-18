@@ -235,10 +235,6 @@ export class Box {
   draw(ctx: CanvasRenderingContext2D) {
     let border = 'white';
 
-    if (this.#isSelected) {
-      border = 'red';
-    }
-
     // body
     ctx.fillStyle = BG_COLOR;
     ctx.fillRect(
