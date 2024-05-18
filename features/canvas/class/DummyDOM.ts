@@ -2,6 +2,7 @@ import {
   BOX_GAP,
   BOX_HEIGHT,
   BOX_MIN_WIDTH,
+  BOX_X_PADDING,
   CANVAS_COLOR,
   FONT_FAMILY,
   FONT_SIZE,
@@ -50,8 +51,9 @@ export class DummyDOM {
     container.style.position = 'fixed';
     container.style.left = '0';
     container.style.backgroundColor = CANVAS_COLOR;
-    container.style.padding = '1rem';
-    container.style.fontSize = FONT_SIZE;
+    container.style.paddingLeft = `${BOX_X_PADDING}px`;
+    container.style.paddingRight = `${BOX_X_PADDING}px`;
+    container.style.fontSize = `${FONT_SIZE}px`;
     container.style.height = BOX_HEIGHT;
     container.style.display = 'flex';
     container.style.alignItems = 'center';

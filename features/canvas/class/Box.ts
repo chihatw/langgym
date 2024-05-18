@@ -1,5 +1,5 @@
 import { customAlphabet } from 'nanoid';
-import { BG_COLOR } from '../constants';
+import { BG_COLOR, FONT_SIZE } from '../constants';
 import { CharDOM } from '../schema';
 import {
   insertBox,
@@ -55,6 +55,17 @@ export class Box {
     }
   }
 
+  getSegment(x: number) {
+    if (x < this.x || x > this.x + this.width) return '';
+    if (x <= this.x + FONT_SIZE) {
+      return 'header';
+    }
+    if (x <= this.x + this.width - FONT_SIZE) {
+      return 'body';
+    }
+    return 'handle';
+  }
+
   nthCenterX(index: number) {
     const targetChar = this.chars.find((c) => c.index === index);
     if (targetChar) return targetChar.centerX;
@@ -71,7 +82,7 @@ export class Box {
 
   updateLabel(label: string) {
     this.label = label;
-    this._setWidthHeightChars(label, 0);
+    this._setWidthHeightChars(label, 0, this.width);
     // remote
     updateBoxLabel(this.id, label);
   }
@@ -201,10 +212,16 @@ export class Box {
     return chars;
   }
 
-  _setWidthHeightChars(label: string, splitBy: number) {
+  _setWidthHeightChars(label: string, splitBy: number, width_org?: number) {
     const dummyDOM = new DummyDOM(label, splitBy);
     this.width = dummyDOM.width;
     this.height = dummyDOM.height;
+
+    if (width_org) {
+      const gap = this.width - width_org;
+      this.x = this.x - gap / 2;
+    }
+
     this.chars = this._buildChars(
       this.x,
       this.y,
@@ -217,20 +234,39 @@ export class Box {
 
   draw(ctx: CanvasRenderingContext2D) {
     let border = 'white';
-    if (this.#isGrabed) {
-      border = 'black';
-    } else if (this.#isSelected) {
+
+    if (this.#isSelected) {
       border = 'red';
     }
 
+    // body
     ctx.fillStyle = BG_COLOR;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.fillRect(
+      this.x + FONT_SIZE,
+      this.y,
+      this.width - FONT_SIZE * 2,
+      this.height
+    );
+
+    // header 先頭から 1字分
+    ctx.fillStyle = 'red';
+    ctx.fillRect(this.x, this.y, FONT_SIZE, this.height);
+
+    // handle 後ろから 1字分
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(
+      this.x + this.width - FONT_SIZE,
+      this.y,
+      FONT_SIZE,
+      this.height
+    );
 
     ctx.strokeStyle = border;
     ctx.lineWidth = 1;
     ctx.setLineDash([]);
     ctx.strokeRect(this.x, this.y, this.width, this.height);
 
+    // char を描画
     for (let i = 0; i < this.chars.length; i++) {
       const char = this.chars[i];
       char.draw(ctx);

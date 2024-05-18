@@ -4,7 +4,6 @@ import {
   DIVIDER_GAP,
   DIVIDER_WIDTH,
   FONT_FAMILY,
-  FONT_HEIGHT,
   FONT_SIZE,
   HIGHLIGHT_TEXT_COLOR,
   TEXT_COLOR,
@@ -65,16 +64,17 @@ export class Char {
     const isInSide = checkIsMouseOver(
       { x, y },
       this.x,
-      this.y + (this.height - FONT_HEIGHT) / 2, // 垂直中央寄せ
+      this.y + (this.height - FONT_SIZE) / 2, // 垂直中央寄せ
       this.width,
-      FONT_HEIGHT
+      FONT_SIZE
     );
     return isInSide;
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.font = `${FONT_SIZE} ${FONT_FAMILY}`;
+    ctx.font = `${FONT_SIZE}px ${FONT_FAMILY}`;
 
+    // 文字描画
     ctx.fillStyle = this.isHighlight ? HIGHLIGHT_TEXT_COLOR : TEXT_COLOR;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';

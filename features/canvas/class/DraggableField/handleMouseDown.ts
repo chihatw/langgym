@@ -1,4 +1,4 @@
-import { FONT_HEIGHT, MODE } from '../../constants';
+import { FONT_SIZE, MODE } from '../../constants';
 import { deleteBox, deleteLine, insertLine } from '../../services/client';
 import { Box } from '../Box';
 import { Line } from '../Line';
@@ -14,9 +14,7 @@ export function handleMouseDown(e: MouseEvent, field: DraggableField) {
 
   switch (field.mode) {
     case MODE.new:
-      return;
-    case MODE.drag:
-      handleMouseDown_drag(field, obj, _x, _y, e);
+      handleMouseDown_new(field, obj, _x, _y);
       return;
     case MODE.highlight:
       handleMouseDown_highlight(field, obj);
@@ -37,12 +35,49 @@ export function handleMouseDown(e: MouseEvent, field: DraggableField) {
   }
 }
 
+function handleMouseDown_new(
+  field: DraggableField,
+  obj: Box | undefined,
+  _x: number,
+  _y: number
+) {
+  // 下にオブジェクトがなければ add
+  if (!obj) {
+    const box = new Box(_x, _y, '', 0, []);
+    field.objs = [...field.objs, box];
+    field.redraw('add');
+    return;
+  }
+
+  // todo
+  const segment = obj.getSegment(_x);
+  switch (segment) {
+    case 'header':
+      // 文字を入力可能にする
+      // mode shift の時は、delete box
+      return;
+    case 'body':
+      // connect / expand
+      return;
+    case 'handle':
+      //  drag
+      field.grab(obj, _x - obj.x, _y - obj.y);
+
+      if (!field.dragObj) throw new Error();
+      field.dragObj.dragging(_x - field.dragDX, _y - field.dragDY);
+
+      field.redraw('grab');
+      return;
+    default:
+  }
+}
+
+// will delete
 function handleMouseDown_drag(
   field: DraggableField,
   obj: Box | undefined,
   _x: number,
-  _y: number,
-  e: MouseEvent
+  _y: number
 ) {
   // 下にオブジェクトがない場合
   if (!obj) {
@@ -209,13 +244,7 @@ function handleMouseDown_expand(
   if (index < 0) return;
 
   // のっていれば、新しいboxを作成
-  const box = new Box(
-    obj.x - FONT_HEIGHT / 2,
-    obj.y - FONT_HEIGHT / 2,
-    '',
-    0,
-    []
-  );
+  const box = new Box(obj.x - FONT_SIZE / 2, obj.y - FONT_SIZE / 2, '', 0, []);
   field.objs = [...field.objs, box];
   field.grab(box, _x - box.x, _y - box.y);
 

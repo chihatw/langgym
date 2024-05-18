@@ -10,7 +10,7 @@ export function handleMouseMove(e: MouseEvent, field: DraggableField) {
   const _y = y / dpr;
 
   switch (field.mode) {
-    case MODE.drag:
+    case MODE.new:
     case MODE.expand:
       handleMouseMove_drag(field, _x, _y);
       return;

@@ -13,7 +13,6 @@ import { DraggableField } from '../../class/DraggableField/DraggableField';
 import { MODE, RECT, SHORT_CUT_KEY } from '../../constants';
 import { clearCanvas, deleteBox } from '../../services/client';
 import CanvasDom from '../CanvasDom';
-import AddBoxButton from './AddBoxButton';
 import DeleteBoxButton from './DeleteBoxButton';
 import LabelInput from './LabelInput';
 
@@ -32,9 +31,11 @@ const MngCanvasForm = ({}: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
   const canvas = useRef<HTMLCanvasElement>(null);
   const input = useRef<HTMLInputElement>(null);
+  const initializing = useRef(true);
 
   // initializing
   useEffect(() => {
+    if (!initializing.current) return;
     if (!canvas.current) throw new Error();
 
     // 一旦白紙に
@@ -53,14 +54,19 @@ const MngCanvasForm = ({}: Props) => {
     );
     setValue((prev) => ({ ...prev, field }));
     field.redraw('initialize');
-  }, []);
+    initializing.current = false;
+  }, [value]);
 
   const handleKeyDown = useCallback(
     (e: globalThis.KeyboardEvent) => {
       if (e.key === 'Shift') {
-        e.preventDefault();
-        // local
         if (!value.field) throw Error();
+        // new モード以外は処理しない
+        if (value.field.mode !== MODE.new) return;
+
+        e.preventDefault();
+
+        // local
         value.field.updateMode(MODE.shift);
         // local rerender
         setValue((prev) => ({ ...prev }));
@@ -71,27 +77,6 @@ const MngCanvasForm = ({}: Props) => {
       if (!e.metaKey) return;
 
       switch (e.key) {
-        case SHORT_CUT_KEY.addBox:
-          e.preventDefault();
-          if (!value.field) throw Error();
-          const box = new Box(
-            (value.field.width - 96) / 2,
-            (value.field.height - 48) / 2,
-            '',
-            0,
-            []
-          );
-          value.field.objs = [...value.field.objs, box];
-          value.field.redraw('add box');
-          break;
-        case SHORT_CUT_KEY.drag:
-          e.preventDefault();
-          // canvas
-          if (!value.field) throw new Error();
-          value.field.updateMode(MODE.drag);
-          // local rerender
-          setValue((prev) => ({ ...prev }));
-          break;
         case SHORT_CUT_KEY.select:
           e.preventDefault();
           // canvas
@@ -206,14 +191,13 @@ const MngCanvasForm = ({}: Props) => {
 
   return (
     <div className='grid gap-4'>
-      <AddBoxButton field={value.field} defaultLabel='' />
       <DeleteBoxButton
         selectedObj={value.field?.selectObj || null}
         field={value.field}
         rerender={() => setValue((prev) => ({ ...prev }))}
       />
       <Select
-        value={value.field?.mode || MODE.drag}
+        value={value.field?.mode || MODE.new}
         onValueChange={(value) => handleChangeMode(value)}
       >
         <SelectTrigger>
@@ -242,8 +226,6 @@ const MngCanvasForm = ({}: Props) => {
           <div>
             <div>Mode Select</div>
             <div className='pl-4 grid grid-cols-[24px,1fr] gap-y-1'>
-              <div>{`⌘${SHORT_CUT_KEY.drag}`}</div>
-              <div>drag</div>
               <div>{`⌘${SHORT_CUT_KEY.split}`}</div>
               <div>split</div>
               <div>{`⌘${SHORT_CUT_KEY.highlight}`}</div>

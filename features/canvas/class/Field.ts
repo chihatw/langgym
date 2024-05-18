@@ -3,7 +3,6 @@ import { Line } from './Line';
 
 export class Field {
   #ctx;
-
   width;
   height;
   objs: Box[] = [];

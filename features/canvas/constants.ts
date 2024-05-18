@@ -1,7 +1,6 @@
 export const RECT = { width: 512, height: 320 };
 
-export const FONT_SIZE = '14px';
-export const FONT_HEIGHT = 14;
+export const FONT_SIZE = 14;
 export const FONT_FAMILY = 'sans-serif';
 
 export const CANVAS_COLOR = 'rgba(255,255,255,0.6)';
@@ -19,11 +18,11 @@ export const DIVIDER_GAP = 16;
 export const BOX_MIN_WIDTH = '6rem';
 export const BOX_GAP = '2rem';
 export const BOX_HEIGHT = '2rem'; // 24px
+export const BOX_X_PADDING = 14;
 
 export const MODE = {
   new: 'new',
   shift: 'shift',
-  drag: 'drag',
   select: 'select',
   split: 'split',
   highlight: 'highlight',
@@ -42,7 +41,7 @@ export const SHORT_CUT_KEY = {
 
   addBox: 'a',
   select: 's',
-  drag: 'd',
+  d: 'd',
   highlight: 'f',
   input: 'g',
 
