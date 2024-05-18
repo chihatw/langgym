@@ -1,4 +1,5 @@
 import { MODE } from '../../constants';
+import { deleteBox } from '../../services/client';
 import { Box } from '../Box';
 import { Field } from '../Field';
 import { handleMouseDown } from './handleMouseDown';
@@ -48,13 +49,11 @@ export class DraggableField extends Field {
 
   select(obj: Box) {
     this.selectObj = obj;
-    this.selectObj.select();
     this.handleSetSelectedObj(this.selectObj);
   }
 
   deselect() {
     if (!this.selectObj) return;
-    this.selectObj.deselect();
     this.selectObj = null;
     this.handleSetSelectedObj(null);
   }
@@ -63,13 +62,10 @@ export class DraggableField extends Field {
     this.dragDX = dragDX;
     this.dragDY = dragDY;
 
-    if (this.dragObj) this.dragObj.ungrab();
     this.dragObj = obj;
-    this.dragObj.grab();
   }
 
   ungrab() {
-    if (this.dragObj) this.dragObj.ungrab();
     this.dragObj = null;
   }
 
@@ -79,6 +75,10 @@ export class DraggableField extends Field {
     this.connectedLines = this.connectedLines.filter(
       (l) => l.startObjId !== obj.id && l.endObjId !== obj.id
     );
+
+    // remote
+    deleteBox(obj.id);
+
     this.redraw('delete box');
   }
 

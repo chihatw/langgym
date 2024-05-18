@@ -45,7 +45,7 @@ export const SHORT_CUT_KEY = {
   g: 'g',
 
   z: 'z',
-  delete: 'x',
+  x: 'x',
   connect: 'c',
   split: 'v',
 };

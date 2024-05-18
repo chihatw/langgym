@@ -11,9 +11,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box } from '../../class/Box';
 import { DraggableField } from '../../class/DraggableField/DraggableField';
 import { MODE, RECT, SHORT_CUT_KEY } from '../../constants';
-import { clearCanvas, deleteBox } from '../../services/client';
+import { clearCanvas } from '../../services/client';
 import CanvasDom from '../CanvasDom';
-import DeleteBoxButton from './DeleteBoxButton';
 import LabelInput from './LabelInput';
 
 type Props = {};
@@ -118,22 +117,6 @@ const MngCanvasForm = ({}: Props) => {
           // local
           setValue((prev) => ({ ...prev }));
           break;
-        case SHORT_CUT_KEY.delete:
-          e.preventDefault();
-          // delete
-          if (!value.field) throw new Error();
-          if (!value.field.selectObj) return;
-
-          // remote
-          deleteBox(value.field.selectObj.id);
-
-          // canvas
-          value.field.delete(value.field.selectObj);
-
-          // local
-          setValue((prev) => ({ ...prev, selectedObj: null }));
-
-          break;
         default:
           console.log(e.key);
       }
@@ -177,11 +160,6 @@ const MngCanvasForm = ({}: Props) => {
 
   return (
     <div className='grid gap-4'>
-      <DeleteBoxButton
-        selectedObj={value.field?.selectObj || null}
-        field={value.field}
-        rerender={() => setValue((prev) => ({ ...prev }))}
-      />
       <Select
         value={value.field?.mode || MODE.new}
         onValueChange={(value) => handleChangeMode(value)}
@@ -221,10 +199,6 @@ const MngCanvasForm = ({}: Props) => {
               <div>{`⌘${SHORT_CUT_KEY.expand}`}</div>
               <div>expand</div>
             </div>
-          </div>
-          <div className='grid grid-cols-[24px,1fr] gap-y-1'>
-            <div>{`⌘${SHORT_CUT_KEY.delete}`}</div>
-            <div>選択オブジェクトの削除</div>
           </div>
         </div>
       </div>

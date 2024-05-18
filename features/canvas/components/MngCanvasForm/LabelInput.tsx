@@ -17,11 +17,15 @@ const LabelInput = forwardRef<HTMLInputElement, Props>(
       const label = e.target.value;
       if (!field || !field.selectObj) throw Error();
 
-      // canvas
-      field.updateLabel(label);
+      // label が空文字なら box 削除
+      if (!label) {
+        field.delete(field.selectObj);
+        rerender(); // input を更新するため
+        return;
+      }
 
-      // local
-      rerender();
+      field.updateLabel(label);
+      rerender(); // input を更新するため
     };
 
     return (

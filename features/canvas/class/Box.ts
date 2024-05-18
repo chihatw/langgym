@@ -22,8 +22,6 @@ export class Box {
   height = 0;
   splittedX = 0;
 
-  #isGrabed = false;
-  #isSelected = false;
   #splitBy = 0;
   highlights: number[] = [];
 
@@ -170,22 +168,6 @@ export class Box {
 
     // remote
     updateHighlights(this.id, []);
-  }
-
-  grab() {
-    this.#isGrabed = true;
-  }
-
-  ungrab() {
-    this.#isGrabed = false;
-  }
-
-  select() {
-    this.#isSelected = true;
-  }
-
-  deselect() {
-    this.#isSelected = false;
   }
 
   _buildChars(
