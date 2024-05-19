@@ -1,5 +1,6 @@
 import { Arrow } from './Arrow';
 import { Box } from './Box';
+import { ExpandArrow } from './ExpandArrow';
 import { Line } from './Line';
 
 export class Field {
@@ -9,6 +10,8 @@ export class Field {
   objs: Box[] = [];
   drawingLine: Line | null = null; // will delete
   connectedObjSets: number[][] = [];
+  expandObj: Box | null = null;
+  expandStartObj: Box | null = null;
 
   // コンストラクタで大きさを設定
   constructor(width: number, height: number, canvas: HTMLCanvasElement) {
@@ -45,15 +48,40 @@ export class Field {
     if (debug !== 'loop') console.log(debug);
 
     this.#ctx.clearRect(0, 0, this.width, this.height);
+
     if (this.drawingLine) this.drawingLine.draw(this.#ctx); // will delete
+
     for (const connectedObjSet of this.connectedObjSets) {
+      if (
+        this.expandObj &&
+        this.expandStartObj &&
+        connectedObjSet.includes(this.expandObj.id)
+      ) {
+        if (this.expandObj.lineEndX > this.expandStartObj.lineStartX) {
+          const arrow = new ExpandArrow(this.expandObj, this.expandStartObj);
+          arrow.draw(this.#ctx);
+          continue;
+        }
+      }
+
       const box1 = this.objs.find((o) => o.id === connectedObjSet.at(0));
       const box2 = this.objs.find((o) => o.id === connectedObjSet.at(1));
       if (!box1 || !box2) continue;
       const arrow = new Arrow(box1, box2);
       arrow.draw(this.#ctx);
     }
-    for (const obj of this.objs) obj.draw(this.#ctx);
+
+    for (const obj of this.objs) {
+      // expandObj が、expandStartObj より後ろに行った時、expandObj は描画しない
+      if (
+        this.expandObj &&
+        this.expandStartObj &&
+        this.expandObj.id === obj.id &&
+        this.expandObj.lineEndX > this.expandStartObj.lineStartX
+      )
+        continue;
+      obj.draw(this.#ctx);
+    }
   }
 
   loop() {

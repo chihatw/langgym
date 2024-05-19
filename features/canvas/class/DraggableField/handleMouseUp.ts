@@ -28,7 +28,6 @@ function handleMouseUp_new(_this: DraggableField) {
 
   // ドラッグしていたら、解除する
   _this.ungrab();
-  _this.dragObj = null;
   _this.redraw('ungrab');
 }
 

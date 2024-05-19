@@ -75,9 +75,9 @@ function handleMouseDown_new(
       );
       field.objs = [...field.objs, box];
       field.connectedObjSets = [...field.connectedObjSets, [obj.id, box.id]];
-      field.grab(box, _x - box.x, _y - box.y);
+      field.expand(box, obj, _x - box.x, _y - box.y);
 
-      // todo insert connectedObjSet on remote
+      // todo remote insert connectedObjSet, expandObj, expandStartObj
       // insertLine(line);
 
       field.redraw(REDRAW.expand);

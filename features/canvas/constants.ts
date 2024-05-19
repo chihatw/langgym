@@ -66,3 +66,8 @@ export const SHORT_CUT_KEY = {
   connect: 'c',
   v: 'v',
 };
+
+export const ARROW_STROKE_WIDTH = 4;
+export const ARROW_LENGTH = 12;
+export const ARROW_WIDTH = 9;
+export const ARROW_MARGIN = 8;

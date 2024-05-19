@@ -20,8 +20,6 @@ export class DraggableField extends Field {
   connectStartObjId = 0;
   connectStartCharIndex = -1;
 
-  expandObj: Box | null = null;
-
   handleSetSelectedObj;
   focusInput;
 
@@ -61,12 +59,19 @@ export class DraggableField extends Field {
   grab(obj: Box, dragDX: number, dragDY: number) {
     this.dragDX = dragDX;
     this.dragDY = dragDY;
-
     this.dragObj = obj;
   }
 
   ungrab() {
+    if (this.expandObj) this.expandObj = null;
+    if (this.expandStartObj) this.expandStartObj = null;
     this.dragObj = null;
+  }
+
+  expand(obj: Box, expandStartObj: Box, dragDX: number, dragDY: number) {
+    this.grab(obj, dragDX, dragDY);
+    this.expandObj = obj;
+    this.expandStartObj = expandStartObj;
   }
 
   delete(obj: Box) {

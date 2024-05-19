@@ -30,7 +30,6 @@ function handleMouseMove_new(field: DraggableField, _x: number, _y: number) {
   // ドラッグオブジェクトがある場合
   if (field.dragObj) {
     field.dragObj.dragging(_x - field.dragDX, _y - field.dragDY);
-
     field.redraw(REDRAW.dragging);
     return;
   }

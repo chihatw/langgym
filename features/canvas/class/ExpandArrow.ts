@@ -4,26 +4,13 @@ import {
   ARROW_STROKE_WIDTH,
   ARROW_WIDTH,
 } from '../constants';
+import { Arrow } from './Arrow';
 import { Box } from './Box';
 
-// https://qiita.com/frogcat/items/2f94b095b4c2d8581ff6
-
-export class Arrow {
-  startObj;
-  endObj;
-
-  constructor(box1: Box, box2: Box) {
-    if (box1.lineStartX < box2.lineEndX) {
-      this.startObj = box1;
-      this.endObj = box2;
-    } else if (box2.lineStartX < box1.lineEndX) {
-      this.startObj = box2;
-      this.endObj = box1;
-    }
-  }
-
+export class ExpandArrow extends Arrow {
   draw(ctx: CanvasRenderingContext2D) {
     if (!this.startObj || !this.endObj) return;
+
     // box1, box2 が接触している場合、描画しない
     const _margin = ARROW_MARGIN + ARROW_LENGTH;
     const points = [
@@ -47,7 +34,7 @@ export class Arrow {
     ctx.fillStyle = 'rgba(0,0,0,0.2)';
 
     // 始点、終点の調整
-    const { startX, startY, endX, endY } = _calcStartEnd(
+    const { startX, startY, endX, endY } = _calcStart(
       this.startObj,
       this.endObj,
       ARROW_MARGIN
@@ -68,7 +55,7 @@ export class Arrow {
   }
 }
 
-function _calcStartEnd(startObj: Box, endObj: Box, margin: number) {
+function _calcStart(startObj: Box, endObj: Box, margin: number) {
   const startObj_plus_margin = {
     x: startObj.right + margin,
     y: startObj.bottom + margin,
@@ -106,7 +93,6 @@ function _calcStartEnd(startObj: Box, endObj: Box, margin: number) {
 
   if (startObj.lineStartY < endObj.lineEndY) {
     const startFromBottom = tan_startPoint_to_margin < tan_arrow;
-    const endFromTop = tan_endObj < tan_arrow;
 
     return {
       startX: startFromBottom
@@ -115,18 +101,13 @@ function _calcStartEnd(startObj: Box, endObj: Box, margin: number) {
       startY: startFromBottom
         ? startObj.bottom + margin
         : startObj.lineStartY + startPoint_to_margin_dx * (out_dy / out_dx),
-      endX: endFromTop
-        ? endObj.lineEndX - endPoint_to_margin_dy * (out_dx / out_dy)
-        : endObj.x - margin,
-      endY: endFromTop
-        ? endObj.y - margin
-        : endObj.lineEndY - endPoint_to_margin_dx * (out_dy / out_dx),
+      endX: endObj.centerX,
+      endY: endObj.ceneterY,
     };
   }
 
   // 起点の修正
   const startFromTop = tan_startPoint_to_margin < tan_arrow;
-  const endFromBottom = tan_endObj < tan_arrow;
 
   return {
     startX: startFromTop
@@ -135,12 +116,8 @@ function _calcStartEnd(startObj: Box, endObj: Box, margin: number) {
     startY: startFromTop
       ? startObj.y - margin
       : startObj.lineStartY - startPoint_to_margin_dx * (out_dy / out_dx),
-    endX: endFromBottom
-      ? endObj.lineEndX - endPoint_to_margin_dy * (out_dx / out_dy)
-      : endObj.x - margin,
-    endY: endFromBottom
-      ? endObj.bottom + margin
-      : endObj.lineEndY + endPoint_to_margin_dx * (out_dy / out_dx),
+    endX: endObj.centerX,
+    endY: endObj.ceneterY,
   };
 }
 
