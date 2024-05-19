@@ -58,7 +58,6 @@ const MngCanvasForm = ({}: Props) => {
   }, [value]);
 
   const focusInput = () => {
-    console.log('focus');
     input.current?.focus();
   };
 
@@ -102,7 +101,6 @@ const MngCanvasForm = ({}: Props) => {
           setValue((prev) => ({ ...prev }));
           break;
         default:
-          console.log(e.key);
       }
     },
     [value]

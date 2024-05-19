@@ -52,9 +52,23 @@ export class Box {
       });
     }
   }
+
+  get bottom() {
+    return this.y + this.height;
+  }
+
+  get right() {
+    return this.x + this.width;
+  }
+
   get centerX() {
     return this.x + this.width / 2;
   }
+
+  get ceneterY() {
+    return this.y + this.height / 2;
+  }
+
   get lineStartX() {
     const lastChar = this.chars.at(-1);
     if (!lastChar) return this.centerX;
