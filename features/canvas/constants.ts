@@ -15,10 +15,10 @@ export const DIVIDER_WIDTH = 1.5;
 export const DIVIDER_DASH = [8, 4];
 export const DIVIDER_GAP = 16;
 
-export const BOX_MIN_WIDTH = '6rem';
-export const BOX_GAP = '2rem';
-export const BOX_HEIGHT = '2rem'; // 24px
-export const BOX_X_PADDING = 14;
+export const BOX_MIN_WIDTH = FONT_SIZE * 6;
+export const BOX_GAP = FONT_SIZE * 2;
+export const BOX_HEIGHT = FONT_SIZE * 2;
+export const BOX_X_PADDING = FONT_SIZE;
 
 export const REDRAW = {
   add: 'add',

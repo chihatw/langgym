@@ -72,8 +72,8 @@ export class DraggableField extends Field {
   delete(obj: Box) {
     this.selectObj = null;
     this.objs = this.objs.filter((o) => o.id !== obj.id);
-    this.connectedLines = this.connectedLines.filter(
-      (l) => l.startObjId !== obj.id && l.endObjId !== obj.id
+    this.connectedObjSets = this.connectedObjSets.filter(
+      (s) => !s.includes(obj.id)
     );
 
     // remote

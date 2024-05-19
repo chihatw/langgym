@@ -31,15 +31,11 @@ function handleMouseMove_new(field: DraggableField, _x: number, _y: number) {
   if (field.dragObj) {
     field.dragObj.dragging(_x - field.dragDX, _y - field.dragDY);
 
-    // recalc connectedLines
-    field.connectedLines = field.connectedLines.map((l) =>
-      _updateLine(l, field)
-    );
     field.redraw(REDRAW.dragging);
     return;
   }
 
-  // ドラッグオブジェクトがない場合
+  // ドラッグオブジェクトがない場合 これは不要？
   // todo connect / expand
 }
 
@@ -120,35 +116,4 @@ function handleMouseMove_connect(
   insertLine(line);
 
   field.redraw(REDRAW.connect);
-}
-
-function _updateLine(l: Line, field: DraggableField) {
-  // 起点終点の変更がない場合
-  if (![l.startObjId, l.endObjId].includes(field.dragObj!.id)) {
-    return l;
-  }
-
-  const startObj = field.objs.find((o) => o.id === l.startObjId);
-  if (!startObj) throw new Error('no start obj');
-  const endObj = field.objs.find((o) => o.id === l.endObjId);
-  if (!endObj) throw new Error('no end obj');
-  if (typeof l.endCharIndex !== 'number') throw new Error('no endCharIndex');
-
-  const newLine = new Line(
-    startObj.nthCenterX(l.startCharIndex),
-    startObj.nthCenterY(l.startCharIndex),
-    endObj.nthCenterX(l.endCharIndex),
-    endObj.nthCenterY(l.endCharIndex),
-    l.startObjId,
-    l.startCharIndex,
-    l.endObjId,
-    l.endCharIndex,
-    l.id
-  );
-
-  // remote
-  updateLine(newLine);
-
-  // canvas
-  return newLine;
 }

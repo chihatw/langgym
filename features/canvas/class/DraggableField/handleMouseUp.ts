@@ -77,7 +77,8 @@ function handleMouseUp_connect(
 
   // connectedLines を追加して
   // canvas
-  _this.connectedLines = [..._this.connectedLines, line];
+  // todo  handleMouseUp_new で expand していて、他のオブジェクトの上で mouse up したら、 非表示の expand のオブジェクトを削除して、 connectedObjSets に追加する
+  // _this.connectedLines = [..._this.connectedLines, line];
   // remote
   insertLine(line);
 

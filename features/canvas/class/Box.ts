@@ -52,6 +52,25 @@ export class Box {
       });
     }
   }
+  get centerX() {
+    return this.x + this.width / 2;
+  }
+  get lineStartX() {
+    const lastChar = this.chars.at(-1);
+    if (!lastChar) return this.centerX;
+    return lastChar.centerX;
+  }
+  get lineStartY() {
+    return this.y + this.height / 2;
+  }
+  get lineEndX() {
+    const firstChar = this.chars.at(0);
+    if (!firstChar) return this.centerX;
+    return firstChar.centerX;
+  }
+  get lineEndY() {
+    return this.y + this.height / 2;
+  }
 
   getSegment(x: number) {
     if (x < this.x || x > this.x + this.width) return '';
@@ -64,6 +83,7 @@ export class Box {
     return SEGMENT.handle;
   }
 
+  // will delete
   nthCenterX(index: number) {
     const targetChar = this.chars.find((c) => c.index === index);
     if (targetChar) return targetChar.centerX;
@@ -71,6 +91,7 @@ export class Box {
     return this.x + this.width / 2;
   }
 
+  // will delete
   nthCenterY(index: number) {
     const targetChar = this.chars.find((c) => c.index === index);
     if (targetChar) return targetChar.centerY;

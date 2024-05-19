@@ -54,12 +54,12 @@ export class DummyDOM {
     container.style.paddingLeft = `${BOX_X_PADDING}px`;
     container.style.paddingRight = `${BOX_X_PADDING}px`;
     container.style.fontSize = `${FONT_SIZE}px`;
-    container.style.height = BOX_HEIGHT;
+    container.style.height = `${BOX_HEIGHT}px`;
     container.style.display = 'flex';
     container.style.alignItems = 'center';
     container.style.justifyContent = 'center';
-    container.style.gap = BOX_GAP;
-    container.style.minWidth = BOX_MIN_WIDTH;
+    container.style.gap = `${BOX_GAP}px`;
+    container.style.minWidth = `${BOX_MIN_WIDTH}px`;
     container.style.fontFamily = FONT_FAMILY;
 
     // 表示を隠す

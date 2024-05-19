@@ -1,3 +1,4 @@
+import { Arrow } from './Arrow';
 import { Box } from './Box';
 import { Line } from './Line';
 
@@ -6,8 +7,8 @@ export class Field {
   width;
   height;
   objs: Box[] = [];
-  drawingLine: Line | null = null;
-  connectedLines: Line[] = [];
+  drawingLine: Line | null = null; // will delete
+  connectedObjSets: number[][] = [];
 
   // コンストラクタで大きさを設定
   constructor(width: number, height: number, canvas: HTMLCanvasElement) {
@@ -44,8 +45,14 @@ export class Field {
     if (debug !== 'loop') console.log(debug);
 
     this.#ctx.clearRect(0, 0, this.width, this.height);
-    for (const line of this.connectedLines) line.draw(this.#ctx);
-    if (this.drawingLine) this.drawingLine.draw(this.#ctx);
+    if (this.drawingLine) this.drawingLine.draw(this.#ctx); // will delete
+    for (const connectedObjSet of this.connectedObjSets) {
+      const box1 = this.objs.find((o) => o.id === connectedObjSet.at(0));
+      const box2 = this.objs.find((o) => o.id === connectedObjSet.at(1));
+      if (!box1 || !box2) continue;
+      const arrow = new Arrow(box1, box2);
+      arrow.draw(this.#ctx);
+    }
     for (const obj of this.objs) obj.draw(this.#ctx);
   }
 

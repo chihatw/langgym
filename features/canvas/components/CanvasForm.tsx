@@ -2,7 +2,6 @@ import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { useEffect, useRef } from 'react';
 import { Box } from '../class/Box';
 import { Field } from '../class/Field';
-import { Line } from '../class/Line';
 import { RECT } from '../constants';
 import { fetchCanvas } from '../services/client';
 import CanvasDom from './CanvasDom';
@@ -120,144 +119,7 @@ const CanvasForm = (props: Props) => {
     };
   }, []);
 
-  // subscribe  canvas lines
-  useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
-    const channel = supabase
-      .channel('canvas lines')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'canvas_lines',
-        },
-        (preload) => {
-          console.log('insert line');
-          const inserted = preload.new;
-          const {
-            id,
-            startX,
-            startY,
-            endX,
-            endY,
-            startObjId,
-            startCharIndex,
-            endObjId,
-            endCharIndex,
-          } = inserted;
-
-          const { field } = ref.current;
-          if (!field) throw new Error();
-
-          const line = new Line(
-            startX,
-            startY,
-            endX,
-            endY,
-            startObjId,
-            startCharIndex,
-            endObjId,
-            endCharIndex,
-            id
-          );
-
-          // endObjId がない場合、drawingLine に設定
-          if (!endObjId) {
-            field.drawingLine = line;
-            return;
-          }
-
-          // endObjId がある場合、connectedLines に追加
-          field.connectedLines = [...field.connectedLines, line];
-        }
-      )
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'canvas_lines',
-        },
-        (preload) => {
-          console.log('update line');
-          const updated = preload.new;
-
-          const {
-            id,
-            startX,
-            startY,
-            endX,
-            endY,
-            startObjId,
-            startCharIndex,
-            endObjId,
-            endCharIndex,
-          } = updated;
-
-          const { field } = ref.current;
-          if (!field) throw new Error();
-
-          const newLine = new Line(
-            startX,
-            startY,
-            endX,
-            endY,
-            startObjId,
-            startCharIndex,
-            endObjId,
-            endCharIndex,
-            id
-          );
-
-          // endObjId がない場合、drawingLine に設定
-          if (!endObjId) {
-            field.drawingLine = newLine;
-            return;
-          }
-
-          // endObjId がある場合、
-
-          // connectedLines に含まれていない場合、追加
-          if (!field.connectedLines.find((line) => line.id === id)) {
-            field.connectedLines = [...field.connectedLines, newLine];
-            return;
-          }
-
-          // connectedLines に含まれている場合、変更
-          field.connectedLines = field.connectedLines.map((line) =>
-            line.id !== id ? line : newLine
-          );
-        }
-      )
-      .on(
-        'postgres_changes',
-        {
-          event: 'DELETE',
-          schema: 'public',
-          table: 'canvas_lines',
-        },
-        (preload) => {
-          console.log('delete line');
-          const { id } = preload.old;
-
-          const { field } = ref.current;
-          if (!field) throw new Error();
-
-          if (field.drawingLine && field.drawingLine.id === id)
-            field.drawingLine = null;
-
-          field.connectedLines = field.connectedLines.filter(
-            (line) => line.id !== id
-          );
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
+  // todo subscribe  canvas connected obj sets
 
   // subscribe canvas_all_delte
   useEffect(() => {
@@ -271,8 +133,8 @@ const CanvasForm = (props: Props) => {
           const { field } = ref.current;
           if (!field) throw new Error();
           field.objs = [];
-          field.drawingLine = null;
-          field.connectedLines = [];
+          field.drawingLine = null; // will delete
+          field.connectedObjSets = [];
         }
       )
       .subscribe();

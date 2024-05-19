@@ -1,7 +1,12 @@
-import { FONT_SIZE, MODE, REDRAW, SEGMENT } from '../../constants';
-import { deleteBox, deleteLine, insertLine } from '../../services/client';
+import {
+  BOX_HEIGHT,
+  BOX_MIN_WIDTH,
+  MODE,
+  REDRAW,
+  SEGMENT,
+} from '../../constants';
+import { deleteBox } from '../../services/client';
 import { Box } from '../Box';
-import { Line } from '../Line';
 import { DraggableField } from './DraggableField';
 
 export function handleMouseDown(e: MouseEvent, field: DraggableField) {
@@ -21,9 +26,6 @@ export function handleMouseDown(e: MouseEvent, field: DraggableField) {
       return;
     case MODE.highlight:
       handleMouseDown_highlight(field, obj);
-      return;
-    case MODE.connect:
-      handleMouseDown_connect(field, obj, _x, _y);
       return;
     default:
   }
@@ -63,35 +65,20 @@ function handleMouseDown_new(
       const index = obj.indexOf(_x, _y);
       if (index < 0) return;
 
-      // 新しいboxを作成
+      // 新しいboxを作成 ポインタの位置を中心にする
       const box = new Box(
-        obj.x - FONT_SIZE / 2,
-        obj.y - FONT_SIZE / 2,
+        _x - BOX_MIN_WIDTH / 2,
+        _y - BOX_HEIGHT / 2,
         '',
         0,
         []
       );
       field.objs = [...field.objs, box];
+      field.connectedObjSets = [...field.connectedObjSets, [obj.id, box.id]];
       field.grab(box, _x - box.x, _y - box.y);
 
-      // 新しいboxとcharをconnected line で結ぶ
-      // 新しいbox は char を持っていないので、 index: -1 , box の中心から線を延ばす
-      const line = new Line(
-        box.nthCenterX(-1),
-        box.nthCenterY(-1),
-        obj.nthCenterX(index),
-        obj.nthCenterY(index),
-        box.id,
-        -1,
-        obj.id,
-        index
-      );
-
-      // connectedLines を追加
-      field.connectedLines = [...field.connectedLines, line];
-
-      // remote
-      insertLine(line);
+      // todo insert connectedObjSet on remote
+      // insertLine(line);
 
       field.redraw(REDRAW.expand);
 
@@ -146,18 +133,7 @@ function handleMouseDown_shift(
       // remote
       deleteBox(obj.id);
 
-      // connected line の更新
-      field.connectedLines = field.connectedLines.map((l) => {
-        // 関係があった場合は、objId, charIndex を更新
-        if (l.startObjId === obj.id)
-          return _updateLineStartObj(l, field, box1, box2);
-
-        // 関係があった場合は、objId, charIndex を更新
-        if (l.endObjId === obj.id)
-          return _updateLineEndObj(l, field, box1, box2);
-
-        return l;
-      });
+      // todo divide した時の connectedObjSetsの更新
 
       // 関連 highlights の削除
       const clone = { ...field.highlights };
@@ -187,36 +163,6 @@ function handleMouseDown_highlight(
   field.redraw(REDRAW.dehighlight);
 }
 
-// todo connect は char 固定（start は最後尾。 end は先頭）
-// line line を arrow にする
-function handleMouseDown_connect(
-  field: DraggableField,
-  obj: Box | undefined,
-  _x: number,
-  _y: number
-) {
-  // 下にオブジェクトがなければ、終了
-  if (!obj) return;
-
-  // 下に char がなければ、終了
-  const index = obj.indexOf(_x, _y);
-  if (index < 0) return;
-
-  // connectedLines に 含まれていれば、削除する
-  field.connectedLines = field.connectedLines.filter((l) => {
-    if (![l.startObjId, l.endObjId].includes(obj.id)) {
-      return true;
-    }
-    // remote フィルターで除外すると同時にリモートも削除
-    deleteLine(l.id);
-    // canvas
-    return false;
-  });
-
-  field.connectStartObjId = obj.id;
-  field.connectStartCharIndex = index;
-}
-
 function _selectObjForInput(field: DraggableField, obj: Box) {
   // 文字を入力可能にする
   field.select(obj);
@@ -225,52 +171,4 @@ function _selectObjForInput(field: DraggableField, obj: Box) {
   setTimeout(() => {
     field.focusInput();
   }, 200);
-}
-
-function _updateLineStartObj(
-  l: Line,
-  field: DraggableField,
-  box1: Box,
-  box2: Box
-) {
-  const newStartObj = l.startCharIndex < field.splitBy ? box1 : box2;
-  const newStartCharIndex =
-    l.startCharIndex < field.splitBy
-      ? l.startCharIndex
-      : l.startCharIndex - field.splitBy;
-  return new Line(
-    newStartObj.nthCenterX(newStartCharIndex),
-    newStartObj.nthCenterY(newStartCharIndex),
-    l.endX,
-    l.endY,
-    newStartObj.id,
-    newStartCharIndex,
-    l.endObjId,
-    l.endCharIndex,
-    l.id
-  );
-}
-
-function _updateLineEndObj(
-  l: Line,
-  field: DraggableField,
-  box1: Box,
-  box2: Box
-) {
-  const newEndObj = l.endCharIndex! < field.splitBy ? box1 : box2;
-  const newEndCharIndex =
-    l.endCharIndex! < field.splitBy
-      ? l.endCharIndex!
-      : l.endCharIndex! - field.splitBy;
-  return new Line(
-    l.startX,
-    l.startY,
-    newEndObj.nthCenterX(newEndCharIndex),
-    newEndObj.nthCenterY(newEndCharIndex),
-    l.startObjId,
-    l.startCharIndex,
-    newEndObj.id,
-    newEndCharIndex,
-    l.id
-  );
 }
