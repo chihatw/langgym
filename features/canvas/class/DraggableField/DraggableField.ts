@@ -72,19 +72,32 @@ export class DraggableField extends Field {
     this.grab(obj, dragDX, dragDY);
     this.expandObj = obj;
     this.expandStartObj = expandStartObj;
+
+    // todo update remote
+  }
+  add(obj: Box) {
+    this.objs = [...this.objs, obj];
+
+    // todo add remote
   }
 
-  delete(obj: Box) {
+  delete(objId: number) {
     this.selectObj = null;
-    this.objs = this.objs.filter((o) => o.id !== obj.id);
+    this.objs = this.objs.filter((o) => o.id !== objId);
     this.connectedObjSets = this.connectedObjSets.filter(
-      (s) => !s.includes(obj.id)
+      (s) => !s.includes(objId)
     );
 
     // remote
-    deleteBox(obj.id);
+    deleteBox(objId);
+    // todo remote delete connectedObjSets
+  }
 
-    this.redraw('delete box');
+  addConnectedObjSet(objId1: number, objId2: number) {
+    // canvas
+    this.connectedObjSets = [...this.connectedObjSets, [objId1, objId2]];
+
+    // todo remote add connectedObjSet
   }
 
   updateLabel(label: string) {

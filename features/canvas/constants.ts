@@ -22,6 +22,7 @@ export const BOX_X_PADDING = FONT_SIZE;
 
 export const REDRAW = {
   add: 'add',
+  delete: 'delete',
   select: 'select',
   grab: 'grab',
   dehighlight: 'dehighlight',
@@ -37,7 +38,6 @@ export const MODE = {
   new: 'new',
   shift: 'shift',
   highlight: 'highlight',
-  connect: 'connect',
 };
 
 export const INITIAL_MODE = MODE.new;
@@ -63,7 +63,7 @@ export const SHORT_CUT_KEY = {
 
   z: 'z',
   x: 'x',
-  connect: 'c',
+  c: 'c',
   v: 'v',
 };
 

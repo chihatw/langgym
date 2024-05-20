@@ -15,8 +15,6 @@ const CanvasDom = forwardRef<HTMLCanvasElement, Props>(({ mode }, ref) => {
         return 'bg-blue-300';
       case MODE.highlight:
         return 'bg-yellow-100';
-      case MODE.connect:
-        return 'bg-purple-100';
       // これは残す
       default:
         return 'bg-white';

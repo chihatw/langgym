@@ -20,10 +20,11 @@ export class Box {
   chars: Char[] = [];
   width = 0;
   height = 0;
+  isHidden;
   splittedX = 0;
+  highlights: number[] = [];
 
   #splitBy = 0;
-  highlights: number[] = [];
 
   constructor(
     x: number,
@@ -31,6 +32,7 @@ export class Box {
     label: string,
     splitBy: number,
     highlights: number[],
+    isHidden: boolean,
     id?: number
   ) {
     const nanoid = customAlphabet('1234567890', 4);
@@ -38,6 +40,7 @@ export class Box {
     this.x = x;
     this.y = y;
     this.label = label;
+    this.isHidden = isHidden;
     this.highlights = highlights;
     this._setWidthHeightChars(label, splitBy);
     if (!id) {

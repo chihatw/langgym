@@ -39,7 +39,7 @@ function handleMouseDown_new(
 ) {
   // 下にオブジェクトがなければ add
   if (!obj) {
-    const box = new Box(_x, _y, '', 0, []);
+    const box = new Box(_x, _y, '', 0, [], false);
     field.objs = [...field.objs, box];
 
     _selectObjForInput(field, box);
@@ -61,6 +61,7 @@ function handleMouseDown_new(
       field.redraw(REDRAW.select);
       return;
     case SEGMENT.body:
+      // expand
       // 下に char がなければ、終了
       const index = obj.indexOf(_x, _y);
       if (index < 0) return;
@@ -71,15 +72,11 @@ function handleMouseDown_new(
         _y - BOX_HEIGHT / 2,
         '',
         0,
-        []
+        [],
+        true // 最初は非表示で
       );
-      field.objs = [...field.objs, box];
-      field.connectedObjSets = [...field.connectedObjSets, [obj.id, box.id]];
+      field.add(box);
       field.expand(box, obj, _x - box.x, _y - box.y);
-
-      // todo remote insert connectedObjSet, expandObj, expandStartObj
-      // insertLine(line);
-
       field.redraw(REDRAW.expand);
 
       return;
@@ -110,7 +107,8 @@ function handleMouseDown_shift(
   const segment = obj.getSegment(_x);
   switch (segment) {
     case SEGMENT.header:
-      field.delete(obj);
+      field.delete(obj.id);
+      field.redraw(REDRAW.delete);
       return;
     case SEGMENT.body:
       // splitBy が 0 ならば終了
@@ -123,8 +121,8 @@ function handleMouseDown_shift(
       ];
 
       // box を新しく２つ作成
-      const box1 = new Box(obj.x - 64, obj.y, charSets[0], 0, []);
-      const box2 = new Box(obj.splittedX, obj.y, charSets[1], 0, []);
+      const box1 = new Box(obj.x - 64, obj.y, charSets[0], 0, [], false);
+      const box2 = new Box(obj.splittedX, obj.y, charSets[1], 0, [], false);
 
       // 古いオブジェクトの削除
       // local

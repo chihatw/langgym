@@ -33,7 +33,7 @@ const CanvasForm = (props: Props) => {
       const boxes: Box[] = [];
       for (const _box of _boxes) {
         const { label, x, y, id, splitBy, highlights } = _box;
-        const box = new Box(x, y, label, splitBy, highlights, id);
+        const box = new Box(x, y, label, splitBy, highlights, false, id);
         boxes.push(box);
       }
       field.objs = boxes;
@@ -56,14 +56,15 @@ const CanvasForm = (props: Props) => {
         (preload) => {
           console.log('insert box');
           const inserted = preload.new;
-          const { x, y, label, id, splitBy, highlights } = inserted;
+          // todo add isHedding column to canvas table
+          const { x, y, label, id, splitBy, highlights, isHidden } = inserted;
 
           const { field } = ref.current;
           if (!field) throw new Error();
 
           field.objs = [
             ...field.objs,
-            new Box(x, y, label, splitBy, highlights, id),
+            new Box(x, y, label, splitBy, highlights, isHidden, id),
           ];
         }
       )
@@ -77,12 +78,20 @@ const CanvasForm = (props: Props) => {
         (preload) => {
           console.log('update box');
           const updated = preload.new;
-          const { x, y, label, id, splitBy, highlights } = updated;
+          const { x, y, label, id, splitBy, highlights, isHidden } = updated;
 
           const { field } = ref.current;
           if (!field) throw new Error();
 
-          const newBox = new Box(x, y, label, splitBy, highlights, id);
+          const newBox = new Box(
+            x,
+            y,
+            label,
+            splitBy,
+            highlights,
+            isHidden,
+            id
+          );
 
           // objs に含まれていない場合、追加
           if (!field.objs.find((o) => o.id === id)) {
@@ -133,7 +142,7 @@ const CanvasForm = (props: Props) => {
           const { field } = ref.current;
           if (!field) throw new Error();
           field.objs = [];
-          field.drawingLine = null; // will delete
+          // field.drawingLine = null; // will delete
           field.connectedObjSets = [];
         }
       )

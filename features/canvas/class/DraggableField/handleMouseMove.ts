@@ -1,6 +1,5 @@
 import { MODE, REDRAW } from '../../constants';
-import { insertLine, updateLine } from '../../services/client';
-import { Line } from '../Line';
+import { boxCollision } from '../../services/utils';
 import { DraggableField } from './DraggableField';
 
 export function handleMouseMove(e: MouseEvent, field: DraggableField) {
@@ -19,23 +18,30 @@ export function handleMouseMove(e: MouseEvent, field: DraggableField) {
     case MODE.highlight:
       handleMouseMove_highlight(field, _x, _y);
       return;
-    case MODE.connect:
-      handleMouseMove_connect(field, _x, _y);
-      return;
     default:
   }
 }
 
 function handleMouseMove_new(field: DraggableField, _x: number, _y: number) {
-  // ドラッグオブジェクトがある場合
-  if (field.dragObj) {
-    field.dragObj.dragging(_x - field.dragDX, _y - field.dragDY);
-    field.redraw(REDRAW.dragging);
-    return;
+  // ドラッグオブジェクトがなければ、終了
+  if (!field.dragObj) return;
+
+  // expandObj, expandStart がある場合、 expand に hidden をつけるかどうか判断
+  if (field.expandObj && field.expandStartObj) {
+    if (field.expandObj.lineEndX > field.expandStartObj.lineStartX) {
+      // expandObj が expandStartObj より後方に行った場合、描画しない
+      field.expandObj.isHidden = true;
+
+      // expandObj が expandStartObj に接している時、描画しない
+    } else if (boxCollision(field.expandObj, field.expandStartObj)) {
+      field.expandObj.isHidden = true;
+    } else {
+      field.expandObj.isHidden = false;
+    }
   }
 
-  // ドラッグオブジェクトがない場合 これは不要？
-  // todo connect / expand
+  field.dragObj.dragging(_x - field.dragDX, _y - field.dragDY);
+  field.redraw(REDRAW.dragging);
 }
 
 function handleMouseMove_shift(field: DraggableField, _x: number, _y: number) {
@@ -65,54 +71,4 @@ function handleMouseMove_highlight(
     field.highlights = highlights;
     field.redraw(REDRAW.highlight);
   }
-}
-
-function handleMouseMove_connect(
-  field: DraggableField,
-  _x: number,
-  _y: number
-) {
-  // start obj id がない場合は終了
-  if (!field.connectStartObjId) return;
-
-  const targetObj = field.objs.find((o) => o.id === field.connectStartObjId);
-  if (!targetObj) throw new Error();
-
-  // すでにdrawingLine がある場合
-  if (field.drawingLine) {
-    const line = new Line(
-      targetObj.nthCenterX(field.connectStartCharIndex), // index: -1 の時は box の中央　// 使いまわせる？
-      targetObj.nthCenterY(field.connectStartCharIndex), // index: -1 の時は box の中央　// 使いまわせる？
-      _x,
-      _y,
-      field.connectStartObjId, // 使いまわせる？
-      field.connectStartCharIndex, // 使いまわせる？
-      null,
-      null,
-      field.drawingLine.id
-    );
-    field.drawingLine = line;
-    // remote
-    updateLine(line);
-
-    field.redraw(REDRAW.connect);
-    return;
-  }
-
-  const line = new Line(
-    targetObj.nthCenterX(field.connectStartCharIndex), // index: -1 の時は box の中央
-    targetObj.nthCenterY(field.connectStartCharIndex), // index: -1 の時は box の中央
-    _x,
-    _y,
-    field.connectStartObjId,
-    field.connectStartCharIndex,
-    null,
-    null
-  );
-
-  field.drawingLine = line;
-  // remote
-  insertLine(line);
-
-  field.redraw(REDRAW.connect);
 }

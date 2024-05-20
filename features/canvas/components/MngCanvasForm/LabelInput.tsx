@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { ChangeEvent, forwardRef } from 'react';
 import { Box } from '../../class/Box';
 import { DraggableField } from '../../class/DraggableField/DraggableField';
+import { REDRAW } from '../../constants';
 
 type Props = {
   field: DraggableField | null;
@@ -19,7 +20,8 @@ const LabelInput = forwardRef<HTMLInputElement, Props>(
 
       // label が空文字なら box 削除
       if (!label) {
-        field.delete(field.selectObj);
+        field.delete(field.selectObj.id);
+        field.redraw(REDRAW.delete);
         rerender(); // input を更新するため
         return;
       }

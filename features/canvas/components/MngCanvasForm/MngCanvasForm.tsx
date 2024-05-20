@@ -92,14 +92,6 @@ const MngCanvasForm = ({}: Props) => {
           // local
           setValue((prev) => ({ ...prev }));
           break;
-        case SHORT_CUT_KEY.connect:
-          e.preventDefault();
-          // canvas
-          if (!value.field) throw new Error();
-          value.field.updateMode(MODE.connect);
-          // local
-          setValue((prev) => ({ ...prev }));
-          break;
         default:
       }
     },
@@ -168,16 +160,9 @@ const MngCanvasForm = ({}: Props) => {
       <CanvasDom ref={canvas} mode={value.field?.mode} />
       <div className='text-xs text-slate-400 grid gap-2'>
         <div>Keyboard Short Cut:</div>
-        <div className='pl-4 grid gap-2'>
-          <div>
-            <div>Mode Select</div>
-            <div className='pl-4 grid grid-cols-[24px,1fr] gap-y-1'>
-              <div>{`⌘${SHORT_CUT_KEY.highlight}`}</div>
-              <div>highlight</div>
-              <div>{`⌘${SHORT_CUT_KEY.connect}`}</div>
-              <div>connect</div>
-            </div>
-          </div>
+        <div className='grid grid-cols-[24px,1fr] gap-y-1'>
+          <div>{`⌘${SHORT_CUT_KEY.highlight}`}</div>
+          <div>highlight</div>
         </div>
       </div>
     </div>
