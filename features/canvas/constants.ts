@@ -21,17 +21,19 @@ export const BOX_HEIGHT = FONT_SIZE * 2;
 export const BOX_X_PADDING = FONT_SIZE;
 
 export const REDRAW = {
+  select: 'select',
   add: 'add',
   delete: 'delete',
-  select: 'select',
   grab: 'grab',
-  dehighlight: 'dehighlight',
-  divide: 'divide',
-  expand: 'expand',
-  split: 'split',
+  ungrab: 'ungrab',
   dragging: 'dragging',
-  highlight: 'highlight',
+  divide: 'divide',
+  split: 'split',
+  expand: 'expand',
+  completeExpand: 'completeExpand',
   connect: 'connect',
+  highlight: 'highlight',
+  dehighlight: 'dehighlight',
 };
 
 export const MODE = {

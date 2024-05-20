@@ -257,25 +257,7 @@ export class Box {
 
     // body
     ctx.fillStyle = BG_COLOR;
-    ctx.fillRect(
-      this.x + FONT_SIZE,
-      this.y,
-      this.width - FONT_SIZE * 2,
-      this.height
-    );
-
-    // header 先頭から 1字分
-    ctx.fillStyle = 'red';
-    ctx.fillRect(this.x, this.y, FONT_SIZE, this.height);
-
-    // handle 後ろから 1字分
-    ctx.fillStyle = 'blue';
-    ctx.fillRect(
-      this.x + this.width - FONT_SIZE,
-      this.y,
-      FONT_SIZE,
-      this.height
-    );
+    ctx.fillRect(this.x, this.y, this.width, this.height);
 
     ctx.strokeStyle = border;
     ctx.lineWidth = 1;

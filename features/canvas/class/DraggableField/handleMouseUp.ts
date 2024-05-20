@@ -30,30 +30,18 @@ function handleMouseUp_new(
   // expand ではない場合、単純にドラッグ終了
   if (!field.expandObj) {
     field.ungrab();
-    field.redraw('ungrab');
     return;
   }
 
-  // expand だが、ドラッグのオブジェクトが表示されていれば、新しく connectedObjSet を追加
+  // expand, connect はかならず カーソルの下に ojb がある
+  if (!obj) return;
+
+  // expand
   if (!field.expandObj.isHidden) {
-    field.addConnectedObjSet(field.expandStartObj!.id, field.expandObj.id);
-    field.ungrab();
-    field.redraw('ungrab');
+    field.completeExpand();
     return;
   }
 
-  // エクスパンドオブジェクトが非表示の場合
-
-  // エクスパンドで使っていた obj を削除
-  field.delete(field.expandObj.id);
-
-  if (obj && obj.id !== field.expandObj.id) {
-    // expandObj 以外のオブジェクトの上にドラッグしている場合
-    // 新しく connectedObjSet を追加
-    field.addConnectedObjSet(field.expandStartObj!.id, obj.id);
-  }
-
-  field.ungrab();
-  field.redraw('remove expand');
-  return;
+  // connect
+  field.connect(obj);
 }

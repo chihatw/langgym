@@ -73,9 +73,10 @@ const MngCanvasForm = ({}: Props) => {
 
         e.preventDefault();
 
-        // local
+        // canvas
         value.field.updateMode(MODE.shift);
-        // local rerender
+
+        // 再描画
         setValue((prev) => ({ ...prev }));
         return;
       }
@@ -86,10 +87,12 @@ const MngCanvasForm = ({}: Props) => {
       switch (e.key) {
         case SHORT_CUT_KEY.highlight:
           e.preventDefault();
-          // canvas
+
           if (!value.field) throw new Error();
+          // canvas
           value.field.updateMode(MODE.highlight);
-          // local
+
+          // 再描画
           setValue((prev) => ({ ...prev }));
           break;
         default:
@@ -106,9 +109,11 @@ const MngCanvasForm = ({}: Props) => {
       if (value.field.mode !== MODE.shift) return;
 
       e.preventDefault();
-      // local
+
+      // canvas
       value.field.updateMode(MODE.new);
-      // local rerender
+
+      // 再描画
       setValue((prev) => ({ ...prev }));
     },
     [value]
@@ -123,12 +128,14 @@ const MngCanvasForm = ({}: Props) => {
     };
   }, [handleKeyDown, handleKeyUp]);
 
+  // will delete
   const handleChangeMode = (mode: string) => {
-    // canvas
     if (!value.field) throw new Error();
+
+    // canvas
     value.field.updateMode(mode);
 
-    // local
+    // 再描画
     setValue((prev) => ({ ...prev }));
   };
 

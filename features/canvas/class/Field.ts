@@ -9,7 +9,7 @@ export class Field {
   objs: Box[] = [];
   expandObj: Box | null = null;
   expandStartObj: Box | null = null;
-  connectedObjSets: number[][] = [];
+  connectedObjSets: number[][] = []; // [startObj, endObj] の順
 
   // コンストラクタで大きさを設定
   constructor(width: number, height: number, canvas: HTMLCanvasElement) {
