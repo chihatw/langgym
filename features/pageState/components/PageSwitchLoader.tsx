@@ -1,14 +1,9 @@
 'use client';
 
-import { Dialog, DialogContent } from '@/components/ui/dialog';
-import PageSwitch from '@/features/pageState/components/PageSwitch';
-import {
-  fetchPageStateByUid,
-  updatePageStateIsOpen,
-} from '@/features/pageState/services/client';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { fetchPageStateByUid } from '../services/client';
+import PageSwitch from './PageSwitch';
 
 type Props = { uid: string };
 
@@ -24,8 +19,7 @@ const INITIAL_STATE: FormProps = {
   pageState: 'blank',
 };
 
-const RealtimeModal = ({ uid }: Props) => {
-  const router = useRouter();
+const PageSwitchLoader = ({ uid }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
 
   // initialize
@@ -74,26 +68,7 @@ const RealtimeModal = ({ uid }: Props) => {
     };
   }, [value, uid]);
 
-  const handleClose = async () => {
-    // local
-    setValue((prev) => ({ ...prev, isOpen: false }));
-    // remote
-    updatePageStateIsOpen(value.uid, false);
-  };
-
-  return (
-    <Dialog
-      open={value.isOpen!}
-      onOpenChange={(isOpen) => {
-        if (isOpen) return;
-        handleClose();
-      }}
-    >
-      <DialogContent className='min-w-full h-screen bg-slate-200 overflow-scroll pb-80 pt-20'>
-        <PageSwitch pageState={value.pageState} />
-      </DialogContent>
-    </Dialog>
-  );
+  return <PageSwitch pageState={value.pageState} />;
 };
 
-export default RealtimeModal;
+export default PageSwitchLoader;

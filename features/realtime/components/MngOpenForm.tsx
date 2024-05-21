@@ -1,11 +1,16 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { updateRemoteLoginTrigger } from '@/features/auth/services/client';
+
 import { PageStateView } from '@/features/pageState/schema';
 import { updatePageStateIsOpen } from '@/features/pageState/services/client';
 import { PathnameLogView } from '@/features/pathnameLog/schema';
+import {
+  updateBackToHomeTrigger,
+  updateRedirectToRealtimeTrigger,
+  updateRefreshRealtimeTrigger,
+  updateRemoteLoginTrigger,
+} from '@/features/trigger/services/client';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import MngOpenFormRow from './MngOpenFormRow';
 
@@ -22,7 +27,6 @@ const INITIAL_STATE: MngOpenFormProps = {
 };
 
 const MngOpenForm = ({ pageStates, pathnameLogs }: Props) => {
-  const router = useRouter();
   const [value, setValue] = useState(INITIAL_STATE);
 
   useEffect(() => {
@@ -39,32 +43,6 @@ const MngOpenForm = ({ pageStates, pathnameLogs }: Props) => {
     const supabase = createSupabaseClientComponentClient();
     const channel = supabase
       .channel('pathname logs')
-
-      .on(
-        'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'pathname_logs' },
-        (preload) => {
-          const updated = preload.new;
-          const { uid, removed_at } = updated;
-          setValue((prev) => {
-            const target = prev.pathnameLogs.map((item) => {
-              if (item.uid !== uid) {
-                return item;
-              }
-
-              return {
-                ...item,
-                removed_at: new Date(removed_at),
-              };
-            });
-
-            return {
-              ...prev,
-              pathnameLogs: target,
-            };
-          });
-        }
-      )
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'pathname_logs' },
@@ -72,14 +50,10 @@ const MngOpenForm = ({ pageStates, pathnameLogs }: Props) => {
           const { created_at, pathname, uid } = preload.new;
           setValue((prev) => {
             const target = prev.pathnameLogs.map((item) => {
-              if (item.uid !== uid) {
-                return item;
-              }
-
+              if (item.uid !== uid) return item;
               return {
                 ...item,
                 created_at: new Date(created_at),
-                removed_at: null,
                 pathname,
               };
             });
@@ -116,20 +90,37 @@ const MngOpenForm = ({ pageStates, pathnameLogs }: Props) => {
     updatePageStateIsOpen(uid, isOpen);
   };
 
-  const handleRemoteLogin = () => {
-    updateRemoteLoginTrigger();
-  };
-
   return (
     <div className='grid gap-4'>
       <div className='text-xs font-extrabold'>Is Open</div>
-      <div>
+      <div className='flex gap-4'>
         <Button
           className='h-auto w-auto p-0'
           variant={'ghost'}
-          onClick={handleRemoteLogin}
+          onClick={updateRemoteLoginTrigger}
         >
           Remote Log in
+        </Button>
+        <Button
+          className='h-auto w-auto p-0'
+          variant={'ghost'}
+          onClick={updateRedirectToRealtimeTrigger}
+        >
+          Redirect to Realtime
+        </Button>
+        <Button
+          className='h-auto w-auto p-0'
+          variant={'ghost'}
+          onClick={updateBackToHomeTrigger}
+        >
+          Back to Home
+        </Button>
+        <Button
+          className='h-auto w-auto p-0'
+          variant={'ghost'}
+          onClick={updateRefreshRealtimeTrigger}
+        >
+          Refresh Realtime
         </Button>
       </div>
       <div className='grid gap-4'>

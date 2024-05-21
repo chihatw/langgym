@@ -1,5 +1,5 @@
 import { BOX_HEIGHT, BOX_MIN_WIDTH, MODE, REDRAW } from '../../constants';
-import { deleteBox } from '../../services/client';
+import { deleteBox, insertBox, updateBox } from '../../services/client';
 import { boxCollision } from '../../services/utils';
 import { Box } from '../Box';
 import { Field } from '../Field';
@@ -18,8 +18,8 @@ export class DraggableField extends Field {
   splitBy = 0;
   highlights: { [boxId: number]: number[] } = {};
 
-  handleSetSelectedObj;
   focusInput;
+  handleSetSelectedObj;
 
   constructor(
     width: number,
@@ -57,6 +57,51 @@ export class DraggableField extends Field {
     this.redraw(REDRAW.select);
   }
 
+  add(_x: number, _y: number) {
+    const box = new Box(_x, _y, '', 0, [], false);
+
+    // canvas
+    this.objs = [...this.objs, box];
+
+    // remote
+    insertBox(box);
+
+    this.selectObj = box;
+    this.handleSetSelectedObj(this.selectObj);
+    setTimeout(() => this.focusInput(), 200);
+
+    this.redraw(REDRAW.add);
+  }
+
+  delete(objId: number) {
+    this.selectObj = null;
+    this.objs = this.objs.filter((o) => o.id !== objId);
+    this.connectedObjSets = this.connectedObjSets.filter(
+      (s) => !s.includes(objId)
+    );
+
+    // remote
+    deleteBox(objId);
+    this.redraw(REDRAW.delete);
+  }
+
+  updateLabel(label: string) {
+    if (!this.selectObj) throw new Error();
+    this.selectObj.updateLabel(label);
+
+    // ハイライトは解除
+    this.selectObj.dehighlight();
+
+    const clone = { ...this.highlights };
+    delete clone[this.selectObj.id];
+    this.highlights = clone;
+
+    // remote
+    updateBox(this.selectObj);
+
+    this.redraw(REDRAW.updateLabel);
+  }
+
   grab(obj: Box, _x: number, _y: number) {
     if (this.selectObj) {
       this.selectObj = null;
@@ -69,6 +114,9 @@ export class DraggableField extends Field {
 
     this.dragObj.dragging(obj.x, obj.y);
     this.redraw(REDRAW.grab);
+
+    // remote
+    updateBox(this.dragObj);
   }
 
   drag(_x: number, _y: number) {
@@ -80,6 +128,11 @@ export class DraggableField extends Field {
 
     this.dragObj.dragging(_x - this.dragDX, _y - this.dragDY);
     this.redraw(REDRAW.dragging);
+
+    // remote
+    updateBox(this.dragObj);
+
+    // todo expand の処理
   }
 
   ungrab() {
@@ -87,17 +140,6 @@ export class DraggableField extends Field {
     if (this.expandStartObj) this.expandStartObj = null;
     this.dragObj = null;
     this.redraw(REDRAW.ungrab);
-  }
-
-  add(_x: number, _y: number) {
-    const box = new Box(_x, _y, '', 0, [], false);
-    this.objs = [...this.objs, box];
-
-    this.selectObj = box;
-    this.handleSetSelectedObj(this.selectObj);
-    setTimeout(() => this.focusInput(), 200);
-
-    // todo remote add
   }
 
   expand(obj: Box, _x: number, _y: number) {
@@ -117,8 +159,12 @@ export class DraggableField extends Field {
     this.expandObj = box;
     this.expandStartObj = obj;
 
-    // todo remote update
+    // remote
+    insertBox(box);
+
     this.redraw(REDRAW.expand);
+
+    // todo expand の処理
   }
 
   completeExpand() {
@@ -135,19 +181,6 @@ export class DraggableField extends Field {
 
     // todo remote add connetion
     this.redraw(REDRAW.completeExpand);
-  }
-
-  delete(objId: number) {
-    this.selectObj = null;
-    this.objs = this.objs.filter((o) => o.id !== objId);
-    this.connectedObjSets = this.connectedObjSets.filter(
-      (s) => !s.includes(objId)
-    );
-
-    // remote
-    deleteBox(objId);
-    // todo remote delete connectedObjSets
-    this.redraw(REDRAW.delete);
   }
 
   split(_x: number, _y: number) {
@@ -220,20 +253,6 @@ export class DraggableField extends Field {
     // todo remote add connectedObjSet
 
     this.redraw(REDRAW.connect);
-  }
-
-  updateLabel(label: string) {
-    if (!this.selectObj) throw new Error();
-    this.selectObj.updateLabel(label);
-
-    // ハイライトは解除
-    this.selectObj.dehighlight();
-
-    const clone = { ...this.highlights };
-    delete clone[this.selectObj.id];
-    this.highlights = clone;
-
-    this.redraw('update label');
   }
 
   updateMode(mode: string) {

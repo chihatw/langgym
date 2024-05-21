@@ -457,6 +457,36 @@ export type Database = {
         }
         Relationships: []
       }
+      canvas_boxes: {
+        Row: {
+          highlights: number[]
+          id: number
+          isHidden: boolean
+          label: string
+          splitBy: number
+          x: number
+          y: number
+        }
+        Insert: {
+          highlights: number[]
+          id?: number
+          isHidden: boolean
+          label: string
+          splitBy: number
+          x: number
+          y: number
+        }
+        Update: {
+          highlights?: number[]
+          id?: number
+          isHidden?: boolean
+          label?: string
+          splitBy?: number
+          x?: number
+          y?: number
+        }
+        Relationships: []
+      }
       canvas_lines: {
         Row: {
           endCharIndex: number | null
@@ -578,21 +608,18 @@ export type Database = {
           created_at: string
           id: number
           pathname: string
-          removed_at: string | null
           uid: string
         }
         Insert: {
           created_at?: string
           id?: number
           pathname: string
-          removed_at?: string | null
           uid: string
         }
         Update: {
           created_at?: string
           id?: number
           pathname?: string
-          removed_at?: string | null
           uid?: string
         }
         Relationships: []
@@ -675,16 +702,19 @@ export type Database = {
         }
         Relationships: []
       }
-      remote_login_trigger: {
+      remote_trigger: {
         Row: {
+          description: string
           id: number
           updated_at: string
         }
         Insert: {
+          description?: string
           id?: number
-          updated_at: string
+          updated_at?: string
         }
         Update: {
+          description?: string
           id?: number
           updated_at?: string
         }
@@ -1271,7 +1301,6 @@ export type Database = {
           created_at: string | null
           display: string | null
           pathname: string | null
-          removed_at: string | null
           uid: string | null
         }
         Relationships: [
@@ -1468,10 +1497,6 @@ export type Database = {
           _uid: string
           _pathname: string
         }
-        Returns: undefined
-      }
-      update_remote_login_trigger: {
-        Args: Record<PropertyKey, never>
         Returns: undefined
       }
     }

@@ -15,6 +15,5 @@ export async function fetchPathnameLogs(): Promise<PathnameLogView[]> {
   return data.map((item) => ({
     ...item,
     created_at: new Date(item.created_at!),
-    removed_at: item.removed_at ? new Date(item.removed_at) : null,
   }));
 }

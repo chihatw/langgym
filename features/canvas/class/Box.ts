@@ -1,13 +1,7 @@
 import { customAlphabet } from 'nanoid';
 import { BG_COLOR, FONT_SIZE, SEGMENT } from '../constants';
 import { CharDOM } from '../schema';
-import {
-  insertBox,
-  updateBoxLabel,
-  updateBoxXY,
-  updateHighlights,
-  updateSplitBy,
-} from '../services/client';
+import { updateHighlights, updateSplitBy } from '../services/client';
 import { checkIsMouseOver } from '../services/utils';
 import { Char } from './Char';
 import { DummyDOM } from './DummyDOM';
@@ -24,7 +18,7 @@ export class Box {
   splittedX = 0;
   highlights: number[] = [];
 
-  #splitBy = 0;
+  splitBy = 0;
 
   constructor(
     x: number,
@@ -42,18 +36,15 @@ export class Box {
     this.label = label;
     this.isHidden = isHidden;
     this.highlights = highlights;
-    this._setWidthHeightChars(label, splitBy);
-    if (!id) {
-      // update remote
-      insertBox({
-        id: this.id,
-        x,
-        y,
-        label,
-        splitBy,
-        highlights: [],
-      });
-    }
+    const { width, height, chars } = _setWidthHeightChars({
+      label,
+      splitBy,
+      x,
+      y,
+      highlights,
+    });
+    this.width = width;
+    (this.height = height), (this.chars = chars);
   }
 
   get bottom() {
@@ -100,27 +91,13 @@ export class Box {
     return SEGMENT.handle;
   }
 
-  // will delete
-  nthCenterX(index: number) {
-    const targetChar = this.chars.find((c) => c.index === index);
-    if (targetChar) return targetChar.centerX;
-    // targetChar がない場合は box の中心を返す
-    return this.x + this.width / 2;
-  }
-
-  // will delete
-  nthCenterY(index: number) {
-    const targetChar = this.chars.find((c) => c.index === index);
-    if (targetChar) return targetChar.centerY;
-    // targetChar がない場合は box の中心を返す
-    return this.y + this.height / 2;
-  }
-
   updateLabel(label: string) {
     this.label = label;
-    this._setWidthHeightChars(label, 0, this.width);
-    // remote
-    updateBoxLabel(this.id, label);
+    const { width, height, chars, x } = _setWidthHeightChars(this, this.width);
+    this.x = x;
+    this.width = width;
+    this.height = height;
+    this.chars = chars;
   }
 
   inBounds(x: number, y: number) {
@@ -138,10 +115,10 @@ export class Box {
     this.x = x;
     this.y = y;
 
-    this._setWidthHeightChars(this.label, 0);
-
-    // remote
-    updateBoxXY(this.id, x, y);
+    const { width, height, chars } = _setWidthHeightChars(this);
+    this.width = width;
+    this.height = height;
+    this.chars = chars;
   }
 
   // 座標がどの Char の上かチェック
@@ -167,15 +144,19 @@ export class Box {
     }
 
     // 分割が変更されている場合、大きさを再計算して、リモートも更新
-    if (this.#splitBy !== splitBy) {
-      this.#splitBy = splitBy;
+    if (this.splitBy !== splitBy) {
+      this.splitBy = splitBy;
       this.splittedX = splittedX;
-      this._setWidthHeightChars(this.label, this.#splitBy);
+      const { width, height, chars } = _setWidthHeightChars(this);
+      this.width = width;
+      this.height = height;
+      this.chars = chars;
+
       // remote
-      updateSplitBy(this.id, this.#splitBy);
+      updateSplitBy(this.id, this.splitBy);
     }
 
-    return this.#splitBy;
+    return this.splitBy;
   }
 
   // 追加だけ（削除はしない）
@@ -193,7 +174,10 @@ export class Box {
     if (typeof highlight === 'number') result.push(highlight);
     // 重複をなくして、sort
     this.highlights = Array.from(new Set(result)).sort((a, b) => a - b);
-    this._setWidthHeightChars(this.label, this.#splitBy);
+    const { width, height, chars } = _setWidthHeightChars(this);
+    this.width = width;
+    this.height = height;
+    this.chars = chars;
 
     // remote
     updateHighlights(this.id, this.highlights);
@@ -202,54 +186,13 @@ export class Box {
 
   dehighlight() {
     this.highlights = [];
-    this._setWidthHeightChars(this.label, this.#splitBy);
+    const { width, height, chars } = _setWidthHeightChars(this);
+    this.width = width;
+    this.height = height;
+    this.chars = chars;
 
     // remote
     updateHighlights(this.id, []);
-  }
-
-  _buildChars(
-    x: number,
-    y: number,
-    height: number,
-    charDOMs: CharDOM[],
-    splitBy: number,
-    highlights?: number[]
-  ) {
-    const chars = charDOMs.map(
-      (c, index) =>
-        new Char(
-          x + c.left,
-          y,
-          c.width,
-          height,
-          c.label || '',
-          index,
-          index === splitBy - 1,
-          highlights ? highlights.includes(index) : false
-        )
-    );
-    return chars;
-  }
-
-  _setWidthHeightChars(label: string, splitBy: number, width_org?: number) {
-    const dummyDOM = new DummyDOM(label, splitBy);
-    this.width = dummyDOM.width;
-    this.height = dummyDOM.height;
-
-    if (width_org) {
-      const gap = this.width - width_org;
-      this.x = this.x - gap / 2;
-    }
-
-    this.chars = this._buildChars(
-      this.x,
-      this.y,
-      dummyDOM.height,
-      dummyDOM.chars,
-      splitBy,
-      this.highlights
-    );
   }
 
   draw(ctx: CanvasRenderingContext2D) {
@@ -270,4 +213,46 @@ export class Box {
       char.draw(ctx);
     }
   }
+}
+
+function _setWidthHeightChars(
+  box: Pick<Box, 'label' | 'splitBy' | 'x' | 'y' | 'highlights'>,
+  width_org?: number
+) {
+  let width = 0;
+  let height = 0;
+  let chars: Char[] = [];
+  let new_x = box.x;
+
+  const dummyDOM = new DummyDOM(box.label, box.splitBy);
+  width = dummyDOM.width;
+  height = dummyDOM.height;
+
+  if (width_org) {
+    const gap = width - width_org;
+    new_x = new_x - gap / 2;
+  }
+
+  chars = _buildChars({ ...box, height, x: new_x }, dummyDOM.chars);
+  return { width, height, chars, x: new_x };
+}
+
+function _buildChars(
+  box: Pick<Box, 'height' | 'x' | 'y' | 'splitBy' | 'highlights'>,
+  charDOMs: CharDOM[]
+) {
+  const chars = charDOMs.map(
+    (c, index) =>
+      new Char(
+        box.x + c.left,
+        box.y,
+        c.width,
+        box.height,
+        c.label || '',
+        index,
+        index === box.splitBy - 1,
+        box.highlights ? box.highlights.includes(index) : false
+      )
+  );
+  return chars;
 }

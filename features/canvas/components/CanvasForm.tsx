@@ -1,9 +1,10 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { nanoid } from 'nanoid';
 import { useEffect, useRef } from 'react';
 import { Box } from '../class/Box';
 import { Field } from '../class/Field';
 import { RECT } from '../constants';
-import { fetchCanvas } from '../services/client';
+import { fetchBoxes } from '../services/client';
 import CanvasDom from './CanvasDom';
 
 type Props = {};
@@ -29,7 +30,7 @@ const CanvasForm = (props: Props) => {
       const field = new Field(RECT.width, RECT.height, canvas.current);
       ref.current = { field };
 
-      const _boxes = await fetchCanvas();
+      const _boxes = await fetchBoxes();
       const boxes: Box[] = [];
       for (const _box of _boxes) {
         const { label, x, y, id, splitBy, highlights } = _box;
@@ -45,23 +46,20 @@ const CanvasForm = (props: Props) => {
   useEffect(() => {
     const supabase = createSupabaseClientComponentClient();
     const channel = supabase
-      .channel('canvas form')
+      .channel(`canvas form ${nanoid()}`)
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'canvas',
+          table: 'canvas_boxes',
         },
         (preload) => {
           console.log('insert box');
           const inserted = preload.new;
-          // todo add isHedding column to canvas table
           const { x, y, label, id, splitBy, highlights, isHidden } = inserted;
-
           const { field } = ref.current;
           if (!field) throw new Error();
-
           field.objs = [
             ...field.objs,
             new Box(x, y, label, splitBy, highlights, isHidden, id),
@@ -71,18 +69,33 @@ const CanvasForm = (props: Props) => {
       .on(
         'postgres_changes',
         {
+          event: 'DELETE',
+          schema: 'public',
+          table: 'canvas_boxes',
+        },
+        (preload) => {
+          console.log('delete box');
+          // delete が発火しない解決法 ALTER TABLE your_table REPLICA IDENTITY FULL
+          // https://github.com/supabase/supabase/issues/4905
+          const { id } = preload.old;
+          const { field } = ref.current;
+          if (!field) throw new Error();
+          field.objs = field.objs.filter((obj) => obj.id !== id);
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
           event: 'UPDATE',
           schema: 'public',
-          table: 'canvas',
+          table: 'canvas_boxes',
         },
         (preload) => {
           console.log('update box');
           const updated = preload.new;
           const { x, y, label, id, splitBy, highlights, isHidden } = updated;
-
           const { field } = ref.current;
           if (!field) throw new Error();
-
           const newBox = new Box(
             x,
             y,
@@ -92,36 +105,16 @@ const CanvasForm = (props: Props) => {
             isHidden,
             id
           );
-
           // objs に含まれていない場合、追加
           if (!field.objs.find((o) => o.id === id)) {
             field.objs = [...field.objs, newBox];
             return;
           }
-
           // 含まれている場合、変更
           field.objs = field.objs.map((obj) => (obj.id !== id ? obj : newBox));
         }
       )
-      .on(
-        'postgres_changes',
-        {
-          event: 'DELETE',
-          schema: 'public',
-          table: 'canvas',
-        },
-        (preload) => {
-          console.log('delete box');
-          // delete が発火しない解決法 ALTER TABLE your_table REPLICA IDENTITY FULL
-          // https://github.com/supabase/supabase/issues/4905
-          const { id } = preload.old;
 
-          const { field } = ref.current;
-          if (!field) throw new Error();
-
-          field.objs = field.objs.filter((obj) => obj.id !== id);
-        }
-      )
       .subscribe();
     return () => {
       supabase.removeChannel(channel);

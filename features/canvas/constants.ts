@@ -24,6 +24,7 @@ export const REDRAW = {
   select: 'select',
   add: 'add',
   delete: 'delete',
+  updateLabel: 'updateLabel',
   grab: 'grab',
   ungrab: 'ungrab',
   dragging: 'dragging',

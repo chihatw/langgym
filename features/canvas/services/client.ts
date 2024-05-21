@@ -1,10 +1,9 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
-import { CanvasBox, CanvasLine } from '../schema';
+import { CanvasBox_New, CanvasLine } from '../schema';
 
-export async function fetchCanvas(): Promise<CanvasBox[]> {
+export async function fetchBoxes(): Promise<CanvasBox_New[]> {
   const supabase = createSupabaseClientComponentClient();
-  const { data, error } = await supabase.from('canvas').select();
-
+  const { data, error } = await supabase.from('canvas_boxes').select();
   if (error) {
     console.error(error.message);
     return [];
@@ -20,15 +19,17 @@ export async function insertBox({
   label,
   splitBy,
   highlights,
-}: CanvasBox) {
+  isHidden,
+}: CanvasBox_New) {
   const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase.from('canvas').insert({
+  const { error } = await supabase.from('canvas_boxes').insert({
     id,
     x: x >> 0,
     y: y >> 0,
     label,
     splitBy,
     highlights,
+    isHidden,
   });
 
   if (error) {
@@ -37,27 +38,26 @@ export async function insertBox({
   }
 }
 
-export async function updateBoxXY(id: number, x: number, y: number) {
+export async function updateBox({
+  id,
+  x,
+  y,
+  label,
+  splitBy,
+  highlights,
+  isHidden,
+}: CanvasBox_New) {
   const supabase = createSupabaseClientComponentClient();
   const { error } = await supabase
-    .from('canvas')
+    .from('canvas_boxes')
     .update({
       x: x >> 0, // SHIFT演算子による整数への変更 https://www.delftstack.com/ja/howto/javascript/javascript-float-to-int/
       y: y >> 0,
+      label,
+      splitBy,
+      highlights,
+      isHidden,
     })
-    .eq('id', id);
-
-  if (error) {
-    console.error(error.message);
-    return;
-  }
-}
-
-export async function updateBoxLabel(id: number, label: string) {
-  const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase
-    .from('canvas')
-    .update({ label })
     .eq('id', id);
 
   if (error) {
@@ -94,41 +94,13 @@ export async function updateHighlights(id: number, highlights: number[]) {
 
 export async function deleteBox(id: number) {
   const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase.from('canvas').delete().eq('id', id);
+  const { error } = await supabase.from('canvas_boxes').delete().eq('id', id);
   if (error) {
     console.error(error.message);
     return;
   }
-}
 
-export async function insertLine({
-  id,
-  startX,
-  startY,
-  endX,
-  endY,
-  startObjId,
-  startCharIndex,
-  endObjId,
-  endCharIndex,
-}: CanvasLine) {
-  const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase.from('canvas_lines').insert({
-    id,
-    startX: startX >> 0,
-    startY: startY >> 0,
-    endX: endX >> 0,
-    endY: endY >> 0,
-    startObjId,
-    startCharIndex,
-    endObjId,
-    endCharIndex,
-  });
-
-  if (error) {
-    console.error(error.message);
-    return;
-  }
+  // todo delete Connection lines
 }
 
 export async function updateLine({

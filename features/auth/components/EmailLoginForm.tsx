@@ -3,6 +3,7 @@
 import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Input } from '@/components/ui/input';
 import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
+import { REMOTE_TRIGGER_ID } from '@/features/trigger/constants';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { isValidEmail } from '@/utils';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -62,7 +63,12 @@ const EmailLoginForm = (props: Props) => {
       .channel('remote login trigger')
       .on(
         'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'remote_login_trigger' },
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'remote_trigger',
+          filter: `id=eq.${REMOTE_TRIGGER_ID.login}`,
+        },
         () => {
           login();
         }

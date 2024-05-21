@@ -1,6 +1,6 @@
 import Breadcrumb from '@/components/Breadcrumb';
+import HiddenElements from '@/components/ui/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
-import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
 import WorkoutForm from '@/features/workout/components/WorkoutForm/WorkoutForm';
 import {
   fetchWorkoutItemsByWorkoutId,
@@ -26,7 +26,7 @@ const WorkoutPage = async ({ params: { id } }: Props) => {
           recordRows={workoutRecordRows}
         />
       </div>
-      <PathnameLog uid={user.id} />
+      <HiddenElements uid={user.id} />
     </>
   );
 };

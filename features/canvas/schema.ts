@@ -7,6 +7,16 @@ export interface CanvasBox {
   highlights: number[];
 }
 
+export interface CanvasBox_New {
+  id: number;
+  x: number;
+  y: number;
+  label: string;
+  splitBy: number;
+  highlights: number[];
+  isHidden: boolean;
+}
+
 export interface CharDOM {
   label: string | null;
   left: number;

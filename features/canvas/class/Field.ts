@@ -47,7 +47,7 @@ export class Field {
 
     this.#ctx.clearRect(0, 0, this.width, this.height);
 
-    // expand があれば arrow を表示
+    // draw expand
     if (this.expandObj && this.expandStartObj) {
       const arrow =
         this.expandObj.lineEndX <= this.expandStartObj.lineStartX
@@ -56,6 +56,7 @@ export class Field {
       arrow.draw(this.#ctx);
     }
 
+    // draw connections
     for (const connectedObjSet of this.connectedObjSets) {
       const box1 = this.objs.find((o) => o.id === connectedObjSet.at(0));
       const box2 = this.objs.find((o) => o.id === connectedObjSet.at(1));
@@ -64,6 +65,7 @@ export class Field {
       arrow.draw(this.#ctx);
     }
 
+    // draw boxes
     for (const obj of this.objs) {
       if (obj.isHidden) continue;
       obj.draw(this.#ctx);

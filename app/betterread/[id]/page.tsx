@@ -1,8 +1,8 @@
 import Breadcrumb from '@/components/Breadcrumb';
+import HiddenElements from '@/components/ui/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 import BetterreadForm from '@/features/betterread/components/BetterreadForm/BetterreadForm';
 import { fetchBetterreadImagePathsById } from '@/features/betterread/services/server';
-import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
 
 type Props = { params: { id: number } };
 
@@ -17,7 +17,7 @@ const BetterreadPage = async ({ params: { id } }: Props) => {
         <Breadcrumb label='課前準備' />
         <BetterreadForm imagePaths={imagePaths} />
       </div>
-      <PathnameLog uid={user.id} />
+      <HiddenElements uid={user.id} />
     </>
   );
 };

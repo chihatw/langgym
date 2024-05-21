@@ -1,6 +1,6 @@
 import Breadcrumb from '@/components/Breadcrumb';
+import HiddenElements from '@/components/ui/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
-import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
 import QuizForm from '@/features/quiz/components/QuizForm/QuizForm';
 import { fetchArticlePitchQuizQuestions } from '@/features/quiz/services/server';
 
@@ -18,7 +18,7 @@ const QuizPage = async ({ params: { id } }: Props) => {
         <Breadcrumb label='アクセント問題' />
         <QuizForm questions={questions} redirectPath='/answer' />
       </div>
-      <PathnameLog uid={user.id} />
+      <HiddenElements uid={user.id} />
     </>
   );
 };

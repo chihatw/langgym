@@ -33,7 +33,6 @@ function handleMouseDown_new(
   // 下にオブジェクトがなければ add
   if (!obj) {
     field.add(_x, _y);
-    field.redraw(REDRAW.add);
     return;
   }
 

@@ -1,8 +1,8 @@
 import Breadcrumb from '@/components/Breadcrumb';
+import HiddenElements from '@/components/ui/HiddenElements';
 import ArticlePane from '@/features/article/components/ArticlePane/ArticlePane';
 import { fetchSentencesByArticleId_Uid } from '@/features/article/services/server';
 import { getUserFromServerSide } from '@/features/auth/services/server';
-import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
 
 type Props = {
   params: { id: number };
@@ -22,7 +22,7 @@ const ArticlePage = async ({ params: { id } }: Props) => {
         <Breadcrumb label='作文' />
         <ArticlePane sentences={sentences} />
       </div>
-      <PathnameLog uid={user.id} />
+      <HiddenElements uid={user.id} />
     </>
   );
 };
