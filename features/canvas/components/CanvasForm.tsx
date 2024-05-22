@@ -132,12 +132,8 @@ const CanvasForm = (props: Props) => {
           const { field } = ref.current;
           if (!field) throw new Error();
 
-          const expandObj = field.objs.find((o) => o.id === expandObjId);
-          const expandStartObj = field.objs.find(
-            (o) => o.id === expandStartObjId
-          );
-          field.expandObj = expandObj || null;
-          field.expandStartObj = expandStartObj || null;
+          field.expandObjId = expandObjId || null;
+          field.expandStartObjId = expandStartObjId || null;
         }
       )
       .subscribe();

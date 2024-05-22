@@ -7,8 +7,8 @@ export class Field {
   width;
   height;
   objs: Box[] = [];
-  expandObj: Box | null = null;
-  expandStartObj: Box | null = null;
+  expandObjId: number | null = 0;
+  expandStartObjId: number | null = 0;
   connectedObjSets: number[][] = []; // [startObj, endObj] の順
 
   // コンストラクタで大きさを設定
@@ -40,6 +40,14 @@ export class Field {
     canvas.style.transform = `scale(${1 / dpr},${1 / dpr})`;
   }
 
+  get expandObj() {
+    return this.objs.find((o) => o.id === this.expandObjId) || null;
+  }
+
+  get expandStartObj() {
+    return this.objs.find((o) => o.id === this.expandStartObjId) || null;
+  }
+
   redraw(debug: string) {
     if (!this.#ctx) throw new Error();
 
@@ -47,7 +55,6 @@ export class Field {
 
     this.#ctx.clearRect(0, 0, this.width, this.height);
 
-    // debug 描画されない drag しても expandObj, expandStartObj が更新されていないから
     // draw expand
     if (this.expandObj && this.expandStartObj) {
       const arrow =

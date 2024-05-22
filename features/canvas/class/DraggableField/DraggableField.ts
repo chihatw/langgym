@@ -145,8 +145,8 @@ export class DraggableField extends Field {
   }
 
   ungrab() {
-    if (this.expandObj) this.expandObj = null;
-    if (this.expandStartObj) this.expandStartObj = null;
+    if (this.expandObjId) this.expandObjId = null;
+    if (this.expandStartObjId) this.expandStartObjId = null;
     this.dragObj = null;
     this.redraw(REDRAW.ungrab);
   }
@@ -218,8 +218,8 @@ export class DraggableField extends Field {
     this.dragObj = box;
     this.dragDX = _x - box.x;
     this.dragDY = _y - box.y;
-    this.expandObj = box;
-    this.expandStartObj = obj;
+    this.expandObjId = box.id;
+    this.expandStartObjId = obj.id;
 
     this.redraw(REDRAW.expand);
 
@@ -240,8 +240,8 @@ export class DraggableField extends Field {
       [this.expandObj.id, this.expandStartObj.id],
     ];
 
-    this.expandObj = null;
-    this.expandStartObj = null;
+    this.expandObjId = null;
+    this.expandStartObjId = null;
     this.dragObj = null;
 
     // todo remote add connetion
@@ -261,8 +261,8 @@ export class DraggableField extends Field {
       [this.expandStartObj.id, obj.id],
     ];
 
-    this.expandObj = null;
-    this.expandStartObj = null;
+    this.expandObjId = null;
+    this.expandStartObjId = null;
     this.dragObj = null;
 
     // todo remote add connectedObjSet

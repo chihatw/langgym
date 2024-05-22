@@ -32,14 +32,8 @@ const MngOpenFormRow = ({ index, value, handleChange }: Props) => {
       <div className='text-xs '>is open</div>
       {pathnameLog ? (
         <div className='flex justify-end gap-2 text-xs items-center'>
-          {pathnameLog.removed_at ? (
-            <div className='text-xs pr-2'>logout</div>
-          ) : (
-            <>
-              <div>{pathnameLog.pathname}</div>
-              <div>{pathnameLog.created_at!.toLocaleTimeString()}</div>
-            </>
-          )}
+          <div>{pathnameLog.pathname}</div>
+          <div>{pathnameLog.created_at!.toLocaleTimeString()}</div>
         </div>
       ) : null}
     </div>
