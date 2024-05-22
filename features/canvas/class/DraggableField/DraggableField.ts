@@ -1,17 +1,11 @@
-import {
-  BOX_HEIGHT,
-  BOX_MIN_WIDTH,
-  CANVAS_FIELD_ID,
-  MODE,
-  REDRAW,
-} from '../../constants';
+import { BOX_HEIGHT, BOX_MIN_WIDTH, MODE, REDRAW } from '../../constants';
 import {
   deleteBox,
   insertBox,
   updateBox,
   updateField,
 } from '../../services/client';
-import { boxCollision } from '../../services/utils';
+import { boxCollision, connectedObjSetsStringify } from '../../services/utils';
 import { Box } from '../Box';
 import { Field } from '../Field';
 import { handleMouseDown } from './handleMouseDown';
@@ -95,6 +89,7 @@ export class DraggableField extends Field {
 
     // remote
     deleteBox(objId);
+    updateField(this);
   }
 
   updateLabel(label: string) {
@@ -149,6 +144,9 @@ export class DraggableField extends Field {
     if (this.expandStartObjId) this.expandStartObjId = null;
     this.dragObj = null;
     this.redraw(REDRAW.ungrab);
+
+    // remote
+    updateField(this);
   }
 
   split(obj: Box, _x: number, _y: number) {
@@ -177,11 +175,6 @@ export class DraggableField extends Field {
     // 旧 box の削除と 新 box の追加
     this.objs = [...this.objs.filter((o) => o.id !== obj.id), box2, box1];
 
-    // remote
-    deleteBox(obj.id);
-    insertBox(box1);
-    insertBox(box2);
-
     this.connectedObjSets = this.connectedObjSets.map((set) => {
       // 元の obj と無関係の connection はそのまま
       if (!set.includes(obj.id)) return set;
@@ -192,8 +185,6 @@ export class DraggableField extends Field {
       return isDivideStart ? [box2.id, oppoObjId] : [oppoObjId, box1.id];
     });
 
-    // todo remote update connections
-
     // 関連 highlights の削除
     const clone = { ...this.highlights };
     delete clone[obj.id];
@@ -202,6 +193,12 @@ export class DraggableField extends Field {
     this.splitBy = 0;
 
     this.redraw(REDRAW.divide);
+
+    // remote
+    deleteBox(obj.id);
+    insertBox(box1);
+    insertBox(box2);
+    updateField(this);
   }
 
   expand(obj: Box, _x: number, _y: number) {
@@ -223,13 +220,14 @@ export class DraggableField extends Field {
 
     this.redraw(REDRAW.expand);
 
+    const temp = {
+      ...this,
+      connectedObjSets: connectedObjSetsStringify(this.connectedObjSets),
+    };
+
     // remote
     insertBox(box);
-    updateField({
-      id: CANVAS_FIELD_ID,
-      expandObjId: box.id,
-      expandStartObjId: obj.id,
-    });
+    updateField(temp);
   }
 
   completeExpand() {
@@ -244,8 +242,10 @@ export class DraggableField extends Field {
     this.expandStartObjId = null;
     this.dragObj = null;
 
-    // todo remote add connetion
     this.redraw(REDRAW.completeExpand);
+
+    // remote
+    updateField(this);
   }
 
   connect(obj: Box) {
@@ -265,9 +265,10 @@ export class DraggableField extends Field {
     this.expandStartObjId = null;
     this.dragObj = null;
 
-    // todo remote add connectedObjSet
-
     this.redraw(REDRAW.connect);
+
+    // remote
+    updateField(this);
   }
 
   updateMode(mode: string) {

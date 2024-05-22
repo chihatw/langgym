@@ -1,7 +1,8 @@
 export interface CanvasField {
   id: number;
-  expandObjId: number | undefined;
-  expandStartObjId: number | undefined;
+  expandObjId: number | null;
+  expandStartObjId: number | null;
+  connectedObjSets: string[];
 }
 
 export interface CanvasBox {

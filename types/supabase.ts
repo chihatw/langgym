@@ -447,16 +447,19 @@ export type Database = {
       }
       canvas_field: {
         Row: {
+          connectedObjSets: string[]
           expandObjId: number | null
           expandStartObjId: number | null
           id: number
         }
         Insert: {
+          connectedObjSets?: string[]
           expandObjId?: number | null
           expandStartObjId?: number | null
           id?: number
         }
         Update: {
+          connectedObjSets?: string[]
           expandObjId?: number | null
           expandStartObjId?: number | null
           id?: number

@@ -1,6 +1,22 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { CANVAS_FIELD_ID } from '../constants';
 import { CanvasBox, CanvasField } from '../schema';
+import { connectedObjSetsStringify } from './utils';
+
+export async function fetchField(): Promise<undefined | CanvasField> {
+  const supabase = createSupabaseClientComponentClient();
+  const { data, error } = await supabase
+    .from('canvas_field')
+    .select()
+    .eq('id', CANVAS_FIELD_ID)
+    .single();
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+
+  return data;
+}
 
 export async function fetchBoxes(): Promise<CanvasBox[]> {
   const supabase = createSupabaseClientComponentClient();
@@ -17,11 +33,16 @@ export async function updateField({
   id,
   expandObjId,
   expandStartObjId,
-}: CanvasField) {
+  connectedObjSets,
+}: Omit<CanvasField, 'connectedObjSets'> & { connectedObjSets: number[][] }) {
   const supabase = createSupabaseClientComponentClient();
   const { error } = await supabase
     .from('canvas_field')
-    .update({ expandObjId, expandStartObjId })
+    .update({
+      expandObjId,
+      expandStartObjId,
+      connectedObjSets: connectedObjSetsStringify(connectedObjSets),
+    })
     .eq('id', id);
 
   if (error) {
@@ -104,8 +125,6 @@ export async function deleteBox(id: number) {
     console.error(error.message);
     return;
   }
-
-  // todo delete Connection lines
 }
 
 export async function clearCanvas() {

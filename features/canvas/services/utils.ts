@@ -37,3 +37,11 @@ export function boxCollision(
 function between(target: number, min: number, max: number) {
   return target >= min && target <= max;
 }
+
+export function connectedObjSetsStringify(input: number[][]): string[] {
+  return input.map((set) => set.join(','));
+}
+
+export function connectedObjSetsParse(input: string[]) {
+  return input.map((setStr) => setStr.split(',').map((str) => parseInt(str)));
+}

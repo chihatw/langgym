@@ -4,7 +4,8 @@ import { useEffect, useRef } from 'react';
 import { Box } from '../class/Box';
 import { Field } from '../class/Field';
 import { RECT } from '../constants';
-import { fetchBoxes } from '../services/client';
+import { fetchBoxes, fetchField } from '../services/client';
+import { connectedObjSetsParse } from '../services/utils';
 import CanvasDom from './CanvasDom';
 
 type Props = {};
@@ -31,7 +32,14 @@ const CanvasForm = (props: Props) => {
     (async () => {
       if (!canvas.current) throw new Error();
 
+      const _field = await fetchField();
+      if (!_field) return;
+
       const field = new Field(RECT.width, RECT.height, canvas.current);
+      field.connectedObjSets = connectedObjSetsParse(_field.connectedObjSets);
+      field.expandObjId = _field.expandObjId;
+      field.expandStartObjId = _field.expandStartObjId;
+
       ref.current = { field, initializing: false };
 
       const _boxes = await fetchBoxes();
@@ -127,13 +135,14 @@ const CanvasForm = (props: Props) => {
         (preload) => {
           console.log('update field');
           const updated = preload.new;
-          const { expandObjId, expandStartObjId } = updated;
+          const { expandObjId, expandStartObjId, connectedObjSets } = updated;
 
           const { field } = ref.current;
           if (!field) throw new Error();
 
           field.expandObjId = expandObjId || null;
           field.expandStartObjId = expandStartObjId || null;
+          field.connectedObjSets = connectedObjSetsParse(connectedObjSets);
         }
       )
       .subscribe();

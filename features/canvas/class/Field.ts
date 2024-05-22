@@ -1,8 +1,10 @@
+import { CANVAS_FIELD_ID } from '../constants';
 import { Arrow } from './Arrow';
 import { Box } from './Box';
 import { ExpandArrow } from './ExpandArrow';
 
 export class Field {
+  id = CANVAS_FIELD_ID;
   #ctx;
   width;
   height;
