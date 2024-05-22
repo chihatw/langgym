@@ -1,7 +1,7 @@
 import { customAlphabet } from 'nanoid';
 import { BG_COLOR, FONT_SIZE, SEGMENT } from '../constants';
 import { CharDOM } from '../schema';
-import { updateHighlights, updateSplitBy } from '../services/client';
+import { updateHighlights } from '../services/client';
 import { checkIsMouseOver } from '../services/utils';
 import { Char } from './Char';
 import { DummyDOM } from './DummyDOM';
@@ -151,9 +151,6 @@ export class Box {
       this.width = width;
       this.height = height;
       this.chars = chars;
-
-      // remote
-      updateSplitBy(this.id, this.splitBy);
     }
 
     return this.splitBy;

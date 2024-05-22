@@ -47,6 +47,7 @@ export class Field {
 
     this.#ctx.clearRect(0, 0, this.width, this.height);
 
+    // debug 描画されない drag しても expandObj, expandStartObj が更新されていないから
     // draw expand
     if (this.expandObj && this.expandStartObj) {
       const arrow =

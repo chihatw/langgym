@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -10,7 +11,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Box } from '../../class/Box';
 import { DraggableField } from '../../class/DraggableField/DraggableField';
-import { MODE, RECT, SHORT_CUT_KEY } from '../../constants';
+import { MODE, RECT, REDRAW, SHORT_CUT_KEY } from '../../constants';
 import { clearCanvas } from '../../services/client';
 import CanvasDom from '../CanvasDom';
 import LabelInput from './LabelInput';
@@ -139,6 +140,18 @@ const MngCanvasForm = ({}: Props) => {
     setValue((prev) => ({ ...prev }));
   };
 
+  const handleDelteAll = () => {
+    if (!value.field) throw new Error();
+
+    // canvas
+    value.field.objs = [];
+    value.field.connectedObjSets = [];
+    value.field.redraw(REDRAW.clearCanvas);
+
+    //  remote
+    clearCanvas();
+  };
+
   return (
     <div className='grid gap-4'>
       <Select
@@ -164,6 +177,9 @@ const MngCanvasForm = ({}: Props) => {
         selectedObj={value.field?.selectObj || null}
         rerender={() => setValue((prev) => ({ ...prev }))}
       />
+      <Button variant={'destructive'} onClick={handleDelteAll}>
+        Clear Canvas
+      </Button>
       <CanvasDom ref={canvas} mode={value.field?.mode} />
       <div className='text-xs text-slate-400 grid gap-2'>
         <div>Keyboard Short Cut:</div>

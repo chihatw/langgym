@@ -35,6 +35,7 @@ export const REDRAW = {
   connect: 'connect',
   highlight: 'highlight',
   dehighlight: 'dehighlight',
+  clearCanvas: 'clearCanvas',
 };
 
 export const MODE = {
@@ -74,3 +75,5 @@ export const ARROW_STROKE_WIDTH = 4;
 export const ARROW_LENGTH = 12;
 export const ARROW_WIDTH = 9;
 export const ARROW_MARGIN = 8;
+
+export const CANVAS_FIELD_ID = 1;

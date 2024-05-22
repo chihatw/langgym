@@ -1,5 +1,16 @@
-import { BOX_HEIGHT, BOX_MIN_WIDTH, MODE, REDRAW } from '../../constants';
-import { deleteBox, insertBox, updateBox } from '../../services/client';
+import {
+  BOX_HEIGHT,
+  BOX_MIN_WIDTH,
+  CANVAS_FIELD_ID,
+  MODE,
+  REDRAW,
+} from '../../constants';
+import {
+  deleteBox,
+  insertBox,
+  updateBox,
+  updateField,
+} from '../../services/client';
 import { boxCollision } from '../../services/utils';
 import { Box } from '../Box';
 import { Field } from '../Field';
@@ -63,14 +74,14 @@ export class DraggableField extends Field {
     // canvas
     this.objs = [...this.objs, box];
 
-    // remote
-    insertBox(box);
-
     this.selectObj = box;
     this.handleSetSelectedObj(this.selectObj);
     setTimeout(() => this.focusInput(), 200);
 
     this.redraw(REDRAW.add);
+
+    // remote
+    insertBox(box);
   }
 
   delete(objId: number) {
@@ -80,9 +91,10 @@ export class DraggableField extends Field {
       (s) => !s.includes(objId)
     );
 
+    this.redraw(REDRAW.delete);
+
     // remote
     deleteBox(objId);
-    this.redraw(REDRAW.delete);
   }
 
   updateLabel(label: string) {
@@ -96,10 +108,10 @@ export class DraggableField extends Field {
     delete clone[this.selectObj.id];
     this.highlights = clone;
 
+    this.redraw(REDRAW.updateLabel);
+
     // remote
     updateBox(this.selectObj);
-
-    this.redraw(REDRAW.updateLabel);
   }
 
   grab(obj: Box, _x: number, _y: number) {
@@ -122,17 +134,14 @@ export class DraggableField extends Field {
   drag(_x: number, _y: number) {
     // ドラッグオブジェクトがなければ、終了
     if (!this.dragObj) return;
-
     // expandObj, expandStart がある場合、 expand に hidden をつけるかどうか判断
-    if (this.expandObj) this.expandObj.isHidden = _isHidden(this);
+    if (this.expandObj) this.dragObj.isHidden = _isHidden(this);
 
     this.dragObj.dragging(_x - this.dragDX, _y - this.dragDY);
     this.redraw(REDRAW.dragging);
 
     // remote
     updateBox(this.dragObj);
-
-    // todo expand の処理
   }
 
   ungrab() {
@@ -140,6 +149,59 @@ export class DraggableField extends Field {
     if (this.expandStartObj) this.expandStartObj = null;
     this.dragObj = null;
     this.redraw(REDRAW.ungrab);
+  }
+
+  split(obj: Box, _x: number, _y: number) {
+    const splitBy = obj.splitting(_x, _y);
+    if (this.splitBy === splitBy) return;
+    this.splitBy = splitBy;
+    this.redraw(REDRAW.split);
+
+    // remote
+    updateBox(obj);
+  }
+
+  divide(obj: Box) {
+    // splitBy が 0 ならば終了
+    if (!this.splitBy) return;
+
+    const charSets = [
+      obj.label.substring(0, this.splitBy),
+      obj.label.substring(this.splitBy),
+    ];
+    // box を新しく２つ作成
+    const box1 = new Box(obj.x - 64, obj.y, charSets[0], 0, [], false);
+    const box2 = new Box(obj.splittedX, obj.y, charSets[1], 0, [], false);
+
+    // オブジェクトの更新
+    // 旧 box の削除と 新 box の追加
+    this.objs = [...this.objs.filter((o) => o.id !== obj.id), box2, box1];
+
+    // remote
+    deleteBox(obj.id);
+    insertBox(box1);
+    insertBox(box2);
+
+    this.connectedObjSets = this.connectedObjSets.map((set) => {
+      // 元の obj と無関係の connection はそのまま
+      if (!set.includes(obj.id)) return set;
+
+      // connection の相手を抽出
+      const isDivideStart = set.indexOf(obj.id) === 0;
+      const oppoObjId = isDivideStart ? set[1] : set[0];
+      return isDivideStart ? [box2.id, oppoObjId] : [oppoObjId, box1.id];
+    });
+
+    // todo remote update connections
+
+    // 関連 highlights の削除
+    const clone = { ...this.highlights };
+    delete clone[obj.id];
+    this.highlights = clone;
+
+    this.splitBy = 0;
+
+    this.redraw(REDRAW.divide);
   }
 
   expand(obj: Box, _x: number, _y: number) {
@@ -159,12 +221,15 @@ export class DraggableField extends Field {
     this.expandObj = box;
     this.expandStartObj = obj;
 
-    // remote
-    insertBox(box);
-
     this.redraw(REDRAW.expand);
 
-    // todo expand の処理
+    // remote
+    insertBox(box);
+    updateField({
+      id: CANVAS_FIELD_ID,
+      expandObjId: box.id,
+      expandStartObjId: obj.id,
+    });
   }
 
   completeExpand() {
@@ -181,56 +246,6 @@ export class DraggableField extends Field {
 
     // todo remote add connetion
     this.redraw(REDRAW.completeExpand);
-  }
-
-  split(_x: number, _y: number) {
-    let splitBy = 0;
-    for (const obj of this.objs) {
-      const _splitBY = obj.splitting(_x, _y);
-      if (_splitBY) splitBy = _splitBY;
-    }
-
-    if (this.splitBy === splitBy) return;
-
-    this.splitBy = splitBy;
-    this.redraw(REDRAW.split);
-    // todo update remote
-  }
-
-  divide(obj: Box) {
-    // splitBy が 0 ならば終了
-    if (!this.splitBy) return;
-
-    const charSets = [
-      obj.label.substring(0, this.splitBy),
-      obj.label.substring(this.splitBy),
-    ];
-    // box を新しく２つ作成
-    const box1 = new Box(obj.x - 64, obj.y, charSets[0], 0, [], false);
-    const box2 = new Box(obj.splittedX, obj.y, charSets[1], 0, [], false);
-
-    // オブジェクトの更新
-    this.objs = [...this.objs.filter((o) => o.id !== obj.id), box2, box1];
-
-    this.connectedObjSets = this.connectedObjSets.map((set) => {
-      // 元の obj と無関係の connection はそのまま
-      if (!set.includes(obj.id)) return set;
-
-      // connection の相手を抽出
-      const isDivideStart = set.indexOf(obj.id) === 0;
-      const oppoObjId = isDivideStart ? set[1] : set[0];
-      return isDivideStart ? [box2.id, oppoObjId] : [oppoObjId, box1.id];
-    });
-
-    // 関連 highlights の削除
-    const clone = { ...this.highlights };
-    delete clone[obj.id];
-    this.highlights = clone;
-
-    this.splitBy = 0;
-
-    // todo remote update objs
-    this.redraw(REDRAW.divide);
   }
 
   connect(obj: Box) {

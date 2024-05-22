@@ -10,10 +10,12 @@ import CanvasDom from './CanvasDom';
 type Props = {};
 
 type RefProps = {
+  initializing: boolean;
   field: Field | null;
 };
 
 const INITIAL_REF: RefProps = {
+  initializing: true,
   field: null,
 };
 
@@ -24,13 +26,16 @@ const CanvasForm = (props: Props) => {
 
   // initialize
   useEffect(() => {
+    if (!ref.current.initializing) return;
+
     (async () => {
       if (!canvas.current) throw new Error();
 
       const field = new Field(RECT.width, RECT.height, canvas.current);
-      ref.current = { field };
+      ref.current = { field, initializing: false };
 
       const _boxes = await fetchBoxes();
+      console.log(`initial fetch ${_boxes.length} boxes`);
       const boxes: Box[] = [];
       for (const _box of _boxes) {
         const { label, x, y, id, splitBy, highlights } = _box;
@@ -47,6 +52,7 @@ const CanvasForm = (props: Props) => {
     const supabase = createSupabaseClientComponentClient();
     const channel = supabase
       .channel(`canvas form ${nanoid()}`)
+
       .on(
         'postgres_changes',
         {
@@ -58,12 +64,13 @@ const CanvasForm = (props: Props) => {
           console.log('insert box');
           const inserted = preload.new;
           const { x, y, label, id, splitBy, highlights, isHidden } = inserted;
+          const box = new Box(x, y, label, splitBy, highlights, isHidden, id);
+
           const { field } = ref.current;
           if (!field) throw new Error();
-          field.objs = [
-            ...field.objs,
-            new Box(x, y, label, splitBy, highlights, isHidden, id),
-          ];
+
+          console.log(`add box`);
+          field.objs = [...field.objs, box];
         }
       )
       .on(
@@ -114,29 +121,23 @@ const CanvasForm = (props: Props) => {
           field.objs = field.objs.map((obj) => (obj.id !== id ? obj : newBox));
         }
       )
-
-      .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
-
-  // todo subscribe  canvas connected obj sets
-
-  // subscribe canvas_all_delte
-  useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
-    const channel = supabase
-      .channel('canvas all delete')
       .on(
         'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'canvas_all_delete' },
-        () => {
+        { event: 'UPDATE', schema: 'public', table: 'canvas_field' },
+        (preload) => {
+          console.log('update field');
+          const updated = preload.new;
+          const { expandObjId, expandStartObjId } = updated;
+
           const { field } = ref.current;
           if (!field) throw new Error();
-          field.objs = [];
-          // field.drawingLine = null; // will delete
-          field.connectedObjSets = [];
+
+          const expandObj = field.objs.find((o) => o.id === expandObjId);
+          const expandStartObj = field.objs.find(
+            (o) => o.id === expandStartObjId
+          );
+          field.expandObj = expandObj || null;
+          field.expandStartObj = expandStartObj || null;
         }
       )
       .subscribe();
@@ -145,8 +146,10 @@ const CanvasForm = (props: Props) => {
     };
   }, []);
 
+  // todo subscribe  canvas connected obj sets
+
   return (
-    <div className='grid gap-4 justify-center'>
+    <div className='grid gap-4 justify-center pt-8'>
       <CanvasDom ref={canvas} />
     </div>
   );

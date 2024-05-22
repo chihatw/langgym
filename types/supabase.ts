@@ -415,48 +415,6 @@ export type Database = {
           },
         ]
       }
-      canvas: {
-        Row: {
-          highlights: number[]
-          id: number
-          label: string
-          splitBy: number
-          x: number
-          y: number
-        }
-        Insert: {
-          highlights?: number[]
-          id?: number
-          label?: string
-          splitBy?: number
-          x?: number
-          y?: number
-        }
-        Update: {
-          highlights?: number[]
-          id?: number
-          label?: string
-          splitBy?: number
-          x?: number
-          y?: number
-        }
-        Relationships: []
-      }
-      canvas_all_delete: {
-        Row: {
-          id: number
-          updated_at: string
-        }
-        Insert: {
-          id?: number
-          updated_at?: string
-        }
-        Update: {
-          id?: number
-          updated_at?: string
-        }
-        Relationships: []
-      }
       canvas_boxes: {
         Row: {
           highlights: number[]
@@ -487,39 +445,21 @@ export type Database = {
         }
         Relationships: []
       }
-      canvas_lines: {
+      canvas_field: {
         Row: {
-          endCharIndex: number | null
-          endObjId: number | null
-          endX: number
-          endY: number
+          expandObjId: number | null
+          expandStartObjId: number | null
           id: number
-          startCharIndex: number
-          startObjId: number
-          startX: number
-          startY: number
         }
         Insert: {
-          endCharIndex?: number | null
-          endObjId?: number | null
-          endX: number
-          endY: number
+          expandObjId?: number | null
+          expandStartObjId?: number | null
           id?: number
-          startCharIndex: number
-          startObjId: number
-          startX: number
-          startY: number
         }
         Update: {
-          endCharIndex?: number | null
-          endObjId?: number | null
-          endX?: number
-          endY?: number
+          expandObjId?: number | null
+          expandStartObjId?: number | null
           id?: number
-          startCharIndex?: number
-          startObjId?: number
-          startX?: number
-          startY?: number
         }
         Relationships: []
       }

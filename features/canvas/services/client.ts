@@ -1,7 +1,8 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
-import { CanvasBox_New, CanvasLine } from '../schema';
+import { CANVAS_FIELD_ID } from '../constants';
+import { CanvasBox, CanvasField } from '../schema';
 
-export async function fetchBoxes(): Promise<CanvasBox_New[]> {
+export async function fetchBoxes(): Promise<CanvasBox[]> {
   const supabase = createSupabaseClientComponentClient();
   const { data, error } = await supabase.from('canvas_boxes').select();
   if (error) {
@@ -12,6 +13,22 @@ export async function fetchBoxes(): Promise<CanvasBox_New[]> {
   return data;
 }
 
+export async function updateField({
+  id,
+  expandObjId,
+  expandStartObjId,
+}: CanvasField) {
+  const supabase = createSupabaseClientComponentClient();
+  const { error } = await supabase
+    .from('canvas_field')
+    .update({ expandObjId, expandStartObjId })
+    .eq('id', id);
+
+  if (error) {
+    console.error(error.message);
+  }
+}
+
 export async function insertBox({
   id,
   x,
@@ -20,7 +37,7 @@ export async function insertBox({
   splitBy,
   highlights,
   isHidden,
-}: CanvasBox_New) {
+}: CanvasBox) {
   const supabase = createSupabaseClientComponentClient();
   const { error } = await supabase.from('canvas_boxes').insert({
     id,
@@ -46,7 +63,7 @@ export async function updateBox({
   splitBy,
   highlights,
   isHidden,
-}: CanvasBox_New) {
+}: CanvasBox) {
   const supabase = createSupabaseClientComponentClient();
   const { error } = await supabase
     .from('canvas_boxes')
@@ -66,19 +83,7 @@ export async function updateBox({
   }
 }
 
-export async function updateSplitBy(id: number, splitBy: number) {
-  const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase
-    .from('canvas')
-    .update({ splitBy })
-    .eq('id', id);
-
-  if (error) {
-    console.error(error.message);
-    return;
-  }
-}
-
+// will delete
 export async function updateHighlights(id: number, highlights: number[]) {
   const supabase = createSupabaseClientComponentClient();
   const { error } = await supabase
@@ -103,67 +108,24 @@ export async function deleteBox(id: number) {
   // todo delete Connection lines
 }
 
-export async function updateLine({
-  id,
-  startX,
-  startY,
-  endX,
-  endY,
-  startObjId,
-  startCharIndex,
-  endObjId,
-  endCharIndex,
-}: CanvasLine) {
-  const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase
-    .from('canvas_lines')
-    .update({
-      startX: startX >> 0,
-      startY: startY >> 0,
-      endX: endX >> 0,
-      endY: endY >> 0,
-      startObjId,
-      startCharIndex,
-      endObjId,
-      endCharIndex,
-    })
-    .eq('id', id);
-
-  if (error) {
-    console.error(error.message);
-    return;
-  }
-}
-
-export async function deleteLine(id: number) {
-  const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase.from('canvas_lines').delete().eq('id', id);
-  if (error) {
-    console.error(error.message);
-    return;
-  }
-}
-
 export async function clearCanvas() {
   const supabase = createSupabaseClientComponentClient();
-  const { error } = await supabase.from('canvas').delete().neq('id', 0);
-  if (error) {
-    console.error(error.message);
-  }
-  const { error: error_l } = await supabase
-    .from('canvas_lines')
-    .delete()
-    .neq('id', 0);
-  if (error_l) {
-    console.error(error_l);
+
+  // field
+  const { error: error_f } = await supabase
+    .from('canvas_field')
+    .update({ expandObjId: null, expandStartObjId: null })
+    .eq('id', CANVAS_FIELD_ID);
+  if (error_f) {
+    console.error(error_f.message);
   }
 
-  // channel.on delete でうまく subscribe できなかったために
-  const { error: error_all_delete } = await supabase
-    .from('canvas_all_delete')
-    .update({ updated_at: new Date().toISOString() })
-    .eq('id', 1);
-  if (error_all_delete) {
-    console.error(error_all_delete);
+  // box
+  const { error: error_b } = await supabase
+    .from('canvas_boxes')
+    .delete()
+    .neq('id', 0);
+  if (error_b) {
+    console.error(error_b.message);
   }
 }
