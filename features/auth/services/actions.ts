@@ -38,3 +38,10 @@ export async function signOut() {
   await supabase.auth.signOut();
   redirect('/login');
 }
+
+export async function updatePassword(password: string) {
+  const supabase = createSupabaseServerActionClient();
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) return error.message;
+  return '';
+}
