@@ -8,7 +8,13 @@ type Props = {
 const QuizTestPlayPage = async ({ params: { id } }: Props) => {
   const questions = await fetchArticlePitchQuizQuestions(id);
 
-  return <QuizForm questions={questions} redirectPath='/mng/answer' />;
+  return (
+    <QuizForm
+      questions={questions}
+      redirectPath='/mng/answer'
+      isTestPlay={true}
+    />
+  );
 };
 
 export default QuizTestPlayPage;

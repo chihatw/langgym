@@ -19,6 +19,7 @@ import QuizFormSentence from './QuizFormSentence';
 type Props = {
   questions: ArticlePitchQuestionView[];
   redirectPath: string;
+  isTestPlay?: boolean;
 };
 
 type FormProps = {
@@ -30,7 +31,7 @@ const INITIAL_STATE: FormProps = {
   inputPitchStrs: [],
 };
 
-const QuizForm = ({ questions, redirectPath }: Props) => {
+const QuizForm = ({ questions, redirectPath, isTestPlay }: Props) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [value, setValue] = useState(INITIAL_STATE);
@@ -92,8 +93,8 @@ const QuizForm = ({ questions, redirectPath }: Props) => {
       }
       if (!answerId) return;
 
-      // aritlce の isShowPitches も変更
-      await updateArticleIsShowAccents(articleId, true);
+      // uid が admin でなければ、aritlce の isShowPitches も変更
+      if (!isTestPlay) await updateArticleIsShowAccents(articleId, true);
 
       router.push(`${redirectPath}/${answerId}`);
     });
