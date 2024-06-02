@@ -151,8 +151,6 @@ const CanvasForm = (props: Props) => {
     };
   }, []);
 
-  // todo subscribe  canvas connected obj sets
-
   return (
     <div className='grid gap-4 justify-center pt-8'>
       <CanvasDom ref={canvas} />

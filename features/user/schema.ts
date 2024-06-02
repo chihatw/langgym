@@ -1,5 +1,7 @@
 export interface AppUser {
   uid: string;
   display: string;
-  created_at: number;
+  created_at: Date;
+  realtime: boolean;
+  realtimePage: string;
 }

@@ -1,14 +1,17 @@
 'use client';
 
+import { fetchUserByUid } from '@/features/user/services/client';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { REMOTE_TRIGGER_ID } from '../constants';
 
-type Props = {};
+type Props = {
+  uid: string;
+};
 
-const BackToHome = (props: Props) => {
+const BackToHome = ({ uid }: Props) => {
   const router = useRouter();
   useEffect(() => {
     const supabase = createSupabaseClientComponentClient();
@@ -23,8 +26,13 @@ const BackToHome = (props: Props) => {
           filter: `id=eq.${REMOTE_TRIGGER_ID.back_to_home}`,
         },
         () => {
-          console.log('back to home');
-          router.push('/');
+          (async () => {
+            const user = await fetchUserByUid(uid);
+            if (user?.realtime) {
+              console.log('back to home');
+              router.push('/');
+            }
+          })();
         }
       )
       .subscribe();
@@ -32,7 +40,7 @@ const BackToHome = (props: Props) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [router]);
+  }, [router, uid]);
   return null;
 };
 

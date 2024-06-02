@@ -8,8 +8,8 @@ const HiddenElements = ({ uid }: Props) => {
   return (
     <>
       <PathnameLog uid={uid} />
-      <RedirectToRealtime />
-      <BackToHome />
+      <RedirectToRealtime uid={uid} />
+      <BackToHome uid={uid} />
     </>
   );
 };

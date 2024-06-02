@@ -5,7 +5,6 @@ import {
   fetchNoteAudioPaths,
 } from '@/features/note/services/server';
 import PageStateForm from '@/features/pageState/components/PageStateForm';
-import { fetchPageStates } from '@/features/pageState/services/server';
 import MngPaperCupForm from '@/features/paperCup/components/MngPaperCupForm/MngPaperCupForm';
 import { fetchPaperCupParams } from '@/features/paperCup/services/server';
 import { fetchPathnameLogs } from '@/features/pathnameLog/services/server';
@@ -14,7 +13,6 @@ import {
   fetchPitches,
   fetchPitchesUser,
 } from '@/features/pitches/services/server';
-import MngOpenForm from '@/features/realtime/components/MngOpenForm';
 import MngRecordForm from '@/features/record/components/MngRecordForm';
 import {
   fetchRecordParams,
@@ -22,12 +20,13 @@ import {
 } from '@/features/record/services/server';
 import MngSpeedWorkoutForm from '@/features/speedWorkout/components/MngSpeedWorkoutForm';
 import { fetchSpeedWorkout } from '@/features/speedWorkout/services/server';
+import { fetchUsers } from '@/features/user/services/server';
 import { fetchWorkoutItems } from '@/features/workout/services/server';
 
 type Props = {};
 
 const page = async (props: Props) => {
-  const pageStates = await fetchPageStates();
+  const users = await fetchUsers();
   const speedWorkout = await fetchSpeedWorkout();
   const workoutItems = await fetchWorkoutItems();
   const paperCupParams = await fetchPaperCupParams();
@@ -41,8 +40,7 @@ const page = async (props: Props) => {
 
   return (
     <div className='grid gap-8'>
-      <MngOpenForm pageStates={pageStates} pathnameLogs={pathnameLogs} />
-      <PageStateForm pageStates={pageStates} />
+      <PageStateForm users={users} pathnameLogs={pathnameLogs} />
       <MngSpeedWorkoutForm
         speedWorkout={speedWorkout}
         workoutItems={workoutItems}

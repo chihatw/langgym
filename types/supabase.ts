@@ -501,17 +501,14 @@ export type Database = {
       }
       page_states: {
         Row: {
-          isOpen: boolean
           pageState: string
           uid: string
         }
         Insert: {
-          isOpen?: boolean
           pageState: string
           uid: string
         }
         Update: {
-          isOpen?: boolean
           pageState?: string
           uid?: string
         }
@@ -799,16 +796,22 @@ export type Database = {
         Row: {
           created_at: string
           display: string
+          realtime: boolean
+          realtimePage: string
           uid: string
         }
         Insert: {
           created_at?: string
           display: string
+          realtime?: boolean
+          realtimePage?: string
           uid: string
         }
         Update: {
           created_at?: string
           display?: string
+          realtime?: boolean
+          realtimePage?: string
           uid?: string
         }
         Relationships: [
@@ -1225,7 +1228,6 @@ export type Database = {
       page_states_view: {
         Row: {
           display: string | null
-          isOpen: boolean | null
           pageState: string | null
           uid: string | null
         }

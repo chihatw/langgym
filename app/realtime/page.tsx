@@ -1,18 +1,24 @@
 import HiddenElements from '@/components/ui/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
-import PageSwitchLoader from '@/features/pageState/components/PageSwitchLoader';
+import PageSwitch from '@/features/pageState/components/PageSwitch';
 import RefreshRealtime from '@/features/trigger/components/RefreshRealtime';
+import { fetchUserByUid } from '@/features/user/services/server';
 
 type Props = {};
 
 const RealtimePage = async (props: Props) => {
   const user = await getUserFromServerSide();
   if (!user) return null;
+
+  const appUser = await fetchUserByUid(user.id);
+
+  if (!appUser) return null;
+
   return (
     <>
-      <PageSwitchLoader uid={user.id} />
+      <PageSwitch user={appUser} />
       <HiddenElements uid={user.id} />
-      <RefreshRealtime />
+      <RefreshRealtime uid={user.id} />
     </>
   );
 };

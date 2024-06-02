@@ -1,69 +1,69 @@
 'use client';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { PAGES } from '@/features/pageState/constants';
-import { PageStateView } from '@/features/pageState/schema';
-import { updatePageState } from '@/features/pageState/services/client';
-import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { PathnameLogView } from '@/features/pathnameLog/schema';
+import {
+  updateBackToHomeTrigger,
+  updateRedirectToRealtimeTrigger,
+  updateRefreshRealtimeTrigger,
+  updateRemoteLoginTrigger,
+} from '@/features/trigger/services/client';
+import { AppUser } from '@/features/user/schema';
+import PageStateRadioGroup from './PageStateRadioGroup';
+import PathnameLog from './PathnameLog';
+import RealtimeToggle from './RealtimeToggle';
 
 type Props = {
-  pageStates: PageStateView[];
+  users: AppUser[];
+  pathnameLogs: PathnameLogView[];
 };
 
-type FormProps = {
-  pageStates: { [uid: string]: string };
-};
-
-const INITIAL_STATE: FormProps = {
-  pageStates: {},
-};
-
-const PageStateForm = ({ pageStates }: Props) => {
-  const [value, setValue] = useState(INITIAL_STATE);
-
-  useEffect(() => {
-    const _pageStates = pageStates.reduce((acc, cur) => {
-      return {
-        ...acc,
-        [cur.uid!]: cur.pageState!,
-      };
-    }, {} as { [uid: string]: string });
-    setValue((prev) => ({ ...prev, pageStates: _pageStates }));
-  }, [pageStates]);
-
-  const handleChange = async (uid: string, pageState: string) => {
-    // local
-    setValue((prev) => ({
-      ...prev,
-      pageStates: {
-        ...prev.pageStates,
-        [uid]: pageState,
-      },
-    }));
-    // remote
-    updatePageState(uid, pageState);
-  };
-
+const PageStateForm = ({ users, pathnameLogs }: Props) => {
   return (
     <div className='grid gap-4'>
       <div className='text-xs font-extrabold'>Page State</div>
+      <div className='flex gap-4'>
+        <Button
+          className='h-auto w-auto p-0'
+          variant={'ghost'}
+          onClick={updateRemoteLoginTrigger}
+        >
+          Remote Log in
+        </Button>
+        <Button
+          className='h-auto w-auto p-0'
+          variant={'ghost'}
+          onClick={updateRedirectToRealtimeTrigger}
+        >
+          Redirect to Realtime
+        </Button>
+        <Button
+          className='h-auto w-auto p-0'
+          variant={'ghost'}
+          onClick={updateBackToHomeTrigger}
+        >
+          Back to Home
+        </Button>
+        <Button
+          className='h-auto w-auto p-0'
+          variant={'ghost'}
+          onClick={updateRefreshRealtimeTrigger}
+        >
+          Refresh Realtime
+        </Button>
+      </div>
       <div className='grid gap-4'>
-        {pageStates.map((line, index) => (
+        {users.map((user, index) => (
           <div key={index} className='p-2 rounded bg-white/60 grid gap-2 '>
-            <div className='text-xs font-extrabold'>{line.display}</div>
-
-            <RadioGroup
-              className='flex flex-wrap gap-2'
-              value={value.pageStates[line.uid!]}
-              onValueChange={(value) => handleChange(line.uid!, value)}
-            >
-              {Object.entries(PAGES).map(([key, value], index) => (
-                <div key={index} className='flex items-center gap-1'>
-                  <RadioGroupItem value={key} />
-                  <Label>{value}</Label>
-                </div>
-              ))}
-            </RadioGroup>
+            <div className='flex items-center justify-between'>
+              <div className='flex gap-2 items-center'>
+                <div className='text-xs font-extrabold'>{user.display}</div>
+                <RealtimeToggle user={user} />
+              </div>
+              <PathnameLog
+                pathnameLog={pathnameLogs.find((log) => log.uid === user.uid)}
+              />
+            </div>
+            <PageStateRadioGroup user={user} />
           </div>
         ))}
       </div>

@@ -1,14 +1,17 @@
 'use client';
 
+import { fetchUserByUid } from '@/features/user/services/client';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { REMOTE_TRIGGER_ID } from '../constants';
 
-type Props = {};
+type Props = {
+  uid: string;
+};
 
-const RedirectToRealtime = (props: Props) => {
+const RedirectToRealtime = ({ uid }: Props) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -24,8 +27,13 @@ const RedirectToRealtime = (props: Props) => {
           filter: `id=eq.${REMOTE_TRIGGER_ID.redirect_to_realtime}`,
         },
         () => {
-          console.log('redirect to realtime');
-          router.push('/realtime');
+          (async () => {
+            const user = await fetchUserByUid(uid);
+            if (user?.realtime) {
+              console.log('redirect to realtime');
+              router.push('/realtime');
+            }
+          })();
         }
       )
       .subscribe();
@@ -33,7 +41,7 @@ const RedirectToRealtime = (props: Props) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [router]);
+  }, [router, uid]);
   return null;
 };
 
