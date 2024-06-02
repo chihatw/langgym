@@ -52,20 +52,22 @@ const PageStateForm = ({ users, pathnameLogs }: Props) => {
         </Button>
       </div>
       <div className='grid gap-4'>
-        {users.map((user, index) => (
-          <div key={index} className='p-2 rounded bg-white/60 grid gap-2 '>
-            <div className='flex items-center justify-between'>
-              <div className='flex gap-2 items-center'>
-                <div className='text-xs font-extrabold'>{user.display}</div>
-                <RealtimeToggle user={user} />
+        {users
+          .sort((a, b) => a.created_at.getTime() - b.created_at.getTime())
+          .map((user, index) => (
+            <div key={index} className='p-2 rounded bg-white/60 grid gap-2 '>
+              <div className='flex items-center justify-between'>
+                <div className='flex gap-2 items-center'>
+                  <div className='text-xs font-extrabold'>{user.display}</div>
+                  <RealtimeToggle user={user} />
+                </div>
+                <PathnameLog
+                  pathnameLog={pathnameLogs.find((log) => log.uid === user.uid)}
+                />
               </div>
-              <PathnameLog
-                pathnameLog={pathnameLogs.find((log) => log.uid === user.uid)}
-              />
+              <PageStateRadioGroup user={user} />
             </div>
-            <PageStateRadioGroup user={user} />
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );
