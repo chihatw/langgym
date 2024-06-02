@@ -1,11 +1,7 @@
 'use client';
 import { Button, buttonVariants } from '@/components/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+
+import TooltipWrapper from '@/components/TooltipWrapper';
 import { ArticlePitchQuizAnswerView } from '@/features/answer/schema';
 import { cn } from '@/lib/utils';
 import {
@@ -66,27 +62,34 @@ const MngArticleListRow = ({
       </Link>
       <div className='flex flex-nowrap items-center gap-2'>
         {article.audioPath ? null : (
+          <TooltipWrapper label='move to upload audio file page'>
+            <Link
+              href={`/mng/article/${article.id}/upload`}
+              className={cn(buttonVariants({ variant: 'ghost' }), 'p-0 ')}
+            >
+              <UploadCloud className='h-5 w-5' />
+            </Link>
+          </TooltipWrapper>
+        )}
+        <TooltipWrapper label='show pitch lines'>
           <Link
-            href={`/mng/article/${article.id}/upload`}
+            href={`/mng/article/${article.id}/print`}
             className={cn(buttonVariants({ variant: 'ghost' }), 'p-0 ')}
           >
-            <UploadCloud className='h-5 w-5' />
+            <Printer className='h-5 w-5' />
           </Link>
-        )}
-        <Link
-          href={`/mng/article/${article.id}/print`}
-          className={cn(buttonVariants({ variant: 'ghost' }), 'p-0 ')}
-        >
-          <Printer className='h-5 w-5' />
-        </Link>
+        </TooltipWrapper>
+        <TooltipWrapper label='move to sentences batch input page'>
+          <Link
+            href={`/mng/article/${article.id}/sentences`}
+            className={cn(buttonVariants({ variant: 'ghost' }), 'p-0 ')}
+          >
+            <AlignJustify className='h-5 w-5' />
+          </Link>
+        </TooltipWrapper>
 
-        <Link
-          href={`/mng/article/${article.id}/sentences`}
-          className={cn(buttonVariants({ variant: 'ghost' }), 'p-0 ')}
-        >
-          <AlignJustify className='h-5 w-5' />
-        </Link>
         <ArchiveToggle article={article} />
+
         <RemoveArticleButton
           articleId={article.id!}
           removeArticle={removeArticle}
@@ -112,11 +115,13 @@ const ArchiveToggle = ({ article }: { article: ArticleView }) => {
   if (optValue) return <div className='w-5' />;
 
   return (
-    <form action={action}>
-      <Button variant={'ghost'} type='submit' className='p-0'>
-        <ArchiveRestore className='h-5 w-5' />
-      </Button>
-    </form>
+    <TooltipWrapper label='archive this article'>
+      <form action={action}>
+        <Button variant={'ghost'} type='submit' className='p-0'>
+          <ArchiveRestore className='h-5 w-5' />
+        </Button>
+      </form>
+    </TooltipWrapper>
   );
 };
 
@@ -135,11 +140,13 @@ const RemoveArticleButton = ({
     deleteArticle(articleId);
   };
   return (
-    <form action={action}>
-      <Button variant={'ghost'} type='submit' className='p-0'>
-        <Trash2 className='h-5 w-5' />
-      </Button>
-    </form>
+    <TooltipWrapper label='delete this article'>
+      <form action={action}>
+        <Button variant={'ghost'} type='submit' className='p-0'>
+          <Trash2 className='h-5 w-5' />
+        </Button>
+      </form>
+    </TooltipWrapper>
   );
 };
 
@@ -178,35 +185,26 @@ const PDFExists = ({ article }: { article: ArticleView }) => {
     })();
   }, [article]);
 
-  if (isExists) return <FileCheck className='h-3 w-3 text-amber-500' />;
+  if (isExists)
+    return (
+      <TooltipWrapper label={`"/assets/${article.id}.pdf" IS exists`}>
+        <FileCheck className='h-3 w-3 text-amber-500' />
+      </TooltipWrapper>
+    );
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <FileX className='h-3 w-3 ' />
-        </TooltipTrigger>
-        <TooltipContent>
-          <p className='text-xs'>{`"/assets/${article.id}.pdf" is not exists`}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <TooltipWrapper label={`"/assets/${article.id}.pdf" IS NOT exists`}>
+      <FileX className='h-3 w-3 ' />
+    </TooltipWrapper>
   );
 };
 
 const UploadAudioExists = ({ article }: { article: ArticleView }) => {
   if (!article.audioPath) return null;
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Headphones className='h-3 w-3' />
-        </TooltipTrigger>
-        <TooltipContent>
-          <p className='text-xs'>{`article audio file is uploaded`}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <TooltipWrapper label={`article audio file is uploaded`}>
+      <Headphones className='h-3 w-3' />
+    </TooltipWrapper>
   );
 };
 
@@ -214,52 +212,32 @@ const IsArchived = ({ article }: { article: ArticleView }) => {
   if (!article.isArchived) return null;
 
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Archive className='h-3 w-3' />
-        </TooltipTrigger>
-        <TooltipContent>
-          <p className='text-xs'>{`article is arhived`}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <TooltipWrapper label={`article is arhived`}>
+      <Archive className='h-3 w-3' />
+    </TooltipWrapper>
   );
 };
 
 const IsShowAccents = ({ article }: { article: ArticleView }) => {
+  if (article.isShowAccents) {
+    return (
+      <TooltipWrapper label={'accents visible'}>
+        <Ear className='h-3 w-3' />
+      </TooltipWrapper>
+    );
+  }
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          {article.isShowAccents ? (
-            <Ear className='h-3 w-3' />
-          ) : (
-            <EarOff className='h-3 w-3' />
-          )}
-        </TooltipTrigger>
-        <TooltipContent>
-          <p className='text-xs'>
-            {article.isShowAccents ? 'show accents' : 'hide accents'}
-          </p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <TooltipWrapper label={'accents hidden'}>
+      <EarOff className='h-3 w-3' />
+    </TooltipWrapper>
   );
 };
 
 const HasAnswers = ({ hasAnswers }: { hasAnswers: boolean }) => {
   if (!hasAnswers) return null;
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <FlagTriangleRight className='w-3 h-3' />
-        </TooltipTrigger>
-        <TooltipContent>
-          <p className='text-xs'>has answers</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <TooltipWrapper label={'has pitch quiz answers'}>
+      <FlagTriangleRight className='w-3 h-3' />
+    </TooltipWrapper>
   );
 };
