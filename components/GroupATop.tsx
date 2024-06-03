@@ -1,4 +1,5 @@
 import BetterreadContainer from '@/features/betterread/components/BetterreadContainer';
+import MirrorNumbersLoader from '@/features/mirror/components/MirrorNumbersLoader';
 import QuizListContainer from '@/features/quiz/components/QuizList/QuizListContainer';
 import WorkoutListContainer from '@/features/workout/components/WorkoutList/WorkoutListContainer';
 import ArticleListLoader from '../features/article/components/ArticleList/ArticleListLoader';
@@ -14,6 +15,7 @@ const GroupATop = async ({ uid }: Props) => {
         <QuizListContainer uid={uid} />
         <WorkoutListContainer uid={uid} />
         <BetterreadContainer uid={uid} />
+        <MirrorNumbersLoader uid={uid} />
       </div>
       <HiddenElements uid={uid} />
     </>

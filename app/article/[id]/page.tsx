@@ -13,8 +13,7 @@ const ArticlePage = async ({ params: { id } }: Props) => {
   if (!user) return null;
 
   const sentences = await fetchSentencesByArticleId_Uid(id, user.id);
-  const sentence = sentences.at(0);
-  if (!sentence) return null;
+  if (!sentences.length) return null;
 
   return (
     <>
