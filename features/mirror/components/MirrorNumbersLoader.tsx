@@ -2,7 +2,7 @@ import BorderLabel from '@/components/BorderLabel';
 import Link from 'next/link';
 import { MIRROR_WORKOUTS_LABEL } from '../constants';
 import {
-  fetchMirrorWorkoutResultsByWorkoutIds,
+  fetchMirrorWorkoutResultItemViewsByWorkoutIds,
   fetchMirrorWorkoutsByUid,
 } from '../services/server';
 
@@ -15,20 +15,27 @@ const MirrorNumbersLoader = async ({ uid }: Props) => {
 
   if (!mirrorWorkouts.length) return null;
 
-  const results = await fetchMirrorWorkoutResultsByWorkoutIds(
+  const resultItems = await fetchMirrorWorkoutResultItemViewsByWorkoutIds(
     mirrorWorkouts.map((w) => w.id)
   );
 
-  const best_3 = results
-    .filter((result, index) => {
-      const items: number[][] = JSON.parse(result.items);
-      return (
-        items[index] &&
-        result.selectedNumbers.every(
-          (number, index) => number === Math.max(...items[index])
-        )
+  // unique な resultIds を抽出
+  const resultIds = Array.from(new Set(resultItems.map((i) => i.resultId)));
+
+  const best_3 = resultIds
+    .filter((resultId) => {
+      const targetResultItems = resultItems.filter(
+        (i) => i.resultId === resultId
       );
+      // その resultId をもつ items がすべて正解のものだけを抽出
+      return targetResultItems.every((i) => i.isCorrect);
     })
+    .map((resultId) => {
+      const resultItem = resultItems.find((i) => i.resultId === resultId)!;
+      // resultId と totalTime でオブジェクトを作成
+      return { resultId, totalTime: resultItem.totalTime! };
+    })
+    // totalTime の上位3つを抽出
     .sort((a, b) => a.totalTime - b.totalTime)
     .slice(0, 3);
 
@@ -47,14 +54,14 @@ const MirrorNumbersLoader = async ({ uid }: Props) => {
               </div>
               {best_3.map((result, index) => (
                 <Link
-                  href={`/mirror/${workout.id}/${result.id}`}
+                  href={`/mirror/${workout.id}/${result.resultId}`}
                   key={index}
                   className='text-end text-xs text-slate-500'
                 >
                   <div className='flex justify-end'>
                     <div className='grid grid-cols-[60px,60px]'>
                       <div>{RESULT_LABELS[index]}</div>
-                      <div>{`${(result.totalTime / 1000).toFixed(2)} 秒`}</div>
+                      <div>{`${(result.totalTime! / 1000).toFixed(2)} 秒`}</div>
                     </div>
                   </div>
                 </Link>

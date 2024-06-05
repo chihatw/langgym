@@ -69,6 +69,7 @@ const MngMirrorWorkoutListWorkoutRow = ({ resultItems }: Props) => {
             const targetResult = resultId_workoutItemIndex_laps
               .filter((i) => i.workoutItemIndex === index)
               .find((i) => i.resultId === resultId)!;
+            // 1問目と不正解は計算に含めない
             if (targetResult.shuffledIndex === 0 || !targetResult.isCorrect)
               continue;
             avgItems.push(targetResult.lap);

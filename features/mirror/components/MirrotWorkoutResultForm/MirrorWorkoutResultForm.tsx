@@ -1,5 +1,4 @@
 import Breadcrumb from '@/components/Breadcrumb';
-import { Lato } from 'next/font/google';
 import { MIRROR_WORKOUTS_LABEL } from '../../constants';
 import { MirrorWorkoutResult } from '../../schema';
 import MirrorWorkoutResultRow from './MirrorWorkoutResultRow';
@@ -7,7 +6,6 @@ import MirrorWorkoutResultRow from './MirrorWorkoutResultRow';
 type Props = {
   result: MirrorWorkoutResult;
 };
-const lato = Lato({ subsets: ['latin'], weight: '900' });
 
 const MirrorWorkoutResultForm = ({ result }: Props) => {
   const correctAnswers = result.selectedNumbers.filter((number, index) => {

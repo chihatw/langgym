@@ -34,26 +34,6 @@ export async function fetchMirrorWorkoutsByUid(
   return data;
 }
 
-export async function fetchMirrorWorkoutById_Uid(
-  id: number,
-  uid: string
-): Promise<MirrorWorkout | undefined> {
-  const supabase = createSupabaseServerComponentClient();
-  const { data, error } = await supabase
-    .from('mirror_workouts')
-    .select()
-    .eq('id', id)
-    .eq('uid', uid)
-    .single();
-
-  if (error) {
-    console.error(error.message);
-    return;
-  }
-
-  return data;
-}
-
 export async function fetchMirrorWorkoutResultById(
   id: number
 ): Promise<MirrorWorkoutResult | undefined> {
@@ -110,6 +90,36 @@ export async function fetchMirrorWorkoutResultItemViews(): Promise<
   const { data, error } = await supabase
     .from('mirror_workout_result_items_view')
     .select();
+  if (error) {
+    console.error(error.message);
+    return [];
+  }
+  return data;
+}
+
+export async function fetchMirrorWorkoutResultItemViewsByWorkoutIds(
+  workoutIds: number[]
+): Promise<MirrorWorkoutResultItemView[]> {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('mirror_workout_result_items_view')
+    .select()
+    .in('workoutId', workoutIds);
+  if (error) {
+    console.error(error.message);
+    return [];
+  }
+  return data;
+}
+
+export async function fetchMirrorWorkoutResultItemViewsByResultId(
+  resultId: number
+): Promise<MirrorWorkoutResultItemView[]> {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('mirror_workout_result_items_view')
+    .select()
+    .eq('resultId', resultId);
   if (error) {
     console.error(error.message);
     return [];

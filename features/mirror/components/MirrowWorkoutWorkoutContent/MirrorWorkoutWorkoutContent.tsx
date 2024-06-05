@@ -60,6 +60,14 @@ const MirrorWorkoutWorkoutContent = ({ workoutItems }: Props) => {
     }, [] as number[][]);
   }, [workoutItems]);
 
+  // workoutItems を 小さい順に並べて「,」で結合
+  // resultItem の workoutItemIndex を計算するため
+  const remoteWorkoutItems = useMemo(
+    () =>
+      _workoutItems.map((numbers) => numbers.sort((a, b) => a - b).join(',')),
+    [_workoutItems]
+  );
+
   const action = async (selectedNumber: number) => {
     if (value.index + 1 < value.items.length) {
       setValue((prev) => ({
@@ -92,9 +100,15 @@ const MirrorWorkoutWorkoutContent = ({ workoutItems }: Props) => {
     };
 
     startTransition(async () => {
-      const id = await insertMirrorWorkoutResult(result);
+      const id = await insertMirrorWorkoutResult(
+        result,
+        _value.selectedNumbers,
+        _value.items,
+        remoteWorkoutItems
+      );
 
       if (!id) return;
+
       router.push(`/mirror/${_workout?.workoutId!}/${id}`);
     });
   };
