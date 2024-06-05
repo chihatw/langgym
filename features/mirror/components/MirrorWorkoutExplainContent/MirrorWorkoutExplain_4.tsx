@@ -1,4 +1,4 @@
-import ExplainUnitWrapper from '../ExplainUnitWrapper';
+import ExplainUnitWrapper from './ExplainUnitWrapper';
 
 type Props = {};
 

@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Lato } from 'next/font/google';
-import ExplainUnitWrapper from '../ExplainUnitWrapper';
+import ExplainUnitWrapper from './ExplainUnitWrapper';
 import MirrorWorkoutExplainRow from './MirrorWorkoutExplainRow';
 
 type Props = {};

@@ -2,13 +2,15 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
 import { MIRROR_WORKOUTS_LABEL } from '../constants';
-import { MirrorWorkout } from '../schema';
+import { MirrorWorkoutItemView } from '../schema';
 import MirrorWorkoutExplainContent from './MirrorWorkoutExplainContent/MirrorWorkoutExplainContent';
-import MirrorWorkoutWorkoutContent from './MirrorWorkoutWorkoutContent';
+import MirrorWorkoutWorkoutContent from './MirrowWorkoutWorkoutContent/MirrorWorkoutWorkoutContent';
 
 type State = 'explain' | 'workout';
 
-type Props = { workout: MirrorWorkout };
+type Props = {
+  workoutItems: MirrorWorkoutItemView[];
+};
 
 type FormProps = {
   state: State;
@@ -18,7 +20,7 @@ const INITIAL_STATE: FormProps = {
   state: 'explain',
 };
 
-const MirrorWorkoutForm = ({ workout }: Props) => {
+const MirrorWorkoutForm = ({ workoutItems }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
   return (
     <div className='grid gap-8'>
@@ -49,7 +51,7 @@ const MirrorWorkoutForm = ({ workout }: Props) => {
             />
           </TabsContent>
           <TabsContent value='workout'>
-            <MirrorWorkoutWorkoutContent workout={workout} />
+            <MirrorWorkoutWorkoutContent workoutItems={workoutItems} />
           </TabsContent>
         </Tabs>
       </div>

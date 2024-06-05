@@ -1318,6 +1318,32 @@ export type Database = {
           },
         ]
       }
+      mirror_workout_items_view: {
+        Row: {
+          id: number | null
+          index: number | null
+          isDev: boolean | null
+          number: number | null
+          uid: string | null
+          workoutId: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mirror_workout_items_workoutId_fkey"
+            columns: ["workoutId"]
+            isOneToOne: false
+            referencedRelation: "mirror_workouts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mirror_workouts_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       page_states_view: {
         Row: {
           display: string | null

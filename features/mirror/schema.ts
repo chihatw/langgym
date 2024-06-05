@@ -11,6 +11,15 @@ export interface MirrorWorkoutItem {
   workoutId: number;
 }
 
+export interface MirrorWorkoutItemView {
+  id: number | null;
+  index: number | null;
+  number: number | null;
+  workoutId: number | null;
+  uid: string | null;
+  isDev: boolean | null;
+}
+
 export interface MirrorWorkoutResult {
   id: number;
   items: string;

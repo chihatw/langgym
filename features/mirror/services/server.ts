@@ -1,5 +1,9 @@
 import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
-import { MirrorWorkout, MirrorWorkoutResult } from '../schema';
+import {
+  MirrorWorkout,
+  MirrorWorkoutItemView,
+  MirrorWorkoutResult,
+} from '../schema';
 
 export async function fetchMirrorWorkoutsByUid(
   uid: string
@@ -63,6 +67,23 @@ export async function fetchMirrorWorkoutResultsByWorkoutIds(
     .from('mirror_workout_results')
     .select()
     .in('workoutId', workoutIds);
+  if (error) {
+    console.error(error.message);
+    return [];
+  }
+  return data;
+}
+
+export async function fetchMirrorWorkoutItemViewsByWorkoutId(
+  workoutId: number
+): Promise<MirrorWorkoutItemView[]> {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('mirror_workout_items_view')
+    .select()
+    .eq('workoutId', workoutId)
+    .order('index');
+
   if (error) {
     console.error(error.message);
     return [];

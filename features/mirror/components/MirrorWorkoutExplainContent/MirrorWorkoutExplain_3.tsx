@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Lato } from 'next/font/google';
 import { useState } from 'react';
-import ExplainUnitWrapper from '../ExplainUnitWrapper';
+import ExplainUnitWrapper from './ExplainUnitWrapper';
 import MirrorWorkoutExplainRow from './MirrorWorkoutExplainRow';
 
 type Props = {};
