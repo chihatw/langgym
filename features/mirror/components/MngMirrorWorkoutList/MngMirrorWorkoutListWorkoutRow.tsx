@@ -1,3 +1,9 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { Lato } from 'next/font/google';
 import { MirrorWorkoutResultItemView } from '../../schema';
@@ -93,19 +99,31 @@ const MngMirrorWorkoutListWorkoutRow = ({ resultItems }: Props) => {
                     .filter((i) => i.workoutItemIndex === index)
                     .find((i) => i.resultId === resultId)!;
                   return (
-                    <div key={resultId} className='basis-8 text-end'>
-                      <div
-                        className={cn(
-                          'text-xs',
-                          targetResult.shuffledIndex === 0 && 'text-slate-400',
-                          targetResult.shuffledIndex !== 0 &&
-                            !targetResult.isCorrect &&
-                            'text-red-500'
-                        )}
-                      >
-                        {(targetResult.lap / 1000).toFixed(2)}
-                      </div>
-                    </div>
+                    <TooltipProvider>
+                      <Tooltip key={resultId}>
+                        <TooltipTrigger asChild>
+                          <div className='basis-8 text-end'>
+                            <div
+                              className={cn(
+                                'text-xs',
+                                targetResult.shuffledIndex === 0 &&
+                                  'text-slate-400',
+                                targetResult.shuffledIndex !== 0 &&
+                                  !targetResult.isCorrect &&
+                                  'text-red-500'
+                              )}
+                            >
+                              {(targetResult.lap / 1000).toFixed(2)}
+                            </div>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className='text-xs'>
+                            {targetResult.shuffledIndex}
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   );
                 })}
                 <div className='basis-9 text-end text-xs'>
