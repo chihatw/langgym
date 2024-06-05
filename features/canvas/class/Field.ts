@@ -12,6 +12,7 @@ export class Field {
   expandObjId: number | null = 0;
   expandStartObjId: number | null = 0;
   connectedObjSets: number[][] = []; // [startObj, endObj] の順
+  isRunning = false;
 
   // コンストラクタで大きさを設定
   constructor(width: number, height: number, canvas: HTMLCanvasElement) {
@@ -83,7 +84,9 @@ export class Field {
   }
 
   loop() {
+    if (this.isRunning) return;
     this.redraw('loop');
     requestAnimationFrame(() => this.loop());
+    this.isRunning = true;
   }
 }

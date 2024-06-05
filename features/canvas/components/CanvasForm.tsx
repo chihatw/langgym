@@ -11,12 +11,10 @@ import CanvasDom from './CanvasDom';
 type Props = {};
 
 type RefProps = {
-  initializing: boolean;
   field: Field | null;
 };
 
 const INITIAL_REF: RefProps = {
-  initializing: true,
   field: null,
 };
 
@@ -27,7 +25,8 @@ const CanvasForm = (props: Props) => {
 
   // initialize
   useEffect(() => {
-    if (!ref.current.initializing) return;
+    // field は 重複作成しない
+    if (!!ref.current.field) return;
 
     (async () => {
       if (!canvas.current) throw new Error();
@@ -40,7 +39,7 @@ const CanvasForm = (props: Props) => {
       field.expandObjId = _field.expandObjId;
       field.expandStartObjId = _field.expandStartObjId;
 
-      ref.current = { field, initializing: false };
+      ref.current = { field };
 
       const _boxes = await fetchBoxes();
       console.log(`initial fetch ${_boxes.length} boxes`);
