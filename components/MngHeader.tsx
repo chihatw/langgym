@@ -13,13 +13,14 @@ const items: { label: string; href: string }[] = [
   { label: 'results', href: '/mng/result/list' },
   { label: 'draft', href: '/mng/draft' },
   { label: 'real time', href: '/mng/realtime' },
+  { label: 'mirror', href: '/mng/mirror/list' },
 ];
 
 const MngHeader = (props: Props) => {
   return (
     <div className='print:hidden flex gap-2 mt-4 flex-wrap items-center'>
       <Link href={'/mng/auth'}>
-        <CircleUser className='h-4 w-4'/>
+        <CircleUser className='h-4 w-4' />
       </Link>
       {items.map((item, index) => (
         <Link
@@ -30,7 +31,6 @@ const MngHeader = (props: Props) => {
           {item.label}
         </Link>
       ))}
-      
     </div>
   );
 };

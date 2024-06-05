@@ -1,9 +1,16 @@
 export interface MirrorWorkout {
   id: number;
   uid: string;
-  // items: string;
   isDev: boolean;
 }
+
+export interface MirrorWorkoutView {
+  id: number | null;
+  uid: string | null;
+  display: string | null;
+  isDev: boolean | null;
+}
+
 export interface MirrorWorkoutItem {
   id: number;
   index: number;
@@ -27,4 +34,28 @@ export interface MirrorWorkoutResult {
   laps: number[];
   totalTime: number;
   workoutId: number;
+}
+
+export interface MirrorWorkoutResultItem {
+  id: number;
+  resultId: number;
+  shuffledIndex: number;
+  workoutItemIndex: number;
+  isCorrect: boolean;
+  lap: number;
+}
+
+export interface MirrorWorkoutResultItemView {
+  id: number | null;
+  resultId: number | null;
+  shuffledIndex: number | null;
+  workoutItemIndex: number | null;
+  isCorrect: boolean | null;
+  number: number | null;
+  lap: number | null;
+  totalTime: number | null;
+  workoutId: number | null;
+  uid: string | null;
+  display: string | null;
+  isDev: boolean | null;
 }

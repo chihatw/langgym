@@ -3,7 +3,20 @@ import {
   MirrorWorkout,
   MirrorWorkoutItemView,
   MirrorWorkoutResult,
+  MirrorWorkoutResultItemView,
+  MirrorWorkoutView,
 } from '../schema';
+
+export async function fetchMirrorWorkoutViews(): Promise<MirrorWorkoutView[]> {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase.from('mirror_workouts_view').select();
+  if (error) {
+    console.log(error.message);
+    return [];
+  }
+
+  return data;
+}
 
 export async function fetchMirrorWorkoutsByUid(
   uid: string
@@ -84,6 +97,19 @@ export async function fetchMirrorWorkoutItemViewsByWorkoutId(
     .eq('workoutId', workoutId)
     .order('index');
 
+  if (error) {
+    console.error(error.message);
+    return [];
+  }
+  return data;
+}
+export async function fetchMirrorWorkoutResultItemViews(): Promise<
+  MirrorWorkoutResultItemView[]
+> {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('mirror_workout_result_items_view')
+    .select();
   if (error) {
     console.error(error.message);
     return [];
