@@ -466,6 +466,35 @@ export type Database = {
         }
         Relationships: []
       }
+      mirror_workout_items: {
+        Row: {
+          id: number
+          index: number
+          number: number
+          workoutId: number
+        }
+        Insert: {
+          id?: number
+          index: number
+          number: number
+          workoutId: number
+        }
+        Update: {
+          id?: number
+          index?: number
+          number?: number
+          workoutId?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mirror_workout_items_workoutId_fkey"
+            columns: ["workoutId"]
+            isOneToOne: false
+            referencedRelation: "mirror_workouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mirror_workout_results: {
         Row: {
           id: number

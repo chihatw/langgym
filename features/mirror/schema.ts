@@ -4,6 +4,12 @@ export interface MirrorWorkout {
   items: string;
   isDev: boolean;
 }
+export interface MirrorWorkoutItem {
+  id: number;
+  index: number;
+  number: number;
+  workoutId: number;
+}
 
 export interface MirrorWorkoutResult {
   id: number;

@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
 import { MIRROR_WORKOUTS_LABEL } from '../constants';
 import { MirrorWorkout } from '../schema';
-import MirrorWorkoutExplainContent from './MirrorWorkoutExplainContent';
+import MirrorWorkoutExplainContent from './MirrorWorkoutExplainContent/MirrorWorkoutExplainContent';
 import MirrorWorkoutWorkoutContent from './MirrorWorkoutWorkoutContent';
 
 type State = 'explain' | 'workout';
