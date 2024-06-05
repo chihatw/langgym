@@ -119,7 +119,7 @@ const MngMirrorWorkoutListWorkoutRow = ({ resultItems }: Props) => {
                         </TooltipTrigger>
                         <TooltipContent>
                           <p className='text-xs'>
-                            {targetResult.shuffledIndex}
+                            {targetResult.shuffledIndex + 1}
                           </p>
                         </TooltipContent>
                       </Tooltip>
