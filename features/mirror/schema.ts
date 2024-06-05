@@ -1,7 +1,7 @@
 export interface MirrorWorkout {
   id: number;
   uid: string;
-  items: string;
+  // items: string;
   isDev: boolean;
 }
 export interface MirrorWorkoutItem {
