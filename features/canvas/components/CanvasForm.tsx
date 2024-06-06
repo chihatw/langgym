@@ -1,3 +1,5 @@
+'use client';
+
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { nanoid } from 'nanoid';
 import { MutableRefObject, useEffect, useRef } from 'react';

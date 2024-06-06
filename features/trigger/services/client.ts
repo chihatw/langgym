@@ -25,6 +25,16 @@ export async function updateRedirectToRealtimeTrigger() {
   if (error) console.error(error.message);
 }
 
+export async function updateRedirectToRealtimeCanvasTrigger() {
+  const supabase = createSupabaseClientComponentClient();
+  const { error } = await supabase
+    .from('remote_trigger')
+    .update({ updated_at: new Date().toISOString() })
+    .eq('id', REMOTE_TRIGGER_ID.redirect_to_realtime_canvas);
+
+  if (error) console.error(error.message);
+}
+
 export async function updateBackToHomeTrigger() {
   const supabase = createSupabaseClientComponentClient();
   const { error } = await supabase

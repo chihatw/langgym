@@ -3,6 +3,7 @@ import MngPaneContainer from '@/components/MngPaneContainer';
 import { Button } from '@/components/ui/button';
 import {
   updateBackToHomeTrigger,
+  updateRedirectToRealtimeCanvasTrigger,
   updateRedirectToRealtimeTrigger,
   updateRefreshRealtimeTrigger,
 } from '@/features/trigger/services/client';
@@ -15,7 +16,14 @@ const MngCanvasFormContainer = ({}: Props) => {
     <MngPaneContainer label='Canvas' open>
       <div className='grid gap-4'>
         <div className='text-2xl font-extrabold'>Canvas</div>
-        <div className='flex gap-4'>
+        <div className='flex gap-4 flex-wrap'>
+          <Button
+            variant={'ghost'}
+            className='p-0 h-auto'
+            onClick={updateRedirectToRealtimeCanvasTrigger}
+          >
+            Redirect to Realtime Canvas
+          </Button>
           <Button
             variant={'ghost'}
             className='p-0 h-auto'
