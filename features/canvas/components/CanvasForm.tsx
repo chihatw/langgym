@@ -145,8 +145,10 @@ const CanvasForm = (props: Props) => {
           field.connectedObjSets = connectedObjSetsParse(connectedObjSets);
         }
       )
-      .subscribe();
-    console.log(channel);
+      .subscribe((status) => {
+        console.log(status);
+      });
+
     return () => {
       supabase.removeChannel(channel);
     };
