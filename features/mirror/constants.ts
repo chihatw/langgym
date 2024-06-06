@@ -46,6 +46,22 @@ export const MIRROR_REALTIME_ITEMS: MirrorWorkoutRealtimeItem[] = [
     highlights_back: [],
   },
   {
+    id: '40',
+    item_1: '9431753222',
+    item_2: '8324823397',
+    highlights: [0],
+    item_back: '',
+    highlights_back: [],
+  },
+  {
+    id: '41',
+    item_1: '7232431275',
+    item_2: '2397323482',
+    highlights: [0],
+    item_back: '',
+    highlights_back: [],
+  },
+  {
     id: '5',
     item_1: '不去',
     item_2: '',
