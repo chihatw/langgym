@@ -146,6 +146,7 @@ const CanvasForm = (props: Props) => {
         }
       )
       .subscribe();
+    console.log(channel);
     return () => {
       supabase.removeChannel(channel);
     };
