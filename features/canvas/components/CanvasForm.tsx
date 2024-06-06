@@ -145,8 +145,11 @@ const CanvasForm = (props: Props) => {
           field.connectedObjSets = connectedObjSetsParse(connectedObjSets);
         }
       )
-      .subscribe((status) => {
+      .subscribe((status, error) => {
         console.log(status);
+        if (error) {
+          console.log(error.message);
+        }
       });
 
     return () => {
