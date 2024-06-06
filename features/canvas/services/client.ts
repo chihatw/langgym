@@ -104,11 +104,11 @@ export async function updateBox({
   }
 }
 
-// will delete
+//
 export async function updateHighlights(id: number, highlights: number[]) {
   const supabase = createSupabaseClientComponentClient();
   const { error } = await supabase
-    .from('canvas')
+    .from('canvas_boxes')
     .update({ highlights })
     .eq('id', id);
 
