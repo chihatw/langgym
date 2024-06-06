@@ -176,7 +176,6 @@ export class Box {
     this.height = height;
     this.chars = chars;
 
-    // todo remote
     updateHighlights(this.id, this.highlights);
     return this.highlights;
   }
@@ -188,7 +187,6 @@ export class Box {
     this.height = height;
     this.chars = chars;
 
-    // todo remote
     updateHighlights(this.id, []);
   }
 

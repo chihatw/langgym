@@ -53,7 +53,9 @@ const CanvasForm = (props: Props) => {
     })();
   }, []);
 
+  // TODO canvas の状態を１つの文字列だけで伝える
   // subscribe canvas
+
   useEffect(() => {
     const supabase = createSupabaseClientComponentClient();
     const channel = supabase

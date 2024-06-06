@@ -100,6 +100,8 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
   }, [value]);
 
   const handleSelect = (value: string) => {
+    // todo debug select speed workout
+    console.log(value);
     if (!speedWorkout) return;
 
     const selectedId = parseInt(value);
