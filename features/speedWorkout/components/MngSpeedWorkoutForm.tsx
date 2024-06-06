@@ -34,8 +34,6 @@ const INITIAL_STATE: FormProps = {
 };
 
 const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
-  // todo debug
-  console.log(workoutItems);
   const [value, setValue] = useState(INITIAL_STATE);
 
   const workouts = useMemo(() => {
@@ -102,9 +100,7 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
   }, [value]);
 
   const handleSelect = (value: string) => {
-    // todo debug select speed workout
-    console.log(value);
-    if (!speedWorkout) return;
+    if (!speedWorkout) throw new Error('no speedd workout');
 
     const selectedId = parseInt(value);
 
@@ -117,7 +113,7 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
   };
 
   const handleClick = () => {
-    if (!speedWorkout) return;
+    if (!speedWorkout) throw new Error('no speedd workout');
 
     const isRunning = !value.isRunning;
 
