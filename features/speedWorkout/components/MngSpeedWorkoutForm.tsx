@@ -34,6 +34,8 @@ const INITIAL_STATE: FormProps = {
 };
 
 const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
+  // todo debug
+  console.log(workoutItems);
   const [value, setValue] = useState(INITIAL_STATE);
 
   const workouts = useMemo(() => {
