@@ -59,3 +59,18 @@ export interface MirrorWorkoutResultItemView {
   display: string | null;
   isDev: boolean | null;
 }
+
+export interface MirrorWorkoutRealtime {
+  id: number;
+  selectedId: string;
+  isMirror: boolean;
+}
+
+export interface MirrorWorkoutRealtimeItem {
+  id: string;
+  item_1: string;
+  item_2: string;
+  item_back: string;
+  highlights: number[];
+  highlights_back: number[];
+}

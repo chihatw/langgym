@@ -13,7 +13,7 @@ type Props = {};
 
 const MngCanvasFormContainer = ({}: Props) => {
   return (
-    <MngPaneContainer label='Canvas' open>
+    <MngPaneContainer label='Canvas'>
       <div className='grid gap-4'>
         <div className='text-2xl font-extrabold'>Canvas</div>
         <div className='flex gap-4 flex-wrap'>
@@ -22,21 +22,14 @@ const MngCanvasFormContainer = ({}: Props) => {
             className='p-0 h-auto'
             onClick={updateRedirectToRealtimeCanvasTrigger}
           >
-            Redirect to Realtime Canvas
+            Open Canvas
           </Button>
           <Button
             variant={'ghost'}
             className='p-0 h-auto'
             onClick={updateRedirectToRealtimeTrigger}
           >
-            Redirect to Realtime
-          </Button>
-          <Button
-            variant={'ghost'}
-            className='p-0 h-auto'
-            onClick={updateRefreshRealtimeTrigger}
-          >
-            Refresh Realtime
+            Open Realtime
           </Button>
           <Button
             variant={'ghost'}
@@ -44,6 +37,13 @@ const MngCanvasFormContainer = ({}: Props) => {
             onClick={updateBackToHomeTrigger}
           >
             Back to Home
+          </Button>
+          <Button
+            variant={'ghost'}
+            className='p-0 h-auto'
+            onClick={updateRefreshRealtimeTrigger}
+          >
+            Refresh
           </Button>
         </div>
         <MngCanvasForm />

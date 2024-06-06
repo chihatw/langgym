@@ -10,4 +10,5 @@ export const PAGES: { [key: string]: string } = {
   pitches: 'ピッチ',
   betterread: '課前準備',
   canvas: 'キャンバス',
+  mirror: '鏡像數字',
 };

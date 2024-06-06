@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { PathnameLogView } from '@/features/pathnameLog/schema';
 import {
   updateBackToHomeTrigger,
+  updateRedirectToRealtimeCanvasTrigger,
   updateRedirectToRealtimeTrigger,
   updateRefreshRealtimeTrigger,
   updateRemoteLoginTrigger,
@@ -21,20 +22,27 @@ const PageStateForm = ({ users, pathnameLogs }: Props) => {
   return (
     <div className='grid gap-4'>
       <div className='text-xs font-extrabold'>Page State</div>
-      <div className='flex gap-4'>
+      <div className='flex gap-4 flex-wrap'>
         <Button
           className='h-auto w-auto p-0'
           variant={'ghost'}
           onClick={updateRemoteLoginTrigger}
         >
-          Remote Log in
+          Log in
+        </Button>
+        <Button
+          className='h-auto w-auto p-0'
+          variant={'ghost'}
+          onClick={updateRedirectToRealtimeCanvasTrigger}
+        >
+          Open Canvas
         </Button>
         <Button
           className='h-auto w-auto p-0'
           variant={'ghost'}
           onClick={updateRedirectToRealtimeTrigger}
         >
-          Redirect to Realtime
+          Open Realtime
         </Button>
         <Button
           className='h-auto w-auto p-0'
@@ -48,7 +56,7 @@ const PageStateForm = ({ users, pathnameLogs }: Props) => {
           variant={'ghost'}
           onClick={updateRefreshRealtimeTrigger}
         >
-          Refresh Realtime
+          Refresh
         </Button>
       </div>
       <div className='grid gap-4'>

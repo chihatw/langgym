@@ -17,6 +17,21 @@ export async function updateRemoteLoginTrigger() {
 
 export async function updateRedirectToRealtimeTrigger() {
   const supabase = createSupabaseClientComponentClient();
+
+  // redirect を発火する前に pageState を blank にする
+  // 全ての uid を取得
+  const { data } = await supabase.from('users').select();
+  if (!data) return;
+
+  // 取得した uid に対して更新
+  const uids = data.map((user) => user.uid);
+  const { error: error_users } = await supabase
+    .from('users')
+    .update({ realtimePage: 'blank' })
+    .in('uid', uids);
+  if (error_users) console.error(error_users.message);
+
+  //
   const { error } = await supabase
     .from('remote_trigger')
     .update({ updated_at: new Date().toISOString() })

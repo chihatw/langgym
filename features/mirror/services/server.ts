@@ -1,7 +1,9 @@
 import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
+import { MIRROR_WORKOUT_REALTIME_ID } from '../constants';
 import {
   MirrorWorkout,
   MirrorWorkoutItemView,
+  MirrorWorkoutRealtime,
   MirrorWorkoutResult,
   MirrorWorkoutResultItemView,
   MirrorWorkoutView,
@@ -124,5 +126,23 @@ export async function fetchMirrorWorkoutResultItemViewsByResultId(
     console.error(error.message);
     return [];
   }
+  return data;
+}
+
+export async function fetchMirrorWorkoutRealtime(): Promise<
+  MirrorWorkoutRealtime | undefined
+> {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('mirror_workout_realtime')
+    .select()
+    .eq('id', MIRROR_WORKOUT_REALTIME_ID)
+    .single();
+
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+
   return data;
 }

@@ -10,6 +10,7 @@ import SpeedWorkoutForm from '@/features/speedWorkout/components/SpeedWorkoutFor
 import { AppUser } from '@/features/user/schema';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { nanoid } from 'nanoid';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 type Props = {
@@ -31,6 +32,9 @@ const INITIAL_STATE: FormProps = {
 };
 
 const PageSwitch = ({ user }: Props) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
   const [value, setValue] = useState(INITIAL_STATE);
 
   // set values from RSC
@@ -85,6 +89,9 @@ const PageSwitch = ({ user }: Props) => {
       return <PitchesForm />;
     case 'betterread':
       return <BetterreadView />;
+    case 'mirror':
+      router.push('/realtime/mirror');
+      return null;
     case 'canvas':
     case 'blank':
       return null;

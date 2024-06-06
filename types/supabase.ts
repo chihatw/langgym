@@ -502,6 +502,24 @@ export type Database = {
           },
         ]
       }
+      mirror_workout_realtime: {
+        Row: {
+          id: number
+          isMirror: boolean
+          selectedId: string
+        }
+        Insert: {
+          id?: number
+          isMirror?: boolean
+          selectedId: string
+        }
+        Update: {
+          id?: number
+          isMirror?: boolean
+          selectedId?: string
+        }
+        Relationships: []
+      }
       mirror_workout_result_items: {
         Row: {
           id: number
