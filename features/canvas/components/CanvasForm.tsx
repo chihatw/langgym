@@ -1,6 +1,6 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { nanoid } from 'nanoid';
-import { useEffect, useRef } from 'react';
+import { MutableRefObject, useEffect, useRef } from 'react';
 import { Box } from '../class/Box';
 import { Field } from '../class/Field';
 import { RECT } from '../constants';
@@ -34,12 +34,10 @@ const CanvasForm = (props: Props) => {
       const _field = await fetchField();
       if (!_field) return;
 
-      const field = new Field(RECT.width, RECT.height, canvas.current);
+      const field = createFieldRef(ref, canvas.current);
       field.connectedObjSets = connectedObjSetsParse(_field.connectedObjSets);
       field.expandObjId = _field.expandObjId;
       field.expandStartObjId = _field.expandStartObjId;
-
-      ref.current = { field };
 
       const _boxes = await fetchBoxes();
       console.log(`initial fetch ${_boxes.length} boxes`);
@@ -50,7 +48,6 @@ const CanvasForm = (props: Props) => {
         boxes.push(box);
       }
       field.objs = boxes;
-      field.loop();
     })();
   }, []);
 
@@ -69,14 +66,14 @@ const CanvasForm = (props: Props) => {
         },
         (preload) => {
           console.log('insert box');
+
           const inserted = preload.new;
           const { x, y, label, id, splitBy, highlights, isHidden } = inserted;
           const box = new Box(x, y, label, splitBy, highlights, isHidden, id);
 
-          const { field } = ref.current;
-          if (!field) throw new Error();
+          if (!canvas.current) throw new Error();
+          const field = createFieldRef(ref, canvas.current);
 
-          console.log(`add box`);
           field.objs = [...field.objs, box];
         }
       )
@@ -92,8 +89,9 @@ const CanvasForm = (props: Props) => {
           // delete が発火しない解決法 ALTER TABLE your_table REPLICA IDENTITY FULL
           // https://github.com/supabase/supabase/issues/4905
           const { id } = preload.old;
-          const { field } = ref.current;
-          if (!field) throw new Error();
+
+          if (!canvas.current) throw new Error();
+          const field = createFieldRef(ref, canvas.current);
           field.objs = field.objs.filter((obj) => obj.id !== id);
         }
       )
@@ -108,8 +106,10 @@ const CanvasForm = (props: Props) => {
           console.log('update box');
           const updated = preload.new;
           const { x, y, label, id, splitBy, highlights, isHidden } = updated;
-          const { field } = ref.current;
-          if (!field) throw new Error();
+
+          if (!canvas.current) throw new Error();
+          const field = createFieldRef(ref, canvas.current);
+
           const newBox = new Box(
             x,
             y,
@@ -124,6 +124,7 @@ const CanvasForm = (props: Props) => {
             field.objs = [...field.objs, newBox];
             return;
           }
+
           // 含まれている場合、変更
           field.objs = field.objs.map((obj) => (obj.id !== id ? obj : newBox));
         }
@@ -136,8 +137,8 @@ const CanvasForm = (props: Props) => {
           const updated = preload.new;
           const { expandObjId, expandStartObjId, connectedObjSets } = updated;
 
-          const { field } = ref.current;
-          if (!field) throw new Error();
+          if (!canvas.current) throw new Error();
+          const field = createFieldRef(ref, canvas.current);
 
           field.expandObjId = expandObjId || null;
           field.expandStartObjId = expandStartObjId || null;
@@ -158,3 +159,17 @@ const CanvasForm = (props: Props) => {
 };
 
 export default CanvasForm;
+
+function createFieldRef(
+  ref: MutableRefObject<RefProps>,
+  canvas: HTMLCanvasElement
+) {
+  console.log(ref.current.field);
+  if (ref.current.field) return ref.current.field;
+
+  const field = new Field(RECT.width, RECT.height, canvas);
+  field.start();
+
+  ref.current = { ...ref.current, field };
+  return field;
+}

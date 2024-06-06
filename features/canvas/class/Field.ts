@@ -84,9 +84,13 @@ export class Field {
   }
 
   loop() {
-    if (this.isRunning) return;
     this.redraw('loop');
     requestAnimationFrame(() => this.loop());
+  }
+
+  start() {
+    if (this.isRunning) return;
+    this.loop();
     this.isRunning = true;
   }
 }
