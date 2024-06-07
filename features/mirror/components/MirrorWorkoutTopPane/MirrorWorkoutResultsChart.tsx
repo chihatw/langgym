@@ -9,13 +9,13 @@ const MirrorWorkoutResultsChart = ({ results }: Props) => {
 
   const lineChartData = useMemo(() => {
     return results.map((r) => {
-      return [new Date(r.created_at), r.totalTime / 1000];
+      return [r.created_at, r.totalTime / 1000];
     });
   }, [results]);
 
   const columnChartData = useMemo(() => {
     return results.map((r) => {
-      return [new Date(r.created_at), r.correctRatio];
+      return [r.created_at, r.correctRatio];
     });
   }, [results]);
 
@@ -29,7 +29,7 @@ const MirrorWorkoutResultsChart = ({ results }: Props) => {
           curveType: 'function',
           hAxis: {
             minValue: new Date('2024-06-07'),
-            maxValue: new Date('2024-6-13'),
+            maxValue: new Date('2024-06-13'),
             format: 'M/d',
           },
           legend: { position: 'none' },
@@ -43,7 +43,7 @@ const MirrorWorkoutResultsChart = ({ results }: Props) => {
           vAxis: { maxValue: 100, minValue: 0 },
           hAxis: {
             minValue: new Date('2024-06-07'),
-            maxValue: new Date('2024-6-13'),
+            maxValue: new Date('2024-06-13'),
             format: 'M/d',
           },
           legend: { position: 'none' },
