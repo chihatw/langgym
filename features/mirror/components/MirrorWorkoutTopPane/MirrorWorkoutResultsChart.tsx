@@ -9,13 +9,13 @@ const MirrorWorkoutResultsChart = ({ results }: Props) => {
 
   const lineChartData = useMemo(() => {
     return results.map((r) => {
-      return [r.created_at, r.totalTime / 1000];
+      return [new Date(r.created_at), r.totalTime / 1000];
     });
   }, [results]);
 
   const columnChartData = useMemo(() => {
     return results.map((r) => {
-      return [r.created_at, r.correctRatio];
+      return [new Date(r.created_at), r.correctRatio];
     });
   }, [results]);
 
@@ -24,7 +24,6 @@ const MirrorWorkoutResultsChart = ({ results }: Props) => {
       <Chart
         chartType='LineChart'
         data={[['日付', '時間'], ...lineChartData]}
-        chartLanguage='zh-TW'
         options={{
           title: '時間',
           curveType: 'function',

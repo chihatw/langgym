@@ -51,8 +51,5 @@ export function getCorrectRatio(selectedNumbers: number[], items: number[][]) {
 export function getResultDates(results: MirrorWorkoutResult[]) {
   const days = results.map((r) => r.created_at.getDate());
   const uniqDays = Array.from(new Set(days));
-  if (uniqDays.length < 2) {
-    return uniqDays;
-  }
   return uniqDays.sort((a, b) => a - b);
 }

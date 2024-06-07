@@ -19,7 +19,9 @@ const MirrorWorkoutResultList = ({ results }: Props) => {
             className='grid grid-cols-[150px,48px,40px] items-center gap-4'
             href={`/mirror/${result.uid}/${result.id}`}
           >
-            <div className='text-xs'>{result.created_at.toLocaleString()}</div>
+            <div className='text-xs'>
+              {result.created_at.toLocaleString('zh-TW')}
+            </div>
             <div className='text-xs text-end'>
               {`${(result.totalTime / 1000).toFixed(2)}秒`}
             </div>
