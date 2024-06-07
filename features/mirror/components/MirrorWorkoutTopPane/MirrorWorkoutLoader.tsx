@@ -21,8 +21,12 @@ const MirrorNumbersLoader = async ({ uid }: Props) => {
           </Link>
         </div>
         <MirrorWorkoutResultCallender results={results} />
-        <MirrorWorkoutResultsChart results={results} />
-        <MirrorWorkoutResultList results={results} />
+        {results.length ? (
+          <div className='grid gap-4'>
+            <MirrorWorkoutResultsChart results={results} />
+            <MirrorWorkoutResultList results={results} />
+          </div>
+        ) : null}
       </div>
     </div>
   );

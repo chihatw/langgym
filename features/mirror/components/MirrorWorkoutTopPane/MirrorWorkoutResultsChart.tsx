@@ -31,6 +31,7 @@ const MirrorWorkoutResultsChart = ({ results }: Props) => {
             maxValue: new Date('2024-6-13'),
             format: 'M/d',
           },
+          legend: { position: 'none' },
         }}
       />
       <Chart
@@ -44,6 +45,7 @@ const MirrorWorkoutResultsChart = ({ results }: Props) => {
             maxValue: new Date('2024-6-13'),
             format: 'M/d',
           },
+          legend: { position: 'none' },
         }}
       />
     </div>
