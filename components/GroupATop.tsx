@@ -1,5 +1,6 @@
 import BetterreadContainer from '@/features/betterread/components/BetterreadContainer';
-import MirrorNumbersLoader from '@/features/mirror/components/MirrorNumbersLoader';
+
+import MirrorNumbersLoader from '@/features/mirror/components/MirrorWorkoutTopPane/MirrorWorkoutLoader';
 import QuizListContainer from '@/features/quiz/components/QuizList/QuizListContainer';
 import WorkoutListContainer from '@/features/workout/components/WorkoutList/WorkoutListContainer';
 import ArticleListLoader from '../features/article/components/ArticleList/ArticleListLoader';

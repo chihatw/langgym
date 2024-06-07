@@ -1,4 +1,4 @@
-import { MirrorWorkoutRealtimeItem } from './schema';
+import { MirrorWorkoutRealtimeItem, MirrorWorkoutResult } from './schema';
 
 export const MIRROR_WORKOUTS_LABEL = '鏡像數字';
 
@@ -94,3 +94,14 @@ export const MIRROR_REALTIME_ITEMS: MirrorWorkoutRealtimeItem[] = [
     highlights_back: [1, 2],
   },
 ];
+
+export const INITIAL_MIRROR_WORKOUT_RESULT: MirrorWorkoutResult = {
+  id: 1,
+  items: '',
+  selectedNumbers: [],
+  laps: [],
+  totalTime: 0,
+  created_at: new Date(),
+  correctRatio: 0,
+  uid: '',
+};

@@ -1,39 +1,20 @@
 import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
 import { MIRROR_WORKOUT_REALTIME_ID } from '../constants';
-import {
-  MirrorWorkout,
-  MirrorWorkoutItemView,
-  MirrorWorkoutRealtime,
-  MirrorWorkoutResult,
-  MirrorWorkoutResultItemView,
-  MirrorWorkoutView,
-} from '../schema';
+import { MirrorWorkoutRealtime, MirrorWorkoutResult } from '../schema';
 
-export async function fetchMirrorWorkoutViews(): Promise<MirrorWorkoutView[]> {
-  const supabase = createSupabaseServerComponentClient();
-  const { data, error } = await supabase.from('mirror_workouts_view').select();
-  if (error) {
-    console.log(error.message);
-    return [];
-  }
-
-  return data;
-}
-
-export async function fetchMirrorWorkoutsByUid(
-  uid: string
-): Promise<MirrorWorkout[]> {
+export async function fetchMirrorWorkoutResults(): Promise<
+  MirrorWorkoutResult[]
+> {
   const supabase = createSupabaseServerComponentClient();
   const { data, error } = await supabase
-    .from('mirror_workouts')
-    .select()
-    .eq('uid', uid)
-    .eq('isDev', false);
+    .from('mirror_workout_results')
+    .select();
   if (error) {
     console.error(error.message);
     return [];
   }
-  return data;
+
+  return data.map((i) => ({ ...i, created_at: new Date(i.created_at) }));
 }
 
 export async function fetchMirrorWorkoutResultById(
@@ -51,82 +32,27 @@ export async function fetchMirrorWorkoutResultById(
     return;
   }
 
-  return data;
+  return {
+    ...data,
+    created_at: new Date(data.created_at),
+  };
 }
 
-export async function fetchMirrorWorkoutResultsByWorkoutIds(
-  workoutIds: number[]
+export async function fetchMirrorWorkoutResultByUid(
+  uid: string
 ): Promise<MirrorWorkoutResult[]> {
   const supabase = createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('mirror_workout_results')
     .select()
-    .in('workoutId', workoutIds);
-  if (error) {
-    console.error(error.message);
-    return [];
-  }
-  return data;
-}
-
-export async function fetchMirrorWorkoutItemViewsByWorkoutId(
-  workoutId: number
-): Promise<MirrorWorkoutItemView[]> {
-  const supabase = createSupabaseServerComponentClient();
-  const { data, error } = await supabase
-    .from('mirror_workout_items_view')
-    .select()
-    .eq('workoutId', workoutId)
-    .order('index');
+    .eq('uid', uid);
 
   if (error) {
     console.error(error.message);
     return [];
   }
-  return data;
-}
-export async function fetchMirrorWorkoutResultItemViews(): Promise<
-  MirrorWorkoutResultItemView[]
-> {
-  const supabase = createSupabaseServerComponentClient();
-  const { data, error } = await supabase
-    .from('mirror_workout_result_items_view')
-    .select();
-  if (error) {
-    console.error(error.message);
-    return [];
-  }
-  return data;
-}
 
-export async function fetchMirrorWorkoutResultItemViewsByWorkoutIds(
-  workoutIds: number[]
-): Promise<MirrorWorkoutResultItemView[]> {
-  const supabase = createSupabaseServerComponentClient();
-  const { data, error } = await supabase
-    .from('mirror_workout_result_items_view')
-    .select()
-    .in('workoutId', workoutIds);
-  if (error) {
-    console.error(error.message);
-    return [];
-  }
-  return data;
-}
-
-export async function fetchMirrorWorkoutResultItemViewsByResultId(
-  resultId: number
-): Promise<MirrorWorkoutResultItemView[]> {
-  const supabase = createSupabaseServerComponentClient();
-  const { data, error } = await supabase
-    .from('mirror_workout_result_items_view')
-    .select()
-    .eq('resultId', resultId);
-  if (error) {
-    console.error(error.message);
-    return [];
-  }
-  return data;
+  return data.map((i) => ({ ...i, created_at: new Date(i.created_at) }));
 }
 
 export async function fetchMirrorWorkoutRealtime(): Promise<

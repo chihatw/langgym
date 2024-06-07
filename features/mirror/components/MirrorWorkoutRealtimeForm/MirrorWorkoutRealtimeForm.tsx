@@ -40,9 +40,7 @@ const MirrorWorkoutRealtimeForm = ({ params }: Props) => {
           setValue((prev) => ({ ...prev, selectedId, isMirror }));
         }
       )
-      .subscribe((state) => {
-        console.log(state);
-      });
+      .subscribe();
     return () => {
       supabase.removeChannel(channel);
     };

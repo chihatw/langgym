@@ -1,4 +1,5 @@
 import MirrorWorkoutWorkoutButton from './MirrorWorkoutWorkoutButton';
+import MirrorWorkoutWorkoutButtonWrapper from './MirrorWorkoutWorkoutButtonWrapper';
 
 type Props = {
   items: number[];
@@ -7,7 +8,7 @@ type Props = {
 
 const MirrorWorkoutButtonSet = ({ items, action }: Props) => {
   return (
-    <div className='grid  grid-cols-1 sm:grid-cols-2 gap-8'>
+    <MirrorWorkoutWorkoutButtonWrapper>
       {items.map((item, index) => (
         <MirrorWorkoutWorkoutButton
           key={index}
@@ -15,7 +16,7 @@ const MirrorWorkoutButtonSet = ({ items, action }: Props) => {
           action={() => action(item)}
         />
       ))}
-    </div>
+    </MirrorWorkoutWorkoutButtonWrapper>
   );
 };
 

@@ -1,18 +1,17 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { shuffle } from '@/utils';
 import { Loader2 } from 'lucide-react';
 import { Lato } from 'next/font/google';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState, useTransition } from 'react';
-import { MirrorWorkoutItemView, MirrorWorkoutResult } from '../../schema';
+import { useState, useTransition } from 'react';
+import { MirrorWorkoutResult } from '../../schema';
 import { insertMirrorWorkoutResult } from '../../services/actions';
+import { buildMirrorWorkoutItems, getCorrectRatio } from '../../services/utils';
+import MirrorWorkoutWorkoutButtonWrapper from './MirrorWorkoutWorkoutButtonWrapper';
 import MirrorWorkoutWorkoutPane from './MirrorWorkoutWorkoutPane';
 
-type Props = {
-  workoutItems: MirrorWorkoutItemView[];
-};
+type Props = { uid: string };
 
 type FormProps = {
   items: number[][];
@@ -34,39 +33,15 @@ const INITIAL_STATE: FormProps = {
 
 const lato = Lato({ subsets: ['latin'], weight: '900' });
 
-const MirrorWorkoutWorkoutContent = ({ workoutItems }: Props) => {
+const LENGTH = 10;
+
+// todo
+const MirrorWorkoutWorkoutContent = ({ uid }: Props) => {
   const router = useRouter();
 
   const [value, setValue] = useState(INITIAL_STATE);
 
   const [isPending, startTransition] = useTransition();
-
-  const _workout = useMemo(() => workoutItems.at(0), [workoutItems]);
-
-  const _workoutItems = useMemo(() => {
-    return workoutItems.reduce((acc, cur, index) => {
-      const cloned = [...acc];
-
-      // 奇数 index は 最後の項の要素を追加
-      if (index % 2) {
-        cloned.splice(cloned.length - 1, 1, [...cloned.at(-1)!, cur.number!]);
-        return cloned;
-      }
-
-      // 偶数 index は 新しい項を追加
-      cloned.push([cur.number!]);
-
-      return cloned;
-    }, [] as number[][]);
-  }, [workoutItems]);
-
-  // workoutItems を 小さい順に並べて「,」で結合
-  // resultItem の workoutItemIndex を計算するため
-  const remoteWorkoutItems = useMemo(
-    () =>
-      _workoutItems.map((numbers) => numbers.sort((a, b) => a - b).join(',')),
-    [_workoutItems]
-  );
 
   const action = async (selectedNumber: number) => {
     if (value.index + 1 < value.items.length) {
@@ -96,27 +71,22 @@ const MirrorWorkoutWorkoutContent = ({ workoutItems }: Props) => {
           (lap - (index > 0 ? self.at(index - 1)! : _value.start_at)) >> 0
       ),
       totalTime: (_value.laps.at(-1)! - _value.start_at) >> 0,
-      workoutId: _workout?.workoutId!,
+      uid,
+      created_at: new Date(),
+      correctRatio: getCorrectRatio(_value.selectedNumbers, _value.items),
     };
 
     startTransition(async () => {
-      const id = await insertMirrorWorkoutResult(
-        result,
-        _value.selectedNumbers,
-        _value.items,
-        remoteWorkoutItems
-      );
+      const id = await insertMirrorWorkoutResult(result);
 
       if (!id) return;
 
-      router.push(`/mirror/${_workout?.workoutId!}/${id}`);
+      router.push(`/mirror/${uid}/${id}`);
     });
   };
 
   const handleStart = () => {
-    const items = shuffle(_workoutItems).map((items) =>
-      shuffle(items as number[])
-    );
+    const items = buildMirrorWorkoutItems(5, LENGTH);
     setValue({
       ...INITIAL_STATE,
       items,
@@ -133,7 +103,7 @@ const MirrorWorkoutWorkoutContent = ({ workoutItems }: Props) => {
       </div>
       <div className={cn('text-center text-4xl', lato.className)}>{`${
         value.isRunning ? value.index + 1 : 0
-      } / ${_workoutItems.length}`}</div>
+      } / ${LENGTH}`}</div>
       {isPending ? (
         <div className='flex justify-center items-center h-96'>
           <Loader2 className='animate-spin h-32 w-32 text-slate-300' />
@@ -147,7 +117,28 @@ const MirrorWorkoutWorkoutContent = ({ workoutItems }: Props) => {
               valueIndex={value.index}
             />
           ) : (
-            <Button onClick={handleStart}>開始</Button>
+            <>
+              <div className='flex justify-center'>
+                <MirrorWorkoutWorkoutButtonWrapper>
+                  {['開始', '開始'].map((item, index) => (
+                    <Button
+                      key={index}
+                      onClick={handleStart}
+                      className='bg-white h-48 hover:bg-slate-300 w-full'
+                    >
+                      <span
+                        className={cn(
+                          'text-slate-400 text-6xl  select-none',
+                          lato.className
+                        )}
+                      >
+                        {item}
+                      </span>
+                    </Button>
+                  ))}
+                </MirrorWorkoutWorkoutButtonWrapper>
+              </div>
+            </>
           )}
         </>
       )}

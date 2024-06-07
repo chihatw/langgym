@@ -33,6 +33,9 @@ export class DummyDOM {
     this.height = container.getBoundingClientRect().height;
 
     const chars: CharDOM[] = [];
+    // https://chaika.hatenablog.com/entry/2020/08/17/083000
+    // tsconfig.json で "target": "es5" だと error
+    // Type error: Type 'HTMLCollection' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
     for (const child of container.children) {
       for (const char of child.children) {
         const charDiv = char as HTMLDivElement;
