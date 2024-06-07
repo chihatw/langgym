@@ -5,6 +5,8 @@ import { MirrorWorkoutResult } from '../../schema';
 type Props = { results: MirrorWorkoutResult[] };
 
 const MirrorWorkoutResultsChart = ({ results }: Props) => {
+  if (!results.length) return null;
+
   const lineChartData = useMemo(() => {
     return results.map((r) => {
       return [r.created_at, r.totalTime / 1000];
