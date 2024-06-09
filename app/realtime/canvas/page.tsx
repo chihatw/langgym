@@ -1,4 +1,4 @@
-import HiddenElements from '@/components/ui/HiddenElements';
+import HiddenElements from '@/components/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 import CanvasForm from '@/features/canvas/components/CanvasForm';
 import RefreshRealtime from '@/features/trigger/components/RefreshRealtime';

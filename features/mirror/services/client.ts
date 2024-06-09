@@ -1,5 +1,5 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
-import { MirrorWorkoutRealtime } from '../schema';
+import { MirrorWorkoutRealtime, MirrorWorkoutResult } from '../schema';
 
 export async function updateMirrorWorkoutRealtime({
   id,
@@ -15,4 +15,21 @@ export async function updateMirrorWorkoutRealtime({
   if (error) {
     console.error(error.message);
   }
+}
+
+export async function fetchMirrorWorkoutResultByUid(
+  uid: string
+): Promise<MirrorWorkoutResult[]> {
+  const supabase = createSupabaseClientComponentClient();
+  const { data, error } = await supabase
+    .from('mirror_workout_results')
+    .select()
+    .eq('uid', uid);
+
+  if (error) {
+    console.error(error.message);
+    return [];
+  }
+
+  return data.map((i) => ({ ...i, created_at: new Date(i.created_at) }));
 }

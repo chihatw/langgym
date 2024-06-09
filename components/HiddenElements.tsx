@@ -1,13 +1,15 @@
+import MirrorDialog from '@/features/mirror/components/MirrorDialog/MirrorDialog';
 import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
 import BackToHome from '@/features/trigger/components/BackToHome';
+import RedirectToRealtime from '@/features/trigger/components/RedirectToRealtime';
 import RedirectToRealtimeCanvas from '@/features/trigger/components/RedirectToRealtimeCanvas';
-import RedirectToRealtime from '../../features/trigger/components/RedirectToRealtime';
 
-type Props = { uid: string };
+type Props = { uid: string; isMirrorPage?: boolean };
 
-const HiddenElements = ({ uid }: Props) => {
+const HiddenElements = ({ uid, isMirrorPage }: Props) => {
   return (
     <>
+      <MirrorDialog uid={uid} isMirrorPage={isMirrorPage} />
       <PathnameLog uid={uid} />
       <RedirectToRealtime uid={uid} />
       <RedirectToRealtimeCanvas uid={uid} />

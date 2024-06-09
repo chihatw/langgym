@@ -6,6 +6,7 @@ type Props = { results: MirrorWorkoutResult[] };
 
 const MirrorWorkoutResultList = ({ results }: Props) => {
   if (!results.length) return null;
+
   return (
     <div className='grid gap-2'>
       <div className='grid grid-cols-[150px,48px,40px] items-center gap-4'>
@@ -21,7 +22,9 @@ const MirrorWorkoutResultList = ({ results }: Props) => {
             href={`/mirror/${result.uid}/${result.id}`}
           >
             <div className='text-xs'>
-              {result.created_at.toLocaleString('zh-TW')}
+              {result.created_at.toLocaleString('zh-TW', {
+                timeZone: 'Asia/Taipei',
+              })}
             </div>
             <div className='text-xs text-end'>
               {`${(result.totalTime / 1000).toFixed(2)}秒`}

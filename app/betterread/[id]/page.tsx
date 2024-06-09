@@ -1,5 +1,5 @@
 import Breadcrumb from '@/components/Breadcrumb';
-import HiddenElements from '@/components/ui/HiddenElements';
+import HiddenElements from '@/components/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 import BetterreadForm from '@/features/betterread/components/BetterreadForm/BetterreadForm';
 import { fetchBetterreadImagePathsById } from '@/features/betterread/services/server';

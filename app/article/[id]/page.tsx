@@ -1,5 +1,5 @@
 import Breadcrumb from '@/components/Breadcrumb';
-import HiddenElements from '@/components/ui/HiddenElements';
+import HiddenElements from '@/components/HiddenElements';
 import ArticlePane from '@/features/article/components/ArticlePane/ArticlePane';
 import { fetchSentencesByArticleId_Uid } from '@/features/article/services/server';
 import { getUserFromServerSide } from '@/features/auth/services/server';

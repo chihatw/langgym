@@ -4,7 +4,7 @@ import MirrorNumbersLoader from '@/features/mirror/components/MirrorWorkoutTopPa
 import QuizListContainer from '@/features/quiz/components/QuizList/QuizListContainer';
 import WorkoutListContainer from '@/features/workout/components/WorkoutList/WorkoutListContainer';
 import ArticleListLoader from '../features/article/components/ArticleList/ArticleListLoader';
-import HiddenElements from './ui/HiddenElements';
+import HiddenElements from './HiddenElements';
 
 type Props = { uid: string };
 

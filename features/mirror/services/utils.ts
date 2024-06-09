@@ -53,3 +53,7 @@ export function getResultDates(results: MirrorWorkoutResult[]) {
   const uniqDays = Array.from(new Set(days));
   return uniqDays.sort((a, b) => a - b);
 }
+
+export function convertTimezone_TW(date: Date) {
+  return new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Taipei' }));
+}

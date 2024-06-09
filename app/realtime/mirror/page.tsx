@@ -1,4 +1,4 @@
-import HiddenElements from '@/components/ui/HiddenElements';
+import HiddenElements from '@/components/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 import MirrorWorkoutRealtimeForm from '@/features/mirror/components/MirrorWorkoutRealtimeForm/MirrorWorkoutRealtimeForm';
 import { fetchMirrorWorkoutRealtime } from '@/features/mirror/services/server';

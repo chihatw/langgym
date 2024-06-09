@@ -2,6 +2,7 @@
 import { useMemo } from 'react';
 import Chart from 'react-google-charts';
 import { MirrorWorkoutResult } from '../../schema';
+import { convertTimezone_TW } from '../../services/utils';
 type Props = { results: MirrorWorkoutResult[] };
 
 const MirrorWorkoutResultsChart = ({ results }: Props) => {
@@ -9,13 +10,13 @@ const MirrorWorkoutResultsChart = ({ results }: Props) => {
 
   const lineChartData = useMemo(() => {
     return results.map((r) => {
-      return [r.created_at, r.totalTime / 1000];
+      return [convertTimezone_TW(r.created_at), r.totalTime / 1000];
     });
   }, [results]);
 
   const columnChartData = useMemo(() => {
     return results.map((r) => {
-      return [r.created_at, r.correctRatio];
+      return [convertTimezone_TW(r.created_at), r.correctRatio];
     });
   }, [results]);
 

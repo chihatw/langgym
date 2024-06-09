@@ -1,4 +1,4 @@
-import HiddenElements from '@/components/ui/HiddenElements';
+import HiddenElements from '@/components/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 import PageSwitch from '@/features/pageState/components/PageSwitch';
 import RefreshRealtime from '@/features/trigger/components/RefreshRealtime';

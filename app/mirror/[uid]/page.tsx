@@ -1,5 +1,5 @@
 import Breadcrumb from '@/components/Breadcrumb';
-import HiddenElements from '@/components/ui/HiddenElements';
+import HiddenElements from '@/components/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 import MirrorWorkoutForm from '@/features/mirror/components/MirrorWorkoutForm';
 import { MIRROR_WORKOUTS_LABEL } from '@/features/mirror/constants';
@@ -18,7 +18,7 @@ const MirrorWorkoutPage = async ({ params: { uid } }: Props) => {
         <Breadcrumb label={MIRROR_WORKOUTS_LABEL} />
         <MirrorWorkoutForm uid={user.id} />
       </div>
-      <HiddenElements uid={user.id} />
+      <HiddenElements uid={user.id} isMirrorPage={true} />
     </>
   );
 };
