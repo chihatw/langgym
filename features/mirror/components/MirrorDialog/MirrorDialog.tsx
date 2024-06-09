@@ -74,7 +74,24 @@ const DialogContentPane = ({
 }) => {
   const router = useRouter();
   if (isGoodStudent) {
-    const icon = shuffle(['😆', '🥹', '🤩', '🥳']).at(0)!;
+    const icon = shuffle([
+      '😆',
+      '🥹',
+      '🤩',
+      '🥳',
+      '😸',
+      '🎃',
+      '🤡',
+      '💂🏻‍♀️',
+      '👩🏻‍⚕️',
+      '👩🏻‍🌾',
+      '👩🏻‍🍳',
+      '👩🏻‍🏫',
+      '👩🏻‍🔬',
+      '👩🏻‍🎨',
+      '👩🏻‍🎨',
+      '🦸🏻‍♀️',
+    ]).at(0)!;
     return (
       <div className='grid gap-4'>
         <div className='text-center text-9xl'>{icon}</div>
