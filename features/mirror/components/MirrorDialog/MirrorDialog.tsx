@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { fetchMirrorWorkoutResultByUid } from '../../services/client';
 import { convertTimezone_TW } from '../../services/utils';
 
-type Props = { uid: string; isMirrorPage?: boolean };
+type Props = { uid: string; cheat?: boolean };
 
 type FormProps = {
   hasTodaysResult: boolean;
@@ -22,7 +22,7 @@ const INITIAL_STATE: FormProps = {
   isBadStudent: false,
 };
 
-const MirrorDialog = ({ uid, isMirrorPage }: Props) => {
+const MirrorDialog = ({ uid, cheat }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
   useEffect(() => {
     (async () => {
@@ -42,7 +42,7 @@ const MirrorDialog = ({ uid, isMirrorPage }: Props) => {
     })();
   }, []);
   return (
-    <Dialog open={!isMirrorPage && !value.hasTodaysResult}>
+    <Dialog open={!cheat && !value.hasTodaysResult}>
       <DialogContent>
         <DialogContentPane
           value={value}

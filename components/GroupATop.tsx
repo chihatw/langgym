@@ -6,9 +6,9 @@ import WorkoutListContainer from '@/features/workout/components/WorkoutList/Work
 import ArticleListLoader from '../features/article/components/ArticleList/ArticleListLoader';
 import HiddenElements from './HiddenElements';
 
-type Props = { uid: string };
+type Props = { uid: string; cheat?: boolean };
 
-const GroupATop = async ({ uid }: Props) => {
+const GroupATop = async ({ uid, cheat }: Props) => {
   return (
     <>
       <div className='grid gap-8 max-w-lg mx-auto pt-10 pb-40'>
@@ -18,7 +18,7 @@ const GroupATop = async ({ uid }: Props) => {
         <BetterreadContainer uid={uid} />
         <MirrorNumbersLoader uid={uid} />
       </div>
-      <HiddenElements uid={uid} />
+      <HiddenElements uid={uid} cheat={cheat} />
     </>
   );
 };

@@ -18,7 +18,7 @@ const MirrorWorkoutPage = async ({ params: { uid } }: Props) => {
         <Breadcrumb label={MIRROR_WORKOUTS_LABEL} />
         <MirrorWorkoutForm uid={user.id} />
       </div>
-      <HiddenElements uid={user.id} isMirrorPage={true} />
+      <HiddenElements uid={user.id} cheat={true} />
     </>
   );
 };

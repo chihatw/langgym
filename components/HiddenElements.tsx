@@ -4,12 +4,12 @@ import BackToHome from '@/features/trigger/components/BackToHome';
 import RedirectToRealtime from '@/features/trigger/components/RedirectToRealtime';
 import RedirectToRealtimeCanvas from '@/features/trigger/components/RedirectToRealtimeCanvas';
 
-type Props = { uid: string; isMirrorPage?: boolean };
+type Props = { uid: string; cheat?: boolean };
 
-const HiddenElements = ({ uid, isMirrorPage }: Props) => {
+const HiddenElements = ({ uid, cheat }: Props) => {
   return (
     <>
-      <MirrorDialog uid={uid} isMirrorPage={isMirrorPage} />
+      <MirrorDialog uid={uid} cheat={cheat} />
       <PathnameLog uid={uid} />
       <RedirectToRealtime uid={uid} />
       <RedirectToRealtimeCanvas uid={uid} />
