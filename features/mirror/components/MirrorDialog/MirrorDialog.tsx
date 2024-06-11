@@ -33,6 +33,9 @@ const MirrorDialog = ({ uid, cheat }: Props) => {
   }, []);
 
   useEffect(() => {
+    const isCheat = typeof searchParams.get('cheat') === 'string';
+    if (isCheat) return;
+
     (async () => {
       let hasTodaysResult = false;
       const now_tw = convertTimezone_TW(new Date());
