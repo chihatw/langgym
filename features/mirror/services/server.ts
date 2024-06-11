@@ -38,7 +38,7 @@ export async function fetchMirrorWorkoutResultById(
   };
 }
 
-export async function fetchMirrorWorkoutResultByUid(
+export async function fetchMirrorWorkoutResultsByUid(
   uid: string
 ): Promise<MirrorWorkoutResult[]> {
   const supabase = createSupabaseServerComponentClient();

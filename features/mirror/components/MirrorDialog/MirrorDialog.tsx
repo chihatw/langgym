@@ -3,9 +3,10 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { shuffle } from '@/utils';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { fetchMirrorWorkoutResultByUid } from '../../services/client';
+import { fetchLatestMirrorWorkoutResultByUid } from '../../services/client';
+
 import { convertTimezone_TW } from '../../services/utils';
 
 type Props = { uid: string; cheat?: boolean };
@@ -24,15 +25,19 @@ const INITIAL_STATE: FormProps = {
 
 const MirrorDialog = ({ uid, cheat }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const isCheat = typeof searchParams.get('cheat') === 'string';
+    setValue((prev) => ({ ...prev, cheat: isCheat }));
+  }, []);
+
   useEffect(() => {
     (async () => {
       let hasTodaysResult = false;
       const now_tw = convertTimezone_TW(new Date());
 
-      const results = await fetchMirrorWorkoutResultByUid(uid);
-      const latest = results
-        .sort((a, b) => a.created_at.getTime() - b.created_at.getTime())
-        .at(-1);
+      const latest = await fetchLatestMirrorWorkoutResultByUid(uid);
 
       if (latest) {
         const latest_created_at_tw = convertTimezone_TW(latest.created_at);

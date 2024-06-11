@@ -1,7 +1,7 @@
 import BorderLabel from '@/components/BorderLabel';
 import Link from 'next/link';
 import { MIRROR_WORKOUTS_LABEL } from '../../constants';
-import { fetchMirrorWorkoutResultByUid } from '../../services/server';
+import { fetchMirrorWorkoutResultsByUid } from '../../services/server';
 import MirrorWorkoutResultCallender from './MirrorWorkoutResultCallender';
 import MirrorWorkoutResultList from './MirrorWorkoutResultList';
 import MirrorWorkoutResultsChart from './MirrorWorkoutResultsChart';
@@ -9,7 +9,7 @@ import MirrorWorkoutResultsChart from './MirrorWorkoutResultsChart';
 type Props = { uid: string };
 
 const MirrorNumbersLoader = async ({ uid }: Props) => {
-  const results = await fetchMirrorWorkoutResultByUid(uid);
+  const results = await fetchMirrorWorkoutResultsByUid(uid);
 
   return (
     <div className='grid gap-4'>
