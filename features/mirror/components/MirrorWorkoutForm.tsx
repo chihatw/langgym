@@ -19,7 +19,6 @@ const INITIAL_STATE: FormProps = {
   state: 'explain',
 };
 
-// todo
 const MirrorWorkoutForm = ({ uid }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
   return (

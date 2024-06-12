@@ -35,7 +35,6 @@ const lato = Lato({ subsets: ['latin'], weight: '900' });
 
 const LENGTH = 10;
 
-// todo
 const MirrorWorkoutWorkoutContent = ({ uid }: Props) => {
   const router = useRouter();
 

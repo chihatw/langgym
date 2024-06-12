@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@/lib/utils';
 import { MirrorWorkoutResult } from '../../schema';
 import { getResultDates, getThisWeek } from '../../services/utils';
