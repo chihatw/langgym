@@ -7,9 +7,10 @@ import {
   buildRandomNumberSet,
   getCorrectRatio,
   getNdaysAfter,
-  getResultDates,
   getThisWeek,
   getThursday,
+  getUniqYYYYMMDDs,
+  getYYYYMMDD,
   randomNumber,
 } from '../services/utils';
 
@@ -173,12 +174,12 @@ describe('getCorrectRatio', () => {
   });
 });
 
-describe('getResultDates', () => {
+describe('getUniqYYYYMMDDs', () => {
   test('one result', () => {
     const results: MirrorWorkoutResult[] = [
       { ...INITIAL_MIRROR_WORKOUT_RESULT, created_at: new Date('2024-06-07') },
     ];
-    expect(getResultDates(results)).toEqual([7]);
+    expect(getUniqYYYYMMDDs(results)).toEqual([7]);
   });
 
   test('one result return uniq days', () => {
@@ -187,7 +188,7 @@ describe('getResultDates', () => {
       { ...INITIAL_MIRROR_WORKOUT_RESULT, created_at: new Date('2024-06-07') },
       { ...INITIAL_MIRROR_WORKOUT_RESULT, created_at: new Date('2024-06-07') },
     ];
-    expect(getResultDates(results)).toEqual([7]);
+    expect(getUniqYYYYMMDDs(results)).toEqual([7]);
   });
 
   test('multi results', () => {
@@ -196,7 +197,7 @@ describe('getResultDates', () => {
       { ...INITIAL_MIRROR_WORKOUT_RESULT, created_at: new Date('2024-06-07') },
       { ...INITIAL_MIRROR_WORKOUT_RESULT, created_at: new Date('2024-06-07') },
     ];
-    expect(getResultDates(results)).toEqual([7, 8]);
+    expect(getUniqYYYYMMDDs(results)).toEqual([7, 8]);
   });
 });
 
@@ -236,5 +237,11 @@ describe('木曜から始まる1週間', () => {
     expect(getThisWeek(new Date('2024-07-01')).map((d) => d.getDate())).toEqual(
       [27, 28, 29, 30, 1, 2, 3]
     );
+  });
+});
+
+describe('日付から年月日の文字列を作成', () => {
+  test('今日', () => {
+    expect(getYYYYMMDD(new Date())).toEqual(20240613);
   });
 });

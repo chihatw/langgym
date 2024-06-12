@@ -48,10 +48,10 @@ export function getCorrectRatio(selectedNumbers: number[], items: number[][]) {
   return Math.round((correctCount / items.length) * 100);
 }
 
-export function getResultDates(results: MirrorWorkoutResult[]) {
-  const days = results.map((r) => r.created_at.getDate());
-  const uniqDays = Array.from(new Set(days));
-  return uniqDays.sort((a, b) => a - b);
+export function getUniqYYYYMMDDs(results: MirrorWorkoutResult[]) {
+  const yyyymmdds = results.map((r) => getYYYYMMDD(r.created_at));
+  const uniqYYYYMMDDs = Array.from(new Set(yyyymmdds));
+  return uniqYYYYMMDDs.sort((a, b) => a - b);
 }
 
 export function convertTimezone_TW(date: Date) {
@@ -79,4 +79,11 @@ export function getThisWeek(date: Date): Date[] {
     result.push(d);
   }
   return result;
+}
+
+export function getYYYYMMDD(date: Date): number {
+  const y = date.getFullYear();
+  const m = date.getMonth() + 1;
+  const d = date.getDate();
+  return d + m * 100 + y * 10000;
 }

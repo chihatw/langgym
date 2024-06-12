@@ -2,7 +2,11 @@
 
 import { cn } from '@/lib/utils';
 import { MirrorWorkoutResult } from '../../schema';
-import { getResultDates, getThisWeek } from '../../services/utils';
+import {
+  getThisWeek,
+  getUniqYYYYMMDDs,
+  getYYYYMMDD,
+} from '../../services/utils';
 
 type Props = {
   results: MirrorWorkoutResult[];
@@ -11,7 +15,7 @@ type Props = {
 const XINQI = ['日', '一', '二', '三', '四', '五', '六'];
 
 const MirrorWorkoutResultCallender = ({ results }: Props) => {
-  const resultDates = getResultDates(results);
+  const yyyymmdds = getUniqYYYYMMDDs(results);
   const dates = getThisWeek(new Date());
   return (
     <div className='grid grid-cols-7 mx-4 border-l border-slate-300'>
@@ -34,7 +38,7 @@ const MirrorWorkoutResultCallender = ({ results }: Props) => {
               {XINQI[date.getDay()]}
             </div>
             <div className='h-[25px] text-center leading-[25px]'>
-              {resultDates.includes(date.getDate()) ? (
+              {yyyymmdds.includes(getYYYYMMDD(date)) ? (
                 <span>💪</span>
               ) : (
                 <span className='opacity-50'>😴</span>
