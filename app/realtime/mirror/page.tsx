@@ -1,7 +1,10 @@
 import HiddenElements from '@/components/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 import MirrorWorkoutRealtimeForm from '@/features/mirror/components/MirrorWorkoutRealtimeForm/MirrorWorkoutRealtimeForm';
-import { fetchMirrorWorkoutRealtime } from '@/features/mirror/services/server';
+import {
+  fetchLatestMirrorWorkoutResultByUid,
+  fetchMirrorWorkoutRealtime,
+} from '@/features/mirror/services/server';
 
 type Props = {};
 
@@ -13,10 +16,12 @@ const RealtimeMirrorPage = async (props: Props) => {
 
   if (!params) return null;
 
+  const latestMirrorResult = await fetchLatestMirrorWorkoutResultByUid(user.id);
+
   return (
     <>
       <MirrorWorkoutRealtimeForm params={params} />
-      <HiddenElements uid={user.id} />
+      <HiddenElements uid={user.id} latestMirrorResult={latestMirrorResult} />
     </>
   );
 };

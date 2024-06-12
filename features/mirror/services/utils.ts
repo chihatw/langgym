@@ -57,3 +57,26 @@ export function getResultDates(results: MirrorWorkoutResult[]) {
 export function convertTimezone_TW(date: Date) {
   return new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Taipei' }));
 }
+
+export function getThursday(date: Date): Date {
+  const day = date.getDay();
+  const diff = (day > 3 ? 4 : -3) - day; // 日曜日から [-3, -4, -5 ,-6 ,0, -1, -2] と修正を入れる
+  const cloned = new Date(date.toISOString());
+  const thursday = new Date(cloned.setDate(date.getDate() + diff));
+  return thursday;
+}
+
+export function getNdaysAfter(date: Date, number: number): Date {
+  const cloned = new Date(date.toISOString());
+  return new Date(cloned.setDate(date.getDate() + number));
+}
+
+export function getThisWeek(date: Date): Date[] {
+  const thursday = getThursday(date);
+  const result: Date[] = [];
+  for (let i = 0; i < 7; i++) {
+    const d = getNdaysAfter(thursday, i);
+    result.push(d);
+  }
+  return result;
+}

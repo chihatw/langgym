@@ -5,11 +5,15 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { shuffle } from '@/utils';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { fetchLatestMirrorWorkoutResultByUid } from '../../services/client';
 
+import { MirrorWorkoutResult } from '../../schema';
 import { convertTimezone_TW } from '../../services/utils';
 
-type Props = { uid: string; cheat?: boolean };
+type Props = {
+  uid: string;
+  cheat?: boolean;
+  latestMirrorResult: MirrorWorkoutResult | undefined;
+};
 
 type FormProps = {
   hasTodaysResult: boolean;
@@ -23,7 +27,7 @@ const INITIAL_STATE: FormProps = {
   isBadStudent: false,
 };
 
-const MirrorDialog = ({ uid, cheat }: Props) => {
+const MirrorDialog = ({ uid, cheat, latestMirrorResult }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
   const searchParams = useSearchParams();
 
@@ -36,19 +40,20 @@ const MirrorDialog = ({ uid, cheat }: Props) => {
     const isCheat = typeof searchParams.get('cheat') === 'string';
     if (isCheat) return;
 
-    (async () => {
-      let hasTodaysResult = false;
-      const now_tw = convertTimezone_TW(new Date());
+    if (!latestMirrorResult) {
+      setValue((prev) => ({ ...prev, hasTodaysResult: false }));
+      return;
+    }
 
-      const latest = await fetchLatestMirrorWorkoutResultByUid(uid);
+    const now_tw = convertTimezone_TW(new Date());
+    const latest_created_at_tw = convertTimezone_TW(
+      latestMirrorResult.created_at
+    );
+    const hasTodaysResult = now_tw.getDate() === latest_created_at_tw.getDate();
 
-      if (latest) {
-        const latest_created_at_tw = convertTimezone_TW(latest.created_at);
-        hasTodaysResult = now_tw.getDate() === latest_created_at_tw.getDate();
-      }
-      setValue((prev) => ({ ...prev, hasTodaysResult }));
-    })();
-  }, []);
+    setValue((prev) => ({ ...prev, hasTodaysResult }));
+  }, [latestMirrorResult]);
+
   return (
     <Dialog open={!cheat && !value.hasTodaysResult}>
       <DialogContent>

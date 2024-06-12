@@ -6,7 +6,10 @@ import {
   buildMirrorWorkoutItems,
   buildRandomNumberSet,
   getCorrectRatio,
+  getNdaysAfter,
   getResultDates,
+  getThisWeek,
+  getThursday,
   randomNumber,
 } from '../services/utils';
 
@@ -194,5 +197,44 @@ describe('getResultDates', () => {
       { ...INITIAL_MIRROR_WORKOUT_RESULT, created_at: new Date('2024-06-07') },
     ];
     expect(getResultDates(results)).toEqual([7, 8]);
+  });
+});
+
+describe('木曜取得', () => {
+  test('今日', () => {
+    const thursday = getThursday(new Date());
+    expect(thursday.getDate()).toEqual(13);
+  });
+  test('月始', () => {
+    const thursday = getThursday(new Date('2024-07-01'));
+    expect(thursday.getDate()).toEqual(27);
+  });
+});
+
+describe('X日後', () => {
+  test('0 days after', () => {
+    const date = getNdaysAfter(new Date(), 0);
+    expect(date.getDate()).toEqual(13);
+  });
+
+  test('x days after', () => {
+    for (let i = 0; i < 365; i++) {
+      const date = getNdaysAfter(new Date(), i);
+      const _date = new Date(new Date().getTime() + 24 * 60 * 60 * 1000 * i);
+      expect(date.getDate()).toEqual(_date.getDate());
+    }
+  });
+});
+
+describe('木曜から始まる1週間', () => {
+  test('今日', () => {
+    expect(getThisWeek(new Date()).map((d) => d.getDate())).toEqual([
+      13, 14, 15, 16, 17, 18, 19,
+    ]);
+  });
+  test('7/1', () => {
+    expect(getThisWeek(new Date('2024-07-01')).map((d) => d.getDate())).toEqual(
+      [27, 28, 29, 30, 1, 2, 3]
+    );
   });
 });

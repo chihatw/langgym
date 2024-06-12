@@ -1,6 +1,7 @@
 import Breadcrumb from '@/components/Breadcrumb';
 import HiddenElements from '@/components/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
+import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/server';
 import WorkoutForm from '@/features/workout/components/WorkoutForm/WorkoutForm';
 import {
   fetchWorkoutItemsByWorkoutId,
@@ -17,6 +18,8 @@ const WorkoutPage = async ({ params: { id } }: Props) => {
 
   const workoutItems = await fetchWorkoutItemsByWorkoutId(id);
   const workoutRecordRows = await fetchWorkoutRecordRowsByWorkoutId(id);
+
+  const latestMirrorResult = await fetchLatestMirrorWorkoutResultByUid(user.id);
   return (
     <>
       <div className='grid gap-4 max-w-lg mx-auto pt-4 pb-40'>
@@ -26,7 +29,7 @@ const WorkoutPage = async ({ params: { id } }: Props) => {
           recordRows={workoutRecordRows}
         />
       </div>
-      <HiddenElements uid={user.id} />
+      <HiddenElements uid={user.id} latestMirrorResult={latestMirrorResult} />
     </>
   );
 };

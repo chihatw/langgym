@@ -4,6 +4,7 @@ import AnswerPane from '@/features/answer/components/AnswerPane/AnswerPane';
 import { fetchAnswerRowsbyAnswerIds } from '@/features/answer/services/server';
 import { buildArticlePitchQuizScore } from '@/features/answer/services/utils';
 import { getUserFromServerSide } from '@/features/auth/services/server';
+import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/server';
 
 type Props = {
   params: { id: number };
@@ -19,13 +20,15 @@ const AnswerPage = async ({ params: { id } }: Props) => {
 
   const score = buildArticlePitchQuizScore(answerRows);
 
+  const latestMirrorResult = await fetchLatestMirrorWorkoutResultByUid(user.id);
+
   return (
     <>
       <div className='grid gap-4 max-w-lg mx-auto pt-4 pb-40'>
         <Breadcrumb label='アクセント問題 回答' />
         <AnswerPane answerRows={answerRows} score={score} />
       </div>
-      <HiddenElements uid={user.id} />
+      <HiddenElements uid={user.id} latestMirrorResult={latestMirrorResult} />
     </>
   );
 };

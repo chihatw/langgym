@@ -1,5 +1,6 @@
 import HiddenElements from '@/components/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
+import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/server';
 import PageSwitch from '@/features/pageState/components/PageSwitch';
 import RefreshRealtime from '@/features/trigger/components/RefreshRealtime';
 import { fetchUserByUid } from '@/features/user/services/server';
@@ -14,10 +15,12 @@ const RealtimePage = async (props: Props) => {
 
   if (!appUser) return null;
 
+  const latestMirrorResult = await fetchLatestMirrorWorkoutResultByUid(user.id);
+
   return (
     <>
       <PageSwitch user={appUser} />
-      <HiddenElements uid={user.id} />
+      <HiddenElements uid={user.id} latestMirrorResult={latestMirrorResult} />
       <RefreshRealtime uid={user.id} />
     </>
   );

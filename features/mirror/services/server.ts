@@ -55,6 +55,26 @@ export async function fetchMirrorWorkoutResultsByUid(
   return data.map((i) => ({ ...i, created_at: new Date(i.created_at) }));
 }
 
+export async function fetchLatestMirrorWorkoutResultByUid(
+  uid: string
+): Promise<MirrorWorkoutResult | undefined> {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('mirror_workout_results')
+    .select()
+    .eq('uid', uid)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+
+  return { ...data, created_at: new Date(data.created_at) };
+}
+
 export async function fetchMirrorWorkoutRealtime(): Promise<
   MirrorWorkoutRealtime | undefined
 > {

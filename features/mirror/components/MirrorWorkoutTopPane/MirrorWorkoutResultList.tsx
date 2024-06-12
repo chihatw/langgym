@@ -14,7 +14,7 @@ const MirrorWorkoutResultList = ({ results }: Props) => {
         <div className='text-xs text-center'>時間</div>
         <div className='text-xs text-center'>正答率</div>
       </div>
-      {results.map((result) => {
+      {results.slice(-10).map((result) => {
         return (
           <Link
             key={result.id}
