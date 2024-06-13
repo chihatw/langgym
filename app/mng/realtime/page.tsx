@@ -1,5 +1,6 @@
 import MngCanvasFormContainer from '@/features/canvas/components/MngCanvasFormContainer';
-import MngMirrorForm from '@/features/mirror/components/MngMirrorForm_dummy/MngMirrorForm';
+import MngMirrorForm from '@/features/mirror/components/MngMirrorForm/MngMirrorForm';
+
 import MngNoteForm from '@/features/note/components/MngNoteForm';
 import {
   fetchNote,
