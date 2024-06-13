@@ -20,7 +20,7 @@ export async function insertMirrorWorkoutResult(
     return;
   }
 
-  revalidatePath('/', 'layout'); // todo check
+  revalidatePath('/', 'layout');
 
   return data.id;
 }

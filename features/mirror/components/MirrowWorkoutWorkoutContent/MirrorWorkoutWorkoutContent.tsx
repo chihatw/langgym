@@ -7,7 +7,11 @@ import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { MirrorWorkoutResult } from '../../schema';
 import { insertMirrorWorkoutResult } from '../../services/actions';
-import { buildMirrorWorkoutItems, getCorrectRatio } from '../../services/utils';
+import {
+  buildMirrorWorkoutItems,
+  convertTimezone_TW,
+  getCorrectRatio,
+} from '../../services/utils';
 import MirrorWorkoutWorkoutButtonWrapper from './MirrorWorkoutWorkoutButtonWrapper';
 import MirrorWorkoutWorkoutPane from './MirrorWorkoutWorkoutPane';
 
@@ -71,7 +75,7 @@ const MirrorWorkoutWorkoutContent = ({ uid }: Props) => {
       ),
       totalTime: (_value.laps.at(-1)! - _value.start_at) >> 0,
       uid,
-      created_at: new Date(),
+      created_at: convertTimezone_TW(new Date()),
       correctRatio: getCorrectRatio(_value.selectedNumbers, _value.items),
     };
 

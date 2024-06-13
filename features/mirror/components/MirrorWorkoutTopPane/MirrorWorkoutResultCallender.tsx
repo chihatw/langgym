@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils';
 import { MirrorWorkoutResult } from '../../schema';
 import {
+  convertTimezone_TW,
   getThisWeek,
   getUniqYYYYMMDDs,
   getYYYYMMDD,
@@ -16,7 +17,7 @@ const XINQI = ['日', '一', '二', '三', '四', '五', '六'];
 
 const MirrorWorkoutResultCallender = ({ results }: Props) => {
   const yyyymmdds = getUniqYYYYMMDDs(results);
-  const dates = getThisWeek(new Date());
+  const dates = getThisWeek(convertTimezone_TW(new Date()));
   return (
     <div className='grid grid-cols-7 mx-4 border-l border-slate-300'>
       {dates.map((date, index) => {

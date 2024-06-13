@@ -49,7 +49,9 @@ export function getCorrectRatio(selectedNumbers: number[], items: number[][]) {
 }
 
 export function getUniqYYYYMMDDs(results: MirrorWorkoutResult[]) {
-  const yyyymmdds = results.map((r) => getYYYYMMDD(r.created_at));
+  const yyyymmdds = results.map((r) =>
+    getYYYYMMDD(convertTimezone_TW(r.created_at))
+  );
   const uniqYYYYMMDDs = Array.from(new Set(yyyymmdds));
   return uniqYYYYMMDDs.sort((a, b) => a - b);
 }
@@ -61,14 +63,16 @@ export function convertTimezone_TW(date: Date) {
 export function getThursday(date: Date): Date {
   const day = date.getDay();
   const diff = (day > 3 ? 4 : -3) - day; // 日曜日から [-3, -4, -5 ,-6 ,0, -1, -2] と修正を入れる
-  const cloned = new Date(date.toISOString());
-  const thursday = new Date(cloned.setDate(date.getDate() + diff));
+  const cloned = convertTimezone_TW(new Date(date.toISOString()));
+  const thursday = convertTimezone_TW(
+    new Date(cloned.setDate(date.getDate() + diff))
+  );
   return thursday;
 }
 
 export function getNdaysAfter(date: Date, number: number): Date {
-  const cloned = new Date(date.toISOString());
-  return new Date(cloned.setDate(date.getDate() + number));
+  const cloned = convertTimezone_TW(new Date(date.toISOString()));
+  return convertTimezone_TW(new Date(cloned.setDate(date.getDate() + number)));
 }
 
 export function getThisWeek(date: Date): Date[] {
@@ -82,6 +86,7 @@ export function getThisWeek(date: Date): Date[] {
 }
 
 export function getYYYYMMDD(date: Date): number {
+  date = convertTimezone_TW(date);
   const y = date.getFullYear();
   const m = date.getMonth() + 1;
   const d = date.getDate();
