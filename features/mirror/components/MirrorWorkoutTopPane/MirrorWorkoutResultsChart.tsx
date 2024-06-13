@@ -28,7 +28,11 @@ const MirrorWorkoutResultsChart = ({ results }: Props) => {
         options={{
           title: '時間',
           curveType: 'function',
-          hAxis: { format: 'M/d' },
+          hAxis: {
+            format: 'M/d',
+            minValue: new Date('2024-06-07'),
+            maxValue: new Date(),
+          },
           legend: { position: 'none' },
         }}
       />
@@ -38,7 +42,11 @@ const MirrorWorkoutResultsChart = ({ results }: Props) => {
         options={{
           title: '正答率',
           vAxis: { maxValue: 100, minValue: 0 },
-          hAxis: { format: 'M/d' },
+          hAxis: {
+            format: 'M/d',
+            minValue: new Date('2024-06-07'),
+            maxValue: new Date(),
+          },
           legend: { position: 'none' },
         }}
       />
