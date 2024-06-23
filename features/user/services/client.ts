@@ -16,5 +16,9 @@ export async function fetchUserByUid(
     return;
   }
 
-  return { ...data, created_at: new Date(data.created_at) };
+  return {
+    ...data,
+    created_at: new Date(data.created_at),
+    updated_at: new Date(data.updated_at),
+  };
 }

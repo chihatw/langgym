@@ -8,13 +8,20 @@ export async function updateUser({
   uid,
   display,
   realtime,
+  redirectTo,
   realtimePage,
 }: AppUser) {
   const supabase = createSupabaseServerActionClient();
 
   const { error } = await supabase
     .from('users')
-    .update({ display, realtime, realtimePage })
+    .update({
+      display,
+      realtime,
+      redirectTo,
+      realtimePage,
+      updated_at: new Date().toISOString(),
+    })
     .eq('uid', uid);
 
   if (error) {

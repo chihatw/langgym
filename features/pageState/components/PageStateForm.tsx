@@ -9,9 +9,9 @@ import {
   updateRemoteLoginTrigger,
 } from '@/features/trigger/services/client';
 import { AppUser } from '@/features/user/schema';
-import PageStateRadioGroup from './PageStateRadioGroup';
+import MngPageStateRadioGroup from './MngPageStateRadioGroup';
+import MngRealtimeToggle from './MngRealtimeToggle';
 import PathnameLog from './PathnameLog';
-import RealtimeToggle from './RealtimeToggle';
 
 type Props = {
   users: AppUser[];
@@ -67,13 +67,13 @@ const PageStateForm = ({ users, pathnameLogs }: Props) => {
               <div className='flex items-center justify-between'>
                 <div className='flex gap-2 items-center'>
                   <div className='text-xs font-extrabold'>{user.display}</div>
-                  <RealtimeToggle user={user} />
+                  <MngRealtimeToggle user={user} />
                 </div>
                 <PathnameLog
                   pathnameLog={pathnameLogs.find((log) => log.uid === user.uid)}
                 />
               </div>
-              <PageStateRadioGroup user={user} />
+              <MngPageStateRadioGroup user={user} />
             </div>
           ))}
       </div>

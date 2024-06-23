@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { shuffle } from '@/utils';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { MirrorWorkoutResult } from '../../schema';
@@ -28,23 +28,29 @@ const INITIAL_STATE: FormProps = {
 };
 
 const MirrorDialog = ({ uid, cheat, latestMirrorResult }: Props) => {
+  const pathname = usePathname();
   const [value, setValue] = useState(INITIAL_STATE);
   const searchParams = useSearchParams();
 
+  // cheat の初期化
   useEffect(() => {
+    // pathname に realtime が含まれていれば dialog を表示しない
+    const regex = /realtime/;
+    // searchParmas で cheat を受け取った場合 dialog を表示しない
     const isCheat = typeof searchParams.get('cheat') === 'string';
-    setValue((prev) => ({ ...prev, cheat: isCheat }));
-  }, []);
+    // 親コンポーネントから cheat を受け取った場合 dialog を表示しない
+    if (regex.test(pathname) || isCheat || cheat) {
+      setValue((prev) => ({ ...prev, hasTodaysResult: true }));
+      return;
+    }
 
-  useEffect(() => {
-    const isCheat = typeof searchParams.get('cheat') === 'string';
-    if (isCheat) return;
-
+    // latestMirrorResult がない場合、dialog を表示
     if (!latestMirrorResult) {
       setValue((prev) => ({ ...prev, hasTodaysResult: false }));
       return;
     }
 
+    // latestMirrorResult がある場合、日付が今日かどうかを確認
     const now_tw = convertTimezone_TW(new Date());
     const latest_created_at_tw = convertTimezone_TW(
       latestMirrorResult.created_at
@@ -52,10 +58,10 @@ const MirrorDialog = ({ uid, cheat, latestMirrorResult }: Props) => {
     const hasTodaysResult = now_tw.getDate() === latest_created_at_tw.getDate();
 
     setValue((prev) => ({ ...prev, hasTodaysResult }));
-  }, [latestMirrorResult]);
+  }, [latestMirrorResult, cheat]);
 
   return (
-    <Dialog open={!cheat && !value.hasTodaysResult}>
+    <Dialog open={!value.hasTodaysResult}>
       <DialogContent>
         <DialogContentPane
           value={value}

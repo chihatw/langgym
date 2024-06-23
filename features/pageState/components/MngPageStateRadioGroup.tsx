@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { AppUser } from '@/features/user/schema';
 import { updateUser } from '@/features/user/services/actions';
-import { useEffect, useRef, useState } from 'react';
+import { useOptimistic, useRef } from 'react';
 import { PAGES } from '../constants';
 
 type Props = {
@@ -19,19 +19,17 @@ const INITIAL_STATE: FormProps = {
   pageState: 'blank',
 };
 
-const PageStateRadioGroup = ({ user }: Props) => {
-  const [value, setValue] = useState(INITIAL_STATE);
+const MngPageStateRadioGroup = ({ user }: Props) => {
+  const [optiValue, setPageState] = useOptimistic<FormProps, string>(
+    {
+      ...INITIAL_STATE,
+      pageState: user.realtimePage,
+    },
+    (state, pageState) => ({ ...state, pageState })
+  );
 
   const form = useRef<HTMLFormElement>(null);
   const ref = useRef(INITIAL_STATE);
-
-  // set value from RSC
-  useEffect(() => {
-    setValue((prev) => ({
-      ...prev,
-      pageState: user.realtimePage,
-    }));
-  }, [user]);
 
   const handleChange = async (_pageState: string) => {
     // ref
@@ -41,20 +39,22 @@ const PageStateRadioGroup = ({ user }: Props) => {
 
   const action = async () => {
     // local
-    setValue((prev) => ({
-      ...prev,
-      pageState: ref.current.pageState,
-    }));
+    setPageState(ref.current.pageState);
 
     // remote
-    updateUser({ ...user, realtimePage: ref.current.pageState });
+    // todo set redirectTo
+    updateUser({
+      ...user,
+      redirectTo: '/',
+      realtimePage: ref.current.pageState,
+    });
   };
 
   return (
     <form action={action} ref={form}>
       <RadioGroup
         className='flex flex-wrap gap-2'
-        value={value.pageState || ''}
+        value={optiValue.pageState || ''}
         onValueChange={(value) => handleChange(value)}
       >
         {Object.entries(PAGES).map(([key, value], index) => (
@@ -68,4 +68,4 @@ const PageStateRadioGroup = ({ user }: Props) => {
   );
 };
 
-export default PageStateRadioGroup;
+export default MngPageStateRadioGroup;

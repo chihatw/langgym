@@ -3,5 +3,7 @@ export interface AppUser {
   display: string;
   created_at: Date;
   realtime: boolean;
-  realtimePage: string;
+  realtimePage: string; // todo will delete AppUser.realtimePage
+  redirectTo: string;
+  updated_at: Date;
 }

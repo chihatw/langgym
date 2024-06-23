@@ -10,7 +10,7 @@ import SpeedWorkoutForm from '@/features/speedWorkout/components/SpeedWorkoutFor
 import { AppUser } from '@/features/user/schema';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { nanoid } from 'nanoid';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 type Props = {
@@ -26,14 +26,16 @@ const INITIAL_STATE: FormProps = {
     uid: '',
     display: '',
     realtime: false,
-    realtimePage: 'blank',
+    redirectTo: '',
     created_at: new Date(),
+    updated_at: new Date(),
+    realtimePage: 'blank',
   },
 };
 
+// todo これをページごとに url を分ける
 const PageSwitch = ({ user }: Props) => {
   const router = useRouter();
-  const pathname = usePathname();
 
   const [value, setValue] = useState(INITIAL_STATE);
 
@@ -83,6 +85,7 @@ const PageSwitch = ({ user }: Props) => {
       return <div>がをに</div>;
     case 'record':
       return <RecordForm />;
+    // todo note を独立させる
     case 'note':
       return <NoteForm />;
     case 'pitches':

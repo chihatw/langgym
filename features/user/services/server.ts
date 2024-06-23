@@ -14,6 +14,7 @@ export async function fetchUsers() {
   const users: AppUser[] = data.map((item) => ({
     ...item,
     created_at: new Date(item.created_at),
+    updated_at: new Date(item.updated_at),
   }));
 
   return users;
@@ -34,5 +35,9 @@ export async function fetchUserByUid(
     return;
   }
 
-  return { ...data, created_at: new Date(data.created_at) };
+  return {
+    ...data,
+    created_at: new Date(data.created_at),
+    updated_at: new Date(data.updated_at),
+  };
 }

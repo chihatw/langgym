@@ -466,42 +466,6 @@ export type Database = {
         }
         Relationships: []
       }
-      mirror_workout_items: {
-        Row: {
-          id: number
-          index: number
-          number: number
-          workoutId: number
-        }
-        Insert: {
-          id?: number
-          index: number
-          number: number
-          workoutId: number
-        }
-        Update: {
-          id?: number
-          index?: number
-          number?: number
-          workoutId?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "mirror_workout_items_workoutId_fkey"
-            columns: ["workoutId"]
-            isOneToOne: false
-            referencedRelation: "mirror_workouts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "mirror_workout_items_workoutId_fkey"
-            columns: ["workoutId"]
-            isOneToOne: false
-            referencedRelation: "mirror_workouts_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       mirror_workout_realtime: {
         Row: {
           id: number
@@ -554,35 +518,6 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "mirror_workout_results_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      mirror_workouts: {
-        Row: {
-          id: number
-          isDev: boolean
-          items: string
-          uid: string
-        }
-        Insert: {
-          id?: number
-          isDev?: boolean
-          items: string
-          uid: string
-        }
-        Update: {
-          id?: number
-          isDev?: boolean
-          items?: string
-          uid?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "mirror_workouts_uid_fkey"
             columns: ["uid"]
             isOneToOne: false
             referencedRelation: "users"
@@ -922,21 +857,27 @@ export type Database = {
           display: string
           realtime: boolean
           realtimePage: string
+          redirectTo: string
           uid: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
           display: string
           realtime?: boolean
           realtimePage?: string
+          redirectTo?: string
           uid: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
           display?: string
           realtime?: boolean
           realtimePage?: string
+          redirectTo?: string
           uid?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -1342,56 +1283,6 @@ export type Database = {
           },
           {
             foreignKeyName: "betterread_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      mirror_workout_items_view: {
-        Row: {
-          id: number | null
-          index: number | null
-          isDev: boolean | null
-          number: number | null
-          uid: string | null
-          workoutId: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "mirror_workout_items_workoutId_fkey"
-            columns: ["workoutId"]
-            isOneToOne: false
-            referencedRelation: "mirror_workouts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "mirror_workout_items_workoutId_fkey"
-            columns: ["workoutId"]
-            isOneToOne: false
-            referencedRelation: "mirror_workouts_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "mirror_workouts_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      mirror_workouts_view: {
-        Row: {
-          display: string | null
-          id: number | null
-          isDev: boolean | null
-          uid: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "mirror_workouts_uid_fkey"
             columns: ["uid"]
             isOneToOne: false
             referencedRelation: "users"
