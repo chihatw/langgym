@@ -701,6 +701,35 @@ export type Database = {
         }
         Relationships: []
       }
+      redirect_tos: {
+        Row: {
+          id: number
+          redirect_to: string
+          uid: string | null
+          updated_at: string
+        }
+        Insert: {
+          id?: number
+          redirect_to: string
+          uid?: string | null
+          updated_at?: string
+        }
+        Update: {
+          id?: number
+          redirect_to?: string
+          uid?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "redirect_tos_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       remote_trigger: {
         Row: {
           description: string
@@ -827,57 +856,27 @@ export type Database = {
           },
         ]
       }
-      todos: {
-        Row: {
-          completed: boolean | null
-          created_at: string
-          created_by: string | null
-          id: number
-          title: string | null
-        }
-        Insert: {
-          completed?: boolean | null
-          created_at?: string
-          created_by?: string | null
-          id?: number
-          title?: string | null
-        }
-        Update: {
-          completed?: boolean | null
-          created_at?: string
-          created_by?: string | null
-          id?: number
-          title?: string | null
-        }
-        Relationships: []
-      }
       users: {
         Row: {
           created_at: string
           display: string
           realtime: boolean
           realtimePage: string
-          redirectTo: string
           uid: string
-          updated_at: string
         }
         Insert: {
           created_at?: string
           display: string
           realtime?: boolean
           realtimePage?: string
-          redirectTo?: string
           uid: string
-          updated_at?: string
         }
         Update: {
           created_at?: string
           display?: string
           realtime?: boolean
           realtimePage?: string
-          redirectTo?: string
           uid?: string
-          updated_at?: string
         }
         Relationships: [
           {
@@ -1116,7 +1115,6 @@ export type Database = {
         Row: {
           articleId: number | null
           audioPath: string | null
-          created_at: string | null
           end: number | null
           hasAudio: boolean | null
           id: number | null
@@ -1318,6 +1316,24 @@ export type Database = {
             foreignKeyName: "users_uid_fkey"
             columns: ["uid"]
             isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      redirect_tos_view: {
+        Row: {
+          display: string | null
+          id: number | null
+          redirect_to: string | null
+          uid: string | null
+          updated_at: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "redirect_tos_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           },

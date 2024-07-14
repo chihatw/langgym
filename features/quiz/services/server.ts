@@ -63,8 +63,5 @@ export async function fetchArticlePitchQuizQuestions(
     return [];
   }
 
-  return data.map((item) => ({
-    ...item,
-    created_at: new Date(item.created_at!),
-  }));
+  return data;
 }

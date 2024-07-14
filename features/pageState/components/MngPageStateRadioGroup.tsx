@@ -45,7 +45,6 @@ const MngPageStateRadioGroup = ({ user }: Props) => {
     // todo set redirectTo
     updateUser({
       ...user,
-      redirectTo: '/',
       realtimePage: ref.current.pageState,
     });
   };

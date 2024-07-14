@@ -2,8 +2,8 @@ export interface AppUser {
   uid: string;
   display: string;
   created_at: Date;
-  realtime: boolean;
+  realtime: boolean; // todo will delete AppUser.realtime
   realtimePage: string; // todo will delete AppUser.realtimePage
-  redirectTo: string;
-  updated_at: Date;
+  // redirectTo: string;
+  // updated_at: Date;
 }

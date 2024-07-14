@@ -39,7 +39,6 @@ const MngRealtimeToggle = ({ user }: Props) => {
     const newUser: AppUser = {
       ...user,
       realtime,
-      redirectTo: realtime ? '/realtime' : '/',
     };
     updateUser(newUser);
   };

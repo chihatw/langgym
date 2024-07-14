@@ -19,6 +19,5 @@ export async function fetchUserByUid(
   return {
     ...data,
     created_at: new Date(data.created_at),
-    updated_at: new Date(data.updated_at),
   };
 }

@@ -20,6 +20,7 @@ import {
   fetchRecordParams,
   fetchRecords,
 } from '@/features/record/services/server';
+import MngRedirectToFormLoader from '@/features/redirectTo/components/MngRedirectToForm/MngRedirectToFormLoader';
 import MngSpeedWorkoutForm from '@/features/speedWorkout/components/MngSpeedWorkoutForm';
 import { fetchSpeedWorkout } from '@/features/speedWorkout/services/server';
 import { fetchUsers } from '@/features/user/services/server';
@@ -42,6 +43,7 @@ const page = async (props: Props) => {
 
   return (
     <div className='grid gap-8'>
+      <MngRedirectToFormLoader />
       <PageStateForm users={users} pathnameLogs={pathnameLogs} />
       <MngSpeedWorkoutForm
         speedWorkout={speedWorkout}

@@ -26,9 +26,7 @@ const INITIAL_STATE: FormProps = {
     uid: '',
     display: '',
     realtime: false,
-    redirectTo: '',
     created_at: new Date(),
-    updated_at: new Date(),
     realtimePage: 'blank',
   },
 };
