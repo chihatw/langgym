@@ -62,6 +62,9 @@ export async function fetchBetterreadImagePathByUid_client(
   // debug
   console.log(uid);
 
+  const { data: data_0 } = await supabase.from('betterread').select();
+  console.log(data_0?.length);
+
   const { data: data_1 } = await supabase
     .from('betterread_image_paths_view')
     .select();
