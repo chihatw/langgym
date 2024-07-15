@@ -52,3 +52,31 @@ export async function fetchBetterreadImagePathsByArticleId(
     created_at: new Date(item.created_at!),
   }));
 }
+
+// debug
+export async function fetchBetterreadImagePathByUid_client(
+  uid: string
+): Promise<BetterReadImagePathView | undefined> {
+  const supabase = createSupabaseClientComponentClient();
+
+  const { data, error } = await supabase
+    .from('betterread_image_paths_view')
+    .select()
+    .eq('uid', uid)
+    .limit(1)
+    .single();
+
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+
+  if (!data) {
+    return;
+  }
+
+  return {
+    ...data,
+    created_at: new Date(data.created_at!),
+  };
+}
