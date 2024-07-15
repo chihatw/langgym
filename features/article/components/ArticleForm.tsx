@@ -57,7 +57,7 @@ const ArticleForm = ({ users, article, title }: Props) => {
     if (!article) return;
     const uid = article.uid;
     (async () => {
-      const imagePath = fetchBetterreadImagePathByUid_client(uid);
+      const imagePath = await fetchBetterreadImagePathByUid_client(uid);
       console.log(imagePath);
     })();
   }, [article]);
