@@ -15,7 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { fetchBetterreadImagePathByUid_client } from '@/features/betterread/services/client';
 import { AppUser } from '@/features/user/schema';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
@@ -51,16 +50,6 @@ const ArticleForm = ({ users, article, title }: Props) => {
 
   const [value, setValue] = useState(INITIAL_STATE);
   const [isPending, startTransition] = useTransition();
-
-  // debug
-  useEffect(() => {
-    if (!article) return;
-    const uid = article.uid;
-    (async () => {
-      const imagePath = await fetchBetterreadImagePathByUid_client(uid);
-      console.log(imagePath);
-    })();
-  }, [article]);
 
   useEffect(() => {
     if (!article) return;
