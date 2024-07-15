@@ -59,6 +59,27 @@ export async function fetchBetterreadImagePathByUid_client(
 ): Promise<BetterReadImagePathView | undefined> {
   const supabase = createSupabaseClientComponentClient();
 
+  // debug
+  console.log(uid);
+
+  const { data: data_1 } = await supabase
+    .from('betterread_image_paths_view')
+    .select();
+  console.log(data_1?.length);
+
+  const { data: data_2 } = await supabase
+    .from('betterread_image_paths_view')
+    .select()
+    .eq('uid', uid);
+  console.log(data_2?.length);
+
+  const { data: data_3 } = await supabase
+    .from('betterread_image_paths_view')
+    .select()
+    .eq('uid', uid)
+    .limit(1);
+  console.log(data_3?.length);
+
   const { data, error } = await supabase
     .from('betterread_image_paths_view')
     .select()
