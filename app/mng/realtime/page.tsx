@@ -6,7 +6,6 @@ import {
   fetchNote,
   fetchNoteAudioPaths,
 } from '@/features/note/services/server';
-import PageStateForm from '@/features/pageState/components/PageStateForm';
 import MngPaperCupForm from '@/features/paperCup/components/MngPaperCupForm/MngPaperCupForm';
 import { fetchPaperCupParams } from '@/features/paperCup/services/server';
 import { fetchPathnameLogs } from '@/features/pathnameLog/services/server';
@@ -44,7 +43,7 @@ const page = async (props: Props) => {
   return (
     <div className='grid gap-8'>
       <MngRedirectToFormLoader />
-      <PageStateForm users={users} pathnameLogs={pathnameLogs} />
+      {/* <PageStateForm users={users} pathnameLogs={pathnameLogs} /> */}
       <MngSpeedWorkoutForm
         speedWorkout={speedWorkout}
         workoutItems={workoutItems}

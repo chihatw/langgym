@@ -1,7 +1,6 @@
 import HiddenElements from '@/components/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 import CanvasForm from '@/features/canvas/components/CanvasForm';
-import RefreshRealtime from '@/features/trigger/components/RefreshRealtime';
 
 type Props = {};
 
@@ -13,7 +12,6 @@ const RealtimeCanvasPage = async (props: Props) => {
     <>
       <CanvasForm />
       <HiddenElements uid={user.id} cheat={true} />
-      <RefreshRealtime uid={user.id} />
     </>
   );
 };

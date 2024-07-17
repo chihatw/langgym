@@ -2,9 +2,6 @@ import MirrorDialog from '@/features/mirror/components/MirrorDialog/MirrorDialog
 import { MirrorWorkoutResult } from '@/features/mirror/schema';
 import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
 import RedirectController from '@/features/redirectTo/components/RedirectController';
-import BackToHome from '@/features/trigger/components/BackToHome';
-import RedirectToRealtime from '@/features/trigger/components/RedirectToRealtime';
-import RedirectToRealtimeCanvas from '@/features/trigger/components/RedirectToRealtimeCanvas';
 
 type Props = {
   uid: string;
@@ -22,10 +19,6 @@ const HiddenElements = ({ uid, cheat, latestMirrorResult }: Props) => {
       />
       <PathnameLog uid={uid} />
       <RedirectController uid={uid} />
-      {/* merge to RedirectController, then delete */}
-      <RedirectToRealtime uid={uid} />
-      <RedirectToRealtimeCanvas uid={uid} />
-      <BackToHome uid={uid} />
     </>
   );
 };

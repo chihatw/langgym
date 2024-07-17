@@ -3,8 +3,6 @@
 import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Input } from '@/components/ui/input';
 import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
-import { REMOTE_TRIGGER_ID } from '@/features/trigger/constants';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { isValidEmail } from '@/utils';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState, useTransition } from 'react';
@@ -55,30 +53,6 @@ const EmailLoginForm = (props: Props) => {
       router.push('/');
     });
   }, [router, value.email, value.password]);
-
-  // subscribe
-  useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
-    const channel = supabase
-      .channel('remote login trigger')
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'remote_trigger',
-          filter: `id=eq.${REMOTE_TRIGGER_ID.login}`,
-        },
-        () => {
-          login();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [login]);
 
   const action = async () => {
     login();

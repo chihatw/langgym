@@ -730,24 +730,6 @@ export type Database = {
           },
         ]
       }
-      remote_trigger: {
-        Row: {
-          description: string
-          id: number
-          updated_at: string
-        }
-        Insert: {
-          description?: string
-          id?: number
-          updated_at?: string
-        }
-        Update: {
-          description?: string
-          id?: number
-          updated_at?: string
-        }
-        Relationships: []
-      }
       sentences: {
         Row: {
           articleId: number
@@ -860,22 +842,16 @@ export type Database = {
         Row: {
           created_at: string
           display: string
-          realtime: boolean
-          realtimePage: string
           uid: string
         }
         Insert: {
           created_at?: string
           display: string
-          realtime?: boolean
-          realtimePage?: string
           uid: string
         }
         Update: {
           created_at?: string
           display?: string
-          realtime?: boolean
-          realtimePage?: string
           uid?: string
         }
         Relationships: [

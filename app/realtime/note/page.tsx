@@ -12,7 +12,6 @@ const NotePage = async (props: Props) => {
     <>
       <NoteForm />
       <HiddenElements uid={user.id} cheat={true} />
-      {/* <RefreshRealtime uid={user.id} /> */}
     </>
   );
 };
