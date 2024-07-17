@@ -107,6 +107,7 @@ export const buildCurrentPatterns = (
   );
 };
 
+// todo 出目が偏っている
 export function updateCue(
   params: PaperCupBooleanParams,
   currentCue: string // currentCue と連続を避けるため必要

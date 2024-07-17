@@ -74,26 +74,36 @@ const PageSwitch = ({ user }: Props) => {
 
   switch (value.user.realtimePage) {
     case 'sokudokuRenshu':
+      // will delete
       return <SpeedWorkoutForm />;
     case 'sokudokuCue':
+      // will delete
       return <SpeedWorkoutCueForm />;
     case 'paperCups':
+      // will delete
       return <PaperCupForm />;
+
     case 'ga_wo_ni':
+      // will delete
       return <div>がをに</div>;
     case 'record':
+      // will delete
       return <RecordForm />;
-    // todo note を独立させる
     case 'note':
+      // will delete
       return <NoteForm />;
     case 'pitches':
+      // will delete
       return <PitchesForm />;
     case 'betterread':
+      // will delete
       return <BetterreadView />;
     case 'mirror':
+      // will delete
       router.push('/realtime/mirror');
       return null;
     case 'canvas':
+    // will delete
     case 'blank':
       return null;
     default:

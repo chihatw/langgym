@@ -1,21 +1,19 @@
 import HiddenElements from '@/components/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
-import CanvasForm from '@/features/canvas/components/CanvasForm';
-import RefreshRealtime from '@/features/trigger/components/RefreshRealtime';
+import SpeedWorkoutCueForm from '@/features/speedWorkout/components/SpeedWorkoutCueForm/SpeedWorkoutCueForm';
 
 type Props = {};
 
-const RealtimeCanvasPage = async (props: Props) => {
+const SpeedWorkoutCuePage = async (props: Props) => {
   const user = await getUserFromServerSide();
   if (!user) return null;
 
   return (
     <>
-      <CanvasForm />
+      <SpeedWorkoutCueForm />
       <HiddenElements uid={user.id} cheat={true} />
-      <RefreshRealtime uid={user.id} />
     </>
   );
 };
 
-export default RealtimeCanvasPage;
+export default SpeedWorkoutCuePage;

@@ -34,17 +34,19 @@ const MngRedirectToFormRow = ({ redirectTo }: Props) => {
         <div>{redirectTo.redirect_to}</div>
       </div>
       <div className='flex flex-wrap gap-4 text-xs'>
-        {REDIRECT_TO_URLS.map((url, index) => (
-          <form key={index} action={() => action(url)}>
+        {REDIRECT_TO_URLS.map((item, index) => (
+          <form key={index} action={() => action(item.url)}>
             <Button
               type='submit'
               className={cn(
                 'px-1 py-0 m-0 h-auto',
-                optiRedirectTo === url ? 'bg-slate-300 hover:bg-slate-300' : ''
+                optiRedirectTo === item.url
+                  ? 'bg-slate-300 hover:bg-slate-300'
+                  : ''
               )}
               variant={'ghost'}
             >
-              {url}
+              {item.label}
             </Button>
           </form>
         ))}
