@@ -14,6 +14,7 @@ const items: { label: string; href: string }[] = [
   { label: 'draft', href: '/mng/draft' },
   { label: 'real time', href: '/mng/realtime' },
   { label: 'mirror', href: '/mng/mirror/list' },
+  { label: 'betterread', href: '/mng/betterread/list' },
 ];
 
 const MngHeader = (props: Props) => {

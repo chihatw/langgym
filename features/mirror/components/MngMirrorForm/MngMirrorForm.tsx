@@ -44,7 +44,7 @@ const MngMirrorForm = (props: Props) => {
     updateMirrorWorkoutRealtime({ ...updated, id: MIRROR_WORKOUT_REALTIME_ID });
   };
   return (
-    <MngPaneContainer label='Mirror' open>
+    <MngPaneContainer label='Mirror'>
       <div className='grid gap-4'>
         {MIRROR_REALTIME_ITEMS.map((item, index) => (
           <div

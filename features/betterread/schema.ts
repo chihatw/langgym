@@ -16,6 +16,7 @@ export interface BetterReadImagePath {
 export interface BetterReadImagePathView {
   betterreadId: number | null;
   uid: string | null;
+  display: string | null;
   articleId: number | null;
   title: string | null;
   index: number | null;

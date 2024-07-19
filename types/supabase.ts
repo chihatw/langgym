@@ -1227,6 +1227,7 @@ export type Database = {
           betterreadId: number | null
           chinese: string | null
           created_at: string | null
+          display: string | null
           imageUrl: string | null
           index: number | null
           japanese: string | null
