@@ -114,9 +114,7 @@ const DialogContentPane = ({
     return (
       <div className='grid gap-4'>
         <div className='text-center text-9xl'>{icon}</div>
-        <Button onClick={() => router.push(`/mirror/${uid}`)}>
-          祝你有快樂的一天
-        </Button>
+        <Button onClick={() => router.push(`/mirror`)}>祝你有快樂的一天</Button>
       </div>
     );
   }

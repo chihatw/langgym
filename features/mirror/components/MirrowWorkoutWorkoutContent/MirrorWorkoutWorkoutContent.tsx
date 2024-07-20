@@ -83,8 +83,7 @@ const MirrorWorkoutWorkoutContent = ({ uid }: Props) => {
       const id = await insertMirrorWorkoutResult(result);
 
       if (!id) return;
-
-      router.push(`/mirror/${uid}/${id}`);
+      router.push(`/mirror/${id}`);
     });
   };
 

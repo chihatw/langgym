@@ -5,11 +5,9 @@ import MirrorWorkoutForm from '@/features/mirror/components/MirrorWorkoutForm';
 import { MIRROR_WORKOUTS_LABEL } from '@/features/mirror/constants';
 import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/server';
 
-type Props = {
-  params: { uid: string };
-};
+type Props = {};
 
-const MirrorWorkoutPage = async ({ params: { uid } }: Props) => {
+const MirrorWorkoutPage = async (params: Props) => {
   const user = await getUserFromServerSide();
   if (!user) return null;
 

@@ -45,6 +45,7 @@ export async function fetchMirrorWorkoutResultsByUid(
   const { data, error } = await supabase
     .from('mirror_workout_results')
     .select()
+    .order('created_at')
     .eq('uid', uid);
 
   if (error) {

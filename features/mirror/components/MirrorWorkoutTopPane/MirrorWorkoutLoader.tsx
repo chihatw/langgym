@@ -10,13 +10,12 @@ type Props = { uid: string };
 
 const MirrorNumbersLoader = async ({ uid }: Props) => {
   const results = await fetchMirrorWorkoutResultsByUid(uid);
-
   return (
     <div className='grid gap-4'>
       <BorderLabel label={MIRROR_WORKOUTS_LABEL} />
       <div className='grid gap-4'>
         <div className='bg-white/60 p-5 rounded-lg block'>
-          <Link href={`/mirror/${uid}`}>
+          <Link href={`/mirror`}>
             <div className='grid gap-4 '>{`練習`}</div>
           </Link>
         </div>

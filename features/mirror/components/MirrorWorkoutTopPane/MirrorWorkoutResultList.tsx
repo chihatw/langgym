@@ -19,7 +19,7 @@ const MirrorWorkoutResultList = ({ results }: Props) => {
           <Link
             key={result.id}
             className='grid grid-cols-[150px,48px,40px] items-center gap-4'
-            href={`/mirror/${result.uid}/${result.id}`}
+            href={`/mirror/${result.id}`}
           >
             <div className='text-xs'>
               {result.created_at.toLocaleString('zh-TW', {

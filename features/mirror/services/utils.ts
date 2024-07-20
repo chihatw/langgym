@@ -57,6 +57,9 @@ export function getUniqYYYYMMDDs(results: MirrorWorkoutResult[]) {
 }
 
 export function convertTimezone_TW(date: Date) {
+  // 実際の timeZone の取得方法
+  // console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);
+
   return new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Taipei' }));
 }
 
