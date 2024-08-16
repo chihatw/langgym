@@ -21,6 +21,7 @@ const ImagePane = ({ imagePath }: Props) => {
     const errMsg = await deleteImageFile(path);
     if (errMsg) {
       console.error(errMsg);
+      return;
     }
 
     // remote

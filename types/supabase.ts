@@ -656,6 +656,113 @@ export type Database = {
         }
         Relationships: []
       }
+      postit_items: {
+        Row: {
+          id: number
+          image_url: string | null
+          index: number
+          japanese: string
+          postit_id: number
+        }
+        Insert: {
+          id?: number
+          image_url?: string | null
+          index: number
+          japanese: string
+          postit_id: number
+        }
+        Update: {
+          id?: number
+          image_url?: string | null
+          index?: number
+          japanese?: string
+          postit_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "postit_items_postit_id_fkey"
+            columns: ["postit_id"]
+            isOneToOne: false
+            referencedRelation: "postits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      postit_note_items: {
+        Row: {
+          created_at: string
+          id: number
+          image_url: string
+          postit_note_id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          image_url: string
+          postit_note_id: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          image_url?: string
+          postit_note_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "postit_note_items_postit_note_id_fkey"
+            columns: ["postit_note_id"]
+            isOneToOne: false
+            referencedRelation: "postit_notes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      postit_notes: {
+        Row: {
+          id: number
+          uid: string
+        }
+        Insert: {
+          id?: number
+          uid: string
+        }
+        Update: {
+          id?: number
+          uid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "postit_notes_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      postits: {
+        Row: {
+          id: number
+          uid: string
+        }
+        Insert: {
+          id?: number
+          uid: string
+        }
+        Update: {
+          id?: number
+          uid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "postits_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       record_params: {
         Row: {
           created_at: string

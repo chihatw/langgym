@@ -1,26 +1,20 @@
 'use client';
-import { uploadImageFile } from '@/features/storage/services/client';
+
+import { uploadPostItNoteFile } from '@/features/storage/services/client';
 import { nanoid } from 'nanoid';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { ChangeEvent, useMemo, useRef, useState } from 'react';
-import { BetterReadImagePath, BetterReadImagePathView } from '../../schema';
-import {
-  deleteBetterreadImagePath,
-  revalidateBetterread,
-} from '../../services/actions';
-import { insertBetterreadImagePath } from '../../services/client';
-import DeleteImageButton from './DeleteImageButton';
+import { ChangeEvent, useRef, useState } from 'react';
+import { PostItNoteItem } from '../schema';
+import { revalidatePostitNote } from '../services/actions';
+import { insertPostitNoteItem } from '../services/client';
 
-// navigator 使用して mobile か PC を判断。 mobile の場合はファイル選択の代わりに外向きカメラを使用
 const SwitchInput = dynamic(
   () => import('@/components/SwitchInput').then((mod) => mod.SwitchInput),
   { ssr: false }
 );
 
-type Props = {
-  imagePath: BetterReadImagePathView;
-};
+type Props = { postitNoteId: number };
 
 type FormProps = {
   imageSrc: string;
@@ -30,14 +24,9 @@ const INITIAL_STATE: FormProps = {
   imageSrc: '',
 };
 
-const UploadForm = ({ imagePath }: Props) => {
+const UploadPostitNoteImage = ({ postitNoteId }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
   const form = useRef<HTMLFormElement>(null);
-
-  const temp = useMemo(() => {
-    if (!imagePath.imageUrl) return [];
-    return imagePath.imageUrl.split('/');
-  }, [imagePath]);
 
   // ファイルが選択された時
   // 本来ならば、server action にして revalidatePath をかけるべきだが、
@@ -52,12 +41,10 @@ const UploadForm = ({ imagePath }: Props) => {
     const file = files[0];
     const type = file.name.split('.').at(-1);
 
-    const path = `${imagePath.betterreadId}/${imagePath.index}_${nanoid(
-      6
-    )}.${type}`;
+    const path = `${postitNoteId}/${nanoid(6)}.${type}`;
 
-    // storege
-    const imageUrl = await uploadImageFile(file, path);
+    // storage
+    const imageUrl = await uploadPostItNoteFile(file, path);
 
     if (!imageUrl) {
       console.error(`no image Url`);
@@ -73,23 +60,24 @@ const UploadForm = ({ imagePath }: Props) => {
     });
 
     // remote (revalidatePath はしない)
-    const betterreadImagePath: Omit<BetterReadImagePath, 'id' | 'created_at'> =
-      {
-        betterreadId: imagePath.betterreadId!,
-        index: imagePath.index!,
-        imageUrl,
-      };
-    await insertBetterreadImagePath(betterreadImagePath);
+    const postitNoteItem: Omit<PostItNoteItem, 'id' | 'created_at'> = {
+      postit_note_id: postitNoteId,
+      image_url: imageUrl,
+    };
+
+    await insertPostitNoteItem(postitNoteItem);
 
     // server action で revalidate
     form.current!.requestSubmit();
   };
 
   const action = async () => {
-    revalidateBetterread(imagePath.betterreadId!);
+    revalidatePostitNote(postitNoteId);
   };
 
   if (value.imageSrc) {
+    // おそらく、これが描画されるのは一瞬
+    // revalidatePath をされると、PostitNoteRow コンポーネントが表示される
     return (
       <div className='relative'>
         <Image
@@ -101,21 +89,18 @@ const UploadForm = ({ imagePath }: Props) => {
           sizes='(max-width: 768px) 100vw, (max-height: 1200px) 50vw, 50vw'
           priority={true}
         />
-        <DeleteImageButton
-          path={`${temp.at(-2)}/${temp.at(-1)}`}
-          resetValue={() => setValue(INITIAL_STATE)}
-          handleDelete={() =>
-            deleteBetterreadImagePath(imagePath.betterreadId!, imagePath.index!)
-          }
-        />
-
+        {/* Delete ボタンは実装しない */}
         <form ref={form} action={action} />
       </div>
     );
   }
 
-  // form をこちらに追加すると、 null になる
-  return <SwitchInput handleChange={handleChange} />;
+  return (
+    <div className='p-4 rounded-lg bg-black/10 grid gap-4'>
+      <div className='pl-2 text-sm'>插入照片</div>
+      <SwitchInput handleChange={handleChange} />
+    </div>
+  );
 };
 
-export default UploadForm;
+export default UploadPostitNoteImage;

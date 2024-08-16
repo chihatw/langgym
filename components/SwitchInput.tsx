@@ -11,7 +11,7 @@ export const SwitchInput = ({
       <Input
         name='image'
         type='file'
-        capture='environment'
+        capture='environment' // 外向きカメラの使用
         accept='image/*'
         onChange={handleChange}
       />

@@ -2,6 +2,7 @@ import BetterreadContainer from '@/features/betterread/components/BetterreadCont
 
 import MirrorNumbersLoader from '@/features/mirror/components/MirrorWorkoutTopPane/MirrorWorkoutLoader';
 import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/server';
+import PostItLoader from '@/features/postit/components/PostItLoader';
 import QuizListContainer from '@/features/quiz/components/QuizList/QuizListContainer';
 import WorkoutListContainer from '@/features/workout/components/WorkoutList/WorkoutListContainer';
 import ArticleListLoader from '../features/article/components/ArticleList/ArticleListLoader';
@@ -18,6 +19,7 @@ const GroupATop = async ({ uid, cheat }: Props) => {
         <ArticleListLoader uid={uid} />
         <QuizListContainer uid={uid} />
         <WorkoutListContainer uid={uid} />
+        <PostItLoader uid={uid} />
         <BetterreadContainer uid={uid} />
         <MirrorNumbersLoader uid={uid} />
       </div>

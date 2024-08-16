@@ -30,6 +30,7 @@ export async function deleteBetterread(id: number) {
 
   if (error) {
     console.error(error.message);
+    return;
   }
   revalidatePath('/');
   revalidatePath('/mng/betterread/list');
@@ -49,6 +50,7 @@ export async function deleteBetterreadImagePath(
 
   if (error) {
     console.error(error.message);
+    return;
   }
   revalidateBetterread(betterreadId);
 }
