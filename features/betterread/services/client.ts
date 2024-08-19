@@ -1,5 +1,9 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
-import { BetterReadImagePath, BetterReadImagePathView } from '../schema';
+import {
+  BetterReadImagePath,
+  BetterReadImagePathView,
+  BetterReadItem,
+} from '../schema';
 
 export async function insertBetterreadImagePath(
   imagePath: Omit<BetterReadImagePath, 'id' | 'created_at'>
@@ -21,6 +25,20 @@ export async function insertBetterreadImagePath(
   const { error } = await supabase
     .from('betterread_image_paths')
     .insert(imagePath);
+
+  if (error) {
+    console.error(error.message);
+  }
+}
+
+export async function insertBetterreadItem(
+  betterreadItem: Omit<BetterReadItem, 'id' | 'created_at'>
+) {
+  const supabase = createSupabaseClientComponentClient();
+
+  const { error } = await supabase
+    .from('betterread_items')
+    .insert(betterreadItem);
 
   if (error) {
     console.error(error.message);

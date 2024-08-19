@@ -1,19 +1,72 @@
-import { BetterReadImagePathView } from '../../schema';
-import BetterreadRow from './BetterreadRow';
+'use client';
+
+import { cn } from '@/lib/utils';
+import { Lato } from 'next/font/google';
+import {
+  BetterReadItem,
+  BetterReadItemQuestion,
+  BetterReadView,
+} from '../../schema';
+import BetterreadFormRow from './BetterreadFormRow';
+import BetterreadFormSentence from './BetterreadFormSentence';
+import UploadBetterreadImage from './UploadBetterreadImage';
+
+const lato = Lato({ subsets: ['latin'], weight: '900' });
 
 type Props = {
-  imagePaths: BetterReadImagePathView[];
+  betterreadId: number;
+  betterreads: BetterReadView[];
+  betterreadItems: BetterReadItem[];
+  betterreadItemQuestions: BetterReadItemQuestion[];
 };
 
-const BetterreadForm = ({ imagePaths }: Props) => {
+const BetterreadForm = ({
+  betterreadId,
+  betterreads,
+  betterreadItems,
+  betterreadItemQuestions,
+}: Props) => {
   return (
     <div className='grid gap-4'>
       <div className='text-2xl font-extrabold'>課前準備</div>
-      <div className='grid gap-8'>
-        {imagePaths.map((imagePath, index) => (
-          <BetterreadRow key={index} imagePath={imagePath} />
+      <div className='flex items-center justify-center'>
+        <div>
+          <span
+            className={cn(
+              'font-lato text-[90px] font-[900] ',
+              betterreadItemQuestions.length > 7
+                ? 'text-gray-700'
+                : 'text-red-500'
+            )}
+          >
+            {betterreadItemQuestions.length}
+          </span>
+          <span className='font-lato text-[48px] font-[900] text-gray-700'>{`/${8}`}</span>
+        </div>
+      </div>
+      <div className='grid gap-1'>
+        {betterreads.map((betterread, index) => (
+          <BetterreadFormSentence key={index} betterread={betterread} />
         ))}
       </div>
+      {betterreadItems.map((betterreadItem, index) => (
+        <BetterreadFormRow
+          key={index}
+          betterreadItem={betterreadItem}
+          betterreadItemQuestions={betterreadItemQuestions.filter(
+            (q) => q.betterread_item_id === betterreadItem.id
+          )}
+        />
+      ))}
+      <UploadBetterreadImage
+        betterreadId={betterreadId}
+        showForm={betterreadItems.length < 2}
+      />
+      {betterreadItems.length > 1 ? (
+        <div className='text-xs text-gray-400 text-center py-4'>
+          <div>已經上傳兩張照片</div>
+        </div>
+      ) : null}
     </div>
   );
 };

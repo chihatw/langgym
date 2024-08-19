@@ -1,6 +1,7 @@
 'use server';
 import { createSupabaseServerActionClient } from '@/lib/supabase/actions';
 import { revalidatePath } from 'next/cache';
+import { BetterReadItemQuestion } from '../schema';
 
 export async function revalidateBetterread(betterreadId: number) {
   revalidatePath('/');
@@ -23,6 +24,22 @@ export async function insertBetterread(uid: string, articleId: number) {
   return '';
 }
 
+export async function insertBetterreadItemQuestion(
+  question: Omit<BetterReadItemQuestion, 'id' | 'created_at'>,
+  betterreadId: number
+) {
+  const supabase = createSupabaseServerActionClient();
+  const { error } = await supabase
+    .from('betterread_item_questions')
+    .insert(question);
+
+  if (error) {
+    return error.message;
+  }
+
+  revalidateBetterread(betterreadId);
+}
+
 export async function deleteBetterread(id: number) {
   const supabase = createSupabaseServerActionClient();
 
@@ -34,6 +51,39 @@ export async function deleteBetterread(id: number) {
   }
   revalidatePath('/');
   revalidatePath('/mng/betterread/list');
+}
+
+export async function deleteBetterreadItem(id: number, betterreadId: number) {
+  const supabase = createSupabaseServerActionClient();
+
+  const { error } = await supabase
+    .from('betterread_items')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+  revalidateBetterread(betterreadId);
+}
+
+export async function deleteBetterreadItemQuestion(
+  id: number,
+  betterreadId: number
+) {
+  const supabase = createSupabaseServerActionClient();
+
+  const { error } = await supabase
+    .from('betterread_item_questions')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+  revalidateBetterread(betterreadId);
 }
 
 export async function deleteBetterreadImagePath(

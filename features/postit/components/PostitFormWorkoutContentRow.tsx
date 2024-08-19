@@ -23,7 +23,7 @@ const PostitFormWorkoutContentRow = ({ index, postItItem }: Props) => {
       return;
     }
 
-    // update
+    // remote
     resetPostItItemImageUrl(postItItem);
   };
   return (

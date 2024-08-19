@@ -413,6 +413,85 @@ export type Database = {
             referencedRelation: "betterread_image_paths_view"
             referencedColumns: ["betterreadId"]
           },
+          {
+            foreignKeyName: "betterread_image_paths_betterreadid_fkey"
+            columns: ["betterreadId"]
+            isOneToOne: false
+            referencedRelation: "betterread_view"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      betterread_item_questions: {
+        Row: {
+          betterread_item_id: number
+          created_at: string
+          id: number
+          question: string
+        }
+        Insert: {
+          betterread_item_id: number
+          created_at?: string
+          id?: number
+          question: string
+        }
+        Update: {
+          betterread_item_id?: number
+          created_at?: string
+          id?: number
+          question?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "betterread_item_questions_betterread_item_id_fkey"
+            columns: ["betterread_item_id"]
+            isOneToOne: false
+            referencedRelation: "betterread_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      betterread_items: {
+        Row: {
+          betterread_id: number
+          created_at: string
+          id: number
+          image_url: string
+        }
+        Insert: {
+          betterread_id: number
+          created_at?: string
+          id?: number
+          image_url: string
+        }
+        Update: {
+          betterread_id?: number
+          created_at?: string
+          id?: number
+          image_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "betterread_items_betterread_id_fkey"
+            columns: ["betterread_id"]
+            isOneToOne: false
+            referencedRelation: "betterread"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "betterread_items_betterread_id_fkey"
+            columns: ["betterread_id"]
+            isOneToOne: false
+            referencedRelation: "betterread_image_paths_view"
+            referencedColumns: ["betterreadId"]
+          },
+          {
+            foreignKeyName: "betterread_items_betterread_id_fkey"
+            columns: ["betterread_id"]
+            isOneToOne: false
+            referencedRelation: "betterread_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       canvas_boxes: {
@@ -1338,6 +1417,48 @@ export type Database = {
           imageUrl: string | null
           index: number | null
           japanese: string | null
+          title: string | null
+          uid: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "betterread_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "betterread_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["articleId"]
+          },
+          {
+            foreignKeyName: "betterread_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "betterread_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      betterread_view: {
+        Row: {
+          articleId: number | null
+          chinese: string | null
+          display: string | null
+          id: number | null
+          japanese: string | null
+          line: number | null
           title: string | null
           uid: string | null
         }

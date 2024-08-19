@@ -94,6 +94,7 @@ const UploadPostitItemImage = ({ postItItem, index }: Props) => {
     );
   }
 
+  // todo form は、こっちに移動してきた方がいいのでは？
   return <SwitchInput handleChange={handleChange} />;
 };
 

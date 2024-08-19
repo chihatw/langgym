@@ -10,18 +10,6 @@ export async function downloadAudioFile(path: string) {
   return data;
 }
 
-export async function getImageUrl(path: string): Promise<string> {
-  const supabase = createSupabaseClientComponentClient();
-  const { data, error } = await supabase.storage
-    .from('image')
-    .createSignedUrl(path, 60);
-  if (error) {
-    console.error(error.message);
-    return '';
-  }
-
-  return data?.signedUrl;
-}
 export async function uploadAudioFile(file: Blob, path: string) {
   const supabase = createSupabaseClientComponentClient();
 
