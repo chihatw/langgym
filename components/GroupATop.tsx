@@ -19,8 +19,8 @@ const GroupATop = async ({ uid, cheat }: Props) => {
         <ArticleListLoader uid={uid} />
         <QuizListContainer uid={uid} />
         <WorkoutListContainer uid={uid} />
-        <PostItLoader uid={uid} />
         <BetterreadContainer uid={uid} />
+        <PostItLoader uid={uid} />
         <MirrorNumbersLoader uid={uid} />
       </div>
       <HiddenElements
