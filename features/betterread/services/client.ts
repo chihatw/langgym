@@ -1,8 +1,9 @@
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import {
   BetterReadImagePath,
-  BetterReadImagePathView,
   BetterReadItem,
+  BetterReadItemQuestion,
+  BetterReadView,
 } from '../schema';
 
 export async function insertBetterreadImagePath(
@@ -45,28 +46,70 @@ export async function insertBetterreadItem(
   }
 }
 
-export async function fetchBetterreadImagePathsByArticleId(
+export async function fetchBetterread(
   articleId: number
-): Promise<BetterReadImagePathView[]> {
+): Promise<BetterReadView | undefined> {
   const supabase = createSupabaseClientComponentClient();
 
   const { data, error } = await supabase
-    .from('betterread_image_paths_view')
+    .from('betterread_view')
     .select()
     .eq('articleId', articleId)
-    .order('index');
+    .limit(1)
+    .single();
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+  if (!data) return;
+  return data;
+}
+
+export async function fetchBetterreadItems(
+  betterread_id: number
+): Promise<BetterReadItem[]> {
+  const supabase = createSupabaseClientComponentClient();
+
+  const { data, error } = await supabase
+    .from('betterread_items')
+    .select()
+    .eq('betterread_id', betterread_id)
+    .order('created_at');
 
   if (error) {
     console.error(error.message);
     return [];
   }
 
-  if (!data) {
-    return [];
-  }
+  if (!data) return [];
 
   return data.map((item) => ({
     ...item,
-    created_at: new Date(item.created_at!),
+    created_at: new Date(item.created_at),
+  }));
+}
+
+export async function fetchBetterreadItemQuestions(
+  betterread_item_ids: number[]
+): Promise<BetterReadItemQuestion[]> {
+  const supabase = createSupabaseClientComponentClient();
+
+  const { data, error } = await supabase
+    .from('betterread_item_questions')
+    .select()
+    .in('betterread_item_id', betterread_item_ids)
+    .order('created_at');
+
+  if (error) {
+    console.error(error.message);
+    return [];
+  }
+
+  if (!data) return [];
+
+  return data.map((item) => ({
+    ...item,
+    created_at: new Date(item.created_at),
   }));
 }

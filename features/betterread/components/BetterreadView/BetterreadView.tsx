@@ -1,19 +1,34 @@
 'use client';
 import { fetchLatestArticleByUid } from '@/features/article/services/client';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
-import Image from 'next/image';
+import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
-import { BetterReadImagePathView } from '../../schema';
-import { fetchBetterreadImagePathsByArticleId } from '../../services/client';
+import {
+  BetterReadItem,
+  BetterReadItemQuestion,
+  BetterReadView,
+} from '../../schema';
+import {
+  fetchBetterread,
+  fetchBetterreadItemQuestions,
+  fetchBetterreadItems,
+} from '../../services/client';
+import BetterreadFormRowImage from '../BetterreadForm/BetterreadFormRowImage';
 
 type Props = {};
 
 type FormProps = {
-  betterreadImagePaths: BetterReadImagePathView[];
+  betterread: BetterReadView | undefined;
+  betterreadItems: BetterReadItem[];
+  betterreadItemQuestions: BetterReadItemQuestion[];
+  show: boolean;
 };
 
 const INITIAL_STATE: FormProps = {
-  betterreadImagePaths: [],
+  betterread: undefined,
+  betterreadItems: [],
+  betterreadItemQuestions: [],
+  show: false,
 };
 
 const BetterreadView = ({}: Props) => {
@@ -38,27 +53,69 @@ const BetterreadView = ({}: Props) => {
         return;
       }
 
-      const betterreadImagePaths = await fetchBetterreadImagePathsByArticleId(
-        article.id
-      );
-      setValue((prev) => ({ ...prev, betterreadImagePaths }));
+      const betterread = await fetchBetterread(article.id);
+      let betterreadItems: BetterReadItem[] = [];
+      let betterreadItemQuestions: BetterReadItemQuestion[] = [];
+
+      if (betterread && betterread.id) {
+        betterreadItems = await fetchBetterreadItems(betterread.id);
+      }
+
+      if (betterreadItems.length) {
+        betterreadItemQuestions = await fetchBetterreadItemQuestions(
+          betterreadItems.map((i) => i.id)
+        );
+      }
+
+      setValue((prev) => ({
+        ...prev,
+        betterread,
+        betterreadItems,
+        betterreadItemQuestions,
+      }));
     })();
+  }, []);
+
+  // subscribe
+  useEffect(() => {
+    const supabase = createSupabaseClientComponentClient();
+
+    const channel = supabase
+      .channel(`betterread_toggle ${nanoid()}`)
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'betterread_toggle' },
+        (preload) => {
+          const updated = preload.new;
+          const { show } = updated;
+          console.log(show);
+          setValue((prev) => ({ ...prev, show }));
+        }
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   return (
     <div className='flex justify-center '>
       <div className='grid gap-8 pt-10 mt-6 max-w-lg'>
-        {value.betterreadImagePaths.map((line, index) => (
-          <div className='grid grid-cols-[8px,1fr] gap-4' key={index}>
-            <div className='text-right text-xs'>{line.index! + 1}</div>
-            <div className='grid gap-2'>
-              <div className='text-sm font-extrabold'>{line.japanese}</div>
-              <div className='text-xs text-green-600'>{line.chinese}</div>
-              {/* 0行目 は表示しない */}
-              {!!line.index && line.imageUrl ? (
-                <ImageContainer imageUrl={line.imageUrl} />
-              ) : null}
-            </div>
+        {value.betterreadItems.map((betterreadItem, index) => (
+          <div key={index} className='grid gap-4'>
+            <BetterreadFormRowImage
+              betterreadItem={betterreadItem}
+              isView={true}
+            />
+            {value.show ? (
+              <div>
+                {value.betterreadItemQuestions
+                  .filter((q) => q.betterread_item_id === betterreadItem.id)
+                  .map((question, index) => (
+                    <div key={index}>{question.question}</div>
+                  ))}
+              </div>
+            ) : null}
           </div>
         ))}
       </div>
@@ -67,19 +124,3 @@ const BetterreadView = ({}: Props) => {
 };
 
 export default BetterreadView;
-
-const ImageContainer = ({ imageUrl }: { imageUrl: string }) => {
-  return (
-    <div className='grid gap-2 rounded-lg bg-white bg-opacity-60 p-3'>
-      <Image
-        src={imageUrl}
-        alt=''
-        className='rounded-lg'
-        width={512}
-        height={512}
-        sizes='(max-width: 768px) 100vw, (max-height: 1200px) 50vw, 50vw'
-        priority={true}
-      />
-    </div>
-  );
-};

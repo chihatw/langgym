@@ -7,9 +7,9 @@ import Image from 'next/image';
 import { BetterReadItem } from '../../schema';
 import { deleteBetterreadItem } from '../../services/actions';
 
-type Props = { betterreadItem: BetterReadItem };
+type Props = { betterreadItem: BetterReadItem; isView?: boolean };
 
-const BetterreadFormRowImage = ({ betterreadItem }: Props) => {
+const BetterreadFormRowImage = ({ betterreadItem, isView }: Props) => {
   const action = async () => {
     const temp = betterreadItem.image_url.split('/');
     const path = `${temp.at(-1)}`;
@@ -36,16 +36,18 @@ const BetterreadFormRowImage = ({ betterreadItem }: Props) => {
         sizes='(max-width: 768px) 100vw, (max-height: 1200px) 50vw, 50vw'
         priority={true}
       />
-      <form action={action}>
-        <Button
-          type='submit'
-          size='icon'
-          variant={'ghost'}
-          className='absolute right-2 top-2 bg-white text-red-500'
-        >
-          <X />
-        </Button>
-      </form>
+      {!isView ? (
+        <form action={action}>
+          <Button
+            type='submit'
+            size='icon'
+            variant={'ghost'}
+            className='absolute right-2 top-2 bg-white text-red-500'
+          >
+            <X />
+          </Button>
+        </form>
+      ) : null}
     </div>
   );
 };
