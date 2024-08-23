@@ -26,11 +26,19 @@ const PostitFormWorkoutContentRow = ({ index, postItItem }: Props) => {
     // remote
     resetPostItItemImageUrl(postItItem);
   };
+
   return (
     <div className='flex gap-4'>
       <div className='basis-2 text-right text-xs'>{index + 1}</div>
       <div className='flex-1 space-y-2'>
-        <div className='text-sm font-extrabold'>{postItItem.japanese}</div>
+        <div className='text-sm font-extrabold'>
+          <div className='grid'>
+            {postItItem.japanese.split('\n').map((line, index) => {
+              console.log(line);
+              return <div key={index}>{line}</div>;
+            })}
+          </div>
+        </div>
 
         <div className='grid gap-2 rounded-lg bg-white bg-opacity-60 p-3'>
           <div className='grid relative'>
