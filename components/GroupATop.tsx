@@ -1,8 +1,5 @@
 import BetterreadContainer from '@/features/betterread/components/BetterreadContainer';
 
-import NoteInfo from '@/features/info/components/NoteInfo';
-import PostItInfo from '@/features/info/components/PostItInfo';
-import SheetsInfo from '@/features/info/components/SheetsInfo';
 import WritingInfo from '@/features/info/components/WritingInfo';
 import MirrorNumbersLoader from '@/features/mirror/components/MirrorWorkoutTopPane/MirrorWorkoutLoader';
 import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/server';
@@ -25,9 +22,6 @@ const GroupATop = async ({ uid, cheat }: Props) => {
           <BorderLabel label='連絡事項' />
           <div className='grid gap-2 pl-2'>
             <WritingInfo />
-            <NoteInfo />
-            <PostItInfo />
-            <SheetsInfo />
           </div>
         </div>
         <ArticleListLoader uid={uid} />
