@@ -18,12 +18,18 @@ type Props = {
   betterreadItemQuestions: BetterReadItemQuestion[];
 };
 
+const dummyIds = [29, 30];
+
 const BetterreadForm = ({
   sentences,
   betterreadId,
   betterreadItems,
   betterreadItemQuestions,
 }: Props) => {
+  const maxCount = dummyIds.includes(betterreadId) ? 4 : BETTERREAD_MAX_COUNT;
+  const photoMaxCount = dummyIds.includes(betterreadId)
+    ? 1
+    : BETTERREAD_PHOTO_MAX_COUNT;
   return (
     <div className='grid gap-4'>
       <div className='text-2xl font-extrabold'>課前準備</div>
@@ -32,14 +38,14 @@ const BetterreadForm = ({
           <span
             className={cn(
               'font-lato text-[90px] font-[900] ',
-              betterreadItemQuestions.length >= BETTERREAD_MAX_COUNT
+              betterreadItemQuestions.length >= maxCount
                 ? 'text-gray-700'
                 : 'text-red-500'
             )}
           >
             {betterreadItemQuestions.length}
           </span>
-          <span className='font-lato text-[48px] font-[900] text-gray-700'>{`/${BETTERREAD_MAX_COUNT}`}</span>
+          <span className='font-lato text-[48px] font-[900] text-gray-700'>{`/${maxCount}`}</span>
         </div>
       </div>
       <div className='grid gap-1'>
@@ -62,9 +68,9 @@ const BetterreadForm = ({
       ))}
       <UploadBetterreadImage
         betterreadId={betterreadId}
-        showForm={betterreadItems.length < BETTERREAD_PHOTO_MAX_COUNT}
+        showForm={betterreadItems.length < photoMaxCount}
       />
-      {betterreadItems.length >= BETTERREAD_PHOTO_MAX_COUNT ? (
+      {betterreadItems.length >= photoMaxCount ? (
         <div className='text-xs text-gray-400 text-center py-4'>
           <div>達到上傳上限</div>
         </div>
