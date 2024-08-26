@@ -84,6 +84,26 @@ export async function fetchArticleById(
   };
 }
 
+export async function fetchArticlesByIds(
+  ids: number[]
+): Promise<ArticleView[]> {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('articles_view')
+    .select()
+    .order('created_at', { ascending: false })
+    .in('id', ids);
+  if (error) {
+    console.error(error.message);
+    return [];
+  }
+
+  return data.map((item) => ({
+    ...item,
+    created_at: new Date(item.created_at!),
+  }));
+}
+
 export async function fetchSentencesByArticleId(
   articleId: number
 ): Promise<SentenceView[]> {

@@ -3,9 +3,9 @@ import { getUserFromServerSide } from '@/features/auth/services/server';
 import BetterreadView from '@/features/betterread/components/BetterreadView/BetterreadView';
 import { BetterReadItemQuestion } from '@/features/betterread/schema';
 import {
-  fetchBetterreadByUid,
   fetchBetterreadItemQuestions,
   fetchBetterreadItems,
+  fetchBetterreadsByUid,
 } from '@/features/betterread/services/server';
 
 type Props = {};
@@ -14,7 +14,9 @@ const RealtimeBetterReadPage = async (props: Props) => {
   const user = await getUserFromServerSide();
   if (!user) return null;
 
-  const betterread = await fetchBetterreadByUid(user.id);
+  const betterreads = await fetchBetterreadsByUid(user.id);
+
+  const betterread = betterreads.at(-1);
 
   if (!betterread) return null;
 

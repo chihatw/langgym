@@ -43,27 +43,30 @@ export async function fetchBetterread(
   return { ...data, created_at: new Date(data.created_at!) };
 }
 
-export async function fetchBetterreadByUid(
+export async function fetchBetterreadsByUid(
   uid: string
-): Promise<BetterRead | undefined> {
+): Promise<BetterRead[]> {
   const supabase = createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('betterread')
     .select()
     .eq('uid', uid)
-    .single();
+    .order('created_at');
 
   if (error) {
     console.error(error.message);
-    return;
+    return [];
   }
 
   if (!data) {
-    return;
+    return [];
   }
 
-  return { ...data, created_at: new Date(data.created_at!) };
+  return data.map((item) => ({
+    ...item,
+    created_at: new Date(item.created_at),
+  }));
 }
 
 export async function fetchBetterreadItems(
