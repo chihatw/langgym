@@ -2,13 +2,14 @@
 
 import { SentenceView } from '@/features/article/schema';
 import { cn } from '@/lib/utils';
-import { Lato } from 'next/font/google';
+import {
+  BETTERREAD_MAX_COUNT,
+  BETTERREAD_PHOTO_MAX_COUNT,
+} from '../../constants';
 import { BetterReadItem, BetterReadItemQuestion } from '../../schema';
 import BetterreadFormRow from './BetterreadFormRow';
 import BetterreadFormSentence from './BetterreadFormSentence';
 import UploadBetterreadImage from './UploadBetterreadImage';
-
-const lato = Lato({ subsets: ['latin'], weight: '900' });
 
 type Props = {
   sentences: SentenceView[];
@@ -31,14 +32,14 @@ const BetterreadForm = ({
           <span
             className={cn(
               'font-lato text-[90px] font-[900] ',
-              betterreadItemQuestions.length > 7
+              betterreadItemQuestions.length >= BETTERREAD_MAX_COUNT
                 ? 'text-gray-700'
                 : 'text-red-500'
             )}
           >
             {betterreadItemQuestions.length}
           </span>
-          <span className='font-lato text-[48px] font-[900] text-gray-700'>{`/${8}`}</span>
+          <span className='font-lato text-[48px] font-[900] text-gray-700'>{`/${BETTERREAD_MAX_COUNT}`}</span>
         </div>
       </div>
       <div className='grid gap-1'>
@@ -61,11 +62,11 @@ const BetterreadForm = ({
       ))}
       <UploadBetterreadImage
         betterreadId={betterreadId}
-        showForm={betterreadItems.length < 2}
+        showForm={betterreadItems.length < BETTERREAD_PHOTO_MAX_COUNT}
       />
-      {betterreadItems.length > 1 ? (
+      {betterreadItems.length >= BETTERREAD_PHOTO_MAX_COUNT ? (
         <div className='text-xs text-gray-400 text-center py-4'>
-          <div>已經上傳兩張照片</div>
+          <div>達到上傳上限</div>
         </div>
       ) : null}
     </div>

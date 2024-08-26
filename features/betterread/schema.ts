@@ -15,6 +15,7 @@ export interface BetterReadItem {
 export interface BetterReadItemQuestion {
   id: number;
   betterread_item_id: number;
+  view_point: string;
   question: string;
   created_at: Date;
 }

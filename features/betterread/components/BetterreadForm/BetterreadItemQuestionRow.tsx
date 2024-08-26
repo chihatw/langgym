@@ -24,7 +24,16 @@ const BetterreadItemQuestionRow = ({ question, betterreadId }: Props) => {
   if (!optiQuestion) return null;
   return (
     <div className='grid grid-cols-[1fr,auto] gap-2 items-center pl-2'>
-      <div className='text-sm'>{optiQuestion.question}</div>
+      <div className='text-sm'>
+        <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
+          <div>👀</div>
+          <div className='text-gray-500'>{optiQuestion.view_point}</div>
+        </div>
+        <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
+          <div>❓</div>
+          <div>{optiQuestion.question}</div>
+        </div>
+      </div>
       <form action={action}>
         <Button size={'icon'} variant={'ghost'}>
           <X className='text-red-500' />

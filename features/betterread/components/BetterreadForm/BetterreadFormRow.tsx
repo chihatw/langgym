@@ -13,12 +13,14 @@ type Props = {
 };
 
 type FormProps = {
-  input: string;
+  viewPoint: string;
+  question: string;
   errMsg: string;
 };
 
 const INITIAL_STATE: FormProps = {
-  input: '',
+  viewPoint: '',
+  question: '',
   errMsg: '',
 };
 
@@ -34,7 +36,8 @@ const BetterreadFormRow = ({
       const errMsg = await insertBetterreadItemQuestion(
         {
           betterread_item_id: betterreadItem.id,
-          question: value.input,
+          view_point: value.viewPoint,
+          question: value.question,
         },
         betterreadItem.betterread_id
       );
@@ -50,8 +53,9 @@ const BetterreadFormRow = ({
   return (
     <div className='grid gap-4 rounded-lg bg-white bg-opacity-60 p-3'>
       <BetterreadFormRowImage betterreadItem={betterreadItem} />
+
       {betterreadItemQuestions.length ? (
-        <div className='grid gap-1'>
+        <div className='grid gap-4'>
           {betterreadItemQuestions
             .sort((a, b) => a.created_at.getTime() - b.created_at.getTime())
             .map((question, index) => (
@@ -65,16 +69,37 @@ const BetterreadFormRow = ({
       ) : null}
 
       <div className='grid gap-2'>
-        <Input
-          value={value.input}
-          placeholder='對方看到這張照片，問什麼？'
-          onChange={(e) =>
-            setValue((prev) => ({ ...prev, input: e.target.value, errMsg: '' }))
-          }
-        />
+        <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
+          <div className='text-2xl'>👀</div>
+          <Input
+            value={value.viewPoint}
+            placeholder='對方注意到哪裡？'
+            onChange={(e) =>
+              setValue((prev) => ({
+                ...prev,
+                viewPoint: e.target.value,
+                errMsg: '',
+              }))
+            }
+          />
+        </div>
+        <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
+          <div className='text-2xl'>❓</div>
+          <Input
+            value={value.question}
+            placeholder='對方問什麼？'
+            onChange={(e) =>
+              setValue((prev) => ({
+                ...prev,
+                question: e.target.value,
+                errMsg: '',
+              }))
+            }
+          />
+        </div>
         <SubmitServerActionButton
           errMsg={value.errMsg}
-          disabled={!value.input}
+          disabled={!value.question || !value.viewPoint}
           isPending={isPending}
           action={action}
         >

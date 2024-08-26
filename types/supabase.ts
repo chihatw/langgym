@@ -382,18 +382,21 @@ export type Database = {
           created_at: string
           id: number
           question: string
+          view_point: string
         }
         Insert: {
           betterread_item_id: number
           created_at?: string
           id?: number
           question: string
+          view_point?: string
         }
         Update: {
           betterread_item_id?: number
           created_at?: string
           id?: number
           question?: string
+          view_point?: string
         }
         Relationships: [
           {
