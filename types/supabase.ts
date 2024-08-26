@@ -376,52 +376,6 @@ export type Database = {
           },
         ]
       }
-      betterread_image_paths: {
-        Row: {
-          betterreadId: number
-          created_at: string
-          id: number
-          imageUrl: string | null
-          index: number
-        }
-        Insert: {
-          betterreadId: number
-          created_at?: string
-          id?: number
-          imageUrl?: string | null
-          index: number
-        }
-        Update: {
-          betterreadId?: number
-          created_at?: string
-          id?: number
-          imageUrl?: string | null
-          index?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "betterread_image_paths_betterreadid_fkey"
-            columns: ["betterreadId"]
-            isOneToOne: false
-            referencedRelation: "betterread"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "betterread_image_paths_betterreadid_fkey"
-            columns: ["betterreadId"]
-            isOneToOne: false
-            referencedRelation: "betterread_image_paths_view"
-            referencedColumns: ["betterreadId"]
-          },
-          {
-            foreignKeyName: "betterread_image_paths_betterreadid_fkey"
-            columns: ["betterreadId"]
-            isOneToOne: false
-            referencedRelation: "betterread_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       betterread_item_questions: {
         Row: {
           betterread_item_id: number
@@ -482,17 +436,25 @@ export type Database = {
             foreignKeyName: "betterread_items_betterread_id_fkey"
             columns: ["betterread_id"]
             isOneToOne: false
-            referencedRelation: "betterread_image_paths_view"
-            referencedColumns: ["betterreadId"]
-          },
-          {
-            foreignKeyName: "betterread_items_betterread_id_fkey"
-            columns: ["betterread_id"]
-            isOneToOne: false
             referencedRelation: "betterread_view"
             referencedColumns: ["id"]
           },
         ]
+      }
+      betterread_toggle: {
+        Row: {
+          id: number
+          show: boolean
+        }
+        Insert: {
+          id?: number
+          show?: boolean
+        }
+        Update: {
+          id?: number
+          show?: boolean
+        }
+        Relationships: []
       }
       canvas_boxes: {
         Row: {
@@ -544,6 +506,38 @@ export type Database = {
           id?: number
         }
         Relationships: []
+      }
+      homepage_infos: {
+        Row: {
+          created_at: string
+          id: number
+          image_url: string | null
+          text: string
+          uid: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          image_url?: string | null
+          text?: string
+          uid: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          image_url?: string | null
+          text?: string
+          uid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "homepage_infos_uid_fkey"
+            columns: ["uid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mirror_workout_realtime: {
         Row: {
@@ -678,27 +672,6 @@ export type Database = {
           cue?: string
           id?: number
           params?: string
-        }
-        Relationships: []
-      }
-      pathname_logs: {
-        Row: {
-          created_at: string
-          id: number
-          pathname: string
-          uid: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          pathname: string
-          uid: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          pathname?: string
-          uid?: string
         }
         Relationships: []
       }
@@ -1407,50 +1380,6 @@ export type Database = {
           },
         ]
       }
-      betterread_image_paths_view: {
-        Row: {
-          articleId: number | null
-          betterreadId: number | null
-          chinese: string | null
-          created_at: string | null
-          display: string | null
-          imageUrl: string | null
-          index: number | null
-          japanese: string | null
-          title: string | null
-          uid: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "betterread_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "articles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "betterread_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["articleId"]
-          },
-          {
-            foreignKeyName: "betterread_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "articles_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "betterread_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       betterread_view: {
         Row: {
           articleId: number | null
@@ -1502,23 +1431,6 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "page_states_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      pathname_logs_view: {
-        Row: {
-          created_at: string | null
-          display: string | null
-          pathname: string | null
-          uid: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "users_uid_fkey"
             columns: ["uid"]
             isOneToOne: true
             referencedRelation: "users"
@@ -1723,13 +1635,7 @@ export type Database = {
       }
     }
     Functions: {
-      update_pathname_log: {
-        Args: {
-          _uid: string
-          _pathname: string
-        }
-        Returns: undefined
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
