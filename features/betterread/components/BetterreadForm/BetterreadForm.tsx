@@ -57,6 +57,9 @@ const BetterreadForm = ({
           />
         ))}
       </div>
+      <div className='text-gray-500 text-center text-3xl font-extrabold'>
+        照片裡嚴禁使用“文字”
+      </div>
       {betterreadItems.map((betterreadItem, index) => (
         <BetterreadFormRow
           key={index}
