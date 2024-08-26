@@ -2,7 +2,6 @@
 
 import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Input } from '@/components/ui/input';
-import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
 import { isValidEmail } from '@/utils';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState, useTransition } from 'react';
@@ -96,7 +95,6 @@ const EmailLoginForm = (props: Props) => {
           Login
         </SubmitServerActionButton>
       </div>
-      <PathnameLog uid={searchParams.get('uid')} />
     </>
   );
 };

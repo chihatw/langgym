@@ -8,7 +8,6 @@ import {
 } from '@/features/note/services/server';
 import MngPaperCupForm from '@/features/paperCup/components/MngPaperCupForm/MngPaperCupForm';
 import { fetchPaperCupParams } from '@/features/paperCup/services/server';
-import { fetchPathnameLogs } from '@/features/pathnameLog/services/server';
 import MngPitchesForm from '@/features/pitches/components/MngPitchesForm';
 import {
   fetchPitches,
@@ -38,7 +37,6 @@ const page = async (props: Props) => {
   const noteAudioPaths = await fetchNoteAudioPaths();
   const pitches = await fetchPitches();
   const pitchesUser = await fetchPitchesUser();
-  const pathnameLogs = await fetchPathnameLogs();
 
   return (
     <div className='grid gap-8'>

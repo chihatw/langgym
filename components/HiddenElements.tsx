@@ -1,6 +1,5 @@
 import MirrorDialog from '@/features/mirror/components/MirrorDialog/MirrorDialog';
 import { MirrorWorkoutResult } from '@/features/mirror/schema';
-import PathnameLog from '@/features/pathnameLog/components/PathnameLog';
 import RedirectController from '@/features/redirectTo/components/RedirectController';
 
 type Props = {
@@ -17,7 +16,6 @@ const HiddenElements = ({ uid, cheat, latestMirrorResult }: Props) => {
         cheat={cheat}
         latestMirrorResult={latestMirrorResult}
       />
-      <PathnameLog uid={uid} />
       <RedirectController uid={uid} />
     </>
   );
