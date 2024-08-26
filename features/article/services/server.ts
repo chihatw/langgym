@@ -64,10 +64,10 @@ export async function fetchArticlesByUid(uid: string): Promise<Article[]> {
 // edit で使うので display 不要
 export async function fetchArticleById(
   id: number
-): Promise<Article | undefined> {
+): Promise<ArticleView | undefined> {
   const supabase = createSupabaseServerComponentClient();
   const { data, error } = await supabase
-    .from('articles')
+    .from('articles_view')
     .select('*')
     .order('created_at', { ascending: false })
     .eq('id', id);
@@ -80,7 +80,7 @@ export async function fetchArticleById(
 
   return {
     ..._article,
-    created_at: new Date(_article.created_at),
+    created_at: new Date(_article.created_at!),
   };
 }
 

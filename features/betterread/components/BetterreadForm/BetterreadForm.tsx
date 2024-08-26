@@ -1,12 +1,9 @@
 'use client';
 
+import { SentenceView } from '@/features/article/schema';
 import { cn } from '@/lib/utils';
 import { Lato } from 'next/font/google';
-import {
-  BetterReadItem,
-  BetterReadItemQuestion,
-  BetterReadView,
-} from '../../schema';
+import { BetterReadItem, BetterReadItemQuestion } from '../../schema';
 import BetterreadFormRow from './BetterreadFormRow';
 import BetterreadFormSentence from './BetterreadFormSentence';
 import UploadBetterreadImage from './UploadBetterreadImage';
@@ -14,15 +11,15 @@ import UploadBetterreadImage from './UploadBetterreadImage';
 const lato = Lato({ subsets: ['latin'], weight: '900' });
 
 type Props = {
+  sentences: SentenceView[];
   betterreadId: number;
-  betterreads: BetterReadView[];
   betterreadItems: BetterReadItem[];
   betterreadItemQuestions: BetterReadItemQuestion[];
 };
 
 const BetterreadForm = ({
+  sentences,
   betterreadId,
-  betterreads,
   betterreadItems,
   betterreadItemQuestions,
 }: Props) => {
@@ -45,8 +42,12 @@ const BetterreadForm = ({
         </div>
       </div>
       <div className='grid gap-1'>
-        {betterreads.map((betterread, index) => (
-          <BetterreadFormSentence key={index} betterread={betterread} />
+        {sentences.map((sentence, index) => (
+          <BetterreadFormSentence
+            key={index}
+            japanese={sentence.japanese || ''}
+            chinese={sentence.chinese || ''}
+          />
         ))}
       </div>
       {betterreadItems.map((betterreadItem, index) => (

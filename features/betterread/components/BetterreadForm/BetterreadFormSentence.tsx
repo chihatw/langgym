@@ -1,12 +1,14 @@
-import { BetterReadView } from '../../schema';
+type Props = {
+  japanese: string;
+  chinese: string;
+};
 
-type Props = { betterread: BetterReadView };
-
-const BetterreadFormSentence = ({ betterread }: Props) => {
+const BetterreadFormSentence = ({ japanese, chinese }: Props) => {
+  const isDummy = japanese === '-';
   return (
     <div className='px-2 gap gap-1'>
-      <div className='text-sm'>{betterread.japanese}</div>
-      <div className='text-xs text-green-600'>{betterread.chinese}</div>
+      {!isDummy ? <div className='text-sm'>{japanese}</div> : null}
+      <div className='text-xs text-green-600'>{chinese}</div>
     </div>
   );
 };

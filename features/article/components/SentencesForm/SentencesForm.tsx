@@ -10,14 +10,14 @@ import { blobToAudioBuffer } from '@/utils';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState, useTransition } from 'react';
 import BuildArticlePitchQuizButton from '../../../quiz/components/BuildArticlePitchQuizButton';
-import { Article, Sentence, SentenceView } from '../../schema';
+import { ArticleView, Sentence, SentenceView } from '../../schema';
 import { batchInsertSentences } from '../../services/actions';
 
 import { downloadAudioFile } from '@/features/storage/services/client';
 import SentencesFormMonitorRow from './SentencesFormMonitorRow';
 
 type Props = {
-  article: Article;
+  article: ArticleView;
   sentences: SentenceView[];
 };
 
@@ -76,11 +76,11 @@ const SentencesForm = ({ sentences, article }: Props) => {
       (item, line) => ({
         ...item,
         line,
-        articleId: article.id,
+        articleId: article.id!,
       })
     );
     startTransigion(async () => {
-      const errMsg = await batchInsertSentences(article.id, _sentences);
+      const errMsg = await batchInsertSentences(article.id!, _sentences);
       if (errMsg) {
         setValue((prev) => ({ ...prev, errMsg }));
         return;

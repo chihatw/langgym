@@ -1,17 +1,10 @@
 import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
-import {
-  BetterReadImagePathView,
-  BetterReadItem,
-  BetterReadItemQuestion,
-  BetterReadView,
-} from '../schema';
+import { BetterRead, BetterReadItem, BetterReadItemQuestion } from '../schema';
 
-export async function fetchBetterreads(): Promise<BetterReadImagePathView[]> {
+export async function fetchBetterreads(): Promise<BetterRead[]> {
   const supabase = createSupabaseServerComponentClient();
 
-  const { data, error } = await supabase
-    .from('betterread_image_paths_view')
-    .select();
+  const { data, error } = await supabase.from('betterread').select();
 
   if (error) {
     console.error(error.message);
@@ -28,16 +21,14 @@ export async function fetchBetterreads(): Promise<BetterReadImagePathView[]> {
   }));
 }
 
-export async function fetchBetterreadImagePathByUid(
-  uid: string
-): Promise<BetterReadImagePathView | undefined> {
+export async function fetchBetterread(
+  id: number
+): Promise<BetterRead | undefined> {
   const supabase = createSupabaseServerComponentClient();
-
   const { data, error } = await supabase
-    .from('betterread_image_paths_view')
+    .from('betterread')
     .select()
-    .eq('uid', uid)
-    .limit(1)
+    .eq('id', id)
     .single();
 
   if (error) {
@@ -49,61 +40,30 @@ export async function fetchBetterreadImagePathByUid(
     return;
   }
 
-  return {
-    ...data,
-    created_at: new Date(data.created_at!),
-  };
+  return { ...data, created_at: new Date(data.created_at!) };
 }
 
-export async function fetchBetterreadImagePathsById(
-  id: number
-): Promise<BetterReadImagePathView[]> {
+export async function fetchBetterreadByUid(
+  uid: string
+): Promise<BetterRead | undefined> {
   const supabase = createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
-    .from('betterread_image_paths_view')
+    .from('betterread')
     .select()
-    .eq('betterreadId', id)
-    .order('index');
+    .eq('uid', uid)
+    .single();
 
   if (error) {
     console.error(error.message);
-    return [];
+    return;
   }
 
   if (!data) {
-    return [];
+    return;
   }
 
-  return data.map((item) => ({
-    ...item,
-    created_at: new Date(item.created_at!),
-  }));
-}
-
-export async function fetchBetterreadViews(
-  id: number
-): Promise<BetterReadView[]> {
-  const supabase = createSupabaseServerComponentClient();
-
-  const { data, error } = await supabase
-    .from('betterread_view')
-    .select()
-    .eq('id', id)
-    .order('line');
-
-  if (error) {
-    console.error(error.message);
-    return [];
-  }
-
-  if (!data) {
-    return [];
-  }
-
-  return data.map((item) => ({
-    ...item,
-  }));
+  return { ...data, created_at: new Date(data.created_at!) };
 }
 
 export async function fetchBetterreadItems(

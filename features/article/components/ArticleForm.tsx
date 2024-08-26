@@ -26,10 +26,10 @@ import {
   useState,
   useTransition,
 } from 'react';
-import { Article } from '../schema';
+import { Article, ArticleView } from '../schema';
 import { insertArticle, updateArticle } from '../services/actions';
 
-type Props = { users: AppUser[]; article?: Article; title: string };
+type Props = { users: AppUser[]; article?: ArticleView; title: string };
 
 type FormProps = {
   uid: string;
@@ -55,9 +55,9 @@ const ArticleForm = ({ users, article, title }: Props) => {
     if (!article) return;
     setTimeout(() => {
       setValue({
-        uid: article.uid,
-        date: new Date(article.date),
-        title: article.title,
+        uid: article.uid!,
+        date: new Date(article.date!),
+        title: article.title!,
         errMsg: '',
       });
     }, 0); // 遅らせないと select されない？
@@ -90,7 +90,7 @@ const ArticleForm = ({ users, article, title }: Props) => {
     };
 
     startTransition(async () => {
-      const errMsg = await updateArticle(article!.id, item);
+      const errMsg = await updateArticle(article!.id!, item);
       if (errMsg) {
         setValue((prev) => ({ ...prev, errMsg }));
         return;

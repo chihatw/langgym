@@ -1,19 +1,21 @@
+import { ArticleView } from '@/features/article/schema';
+import { fetchArticleById } from '@/features/article/services/server';
 import MngBetterreadList from '@/features/betterread/components/MngBetterreadList/MngBetterreadList';
-import { BetterReadImagePathView } from '@/features/betterread/schema';
 import { fetchBetterreads } from '@/features/betterread/services/server';
 
 type Props = {};
 
 const MngBetterreadListPage = async (props: Props) => {
-  const items = await fetchBetterreads();
-  const uniqueItems = items.reduce((acc, cur) => {
-    const accBetterreadIds = acc.map((item) => item.betterreadId);
-    if (accBetterreadIds.includes(cur.betterreadId)) {
-      return acc;
+  const betterreads = await fetchBetterreads();
+  const articles: ArticleView[] = [];
+  for (let betterread of betterreads) {
+    const _article = await fetchArticleById(betterread.articleId);
+    if (_article) {
+      articles.push(_article);
     }
-    return [...acc, cur];
-  }, [] as BetterReadImagePathView[]);
-  return <MngBetterreadList items={uniqueItems} />;
+  }
+
+  return <MngBetterreadList betterreads={betterreads} articles={articles} />;
 };
 
 export default MngBetterreadListPage;

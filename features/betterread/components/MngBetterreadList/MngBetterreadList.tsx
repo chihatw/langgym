@@ -1,17 +1,18 @@
 'use client';
 import { buttonVariants } from '@/components/ui/button';
+import { ArticleView } from '@/features/article/schema';
 import Link from 'next/link';
 import { useOptimistic } from 'react';
-import { BetterReadImagePathView } from '../../schema';
+import { BetterRead } from '../../schema';
 import MngBetterreadListRow from './MngBetterreadListRow';
 
-type Props = { items: BetterReadImagePathView[] };
+type Props = { betterreads: BetterRead[]; articles: ArticleView[] };
 
-const MngBetterreadList = ({ items }: Props) => {
-  const [opti_items, removeItem] = useOptimistic<
-    BetterReadImagePathView[],
+const MngBetterreadList = ({ betterreads, articles }: Props) => {
+  const [opti_betterreads, removeBetterread] = useOptimistic<
+    BetterRead[],
     number
-  >(items, (state, id) => state.filter((item) => item.betterreadId !== id));
+  >(betterreads, (state, id) => state.filter((item) => item.id !== id));
   return (
     <div className='grid gap-y-4'>
       <div className='text-2xl font-extrabold'>Betterread List</div>
@@ -21,13 +22,20 @@ const MngBetterreadList = ({ items }: Props) => {
         </Link>
       </div>
       <div className='grid'>
-        {opti_items.map((item, index) => (
-          <MngBetterreadListRow
-            key={index}
-            item={item}
-            removeItem={() => removeItem(item.betterreadId!)}
-          />
-        ))}
+        {opti_betterreads.map((betterread, index) => {
+          const article = articles.find(
+            (item) => item.id === betterread.articleId
+          );
+          if (!article) return null;
+          return (
+            <MngBetterreadListRow
+              key={index}
+              article={article}
+              betterread={betterread}
+              removeBetterread={() => removeBetterread(betterread.id!)}
+            />
+          );
+        })}
       </div>
     </div>
   );

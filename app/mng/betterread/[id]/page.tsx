@@ -1,9 +1,10 @@
+import { fetchSentencesByArticleId } from '@/features/article/services/server';
 import BetterreadForm from '@/features/betterread/components/BetterreadForm/BetterreadForm';
 import { BetterReadItemQuestion } from '@/features/betterread/schema';
 import {
+  fetchBetterread,
   fetchBetterreadItemQuestions,
   fetchBetterreadItems,
-  fetchBetterreadViews,
 } from '@/features/betterread/services/server';
 
 type Props = {
@@ -12,7 +13,13 @@ type Props = {
 
 const MngBetterreadPage = async ({ params: { id } }: Props) => {
   const betterreadId = parseInt(id);
-  const betterreads = await fetchBetterreadViews(betterreadId);
+
+  const betterread = await fetchBetterread(betterreadId);
+
+  if (!betterread || !betterread.articleId) return null;
+
+  const sentences = await fetchSentencesByArticleId(betterread.articleId);
+
   const betterreadItems = await fetchBetterreadItems(betterreadId);
 
   const betterreadItemIds = betterreadItems.map((item) => item.id);
@@ -27,8 +34,8 @@ const MngBetterreadPage = async ({ params: { id } }: Props) => {
   return (
     <div className='grid gap-4 max-w-lg mx-auto pt-4 pb-40'>
       <BetterreadForm
+        sentences={sentences}
         betterreadId={betterreadId}
-        betterreads={betterreads}
         betterreadItems={betterreadItems}
         betterreadItemQuestions={betterreadItemQuestions}
       />
