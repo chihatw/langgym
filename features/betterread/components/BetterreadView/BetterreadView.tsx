@@ -250,7 +250,7 @@ const BetterreadView = ({}: Props) => {
   }, [value.betterreadId]);
 
   return (
-    <div className='mx-auto max-w-md grid pt-10'>
+    <div className='mx-auto max-w-md grid pt-10 pb-40'>
       <div className='grid gap-1'>
         {value.sentences.map((sentence, index) => (
           <BetterreadFormSentence
