@@ -222,7 +222,7 @@ const BetterreadView = ({}: Props) => {
         const { data, error } = await supabase
           .from('betterread_item_questions')
           .select()
-          .eq('betterread_item_id', betterreadItemIds);
+          .in('betterread_item_id', betterreadItemIds);
 
         if (error) {
           console.error(error.message);
