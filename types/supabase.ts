@@ -449,16 +449,19 @@ export type Database = {
           betterread_id: number | null
           id: number
           show: boolean
+          view_points: number[]
         }
         Insert: {
           betterread_id?: number | null
           id?: number
           show?: boolean
+          view_points?: number[]
         }
         Update: {
           betterread_id?: number | null
           id?: number
           show?: boolean
+          view_points?: number[]
         }
         Relationships: [
           {
