@@ -262,8 +262,8 @@ const BetterreadView = ({}: Props) => {
       </div>
       <div className='flex justify-center '>
         <div className='grid gap-8 pt-10 mt-6 max-w-lg'>
-          {value.betterreadItems.map((betterreadItem, index) => (
-            <div key={index} className='grid gap-4'>
+          {value.betterreadItems.map((betterreadItem, item_index) => (
+            <div key={item_index} className='grid gap-4'>
               <BetterreadFormRowImage
                 betterreadItem={betterreadItem}
                 isView={true}
@@ -271,10 +271,11 @@ const BetterreadView = ({}: Props) => {
               <div className='grid gap-4'>
                 {value.betterreadItemQuestions
                   .filter((q) => q.betterread_item_id === betterreadItem.id)
-                  .map((question, index) => {
-                    if (!value.viewPoints.includes(index)) return null;
+                  .map((question, q_index) => {
+                    if (!value.viewPoints.includes(q_index + item_index * 10))
+                      return null;
                     return (
-                      <div key={index} className='grid gap-0'>
+                      <div key={q_index} className='grid gap-0'>
                         <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
                           <div className='text-2xl'>👀</div>
                           {question.view_point}
