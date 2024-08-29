@@ -446,18 +446,36 @@ export type Database = {
       }
       betterread_toggle: {
         Row: {
+          betterread_id: number | null
           id: number
           show: boolean
         }
         Insert: {
+          betterread_id?: number | null
           id?: number
           show?: boolean
         }
         Update: {
+          betterread_id?: number | null
           id?: number
           show?: boolean
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "betterread_toggle_betterread_id_fkey"
+            columns: ["betterread_id"]
+            isOneToOne: false
+            referencedRelation: "betterread"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "betterread_toggle_betterread_id_fkey"
+            columns: ["betterread_id"]
+            isOneToOne: false
+            referencedRelation: "betterread_view"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       canvas_boxes: {
         Row: {

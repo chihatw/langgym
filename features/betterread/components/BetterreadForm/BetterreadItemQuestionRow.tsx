@@ -13,7 +13,7 @@ const BetterreadItemQuestionRow = ({ question, betterreadId }: Props) => {
     BetterReadItemQuestion | null,
     void
   >(question, () => null);
-  // todo
+
   const action = async () => {
     // local
     removeQuestion();

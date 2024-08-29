@@ -13,7 +13,7 @@ export async function fetchHomepageInfosByUid(
     .order('created_at');
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
     return [];
   }
 
