@@ -1,16 +1,15 @@
 'use client';
 import { buttonVariants } from '@/components/ui/button';
-import { ArticleView } from '@/features/article/schema';
 import Link from 'next/link';
 import { useOptimistic } from 'react';
-import { BetterRead } from '../../schema';
+import { BetterReadView } from '../../schema';
 import MngBetterreadListRow from './MngBetterreadListRow';
 
-type Props = { betterreads: BetterRead[]; articles: ArticleView[] };
+type Props = { betterreads: BetterReadView[] };
 
-const MngBetterreadList = ({ betterreads, articles }: Props) => {
+const MngBetterreadList = ({ betterreads }: Props) => {
   const [opti_betterreads, removeBetterread] = useOptimistic<
-    BetterRead[],
+    BetterReadView[],
     number
   >(betterreads, (state, id) => state.filter((item) => item.id !== id));
   return (
@@ -23,14 +22,9 @@ const MngBetterreadList = ({ betterreads, articles }: Props) => {
       </div>
       <div className='grid'>
         {opti_betterreads.map((betterread, index) => {
-          const article = articles.find(
-            (item) => item.id === betterread.articleId
-          );
-          if (!article) return null;
           return (
             <MngBetterreadListRow
               key={index}
-              article={article}
               betterread={betterread}
               removeBetterread={() => removeBetterread(betterread.id!)}
             />

@@ -2,11 +2,12 @@
 
 import { SentenceView } from '@/features/article/schema';
 import { cn } from '@/lib/utils';
+import { useMemo } from 'react';
 import {
   BETTERREAD_MAX_COUNT,
   BETTERREAD_PHOTO_MAX_COUNT,
 } from '../../constants';
-import { BetterReadItem, BetterReadItemQuestion } from '../../schema';
+import { BetterReadItemView } from '../../schema';
 import BetterreadFormRow from './BetterreadFormRow';
 import BetterreadFormSentence from './BetterreadFormSentence';
 import UploadBetterreadImage from './UploadBetterreadImage';
@@ -14,8 +15,7 @@ import UploadBetterreadImage from './UploadBetterreadImage';
 type Props = {
   sentences: SentenceView[];
   betterreadId: number;
-  betterreadItems: BetterReadItem[];
-  betterreadItemQuestions: BetterReadItemQuestion[];
+  betterreadItems: BetterReadItemView[];
 };
 
 const dummyIds = [29, 30];
@@ -24,12 +24,16 @@ const BetterreadForm = ({
   sentences,
   betterreadId,
   betterreadItems,
-  betterreadItemQuestions,
 }: Props) => {
   const maxCount = dummyIds.includes(betterreadId) ? 4 : BETTERREAD_MAX_COUNT;
   const photoMaxCount = dummyIds.includes(betterreadId)
     ? 1
     : BETTERREAD_PHOTO_MAX_COUNT;
+
+  const uniqBetterreadItemIds = useMemo(() => {
+    return Array.from(new Set(betterreadItems.map((item) => item.id!)));
+  }, [betterreadItems]);
+
   return (
     <div className='grid gap-4'>
       <div className='text-2xl font-extrabold'>課前準備</div>
@@ -38,12 +42,12 @@ const BetterreadForm = ({
           <span
             className={cn(
               'font-lato text-[90px] font-[900] ',
-              betterreadItemQuestions.length >= maxCount
+              betterreadItems.length >= maxCount
                 ? 'text-gray-700'
                 : 'text-red-500'
             )}
           >
-            {betterreadItemQuestions.length}
+            {betterreadItems.length}
           </span>
           <span className='font-lato text-[48px] font-[900] text-gray-700'>{`/${maxCount}`}</span>
         </div>
@@ -60,15 +64,12 @@ const BetterreadForm = ({
       <div className='text-gray-500 text-center text-3xl font-extrabold'>
         照片裡嚴禁使用“文字”
       </div>
-      {betterreadItems.map((betterreadItem, index) => (
-        <BetterreadFormRow
-          key={index}
-          betterreadItem={betterreadItem}
-          betterreadItemQuestions={betterreadItemQuestions.filter(
-            (q) => q.betterread_item_id === betterreadItem.id
-          )}
-        />
-      ))}
+      {uniqBetterreadItemIds.map((betterreadItemId, index) => {
+        const target = betterreadItems.filter(
+          (item) => item.id === betterreadItemId
+        );
+        return <BetterreadFormRow key={index} betterreadItems={target} />;
+      })}
       <UploadBetterreadImage
         betterreadId={betterreadId}
         showForm={betterreadItems.length < photoMaxCount}

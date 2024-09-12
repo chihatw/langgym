@@ -1,10 +1,16 @@
 import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
-import { BetterRead, BetterReadItem, BetterReadItemQuestion } from '../schema';
+import {
+  BetterRead,
+  BetterReadItemQuestion,
+  BetterReadItemView,
+  BetterreadToggle,
+  BetterReadView,
+} from '../schema';
 
-export async function fetchBetterreads(): Promise<BetterRead[]> {
+export async function fetchBetterreads(): Promise<BetterReadView[]> {
   const supabase = createSupabaseServerComponentClient();
 
-  const { data, error } = await supabase.from('betterread').select();
+  const { data, error } = await supabase.from('betterread_view').select();
 
   if (error) {
     console.error(error.message);
@@ -15,10 +21,7 @@ export async function fetchBetterreads(): Promise<BetterRead[]> {
     return [];
   }
 
-  return data.map((item) => ({
-    ...item,
-    created_at: new Date(item.created_at!),
-  }));
+  return data;
 }
 
 export async function fetchBetterread(
@@ -71,14 +74,15 @@ export async function fetchBetterreadsByUid(
 
 export async function fetchBetterreadItems(
   betterread_id: number
-): Promise<BetterReadItem[]> {
+): Promise<BetterReadItemView[]> {
   const supabase = createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
-    .from('betterread_items')
+    .from('betterread_items_view')
     .select()
     .eq('betterread_id', betterread_id)
-    .order('created_at');
+    .order('item_created_at')
+    .order('question_created_at');
 
   if (error) {
     console.error(error.message);
@@ -91,7 +95,8 @@ export async function fetchBetterreadItems(
 
   return data.map((item) => ({
     ...item,
-    created_at: new Date(item.created_at),
+    item_created_at: new Date(item.item_created_at!),
+    question_created_at: new Date(item.question_created_at!),
   }));
 }
 
@@ -119,4 +124,25 @@ export async function fetchBetterreadItemQuestions(
     ...item,
     created_at: new Date(item.created_at),
   }));
+}
+
+export async function fetchBetterreadToggle(): Promise<
+  BetterreadToggle | undefined
+> {
+  const supabase = createSupabaseServerComponentClient();
+
+  const { data, error } = await supabase
+    .from('betterread_toggle')
+    .select()
+    .eq('id', 1)
+    .single();
+
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+
+  if (!data) return;
+
+  return data;
 }

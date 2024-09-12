@@ -1,3 +1,8 @@
+import MngRealtimeBetterreadForm from '@/features/betterread/components/MngRealtimeBetterreadForm/MngRealtimeBetterreadForm';
+import {
+  fetchBetterreads,
+  fetchBetterreadToggle,
+} from '@/features/betterread/services/server';
 import MngCanvasFormContainer from '@/features/canvas/components/MngCanvasFormContainer';
 import MngMirrorForm from '@/features/mirror/components/MngMirrorForm/MngMirrorForm';
 
@@ -21,13 +26,11 @@ import {
 import MngRedirectToFormLoader from '@/features/redirectTo/components/MngRedirectToForm/MngRedirectToFormLoader';
 import MngSpeedWorkoutForm from '@/features/speedWorkout/components/MngSpeedWorkoutForm';
 import { fetchSpeedWorkout } from '@/features/speedWorkout/services/server';
-import { fetchUsers } from '@/features/user/services/server';
 import { fetchWorkoutItems } from '@/features/workout/services/server';
 
 type Props = {};
 
 const page = async (props: Props) => {
-  const users = await fetchUsers();
   const speedWorkout = await fetchSpeedWorkout();
   const workoutItems = await fetchWorkoutItems();
   const paperCupParams = await fetchPaperCupParams();
@@ -37,11 +40,16 @@ const page = async (props: Props) => {
   const noteAudioPaths = await fetchNoteAudioPaths();
   const pitches = await fetchPitches();
   const pitchesUser = await fetchPitchesUser();
+  const betterreads = await fetchBetterreads();
+  const betterreadToggle = await fetchBetterreadToggle();
 
   return (
     <div className='grid gap-8'>
       <MngRedirectToFormLoader />
-      {/* <PageStateForm users={users} pathnameLogs={pathnameLogs} /> */}
+      <MngRealtimeBetterreadForm
+        betterreads={betterreads}
+        betterreadToggle={betterreadToggle!}
+      />
       <MngSpeedWorkoutForm
         speedWorkout={speedWorkout}
         workoutItems={workoutItems}

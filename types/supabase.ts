@@ -406,6 +406,13 @@ export type Database = {
             referencedRelation: "betterread_items"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "betterread_item_questions_betterread_item_id_fkey"
+            columns: ["betterread_item_id"]
+            isOneToOne: false
+            referencedRelation: "betterread_items_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       betterread_items: {
@@ -439,6 +446,13 @@ export type Database = {
             foreignKeyName: "betterread_items_betterread_id_fkey"
             columns: ["betterread_id"]
             isOneToOne: false
+            referencedRelation: "betterread_items_view"
+            referencedColumns: ["betterread_id"]
+          },
+          {
+            foreignKeyName: "betterread_items_betterread_id_fkey"
+            columns: ["betterread_id"]
+            isOneToOne: false
             referencedRelation: "betterread_view"
             referencedColumns: ["id"]
           },
@@ -448,19 +462,19 @@ export type Database = {
         Row: {
           betterread_id: number | null
           id: number
-          show: boolean
+          questions: number[]
           view_points: number[]
         }
         Insert: {
           betterread_id?: number | null
           id?: number
-          show?: boolean
+          questions?: number[]
           view_points?: number[]
         }
         Update: {
           betterread_id?: number | null
           id?: number
-          show?: boolean
+          questions?: number[]
           view_points?: number[]
         }
         Relationships: [
@@ -470,6 +484,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "betterread"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "betterread_toggle_betterread_id_fkey"
+            columns: ["betterread_id"]
+            isOneToOne: false
+            referencedRelation: "betterread_items_view"
+            referencedColumns: ["betterread_id"]
           },
           {
             foreignKeyName: "betterread_toggle_betterread_id_fkey"
@@ -1404,47 +1425,28 @@ export type Database = {
           },
         ]
       }
+      betterread_items_view: {
+        Row: {
+          betterread_id: number | null
+          id: number | null
+          image_url: string | null
+          item_created_at: string | null
+          question: string | null
+          question_created_at: string | null
+          question_id: number | null
+          title: string | null
+          view_point: string | null
+        }
+        Relationships: []
+      }
       betterread_view: {
         Row: {
-          articleId: number | null
-          chinese: string | null
+          auther: string | null
           display: string | null
           id: number | null
-          japanese: string | null
-          line: number | null
           title: string | null
-          uid: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "betterread_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "articles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "betterread_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["articleId"]
-          },
-          {
-            foreignKeyName: "betterread_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "articles_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "betterread_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       page_states_view: {
         Row: {

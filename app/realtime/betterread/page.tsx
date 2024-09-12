@@ -1,6 +1,6 @@
 import HiddenElements from '@/components/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
-import BetterreadView from '@/features/betterread/components/BetterreadView/BetterreadView';
+import BetterreadRealtimeView from '@/features/betterread/components/BetterreadRealtimeView/BetterreadRealtimeView';
 
 type Props = {};
 
@@ -10,7 +10,7 @@ const RealtimeBetterReadPage = async (props: Props) => {
 
   return (
     <>
-      <BetterreadView />
+      <BetterreadRealtimeView />
       <HiddenElements uid={user.id} cheat={true} />
     </>
   );

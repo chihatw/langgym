@@ -4,14 +4,14 @@ import { Button } from '@/components/ui/button';
 import { deleteImageFile } from '@/features/storage/services/client';
 import { X } from 'lucide-react';
 import Image from 'next/image';
-import { BetterReadItem } from '../../schema';
+import { BetterReadItemView } from '../../schema';
 import { deleteBetterreadItem } from '../../services/actions';
 
-type Props = { betterreadItem: BetterReadItem; isView?: boolean };
+type Props = { betterreadItem: BetterReadItemView; isView?: boolean };
 
 const BetterreadFormRowImage = ({ betterreadItem, isView }: Props) => {
   const action = async () => {
-    const temp = betterreadItem.image_url.split('/');
+    const temp = betterreadItem.image_url!.split('/');
     const path = `${temp.at(-1)}`;
 
     // storage
@@ -22,13 +22,13 @@ const BetterreadFormRowImage = ({ betterreadItem, isView }: Props) => {
     }
 
     // remote
-    deleteBetterreadItem(betterreadItem.id, betterreadItem.betterread_id);
+    deleteBetterreadItem(betterreadItem.id!, betterreadItem.betterread_id!);
   };
 
   return (
     <div className='grid relative'>
       <Image
-        src={betterreadItem.image_url}
+        src={betterreadItem.image_url!}
         alt=''
         className='rounded-lg'
         width={512}

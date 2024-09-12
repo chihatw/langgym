@@ -3,31 +3,31 @@ import { Sentence } from '@/features/article/schema';
 import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
-import { BetterReadItem, BetterReadItemQuestion } from '../../schema';
+import { BetterReadItemView } from '../../schema';
 import BetterreadFormRowImage from '../BetterreadForm/BetterreadFormRowImage';
 import BetterreadFormSentence from '../BetterreadForm/BetterreadFormSentence';
 
 type Props = {};
 
 type FormProps = {
-  show: boolean;
   viewPoints: number[];
+  questions: number[];
   sentences: Sentence[];
   betterreadId: number | null;
-  betterreadItems: BetterReadItem[];
-  betterreadItemQuestions: BetterReadItemQuestion[];
+  betterreadItems: BetterReadItemView[];
+  uniqBetterreadItemIds: number[];
 };
 
 const INITIAL_STATE: FormProps = {
-  show: false,
   viewPoints: [],
+  questions: [],
   sentences: [],
   betterreadId: null,
   betterreadItems: [],
-  betterreadItemQuestions: [],
+  uniqBetterreadItemIds: [],
 };
 
-const BetterreadView = ({}: Props) => {
+const BetterreadRealtimeView = ({}: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
 
   // initialize
@@ -46,15 +46,19 @@ const BetterreadView = ({}: Props) => {
         return;
       }
 
-      const { betterread_id, show, view_points } = data;
+      const { betterread_id, questions, view_points } = data;
 
       if (!betterread_id) return;
-      setValue((prev) => ({
-        ...prev,
-        show,
-        viewPoints: view_points,
-        betterreadId: betterread_id,
-      }));
+
+      setValue((prev) => {
+        const value: FormProps = {
+          ...prev,
+          questions,
+          viewPoints: view_points,
+          betterreadId: betterread_id,
+        };
+        return value;
+      });
     })();
   }, []);
 
@@ -69,13 +73,16 @@ const BetterreadView = ({}: Props) => {
         { event: 'UPDATE', schema: 'public', table: 'betterread_toggle' },
         (preload) => {
           const updated = preload.new;
-          const { show, betterread_id, view_points } = updated;
-          setValue((prev) => ({
-            ...prev,
-            show,
-            viewPoints: view_points,
-            betterreadId: betterread_id,
-          }));
+          const { betterread_id, view_points, questions } = updated;
+          setValue((prev) => {
+            const value: FormProps = {
+              ...prev,
+              questions,
+              viewPoints: view_points,
+              betterreadId: betterread_id,
+            };
+            return value;
+          });
         }
       )
       .subscribe();
@@ -100,20 +107,26 @@ const BetterreadView = ({}: Props) => {
           const inserted = preload.new;
           const { id, view_point, question, betterread_item_id, created_at } =
             inserted;
-          const betterreadItemQuestion: BetterReadItemQuestion = {
-            id,
-            view_point,
-            question,
-            betterread_item_id,
-            created_at: new Date(created_at),
-          };
+
           setValue((prev) => {
-            let { betterreadItemQuestions } = prev;
-            betterreadItemQuestions = [
-              ...betterreadItemQuestions,
-              betterreadItemQuestion,
-            ];
-            return { ...prev, betterreadItemQuestions };
+            let { betterreadItems } = prev;
+
+            const targetItem = prev.betterreadItems.find(
+              (item) => item.id === betterread_item_id
+            )!;
+
+            const betterreadItem: BetterReadItemView = {
+              ...targetItem,
+              question_id: id,
+              question,
+              view_point,
+              question_created_at: new Date(created_at),
+            };
+
+            betterreadItems = [...betterreadItems, betterreadItem];
+
+            const value: FormProps = { ...prev, betterreadItems };
+            return value;
           });
         }
       )
@@ -126,24 +139,19 @@ const BetterreadView = ({}: Props) => {
         },
         (preload) => {
           const updated = preload.new;
-          const { id, view_point, question, betterread_item_id, created_at } =
-            updated;
-          const betterreadItemQuestion: BetterReadItemQuestion = {
-            id,
-            view_point,
-            question,
-            betterread_item_id,
-            created_at: new Date(created_at),
-          };
+          const { id, view_point, question } = updated;
+
           setValue((prev) => {
-            let { betterreadItemQuestions } = prev;
-            betterreadItemQuestions = betterreadItemQuestions.map((item) => {
-              if (item.id === betterreadItemQuestion.id) {
-                return betterreadItemQuestion;
+            let { betterreadItems } = prev;
+
+            betterreadItems = betterreadItems.map((item) => {
+              if (item.question_id === id) {
+                return { ...item, view_point, question };
               }
               return item;
             });
-            return { ...prev, betterreadItemQuestions };
+            const value: FormProps = { ...prev, betterreadItems };
+            return value;
           });
         }
       )
@@ -157,11 +165,14 @@ const BetterreadView = ({}: Props) => {
         (preload) => {
           const { id } = preload.old;
           setValue((prev) => {
-            let { betterreadItemQuestions } = prev;
-            betterreadItemQuestions = betterreadItemQuestions.filter(
-              (item) => item.id !== id
+            let { betterreadItems } = prev;
+            betterreadItems = betterreadItems.filter(
+              (item) => item.question_id !== id
             );
-            return { ...prev, betterreadItemQuestions };
+
+            const value: FormProps = { ...prev, betterreadItems };
+
+            return value;
           });
         }
       )
@@ -205,47 +216,34 @@ const BetterreadView = ({}: Props) => {
       }
 
       const { data: data_i, error: error_i } = await supabase
-        .from('betterread_items')
+        .from('betterread_items_view')
         .select()
         .eq('betterread_id', value.betterreadId)
-        .order('created_at');
+        .order('item_created_at')
+        .order('question_created_at');
       if (error_i) {
         console.error(error_i.message);
         return;
       }
 
-      const betterreadItemIds = data_i.map((item) => item.id);
-
-      let betterreadItemQuestions: BetterReadItemQuestion[] = [];
-
-      if (betterreadItemIds) {
-        const { data, error } = await supabase
-          .from('betterread_item_questions')
-          .select()
-          .in('betterread_item_id', betterreadItemIds);
-
-        if (error) {
-          console.error(error.message);
-          return;
-        }
-        betterreadItemQuestions = data.map((item) => ({
-          ...item,
-          created_at: new Date(item.created_at),
-        }));
-      }
-
-      setValue((prev) => ({
-        ...prev,
-        sentences: data_s.map((item) => ({
-          ...item,
-          created_at: new Date(item.created_at),
-        })),
-        betterreadItems: data_i.map((item) => ({
-          ...item,
-          created_at: new Date(item.created_at),
-        })),
-        betterreadItemQuestions,
-      }));
+      setValue((prev) => {
+        const value: FormProps = {
+          ...prev,
+          sentences: data_s.map((item) => ({
+            ...item,
+            created_at: new Date(item.created_at),
+          })),
+          uniqBetterreadItemIds: Array.from(
+            new Set(data_i.map((item) => item.id!))
+          ),
+          betterreadItems: data_i.map((item) => ({
+            ...item,
+            item_created_at: new Date(item.item_created_at!),
+            question_created_at: new Date(item.question_created_at!),
+          })),
+        };
+        return value;
+      });
     })();
   }, [value.betterreadId]);
 
@@ -262,40 +260,48 @@ const BetterreadView = ({}: Props) => {
       </div>
       <div className='flex justify-center '>
         <div className='grid gap-8 pt-10 mt-6 max-w-lg'>
-          {value.betterreadItems.map((betterreadItem, item_index) => (
-            <div key={item_index} className='grid gap-4'>
-              <BetterreadFormRowImage
-                betterreadItem={betterreadItem}
-                isView={true}
-              />
-              <div className='grid gap-4'>
-                {value.betterreadItemQuestions
-                  .filter((q) => q.betterread_item_id === betterreadItem.id)
-                  .map((question, q_index) => {
-                    if (!value.viewPoints.includes(q_index + item_index * 10))
-                      return null;
+          {value.uniqBetterreadItemIds.map((betterreadItemId) => {
+            const betterreadItem = value.betterreadItems.find(
+              (item) => item.id === betterreadItemId
+            );
+            if (!betterreadItem) return null;
+            const betterreadItems = value.betterreadItems.filter(
+              (item) => item.id === betterreadItemId
+            );
+            return (
+              <div key={betterreadItemId} className='grid gap-4'>
+                <BetterreadFormRowImage
+                  betterreadItem={betterreadItem}
+                  isView={true}
+                />
+                <div className='grid gap-4'>
+                  {betterreadItems.map((item) => {
                     return (
-                      <div key={q_index} className='grid gap-0'>
-                        <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
-                          <div className='text-2xl'>👀</div>
-                          {question.view_point}
-                        </div>
-                        {value.show ? (
+                      <div key={item.question_id!} className='grid gap-0'>
+                        {value.viewPoints.includes(item.question_id!) ? (
+                          <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
+                            <div className='text-2xl'>👀</div>
+                            {item.view_point}
+                          </div>
+                        ) : null}
+
+                        {value.questions.includes(item.question_id!) ? (
                           <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
                             <div className='text-2xl'>❓</div>
-                            {question.question}
+                            {item.question}
                           </div>
                         ) : null}
                       </div>
                     );
                   })}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
   );
 };
 
-export default BetterreadView;
+export default BetterreadRealtimeView;

@@ -3,22 +3,25 @@
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-react';
 import { useOptimistic } from 'react';
-import { BetterReadItemQuestion } from '../../schema';
+import { BetterReadItemView } from '../../schema';
 import { deleteBetterreadItemQuestion } from '../../services/actions';
 
-type Props = { question: BetterReadItemQuestion; betterreadId: number };
+type Props = { betterreadItem: BetterReadItemView };
 
-const BetterreadItemQuestionRow = ({ question, betterreadId }: Props) => {
+const BetterreadItemQuestionRow = ({ betterreadItem }: Props) => {
   const [optiQuestion, removeQuestion] = useOptimistic<
-    BetterReadItemQuestion | null,
+    BetterReadItemView | null,
     void
-  >(question, () => null);
+  >(betterreadItem, () => null);
 
   const action = async () => {
     // local
     removeQuestion();
     // remote
-    deleteBetterreadItemQuestion(question.id, betterreadId);
+    deleteBetterreadItemQuestion(
+      betterreadItem.question_id!,
+      betterreadItem.betterread_id!
+    );
   };
 
   if (!optiQuestion) return null;

@@ -27,17 +27,26 @@ export async function insertBetterread(uid: string, articleId: number) {
 export async function insertBetterreadItemQuestion(
   question: Omit<BetterReadItemQuestion, 'id' | 'created_at'>,
   betterreadId: number
-) {
+): Promise<{ errMsg: string; question?: BetterReadItemQuestion }> {
   const supabase = createSupabaseServerActionClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('betterread_item_questions')
-    .insert(question);
+    .insert(question)
+    .select()
+    .single();
 
   if (error) {
-    return error.message;
+    return { errMsg: error.message };
   }
 
   revalidateBetterread(betterreadId);
+  return {
+    errMsg: '',
+    question: {
+      ...data,
+      created_at: new Date(data.created_at),
+    },
+  };
 }
 
 export async function deleteBetterread(id: number) {
@@ -61,6 +70,24 @@ export async function deleteBetterreadItem(id: number, betterreadId: number) {
     .delete()
     .eq('id', id);
 
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+  revalidateBetterread(betterreadId);
+}
+
+export async function updateBetterreadItemQuestion(
+  id: number,
+  view_point: string,
+  question: string,
+  betterreadId: number
+) {
+  const supabase = createSupabaseServerActionClient();
+  const { error } = await supabase
+    .from('betterread_item_questions')
+    .update({ view_point, question })
+    .eq('id', id);
   if (error) {
     console.error(error.message);
     return;
@@ -103,4 +130,48 @@ export async function deleteBetterreadImagePath(
     return;
   }
   revalidateBetterread(betterreadId);
+}
+
+export async function updateBetterreadToggleBetterreadId(
+  betterread_id: number
+) {
+  const supabase = createSupabaseServerActionClient();
+
+  const { error } = await supabase
+    .from('betterread_toggle')
+    .update({ betterread_id })
+    .eq('id', 1);
+
+  if (error) {
+    console.error(error.message);
+  }
+  revalidatePath('/mng/realtime');
+}
+
+export async function updateBetterreadToggleViewPoints(view_points: number[]) {
+  const supabase = createSupabaseServerActionClient();
+
+  const { error } = await supabase
+    .from('betterread_toggle')
+    .update({ view_points })
+    .eq('id', 1);
+
+  if (error) {
+    console.error(error.message);
+  }
+  revalidatePath('/mng/realtime');
+}
+
+export async function updateBetterreadToggleQuestions(questions: number[]) {
+  const supabase = createSupabaseServerActionClient();
+
+  const { error } = await supabase
+    .from('betterread_toggle')
+    .update({ questions })
+    .eq('id', 1);
+
+  if (error) {
+    console.error(error.message);
+  }
+  revalidatePath('/mng/realtime');
 }
