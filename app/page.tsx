@@ -14,7 +14,6 @@ export default async function Home() {
     case 'admin':
       return <MngArticleListLoader />;
     case 'a':
-      // pathnamelog を設置
       return <GroupATop uid={user.id} />;
     default:
       return null;

@@ -43,3 +43,41 @@ export async function deletePostItNoteItem(id: number, postitNoteId: number) {
 
   revalidatePostitNote(postitNoteId);
 }
+
+export async function updatePostItWorkoutChecked(
+  id: number,
+  checked: number[]
+) {
+  const supabase = createSupabaseServerActionClient();
+
+  const { error } = await supabase
+    .from('postit_workouts')
+    .update({ checked })
+    .eq('id', id);
+
+  if (error) {
+    console.log(error.message);
+    return;
+  }
+
+  revalidatePath('/postit/workout');
+}
+
+export async function updatePostItWorkoutJapanese(
+  id: number,
+  japanese: string
+): Promise<string | undefined> {
+  const supabase = createSupabaseServerActionClient();
+
+  const { error } = await supabase
+    .from('postit_workouts')
+    .update({ japanese })
+    .eq('id', id);
+
+  if (error) {
+    return error.message;
+  }
+
+  revalidatePath('/postit/workout');
+  return;
+}

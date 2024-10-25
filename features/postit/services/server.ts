@@ -1,5 +1,11 @@
 import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
-import { PostIt, PostItItem, PostItNote, PostItNoteItem } from '../schema';
+import {
+  PostIt,
+  PostItItem,
+  PostItNote,
+  PostItNoteItem,
+  PostItWorkout,
+} from '../schema';
 
 export async function fetchPostItByUid(
   uid: string
@@ -93,4 +99,22 @@ export async function fetchPostItNoteItemsByPostItNoteId(
     ...item,
     created_at: new Date(item.created_at!),
   }));
+}
+
+export async function fetchPostItWorkoutByUid(
+  uid: string
+): Promise<PostItWorkout | undefined> {
+  const supabase = createSupabaseServerComponentClient();
+  const { data, error } = await supabase
+    .from('postit_workouts')
+    .select()
+    .eq('uid', uid)
+    .single();
+
+  if (error) {
+    console.log(error.message);
+    return;
+  }
+
+  return data;
 }

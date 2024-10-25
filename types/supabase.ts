@@ -316,15 +316,7 @@ export type Database = {
           title?: string
           uid?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "articles_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       betterread: {
         Row: {
@@ -365,13 +357,6 @@ export type Database = {
             columns: ["articleId"]
             isOneToOne: false
             referencedRelation: "articles_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "betterread_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -574,15 +559,7 @@ export type Database = {
           text?: string
           uid?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "homepage_infos_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       mirror_workout_realtime: {
         Row: {
@@ -633,15 +610,7 @@ export type Database = {
           totalTime?: number
           uid?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "mirror_workout_results_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       note: {
         Row: {
@@ -689,15 +658,7 @@ export type Database = {
           pageState?: string
           uid?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "page_states_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       paper_cup_params: {
         Row: {
@@ -827,15 +788,61 @@ export type Database = {
           id?: number
           uid?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "postit_notes_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
+      }
+      postit_workouts: {
+        Row: {
+          checked: number[]
+          descriptions: string[]
+          id: number
+          japanese: string
+          japanese_passed: boolean | null
+          one_sentence_image_url: string
+          one_sentence_passed: boolean
+          one_topic_image_url: string
+          one_topic_passed: boolean
+          ordered_image_url: string
+          ordered_passed: boolean
+          three_topics_image_urls: string[]
+          three_topics_passed: boolean
+          topic: string
+          uid: string
+        }
+        Insert: {
+          checked?: number[]
+          descriptions?: string[]
+          id?: number
+          japanese?: string
+          japanese_passed?: boolean | null
+          one_sentence_image_url?: string
+          one_sentence_passed?: boolean
+          one_topic_image_url?: string
+          one_topic_passed?: boolean
+          ordered_image_url?: string
+          ordered_passed?: boolean
+          three_topics_image_urls?: string[]
+          three_topics_passed?: boolean
+          topic?: string
+          uid: string
+        }
+        Update: {
+          checked?: number[]
+          descriptions?: string[]
+          id?: number
+          japanese?: string
+          japanese_passed?: boolean | null
+          one_sentence_image_url?: string
+          one_sentence_passed?: boolean
+          one_topic_image_url?: string
+          one_topic_passed?: boolean
+          ordered_image_url?: string
+          ordered_passed?: boolean
+          three_topics_image_urls?: string[]
+          three_topics_passed?: boolean
+          topic?: string
+          uid?: string
+        }
+        Relationships: []
       }
       postits: {
         Row: {
@@ -850,15 +857,7 @@ export type Database = {
           id?: number
           uid?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "postits_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       record_params: {
         Row: {
@@ -924,15 +923,7 @@ export type Database = {
           uid?: string | null
           updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "redirect_tos_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       sentences: {
         Row: {
@@ -1058,15 +1049,7 @@ export type Database = {
           display?: string
           uid?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "users_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       workout_items: {
         Row: {
@@ -1226,15 +1209,7 @@ export type Database = {
           title?: string
           uid?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "public_workouts_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
@@ -1259,15 +1234,15 @@ export type Database = {
             foreignKeyName: "public_article_pitch_quiz_answers_quizId_fkey"
             columns: ["quizId"]
             isOneToOne: false
-            referencedRelation: "article_pitch_quizzes"
-            referencedColumns: ["id"]
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["quizId"]
           },
           {
             foreignKeyName: "public_article_pitch_quiz_answers_quizId_fkey"
             columns: ["quizId"]
             isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["quizId"]
+            referencedRelation: "article_pitch_quizzes"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "public_article_pitch_quiz_answers_quizId_fkey"
@@ -1310,11 +1285,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "articles_uid_fkey"
-            columns: ["uid"]
+            foreignKeyName: "public_article_pitch_questions_articlePitchQuizId_fkey"
+            columns: ["quizId"]
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["quizId"]
           },
           {
             foreignKeyName: "public_article_pitch_questions_articlePitchQuizId_fkey"
@@ -1327,21 +1302,7 @@ export type Database = {
             foreignKeyName: "public_article_pitch_questions_articlePitchQuizId_fkey"
             columns: ["quizId"]
             isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["quizId"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_questions_articlePitchQuizId_fkey"
-            columns: ["quizId"]
-            isOneToOne: false
             referencedRelation: "article_pitch_quizzes_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "articles"
             referencedColumns: ["id"]
           },
           {
@@ -1350,6 +1311,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "article_pitch_quiz_answer_view"
             referencedColumns: ["articleId"]
+          },
+          {
+            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles"
+            referencedColumns: ["id"]
           },
           {
             foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
@@ -1377,13 +1345,6 @@ export type Database = {
             foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
             columns: ["articleId"]
             isOneToOne: false
-            referencedRelation: "articles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
             referencedRelation: "article_pitch_quiz_answer_view"
             referencedColumns: ["articleId"]
           },
@@ -1391,14 +1352,14 @@ export type Database = {
             foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
             columns: ["articleId"]
             isOneToOne: false
-            referencedRelation: "articles_view"
+            referencedRelation: "articles"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "users_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: true
-            referencedRelation: "users"
+            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
+            columns: ["articleId"]
+            isOneToOne: false
+            referencedRelation: "articles_view"
             referencedColumns: ["id"]
           },
         ]
@@ -1415,15 +1376,7 @@ export type Database = {
           title: string | null
           uid: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "articles_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       betterread_items_view: {
         Row: {
@@ -1454,15 +1407,7 @@ export type Database = {
           pageState: string | null
           uid: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "page_states_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       redirect_tos_view: {
         Row: {
@@ -1472,15 +1417,7 @@ export type Database = {
           uid: string | null
           updated_at: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "redirect_tos_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       sentences_view: {
         Row: {
@@ -1505,11 +1442,11 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "articles_uid_fkey"
-            columns: ["uid"]
+            foreignKeyName: "public_sentences_articleId_fkey"
+            columns: ["articleId"]
             isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
+            referencedRelation: "article_pitch_quiz_answer_view"
+            referencedColumns: ["articleId"]
           },
           {
             foreignKeyName: "public_sentences_articleId_fkey"
@@ -1517,13 +1454,6 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "articles"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_sentences_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["articleId"]
           },
           {
             foreignKeyName: "public_sentences_articleId_fkey"
@@ -1562,13 +1492,6 @@ export type Database = {
             columns: ["workoutId"]
             isOneToOne: false
             referencedRelation: "workouts_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_workouts_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -1629,13 +1552,6 @@ export type Database = {
             referencedRelation: "workout_records"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "public_workouts_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
         ]
       }
       workouts_view: {
@@ -1649,15 +1565,7 @@ export type Database = {
           title: string | null
           uid: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "public_workouts_uid_fkey"
-            columns: ["uid"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Functions: {
@@ -1752,4 +1660,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
