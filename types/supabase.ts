@@ -796,7 +796,7 @@ export type Database = {
           descriptions: string[]
           id: number
           japanese: string
-          japanese_passed: boolean | null
+          japanese_passed: boolean
           one_sentence_image_url: string
           one_sentence_passed: boolean
           one_topic_image_url: string
@@ -813,7 +813,7 @@ export type Database = {
           descriptions?: string[]
           id?: number
           japanese?: string
-          japanese_passed?: boolean | null
+          japanese_passed?: boolean
           one_sentence_image_url?: string
           one_sentence_passed?: boolean
           one_topic_image_url?: string
@@ -830,7 +830,7 @@ export type Database = {
           descriptions?: string[]
           id?: number
           japanese?: string
-          japanese_passed?: boolean | null
+          japanese_passed?: boolean
           one_sentence_image_url?: string
           one_sentence_passed?: boolean
           one_topic_image_url?: string
