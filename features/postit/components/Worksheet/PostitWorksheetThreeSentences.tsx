@@ -24,10 +24,7 @@ const PostitWorksheetThreeSentences = ({ workout }: Props) => {
         <AccordionTrigger>
           <div className='text-xl text-slate-700 font-extrabold flex gap-2 items-center'>
             <div>1. 寫三個日文短句</div>
-            {THREE_SENTENCES_VALUES.every((i) => workout.checked.includes(i)) &&
-            !!workout.japanese ? (
-              <div>✅</div>
-            ) : null}
+            {workout.japanese_passed ? <div>✅</div> : null}
           </div>
         </AccordionTrigger>
         {/* textarea の outline が accordion の描画幅内に収まるように px-1 */}

@@ -25,11 +25,7 @@ const PostitWorksheetRoadmap = ({ workout }: Props) => {
           <div className='pl-[1em] grid gap-2'>
             <div className='flex gap-2 items-center text-lg font-bold'>
               <div>1. 寫三個日文短句</div>
-              {THREE_SENTENCES_VALUES.every((i) =>
-                workout.checked.includes(i)
-              ) && !!workout.japanese ? (
-                <div>✅</div>
-              ) : null}
+              {workout.japanese_passed ? <div>✅</div> : null}
             </div>
             <div
               className={cn(
