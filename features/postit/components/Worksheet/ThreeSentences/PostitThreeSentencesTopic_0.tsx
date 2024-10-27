@@ -1,5 +1,5 @@
-import { PostItWorkout } from '../../schema';
-import PostitWorksheetCheckBox from './PostitWorksheetCheckBox';
+import { PostItWorkout } from '../../../schema';
+import PostitWorksheetCheckBox from '../PostitWorksheetCheckBox';
 
 type Props = {
   workout: PostItWorkout;

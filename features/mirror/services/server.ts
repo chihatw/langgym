@@ -5,7 +5,7 @@ import { MirrorWorkoutRealtime, MirrorWorkoutResult } from '../schema';
 export async function fetchMirrorWorkoutResults(): Promise<
   MirrorWorkoutResult[]
 > {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('mirror_workout_results')
     .select();
@@ -20,7 +20,7 @@ export async function fetchMirrorWorkoutResults(): Promise<
 export async function fetchMirrorWorkoutResultById(
   id: number
 ): Promise<MirrorWorkoutResult | undefined> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('mirror_workout_results')
     .select()
@@ -41,7 +41,7 @@ export async function fetchMirrorWorkoutResultById(
 export async function fetchMirrorWorkoutResultsByUid(
   uid: string
 ): Promise<MirrorWorkoutResult[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('mirror_workout_results')
     .select()
@@ -59,7 +59,7 @@ export async function fetchMirrorWorkoutResultsByUid(
 export async function fetchLatestMirrorWorkoutResultByUid(
   uid: string
 ): Promise<MirrorWorkoutResult | undefined> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('mirror_workout_results')
     .select()
@@ -79,7 +79,7 @@ export async function fetchLatestMirrorWorkoutResultByUid(
 export async function fetchMirrorWorkoutRealtime(): Promise<
   MirrorWorkoutRealtime | undefined
 > {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('mirror_workout_realtime')
     .select()

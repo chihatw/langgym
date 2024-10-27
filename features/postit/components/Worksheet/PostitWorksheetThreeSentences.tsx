@@ -6,12 +6,13 @@ import {
 } from '@/components/ui/accordion';
 import { THREE_SENTENCES_VALUES } from '../../constants';
 import { PostItWorkout } from '../../schema';
-import PostitThreeSentencesTextarea from './PostitThreeSentencesTextarea';
-import PostitThreeSentencesTopic_0 from './PostitThreeSentencesTopic_0';
-import PostitThreeSentencesTopic_1 from './PostitThreeSentencesTopic_1';
-import PostitThreeSentencesTopic_2 from './PostitThreeSentencesTopic_2';
-import PostitThreeSentencesTopic_3 from './PostitThreeSentencesTopic_3';
+
 import PostitWorksheetMultipleCheckButton from './PostitWorksheetMultipleCheckButton';
+import PostitThreeSentencesTextarea from './ThreeSentences/PostitThreeSentencesTextarea';
+import PostitThreeSentencesTopic_0 from './ThreeSentences/PostitThreeSentencesTopic_0';
+import PostitThreeSentencesTopic_1 from './ThreeSentences/PostitThreeSentencesTopic_1';
+import PostitThreeSentencesTopic_2 from './ThreeSentences/PostitThreeSentencesTopic_2';
+import PostitThreeSentencesTopic_3 from './ThreeSentences/PostitThreeSentencesTopic_3';
 
 type Props = {
   workout: PostItWorkout;

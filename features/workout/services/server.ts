@@ -8,7 +8,7 @@ import {
 } from '../schema';
 
 export async function fetchWorkouts(): Promise<WorkoutView[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('workouts_view')
     .select()
@@ -24,7 +24,7 @@ export async function fetchWorkouts(): Promise<WorkoutView[]> {
 }
 
 export async function fetchWorkoutsByUid(uid: string): Promise<Workout[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('workouts')
     .select()
@@ -44,7 +44,7 @@ export async function fetchWorkoutsByUid(uid: string): Promise<Workout[]> {
 export async function fetchWorkoutRecordsByWorkoutIds(
   workoutIds: number[]
 ): Promise<WorkoutRecord[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('workout_records')
@@ -65,7 +65,7 @@ export async function fetchWorkoutRecordsByWorkoutIds(
 export async function fetchWorkoutById(
   id: number
 ): Promise<Workout | undefined> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('workouts')
     .select()
@@ -83,7 +83,7 @@ export async function fetchWorkoutById(
 }
 
 export async function fetchWorkoutItems(): Promise<WorkoutItemView[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('workout_items_view')
     .select()
@@ -102,7 +102,7 @@ export async function fetchWorkoutItems(): Promise<WorkoutItemView[]> {
 export async function fetchWorkoutRecordRows(): Promise<
   WorkoutRecordRowView[]
 > {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('workout_record_rows_view')
@@ -123,7 +123,7 @@ export async function fetchWorkoutRecordRows(): Promise<
 export async function fetchWorkoutItemsByWorkoutId(
   workoutId: number
 ): Promise<WorkoutItemView[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('workout_items_view')
@@ -145,7 +145,7 @@ export async function fetchWorkoutItemsByWorkoutId(
 export async function fetchWorkoutRecordRowsByWorkoutId(
   id: number
 ): Promise<WorkoutRecordRowView[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('workout_record_rows_view')

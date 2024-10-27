@@ -4,7 +4,7 @@ import { HomepageInfo } from '../schema';
 export async function fetchHomepageInfosByUid(
   uid: string
 ): Promise<HomepageInfo[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('homepage_infos')

@@ -10,7 +10,7 @@ import {
 export async function fetchPostItByUid(
   uid: string
 ): Promise<PostIt | undefined> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('postits')
@@ -33,7 +33,7 @@ export async function fetchPostItByUid(
 export async function fetchPostItItemsByPostitId(
   postitId: number
 ): Promise<PostItItem[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('postit_items')
     .select()
@@ -55,7 +55,7 @@ export async function fetchPostItItemsByPostitId(
 export async function fetchPostItNoteByUid(
   uid: string
 ): Promise<PostItNote | undefined> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('postit_notes')
@@ -78,7 +78,7 @@ export async function fetchPostItNoteByUid(
 export async function fetchPostItNoteItemsByPostItNoteId(
   postit_note_id: number
 ): Promise<PostItNoteItem[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('postit_note_items')
@@ -104,7 +104,7 @@ export async function fetchPostItNoteItemsByPostItNoteId(
 export async function fetchPostItWorkoutByUid(
   uid: string
 ): Promise<PostItWorkout | undefined> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('postit_workouts')
     .select()

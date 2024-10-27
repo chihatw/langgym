@@ -7,7 +7,7 @@ import {
 export async function fetchAnswers(
   limit: number = 10
 ): Promise<ArticlePitchQuizAnswerView[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('article_pitch_quiz_answer_view')
@@ -31,7 +31,7 @@ export async function fetchAnswers(
 export async function fetchAnswerRowsbyAnswerIds(
   answerIds: number[]
 ): Promise<ArticlePitchQuizAnswerRowView[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('article_pitch_quiz_answer_rows_view')
@@ -54,7 +54,7 @@ export async function fetchAnswerRowsbyAnswerIds(
 export async function fetchAnswerRowsbyQuizIds(
   quizIds: number[]
 ): Promise<ArticlePitchQuizAnswerRowView[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('article_pitch_quiz_answer_rows_view')

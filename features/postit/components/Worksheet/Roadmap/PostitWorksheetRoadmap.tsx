@@ -9,8 +9,8 @@ import { Lock } from 'lucide-react';
 import {
   PREPARE_POSTITS_VALUES,
   THREE_SENTENCES_VALUES,
-} from '../../constants';
-import { PostItWorkout } from '../../schema';
+} from '../../../constants';
+import { PostItWorkout } from '../../../schema';
 
 type Props = { workout: PostItWorkout };
 

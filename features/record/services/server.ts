@@ -2,7 +2,7 @@ import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
 import { Record, RecordParams } from '../schema';
 
 export async function fetchRecordParams(): Promise<undefined | RecordParams> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('record_params')
     .select()
@@ -21,7 +21,7 @@ export async function fetchRecordParams(): Promise<undefined | RecordParams> {
 }
 
 export async function fetchRecords(): Promise<Record[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase.from('records').select();
 
   if (error) {

@@ -1,9 +1,9 @@
 'use client';
 import SubmitServerActionButton from '@/components/SubmitServerActionButton';
 import { Textarea } from '@/components/ui/textarea';
+import { PostItWorkout } from '@/features/postit/schema';
+import { updatePostItWorkoutJapanese } from '@/features/postit/services/actions';
 import { ChangeEvent, useEffect, useState, useTransition } from 'react';
-import { PostItWorkout } from '../../schema';
-import { updatePostItWorkoutJapanese } from '../../services/actions';
 
 type Props = { workout: PostItWorkout; values: number[] };
 

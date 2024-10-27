@@ -8,7 +8,7 @@ import {
 } from '../schema';
 
 export async function fetchBetterreads(): Promise<BetterReadView[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase.from('betterread_view').select();
 
@@ -27,7 +27,7 @@ export async function fetchBetterreads(): Promise<BetterReadView[]> {
 export async function fetchBetterread(
   id: number
 ): Promise<BetterRead | undefined> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('betterread')
     .select()
@@ -49,7 +49,7 @@ export async function fetchBetterread(
 export async function fetchBetterreadsByUid(
   uid: string
 ): Promise<BetterRead[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('betterread')
@@ -75,7 +75,7 @@ export async function fetchBetterreadsByUid(
 export async function fetchBetterreadItems(
   betterread_id: number
 ): Promise<BetterReadItemView[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('betterread_items_view')
@@ -103,7 +103,7 @@ export async function fetchBetterreadItems(
 export async function fetchBetterreadItemQuestions(
   betterread_item_ids: number[]
 ): Promise<BetterReadItemQuestion[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('betterread_item_questions')
@@ -129,7 +129,7 @@ export async function fetchBetterreadItemQuestions(
 export async function fetchBetterreadToggle(): Promise<
   BetterreadToggle | undefined
 > {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('betterread_toggle')

@@ -1,7 +1,7 @@
 import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
 
 export async function getUserFromServerSide() {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const {
     data: { user },

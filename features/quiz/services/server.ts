@@ -4,7 +4,7 @@ import { ArticlePitchQuestionView, ArticlePitchQuizView } from '../schema';
 export async function fetchArticlePitchQuizzes(
   limit: number
 ): Promise<ArticlePitchQuizView[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('article_pitch_quizzes_view')
     .select()
@@ -26,7 +26,7 @@ export async function fetchArticlePitchQuizzes(
 export async function fetchArticlePitchQuizzesByUid(
   uid: string
 ): Promise<ArticlePitchQuizView[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
   const { data, error } = await supabase
     .from('article_pitch_quizzes_view')
     .select()
@@ -50,7 +50,7 @@ export async function fetchArticlePitchQuizzesByUid(
 export async function fetchArticlePitchQuizQuestions(
   quizId: number
 ): Promise<ArticlePitchQuestionView[]> {
-  const supabase = createSupabaseServerComponentClient();
+  const supabase = await createSupabaseServerComponentClient();
 
   const { data, error } = await supabase
     .from('article_pitch_quiz_questions_view')
