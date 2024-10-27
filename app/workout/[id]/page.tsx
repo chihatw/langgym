@@ -9,10 +9,16 @@ import {
 } from '@/features/workout/services/server';
 
 type Props = {
-  params: { id: number };
+  params: Promise<{ id: number }>;
 };
 
-const WorkoutPage = async ({ params: { id } }: Props) => {
+const WorkoutPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const user = await getUserFromServerSide();
   if (!user) return null;
 

@@ -11,7 +11,7 @@ export async function revalidateBetterread(betterreadId: number) {
 }
 
 export async function insertBetterread(uid: string, articleId: number) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { error } = await supabase
     .from('betterread')
     .insert({ uid, articleId });
@@ -28,7 +28,7 @@ export async function insertBetterreadItemQuestion(
   question: Omit<BetterReadItemQuestion, 'id' | 'created_at'>,
   betterreadId: number
 ): Promise<{ errMsg: string; question?: BetterReadItemQuestion }> {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { data, error } = await supabase
     .from('betterread_item_questions')
     .insert(question)
@@ -50,7 +50,7 @@ export async function insertBetterreadItemQuestion(
 }
 
 export async function deleteBetterread(id: number) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { error } = await supabase.from('betterread').delete().eq('id', id);
 
@@ -63,7 +63,7 @@ export async function deleteBetterread(id: number) {
 }
 
 export async function deleteBetterreadItem(id: number, betterreadId: number) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { error } = await supabase
     .from('betterread_items')
@@ -83,7 +83,7 @@ export async function updateBetterreadItemQuestion(
   question: string,
   betterreadId: number
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { error } = await supabase
     .from('betterread_item_questions')
     .update({ view_point, question })
@@ -99,7 +99,7 @@ export async function deleteBetterreadItemQuestion(
   id: number,
   betterreadId: number
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { error } = await supabase
     .from('betterread_item_questions')
@@ -117,7 +117,7 @@ export async function deleteBetterreadImagePath(
   betterreadId: number,
   index: number
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { error } = await supabase
     .from('betterread_image_paths')
@@ -135,7 +135,7 @@ export async function deleteBetterreadImagePath(
 export async function updateBetterreadToggleBetterreadId(
   betterread_id: number
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { error } = await supabase
     .from('betterread_toggle')
@@ -149,7 +149,7 @@ export async function updateBetterreadToggleBetterreadId(
 }
 
 export async function updateBetterreadToggleViewPoints(view_points: number[]) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { error } = await supabase
     .from('betterread_toggle')
@@ -163,7 +163,7 @@ export async function updateBetterreadToggleViewPoints(view_points: number[]) {
 }
 
 export async function updateBetterreadToggleQuestions(questions: number[]) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { error } = await supabase
     .from('betterread_toggle')

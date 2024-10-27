@@ -6,10 +6,16 @@ import {
 } from '@/features/betterread/services/server';
 
 type Props = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-const MngBetterreadPage = async ({ params: { id } }: Props) => {
+const MngBetterreadPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const betterreadId = parseInt(id);
 
   const betterread = await fetchBetterread(betterreadId);

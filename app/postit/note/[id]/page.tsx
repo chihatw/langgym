@@ -5,9 +5,15 @@ import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/
 import PostitNoteForm from '@/features/postit/components/PostitNoteForm';
 import { fetchPostItNoteItemsByPostItNoteId } from '@/features/postit/services/server';
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
-const PostItNotePage = async ({ params: { id } }: Props) => {
+const PostItNotePage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const postitNoteItems = await fetchPostItNoteItemsByPostItNoteId(
     parseInt(id)
   );

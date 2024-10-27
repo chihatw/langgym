@@ -30,7 +30,7 @@ function revalidatePath_article_marks(id: number) {
 export async function insertArticle(
   article: Omit<Article, 'id' | 'created_at'>
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { error } = await supabase.from('articles').insert(article);
   if (error) {
     return error.message;
@@ -47,7 +47,7 @@ export async function updateArticle(
     title: string;
   }
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { error } = await supabase
     .from('articles')
     .update({ ...item })
@@ -60,7 +60,7 @@ export async function updateArticle(
 }
 
 export async function deleteArticle(id: number) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { error } = await supabase.from('articles').delete().eq('id', id);
   if (error) {
     console.error(error.message);
@@ -74,7 +74,7 @@ export async function batchInsertSentences(
   articleId: number,
   sentences: Omit<Sentence, 'id' | 'created_at'>[]
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   // 既存の sentenes を削除
   const { error } = await supabase
@@ -99,7 +99,7 @@ export async function updateArticleIsShowAccents(
   id: number,
   isShowAccents: boolean
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { error } = await supabase
     .from('articles')
     .update({ isShowAccents })
@@ -112,7 +112,7 @@ export async function updateArticleIsShowAccents(
 }
 
 export async function updateArticleIsArchived(id: number, isArchived: boolean) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { error } = await supabase
     .from('articles')
     .update({ isArchived })
@@ -125,7 +125,7 @@ export async function updateArticleIsArchived(id: number, isArchived: boolean) {
 }
 
 export async function updateArticleAudioPath(id: number, audioPath: string) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { error } = await supabase
     .from('articles')
     .update({ audioPath })
@@ -140,7 +140,7 @@ export async function batchInsertArticleMarks(
   articleId: number,
   marks: Omit<ArticleMark, 'id' | 'created_at'>[]
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   // 既存の articleMarks を削除
   const { error } = await supabase
@@ -165,7 +165,7 @@ export async function upsertArticleRecordedAssignment(
   articleId: number,
   assignment: Omit<ArticleRecordedAssignment, 'id' | 'created_at'>
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { error } = await supabase
     .from('article_recorded_assignments')
     .upsert(assignment)
@@ -181,7 +181,7 @@ export async function deleteArticleRecordedAssignment(
   articleId: number,
   id: number
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { error } = await supabase
     .from('article_recorded_assignments')
     .delete()

@@ -2,10 +2,16 @@ import QuizForm from '@/features/quiz/components/QuizForm/QuizForm';
 import { fetchArticlePitchQuizQuestions } from '@/features/quiz/services/server';
 
 type Props = {
-  params: { id: number };
+  params: Promise<{ id: number }>;
 };
 
-const QuizTestPlayPage = async ({ params: { id } }: Props) => {
+const QuizTestPlayPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const questions = await fetchArticlePitchQuizQuestions(id);
 
   return (

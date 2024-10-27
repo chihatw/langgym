@@ -5,9 +5,15 @@ import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/
 import QuizForm from '@/features/quiz/components/QuizForm/QuizForm';
 import { fetchArticlePitchQuizQuestions } from '@/features/quiz/services/server';
 
-type Props = { params: { id: number } };
+type Props = { params: Promise<{ id: number }> };
 
-const QuizPage = async ({ params: { id } }: Props) => {
+const QuizPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const user = await getUserFromServerSide();
   if (!user) return null;
 

@@ -7,7 +7,7 @@ import { MirrorWorkoutResult } from '../schema';
 export async function insertMirrorWorkoutResult(
   result: Omit<MirrorWorkoutResult, 'id'>
 ): Promise<number | undefined> {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { data, error } = await supabase
     .from('mirror_workout_results')

@@ -4,9 +4,15 @@ import {
   fetchWorkoutItemsByWorkoutId,
 } from '@/features/workout/services/server';
 
-type Props = { params: { id: number } };
+type Props = { params: Promise<{ id: number }> };
 
-const WorkoutItemsPage = async ({ params: { id } }: Props) => {
+const WorkoutItemsPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   // workoutItems がない場合のため
   const workout = await fetchWorkoutById(id);
   if (!workout) return null;

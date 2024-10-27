@@ -5,9 +5,15 @@ import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/
 import PostitForm from '@/features/postit/components/PostitForm';
 import { fetchPostItItemsByPostitId } from '@/features/postit/services/server';
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
-const PostItPage = async ({ params: { id } }: Props) => {
+const PostItPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const user = await getUserFromServerSide();
   if (!user) return null;
 

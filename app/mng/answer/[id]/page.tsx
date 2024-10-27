@@ -3,10 +3,16 @@ import { fetchAnswerRowsbyAnswerIds } from '@/features/answer/services/server';
 import { buildArticlePitchQuizScore } from '@/features/answer/services/utils';
 
 type Props = {
-  params: { id: number };
+  params: Promise<{ id: number }>;
 };
 
-const AnswerPage = async ({ params: { id } }: Props) => {
+const AnswerPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const answerRows = await fetchAnswerRowsbyAnswerIds([id]);
 
   if (!answerRows.length) return null;

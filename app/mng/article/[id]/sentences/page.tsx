@@ -4,9 +4,15 @@ import {
   fetchSentencesByArticleId,
 } from '@/features/article/services/server';
 
-type Props = { params: { id: number } };
+type Props = { params: Promise<{ id: number }> };
 
-const SentencesPage = async ({ params: { id } }: Props) => {
+const SentencesPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   // sentences がない場合のため
   const article = await fetchArticleById(id);
   if (!article) return;

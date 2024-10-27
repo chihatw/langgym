@@ -7,10 +7,16 @@ import { getUserFromServerSide } from '@/features/auth/services/server';
 import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/server';
 
 type Props = {
-  params: { id: number };
+  params: Promise<{ id: number }>;
 };
 
-const AnswerPage = async ({ params: { id } }: Props) => {
+const AnswerPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const user = await getUserFromServerSide();
   if (!user) return null;
 

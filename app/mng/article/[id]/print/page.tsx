@@ -2,10 +2,16 @@ import { fetchSentencesByArticleId } from '@/features/article/services/server';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 
 type Props = {
-  params: { id: number };
+  params: Promise<{ id: number }>;
 };
 
-const PrintArticlePage = async ({ params: { id } }: Props) => {
+const PrintArticlePage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const sentences = await fetchSentencesByArticleId(id);
 
   return (

@@ -9,9 +9,15 @@ import {
 } from '@/features/betterread/services/server';
 import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/server';
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
-const BetterreadPage = async ({ params: { id } }: Props) => {
+const BetterreadPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const betterreadId = parseInt(id);
 
   const betterread = await fetchBetterread(parseInt(id));

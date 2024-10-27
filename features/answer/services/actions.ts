@@ -8,7 +8,7 @@ export async function insertQuizAnswers(
   quizId: number,
   rows: Omit<ArticlePitchQuizAnswerRow, 'id' | 'created_at' | 'answerId'>[]
 ): Promise<{ errMsg?: string; answerId?: number }> {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { data: _answer, error: error_a } = await supabase
     .from('article_pitch_quiz_answers')
     .insert({ quizId })
@@ -37,7 +37,7 @@ export async function insertQuizAnswers(
 }
 
 export async function deleteAnswer(id: number) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { error } = await supabase
     .from('article_pitch_quiz_answers')

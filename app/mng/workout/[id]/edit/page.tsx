@@ -3,10 +3,16 @@ import WorkoutEditForm from '@/features/workout/components/WorkoutEditForm';
 import { fetchWorkoutById } from '@/features/workout/services/server';
 
 type Props = {
-  params: { id: number };
+  params: Promise<{ id: number }>;
 };
 
-const WorkoutEditPage = async ({ params: { id } }: Props) => {
+const WorkoutEditPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   if (typeof id === undefined) {
     return null;
   }

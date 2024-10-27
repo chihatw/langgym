@@ -6,9 +6,15 @@ import {
   fetchMirrorWorkoutResultById,
 } from '@/features/mirror/services/server';
 
-type Props = { params: { resultId: string } };
+type Props = { params: Promise<{ resultId: string }> };
 
-const MirrorWorkoutResultPage = async ({ params: { resultId } }: Props) => {
+const MirrorWorkoutResultPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    resultId
+  } = params;
+
   const user = await getUserFromServerSide();
   if (!user) return null;
 

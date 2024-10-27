@@ -8,7 +8,7 @@ export async function insertQuiz(
   quiz: Omit<ArticlePitchQuiz, 'id' | 'created_at' | 'hasAudio' | 'isDev'>,
   questions: Omit<ArticlePitchQuestion, 'id' | 'created_at' | 'quizId'>[]
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { data, error } = await supabase
     .from('article_pitch_quizzes')
@@ -45,7 +45,7 @@ export async function updateQuiz_Questions(
   isUpdateQuiz: boolean,
   isUpdateQuestions: boolean
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   if (isUpdateQuiz) {
     const { error } = await supabase
@@ -82,7 +82,7 @@ export async function updateQuiz_Questions(
 }
 
 export async function updateQuizIsDev(id: number, isDev: boolean) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { error } = await supabase
     .from('article_pitch_quizzes')
     .update({ isDev })
@@ -96,7 +96,7 @@ export async function updateQuizIsDev(id: number, isDev: boolean) {
 }
 
 export async function updateQuizHasAudio(id: number, hasAudio: boolean) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { error } = await supabase
     .from('article_pitch_quizzes')
     .update({ hasAudio })
@@ -109,7 +109,7 @@ export async function updateQuizHasAudio(id: number, hasAudio: boolean) {
 }
 
 export async function deleteQuiz(id: number) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
   const { error } = await supabase
     .from('article_pitch_quizzes')
     .delete()

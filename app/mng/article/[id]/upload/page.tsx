@@ -2,10 +2,16 @@ import UploadAudioForm from '@/features/article/components/UploadAudioForm/Uploa
 import { fetchSentencesByArticleId } from '@/features/article/services/server';
 
 type Props = {
-  params: { id: number };
+  params: Promise<{ id: number }>;
 };
 
-const UploadAudioPage = async ({ params: { id } }: Props) => {
+const UploadAudioPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   const sentences = await fetchSentencesByArticleId(id);
 
   return (

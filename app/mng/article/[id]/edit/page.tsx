@@ -3,10 +3,16 @@ import { fetchArticleById } from '@/features/article/services/server';
 import { fetchUsers } from '@/features/user/services/server';
 
 type Props = {
-  params: { id: number };
+  params: Promise<{ id: number }>;
 };
 
-const MngArticleEditPage = async ({ params: { id } }: Props) => {
+const MngArticleEditPage = async (props: Props) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
   if (typeof id === undefined) {
     return null;
   }

@@ -13,7 +13,7 @@ export async function revalidatePostitNote(postitNoteId: number) {
 }
 
 export async function resetPostItItemImageUrl(item: PostItItem) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { error } = await supabase
     .from('postit_items')
@@ -29,7 +29,7 @@ export async function resetPostItItemImageUrl(item: PostItItem) {
 }
 
 export async function deletePostItNoteItem(id: number, postitNoteId: number) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { error } = await supabase
     .from('postit_note_items')
@@ -48,7 +48,7 @@ export async function updatePostItWorkoutChecked(
   id: number,
   checked: number[]
 ) {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { error } = await supabase
     .from('postit_workouts')
@@ -67,7 +67,7 @@ export async function updatePostItWorkoutJapanese(
   id: number,
   japanese: string
 ): Promise<string | undefined> {
-  const supabase = createSupabaseServerActionClient();
+  const supabase = await createSupabaseServerActionClient();
 
   const { error } = await supabase
     .from('postit_workouts')
