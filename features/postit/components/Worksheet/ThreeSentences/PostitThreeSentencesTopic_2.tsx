@@ -5,6 +5,7 @@ import PostitThreeSentencesTableRow from './PostitThreeSentencesTableRow';
 
 type Props = {
   workout: PostItWorkout;
+  disabled: boolean;
 };
 
 const items_1: { label: string; sentence: string }[] = [
@@ -41,11 +42,15 @@ const items_2: { label: string; sentence: string }[] = [
   },
 ];
 
-const PostitThreeSentencesTopic_2 = ({ workout }: Props) => {
+const PostitThreeSentencesTopic_2 = ({ workout, disabled }: Props) => {
   return (
     <div className='grid gap-0'>
       <div className='grid grid-cols-[16px,1fr] gap-4 items-center'>
-        <PostitWorksheetCheckBox value={12} workout={workout} />
+        <PostitWorksheetCheckBox
+          value={12}
+          workout={workout}
+          disabled={disabled}
+        />
         <div className='font-bold'>要注意時制</div>
       </div>
       <div className='grid grid-cols-[16px,1fr] gap-4 items-center'>

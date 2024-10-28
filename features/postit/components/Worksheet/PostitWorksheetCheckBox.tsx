@@ -4,9 +4,9 @@ import { useOptimistic, useTransition } from 'react';
 import { PostItWorkout } from '../../schema';
 import { updatePostItWorkoutChecked } from '../../services/actions';
 
-type Props = { workout: PostItWorkout; value: number };
+type Props = { workout: PostItWorkout; value: number; disabled?: boolean };
 
-const PostitWorksheetCheckBox = ({ workout, value }: Props) => {
+const PostitWorksheetCheckBox = ({ workout, value, disabled }: Props) => {
   const [, startTransition] = useTransition();
 
   const [optiChecked, toggleCheck] = useOptimistic<boolean, void>(
@@ -35,7 +35,9 @@ const PostitWorksheetCheckBox = ({ workout, value }: Props) => {
 
     updatePostItWorkoutChecked(workout.id, newChecked);
   };
-  return <Checkbox checked={optiChecked} onClick={handleClick} />;
+  return (
+    <Checkbox checked={optiChecked} onClick={handleClick} disabled={disabled} />
+  );
 };
 
 export default PostitWorksheetCheckBox;

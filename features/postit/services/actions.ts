@@ -81,3 +81,25 @@ export async function updatePostItWorkoutJapanese(
   revalidatePath('/postit/workout');
   return;
 }
+
+export async function revalidatePostitWorkout() {
+  revalidatePath('/postit/workout');
+}
+
+export async function updatePostItWorkoutThreeTopicsImageUrls(
+  id: number,
+  three_topics_image_urls: string[]
+) {
+  const supabase = await createSupabaseServerActionClient();
+  const { error } = await supabase
+    .from('postit_workouts')
+    .update({ three_topics_image_urls })
+    .eq('id', id);
+
+  if (error) {
+    console.log(error.message);
+    return;
+  }
+
+  revalidatePath('/postit/workout');
+}

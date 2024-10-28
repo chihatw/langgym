@@ -3,13 +3,18 @@ import PostitWorksheetCheckBox from '../PostitWorksheetCheckBox';
 
 type Props = {
   workout: PostItWorkout;
+  disabled: boolean;
 };
 
-const PostitThreeSentencesTopic_3 = ({ workout }: Props) => {
+const PostitThreeSentencesTopic_3 = ({ workout, disabled }: Props) => {
   return (
     <div className='grid gap-0'>
       <div className='grid grid-cols-[16px,1fr] gap-4 items-center'>
-        <PostitWorksheetCheckBox value={13} workout={workout} />
+        <PostitWorksheetCheckBox
+          value={13}
+          workout={workout}
+          disabled={disabled}
+        />
         <div className='font-bold'>「同一詞」不一定指出「同一個主題」</div>
       </div>
       <div className='grid grid-cols-[16px,1fr] gap-4 items-center'>

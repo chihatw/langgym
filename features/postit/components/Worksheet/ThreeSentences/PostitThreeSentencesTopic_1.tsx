@@ -3,13 +3,18 @@ import PostitWorksheetCheckBox from '../PostitWorksheetCheckBox';
 
 type Props = {
   workout: PostItWorkout;
+  disabled: boolean;
 };
 
-const PostitThreeSentencesTopic_1 = ({ workout }: Props) => {
+const PostitThreeSentencesTopic_1 = ({ workout, disabled }: Props) => {
   return (
     <div className='grid gap-0'>
       <div className='grid grid-cols-[16px,1fr] gap-4 items-center'>
-        <PostitWorksheetCheckBox value={11} workout={workout} />
+        <PostitWorksheetCheckBox
+          value={11}
+          workout={workout}
+          disabled={disabled}
+        />
         <div className='font-bold'>日文句號前面需要禮貌題</div>
       </div>
       <div className='grid grid-cols-[16px,1fr] gap-4 items-center'>

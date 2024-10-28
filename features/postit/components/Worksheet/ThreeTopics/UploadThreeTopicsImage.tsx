@@ -1,19 +1,20 @@
 'use client';
 
+import { PostItWorkout } from '@/features/postit/schema';
+import { revalidatePostitWorkout } from '@/features/postit/services/actions';
+import { updatePostItWorkoutThreeTopicsImageUrls } from '@/features/postit/services/client';
 import { uploadImageFile } from '@/features/storage/services/client';
 import { nanoid } from 'nanoid';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { ChangeEvent, useRef, useState } from 'react';
-import { revalidateBetterread } from '../../services/actions';
-import { insertBetterreadItem } from '../../services/client';
 
 const SwitchInput = dynamic(
   () => import('@/components/SwitchInput').then((mod) => mod.SwitchInput),
   { ssr: false }
 );
 
-type Props = { betterreadId: number; showForm: boolean };
+type Props = { index: number; workout: PostItWorkout; disabled: boolean };
 
 type FormProps = {
   imageUrl: string;
@@ -22,8 +23,8 @@ type FormProps = {
 const INITIAL_STATE: FormProps = {
   imageUrl: '',
 };
-// todo
-const UploadBetterreadImage = ({ betterreadId, showForm }: Props) => {
+
+const UploadThreeTopicsImage = ({ workout, index, disabled }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
   const form = useRef<HTMLFormElement>(null);
 
@@ -36,15 +37,14 @@ const UploadBetterreadImage = ({ betterreadId, showForm }: Props) => {
     }
     const file = files[0];
     const type = file.name.split('.').at(-1);
-    const path = `${nanoid(6)}.${type}`;
+    const today = new Date();
+
+    const path = `${
+      today.toISOString().split('T')[0] // 2011-10-05T14:48:00.000Z -> 2011-10-05
+    }/${index}_${nanoid(6)}.${type}`;
 
     // storage
     const imageUrl = await uploadImageFile(file, path);
-
-    if (!imageUrl) {
-      console.error(`no image Url`);
-      return;
-    }
 
     // local
     const fileReader = new FileReader();
@@ -54,18 +54,29 @@ const UploadBetterreadImage = ({ betterreadId, showForm }: Props) => {
       setValue({ imageUrl: result as string });
     });
 
-    // remote (revalidatePath はしない)
-    await insertBetterreadItem({
-      betterread_id: betterreadId,
-      image_url: imageUrl,
-    });
+    // remote (revalidatePath は server action で行う)
+    const newThree_topics_image_urls = new Array(3)
+      .fill('')
+      .map((_, _index) =>
+        index !== _index
+          ? workout.three_topics_image_urls.at(_index) || ''
+          : imageUrl
+      );
+
+    // debug
+    console.log(newThree_topics_image_urls);
+
+    await updatePostItWorkoutThreeTopicsImageUrls(
+      workout.id,
+      newThree_topics_image_urls
+    );
 
     // server action で revalidate
     form.current!.requestSubmit();
   };
 
   const action = async () => {
-    await revalidateBetterread(betterreadId);
+    await revalidatePostitWorkout();
     setTimeout(() => {
       setValue(INITIAL_STATE);
     }, 2000);
@@ -84,9 +95,9 @@ const UploadBetterreadImage = ({ betterreadId, showForm }: Props) => {
           priority={true}
         />
       ) : null}
-      {showForm ? (
+      {!workout.three_topics_image_urls.at(index) && !disabled ? (
         <div className='p-4 rounded-lg bg-black/10 grid gap-4'>
-          <div className='pl-2 text-sm'>插入照片（最多兩張）</div>
+          <div className='pl-2 text-sm'>照片上傳</div>
           <SwitchInput handleChange={handleChange} />
           <form ref={form} action={action} />
         </div>
@@ -95,4 +106,4 @@ const UploadBetterreadImage = ({ betterreadId, showForm }: Props) => {
   );
 };
 
-export default UploadBetterreadImage;
+export default UploadThreeTopicsImage;

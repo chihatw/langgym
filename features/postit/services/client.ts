@@ -27,3 +27,18 @@ export async function updatePostitItem(item: PostItItem) {
     console.error(error.message);
   }
 }
+
+export async function updatePostItWorkoutThreeTopicsImageUrls(
+  id: number,
+  three_topics_image_urls: string[]
+) {
+  const supabase = createSupabaseClientComponentClient();
+  const { error } = await supabase
+    .from('postit_workouts')
+    .update({ three_topics_image_urls })
+    .eq('id', id);
+
+  if (error) {
+    console.log(error.message);
+  }
+}

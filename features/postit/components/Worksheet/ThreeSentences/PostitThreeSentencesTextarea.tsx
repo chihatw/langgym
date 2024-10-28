@@ -5,13 +5,13 @@ import { PostItWorkout } from '@/features/postit/schema';
 import { updatePostItWorkoutJapanese } from '@/features/postit/services/actions';
 import { ChangeEvent, useEffect, useState, useTransition } from 'react';
 
-type Props = { workout: PostItWorkout; values: number[] };
+type Props = { workout: PostItWorkout; values: number[]; disabled: boolean };
 
 type FormProps = { input: string; errMsg: string };
 
 const INITIAL_STATE: FormProps = { input: '', errMsg: '' };
 
-const PostitThreeSentencesTextarea = ({ workout, values }: Props) => {
+const PostitThreeSentencesTextarea = ({ workout, values, disabled }: Props) => {
   const [isPending, startTransition] = useTransition();
   const [value, setValue] = useState(INITIAL_STATE);
 
@@ -50,7 +50,9 @@ const PostitThreeSentencesTextarea = ({ workout, values }: Props) => {
         <Textarea
           value={value.input}
           rows={5}
-          disabled={!values.every((i) => workout.checked.includes(i))}
+          disabled={
+            !values.every((i) => workout.checked.includes(i)) || disabled
+          }
           placeholder={
             values.some((i) => !workout.checked.includes(i))
               ? `還有${
