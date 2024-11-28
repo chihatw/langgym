@@ -55,16 +55,14 @@ const UploadThreeTopicsImage = ({ workout, index, disabled }: Props) => {
     });
 
     // remote (revalidatePath は server action で行う)
-    const newThree_topics_image_urls = new Array(3)
+    const length = Math.max(index + 1, workout.three_topics_image_urls.length);
+    const newThree_topics_image_urls = new Array(length)
       .fill('')
       .map((_, _index) =>
         index !== _index
           ? workout.three_topics_image_urls.at(_index) || ''
           : imageUrl
       );
-
-    // debug
-    console.log(newThree_topics_image_urls);
 
     await updatePostItWorkoutThreeTopicsImageUrls(
       workout.id,
