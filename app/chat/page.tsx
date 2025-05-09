@@ -3,7 +3,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabaseClient';
 
 import { Database } from '@/types/supabase';
 import { FormEvent, useEffect, useState } from 'react';
