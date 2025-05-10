@@ -1,4 +1,3 @@
-// hooks/useImageUrl.ts
 import { supabase } from '@/lib/supabaseClient';
 import { useEffect, useState } from 'react';
 

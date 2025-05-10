@@ -1,10 +1,9 @@
 'use client';
 
 import { useImageUrl } from '@/hooks/useImageUrl';
-import { usePinchZoomScale } from '@/hooks/usePinchZoomScale';
-import { getDistance } from '@/utils/getDistance';
 import Image from 'next/image';
-import { useCallback, useRef } from 'react';
+import { usePinchZoomScale } from './hooks/usePinchZoomScale';
+import { useTouchHandlers } from './hooks/useTouchHandlers';
 
 type Props = {};
 
@@ -17,31 +16,13 @@ const ImagePage = (props: Props) => {
   const { imageUrl } = useImageUrl('image', IMAGE_PATH);
 
   const { scale, updateScale } = usePinchZoomScale(MIN_SCALE, MAX_SCALE);
-  const initialPinchScale = useRef<number | null>(scale); // ピンチ開始時のスケール
 
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    if (e.touches.length === 2) {
-      initialPinchScale.current = scale; // ピンチ開始時のスケールを記録
+  const { onTouchEnd, onTouchMove, onTouchStart, translate } = useTouchHandlers(
+    {
+      scale,
+      updateScale,
     }
-  }, []);
-
-  const handleTouchMove = useCallback(
-    (e: React.TouchEvent) => {
-      if (e.touches.length === 2 && initialPinchScale.current) {
-        const currentDistance = getDistance(e.touches);
-        const scaleChange = currentDistance / initialPinchScale.current;
-        const newScale = initialPinchScale.current * scaleChange;
-
-        updateScale(newScale);
-        e.preventDefault();
-      }
-    },
-    [scale, updateScale]
   );
-
-  const handleTouchEnd = useCallback(() => {
-    initialPinchScale.current = null;
-  }, []);
 
   if (!imageUrl) return <div>Loading...</div>;
 
@@ -57,9 +38,9 @@ const ImagePage = (props: Props) => {
         justifyContent: 'center',
         background: '#000',
       }}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
     >
       <Image
         src={imageUrl}
@@ -67,7 +48,7 @@ const ImagePage = (props: Props) => {
         fill
         style={{
           objectFit: 'contain',
-          transform: `scale(${scale})`,
+          transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
           transition: 'transform 0.1s',
           userSelect: 'none',
           touchAction: 'none',
