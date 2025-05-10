@@ -1,23 +1,46 @@
 'use client';
 
-import { supabase } from '@/lib/supabaseClient';
+import { useImageUrl } from '@/hooks/useImageUrl';
+import { usePinchZoomScale } from '@/hooks/usePinchZoomScale';
+import { getDistance } from '@/utils/getDistance';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useCallback, useRef } from 'react';
 
 type Props = {};
 
-const imagePath = 'folder/sample.png';
+const IMAGE_PATH = 'folder/sample.png';
+
+const MIN_SCALE = 0.5; // 最小スケール（画面より小さくできる）
+const MAX_SCALE = 3;
 
 const ImagePage = (props: Props) => {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const { imageUrl } = useImageUrl('image', IMAGE_PATH);
 
-  useEffect(() => {
-    const fetchImageUrl = async () => {
-      // file Path から url を取得
-      const { data } = supabase.storage.from('image').getPublicUrl(imagePath);
-      setImageUrl(data.publicUrl);
-    };
-    fetchImageUrl();
+  const { scale, updateScale } = usePinchZoomScale(MIN_SCALE, MAX_SCALE);
+  const initialPinchScale = useRef<number | null>(scale); // ピンチ開始時のスケール
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      initialPinchScale.current = scale; // ピンチ開始時のスケールを記録
+    }
+  }, []);
+
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (e.touches.length === 2 && initialPinchScale.current) {
+        const currentDistance = getDistance(e.touches);
+        const scaleChange = currentDistance / initialPinchScale.current;
+        const newScale = initialPinchScale.current * scaleChange;
+
+        updateScale(newScale);
+        e.preventDefault();
+      }
+    },
+    [scale, updateScale]
+  );
+
+  const handleTouchEnd = useCallback(() => {
+    initialPinchScale.current = null;
   }, []);
 
   if (!imageUrl) return <div>Loading...</div>;
@@ -25,26 +48,31 @@ const ImagePage = (props: Props) => {
   return (
     <div
       style={{
-        position: 'fixed',
-        inset: 0,
         width: '100vw',
         height: '100vh',
-        background: '#000',
+        overflow: 'hidden',
+        touchAction: 'none',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        background: '#000',
       }}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       <Image
-        // url を設定
         src={imageUrl}
-        alt='Supabase image'
+        alt={'alt'}
         fill
         style={{
-          objectFit: 'contain', // アスペクト比維持して画面いっぱい表示
+          objectFit: 'contain',
+          transform: `scale(${scale})`,
+          transition: 'transform 0.1s',
+          userSelect: 'none',
+          touchAction: 'none',
         }}
-        sizes='100vw'
-        priority
+        draggable={false}
       />
     </div>
   );
