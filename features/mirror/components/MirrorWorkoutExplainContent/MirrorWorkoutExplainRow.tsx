@@ -2,6 +2,8 @@ import { cn } from '@/lib/utils';
 import { Check, X } from 'lucide-react';
 import { Lato } from 'next/font/google';
 
+import type { JSX } from "react";
+
 type Props = {
   left: number;
   right: number;
