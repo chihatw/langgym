@@ -91,8 +91,8 @@ importers:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
       react-google-charts:
-        specifier: ^4.0.7
-        version: 4.0.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: ^5.2.1
+        version: 5.2.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react-hook-form:
         specifier: ^7.56.4
         version: 7.56.4(react@19.1.0)
@@ -3303,8 +3303,8 @@ packages:
     peerDependencies:
       react: ^19.1.0
 
-  react-google-charts@4.0.7:
-    resolution: {integrity: sha512-u1HHEaFvjYrO4r5tnVic7Zl+p7rZKqq6ukLY7E4qdIREN7MPiBBMVRmfUpuWHCQw5aFLRoK+EAHi0c7ub8CW3A==}
+  react-google-charts@5.2.1:
+    resolution: {integrity: sha512-mCbPiObP8yWM5A9ogej7Qp3/HX4EzOwuEzUYvcfHtL98Xt4V/brD14KgfDzSNNtyD48MNXCpq5oVaYKt0ykQUQ==}
     peerDependencies:
       react: '>=16.3.0'
       react-dom: '>=16.3.0'
@@ -7457,7 +7457,7 @@ snapshots:
       react: 19.1.0
       scheduler: 0.26.0
 
-  react-google-charts@4.0.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  react-google-charts@5.2.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
