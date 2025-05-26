@@ -113,25 +113,6 @@ export async function deleteBetterreadItemQuestion(
   revalidateBetterread(betterreadId);
 }
 
-export async function deleteBetterreadImagePath(
-  betterreadId: number,
-  index: number
-) {
-  const supabase = await createSupabaseServerActionClient();
-
-  const { error } = await supabase
-    .from('betterread_image_paths')
-    .delete()
-    .eq('betterreadId', betterreadId)
-    .eq('index', index);
-
-  if (error) {
-    console.error(error.message);
-    return;
-  }
-  revalidateBetterread(betterreadId);
-}
-
 export async function updateBetterreadToggleBetterreadId(
   betterread_id: number
 ) {
