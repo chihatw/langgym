@@ -39,7 +39,7 @@
     "react-google-charts": "^5.2.1",
     "react-hook-form": "^7.56.4",
     "sharp": "^0.33.5",
-    "tailwind-merge": "^2.6.0",
+    "tailwind-merge": "^3.3.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.25.28"
   },
