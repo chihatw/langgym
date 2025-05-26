@@ -68,7 +68,7 @@ const MngPaperCupForm = ({ params }: Props) => {
   return (
     <MngPaneContainer label='Paper Cup'>
       <div className='grid gap-4'>
-        <div className='grid grid-cols-[1fr,auto] items-center'>
+        <div className='grid grid-cols-[1fr_auto] items-center'>
           <div className='flex gap-2'>
             {cueObj.header.pitchStr ? (
               <SentencePitchLine pitchStr={cueObj.header.pitchStr} />

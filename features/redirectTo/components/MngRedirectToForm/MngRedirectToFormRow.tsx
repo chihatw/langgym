@@ -29,7 +29,7 @@ const MngRedirectToFormRow = ({ redirectTo }: Props) => {
 
   return (
     <div className='round p-2 bg-white/50 grid gap-4'>
-      <div className='grid grid-cols-[40px,1fr] items-center text-xs'>
+      <div className='grid grid-cols-[40px_1fr] items-center text-xs'>
         <div className='font-extrabold'>{redirectTo.display}</div>
         <div>{redirectTo.redirect_to}</div>
       </div>

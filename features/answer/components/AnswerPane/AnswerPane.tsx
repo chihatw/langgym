@@ -59,7 +59,7 @@ const AnswerPane = ({ answerRows, score }: Props) => {
               />
             ) : null}
             {row.answer === row.pitchStr ? (
-              <div className='p-2 rounded bg-[#52a2aa] bg-opacity-10 grid grid-cols-[32px,1fr] items-center'>
+              <div className='p-2 rounded bg-[#52a2aa] bg-opacity-10 grid grid-cols-[32px_1fr] items-center'>
                 <Check className='text-[#52a2aa]' />
                 <SentencePitchLine pitchStr={row.answer!} />
               </div>

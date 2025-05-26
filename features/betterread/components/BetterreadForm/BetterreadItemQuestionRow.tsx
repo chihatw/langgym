@@ -26,13 +26,13 @@ const BetterreadItemQuestionRow = ({ betterreadItem }: Props) => {
 
   if (!optiQuestion) return null;
   return (
-    <div className='grid grid-cols-[1fr,auto] gap-2 items-center pl-2'>
+    <div className='grid grid-cols-[1fr_auto] gap-2 items-center pl-2'>
       <div className='text-sm'>
-        <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
+        <div className='grid grid-cols-[auto_1fr] gap-2 items-center'>
           <div>👀</div>
           <div className='text-gray-500'>{optiQuestion.view_point}</div>
         </div>
-        <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
+        <div className='grid grid-cols-[auto_1fr] gap-2 items-center'>
           <div>❓</div>
           <div>{optiQuestion.question}</div>
         </div>

@@ -32,7 +32,7 @@ const MirrorWorkoutResultRow = ({
   const [value, setValue] = useState(INITIAL_STATE);
   const isCorrect = Math.max(...items) === selectedNumber;
   return (
-    <div className='grid grid-cols-[12px,1fr,1fr,1fr,40px,48px] items-center gap-2'>
+    <div className='grid grid-cols-[12px_1fr_1fr_1fr_40px_48px] items-center gap-2'>
       <div className='text-xs text-end'>{index + 1}</div>
 
       {items.map((item, index) => (

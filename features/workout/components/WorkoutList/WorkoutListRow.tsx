@@ -64,7 +64,7 @@ const WorkoutListRow = ({ workout, record, removeWorkoutRecords }: Props) => {
             <div>{workout.title}</div>
             {workout.isReview ? <div>復習</div> : null}
           </div>
-          <div className='grid grid-cols-[auto,48px,1fr,auto,48px,1fr] items-center text-xs  text-slate-500 '>
+          <div className='grid grid-cols-[auto_48px_1fr_auto_48px_1fr] items-center text-xs  text-slate-500 '>
             <div>目標BPM</div>
             <div className='text-xl text-end'>{workout.targetBPM}</div>
             <div />
@@ -76,7 +76,7 @@ const WorkoutListRow = ({ workout, record, removeWorkoutRecords }: Props) => {
         </div>
       </Link>
       {audioBuffer ? (
-        <div className='grid grid-cols-[1fr,auto] gap-1 items-center'>
+        <div className='grid grid-cols-[1fr_auto] gap-1 items-center'>
           <AudioSlider
             audioBuffer={audioBuffer}
             start={0}

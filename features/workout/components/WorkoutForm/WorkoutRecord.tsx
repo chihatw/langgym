@@ -188,7 +188,7 @@ const WorkoutRecord = ({ value, setValue }: Props) => {
             <div className='w-9'></div>
           </div>
         </div>
-        <div className='h-60 bg-white/60 rounded grid grid-rows-[1fr,auto] relative'>
+        <div className='h-60 bg-white/60 rounded grid grid-rows-[1fr_auto] relative'>
           <div
             className={cn(
               'flex justify-center items-center ',

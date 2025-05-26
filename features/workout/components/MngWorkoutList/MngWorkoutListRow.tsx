@@ -18,7 +18,7 @@ type Props = {
 
 const MngWorkoutListRow = ({ workout, removeWorkout }: Props) => {
   return (
-    <div className='grid grid-cols-[60px,1fr,28px,auto] items-center gap-2 px-2 py-1 text-sm border-b border-black/20 '>
+    <div className='grid grid-cols-[60px_1fr_28px_auto] items-center gap-2 px-2 py-1 text-sm border-b border-black/20 '>
       <div className='pr-2 text-xs  text-gray-500 whitespace-nowrap overflow-hidden'>
         {workout.display}
       </div>

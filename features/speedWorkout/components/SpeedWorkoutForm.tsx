@@ -104,7 +104,7 @@ const SpeedWorkoutForm = ({}: Props) => {
 
   return (
     <div className='flex justify-center mt-6 '>
-      <div className='grid gap-8 grid-rows-[auto,auto,1fr]'>
+      <div className='grid gap-8 grid-rows-[auto_auto_1fr]'>
         <div className='text-center text-gray-700 text-4xl '>
           {`${selectedWorkoutItems?.at(0)?.display} ${
             selectedWorkoutItems?.at(0)?.title
@@ -149,10 +149,10 @@ const SpeedWorkoutCounter = ({
   return (
     <div className='flex items-center'>
       <div>
-        <span className='font-lato text-[90px] font-[900] text-gray-700'>
+        <span className='font-lato text-[90px] font-black text-gray-700'>
           {value.checkedItemIds.length}
         </span>
-        <span className='font-lato text-[48px] font-[900] text-gray-700'>{`/${
+        <span className='font-lato text-[48px] font-black text-gray-700'>{`/${
           selectedWorkoutItems.length * 2
         }`}</span>
       </div>

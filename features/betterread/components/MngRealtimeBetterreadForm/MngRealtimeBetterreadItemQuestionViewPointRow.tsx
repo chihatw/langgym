@@ -38,7 +38,7 @@ const MngRealtimeBetterreadItemQuestionViewPointRow = ({
     handleUpdateToggleViewPoints(cloned);
   };
   return (
-    <div className='grid grid-cols-[auto,auto,1fr] gap-2 items-center'>
+    <div className='grid grid-cols-[auto_auto_1fr] gap-2 items-center'>
       <form action={action}>
         <Button
           size={'icon'}

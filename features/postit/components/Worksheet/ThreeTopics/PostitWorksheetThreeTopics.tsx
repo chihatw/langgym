@@ -27,7 +27,7 @@ const PostitWorksheetThreeTopics = ({
       <div className='pl-[1em] grid gap-12'>
         <div className='grid gap-2'>
           <div className=''>確認後，請打勾</div>
-          <div className='grid grid-cols-[16px,1fr] gap-x-4 gap-y-2 items-center'>
+          <div className='grid grid-cols-[16px_1fr] gap-x-4 gap-y-2 items-center'>
             <PostitWorksheetCheckBox
               value={40}
               workout={workout}
@@ -37,7 +37,7 @@ const PostitWorksheetThreeTopics = ({
             <div></div>
             <div>為了凸顯「助詞組合」</div>
           </div>
-          <div className='grid grid-cols-[16px,1fr] gap-x-4 gap-y-2 items-center'>
+          <div className='grid grid-cols-[16px_1fr] gap-x-4 gap-y-2 items-center'>
             <PostitWorksheetCheckBox
               value={41}
               workout={workout}
@@ -107,7 +107,7 @@ const PostitWorksheetThreeTopics = ({
               />
             </div>
           </div>
-          <div className='grid grid-cols-[16px,1fr] gap-x-4 gap-y-2 items-center'>
+          <div className='grid grid-cols-[16px_1fr] gap-x-4 gap-y-2 items-center'>
             <PostitWorksheetCheckBox
               value={42}
               workout={workout}

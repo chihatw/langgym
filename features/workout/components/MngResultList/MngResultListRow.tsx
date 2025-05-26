@@ -65,7 +65,7 @@ const MngResultListRow = ({ result, removeWorkoutRecord }: Props) => {
 
   return (
     <div className='grid gap-2 p-2 rounded bg-white/60'>
-      <div className='grid grid-cols-[1fr,auto,auto] gap-2 items-center'>
+      <div className='grid grid-cols-[1fr_auto_auto] gap-2 items-center'>
         <div className='text-sm'>{`${result.display} ${result.title}`}</div>
         <div className='text-xs text-slate-500 '>
           {formatDistance(result.created_at!, new Date(), {
@@ -76,7 +76,7 @@ const MngResultListRow = ({ result, removeWorkoutRecord }: Props) => {
         <div>{`${result.bpm} / ${result.targetBPM}`}</div>
       </div>
       {!!value.audioBuffer ? (
-        <div className='grid grid-cols-[1fr,auto] gap-2'>
+        <div className='grid grid-cols-[1fr_auto] gap-2'>
           <AudioSlider
             audioBuffer={value.audioBuffer}
             start={0}

@@ -79,7 +79,7 @@ const MngRealtimeBetterreadItemQuestionRow = ({
 
   return (
     <div className='grid gap-4'>
-      <div className='grid grid-cols-[1fr,auto,auto] gap-2 items-center pl-2'>
+      <div className='grid grid-cols-[1fr_auto_auto] gap-2 items-center pl-2'>
         <div className='text-sm grid gap-2 '>
           <MngRealtimeBetterreadItemQuestionViewPointRow
             betterreadItem={betterreadItem}

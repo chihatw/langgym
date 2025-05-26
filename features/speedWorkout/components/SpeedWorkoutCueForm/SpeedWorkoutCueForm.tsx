@@ -152,12 +152,12 @@ const SpeedWorkoutCueForm = ({}: Props) => {
 
   return (
     <div className='flex justify-center mt-6 '>
-      <div className='grid gap-8 grid-rows-[auto,auto,1fr]'>
+      <div className='grid gap-8 grid-rows-[auto_auto_1fr]'>
         <div className='text-center text-gray-700 text-4xl '>
           {`${selectedWorkout?.display} ${selectedWorkout?.title}`}
         </div>
         {value.isRunning ? (
-          <div className='grid gap-10 grid-rows-[auto,1fr]'>
+          <div className='grid gap-10 grid-rows-[auto_1fr]'>
             <div className='grid gap-2'>
               <FirstRoundList
                 value={value}

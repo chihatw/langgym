@@ -9,7 +9,7 @@ type Props = {
 const PostitThreeSentencesTopic_1 = ({ workout, disabled }: Props) => {
   return (
     <div className='grid gap-0'>
-      <div className='grid grid-cols-[16px,1fr] gap-4 items-center'>
+      <div className='grid grid-cols-[16px_1fr] gap-4 items-center'>
         <PostitWorksheetCheckBox
           value={11}
           workout={workout}
@@ -17,7 +17,7 @@ const PostitThreeSentencesTopic_1 = ({ workout, disabled }: Props) => {
         />
         <div className='font-bold'>日文句號前面需要禮貌題</div>
       </div>
-      <div className='grid grid-cols-[16px,1fr] gap-4 items-center'>
+      <div className='grid grid-cols-[16px_1fr] gap-4 items-center'>
         <div></div>
         <div>
           <div>日本人用普通體思考，但大家面前說話時會使用禮貌體。</div>

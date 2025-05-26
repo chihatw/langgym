@@ -26,7 +26,7 @@ const SpeedWorkoutRow = ({
         disabled={isChecked}
       >
         <div className='grid flex-1 items-center gap-1'>
-          <div className='grid grid-cols-[1fr,auto] items-center'>
+          <div className='grid grid-cols-[1fr_auto] items-center'>
             <div className={isSelected ? 'text-red-500 bg-white' : ''}>
               {workoutItem.chinese}
             </div>

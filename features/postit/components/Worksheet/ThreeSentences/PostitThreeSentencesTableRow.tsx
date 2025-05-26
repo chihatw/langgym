@@ -7,7 +7,7 @@ type Props = {
 
 const PostitThreeSentencesTableRow = ({ label, items }: Props) => {
   return (
-    <div className='grid grid-cols-[40px,1fr] items-center border-black/40 border-r'>
+    <div className='grid grid-cols-[40px_1fr] items-center border-black/40 border-r'>
       <div className=' h-full border-r border-l border-b  border-black/40 flex items-center justify-center'>
         {label}
       </div>

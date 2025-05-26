@@ -25,7 +25,7 @@ const PostitWorksheetCombinePostits = ({
       <div className='pl-[1em] grid gap-12'>
         <div className='grid gap-2'>
           <div className=''>確認後，請打勾</div>
-          <div className='grid grid-cols-[16px,1fr] gap-x-4 gap-y-2 items-center'>
+          <div className='grid grid-cols-[16px_1fr] gap-x-4 gap-y-2 items-center'>
             <PostitWorksheetCheckBox value={30} workout={workout} />
             <div className='font-bold'>
               「<span className='text-red-500'>助詞</span>」與「
@@ -50,7 +50,7 @@ const PostitWorksheetCombinePostits = ({
               />
             </div>
           </div>
-          <div className='grid grid-cols-[16px,1fr] gap-x-4 gap-y-2 items-center'>
+          <div className='grid grid-cols-[16px_1fr] gap-x-4 gap-y-2 items-center'>
             <PostitWorksheetCheckBox value={31} workout={workout} />
             <div className='font-bold'>組合是為了方便</div>
             <div></div>
@@ -73,7 +73,7 @@ const PostitWorksheetCombinePostits = ({
               />
             </div>
           </div>
-          <div className='grid grid-cols-[16px,1fr] gap-x-4 gap-y-2 items-center'>
+          <div className='grid grid-cols-[16px_1fr] gap-x-4 gap-y-2 items-center'>
             <PostitWorksheetCheckBox value={32} workout={workout} />
             <div className='font-bold'>左邊上、右邊下</div>
             <div></div>

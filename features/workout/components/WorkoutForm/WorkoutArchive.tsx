@@ -69,7 +69,7 @@ const WorkoutArchive = ({ recordRows, removeRecord }: Props) => {
 
   return (
     <div className='grid gap-4'>
-      <div className='grid grid-cols-[1fr,auto,1fr] items-end gap-2'>
+      <div className='grid grid-cols-[1fr_auto_1fr] items-end gap-2'>
         <div />
         <div className={cn('text-8xl font-extrabold', lato.className)}>
           {recordRow.bpm}
@@ -77,7 +77,7 @@ const WorkoutArchive = ({ recordRows, removeRecord }: Props) => {
         <div className={cn('text-slate-700  pb-2', lato.className)}>bpm</div>
       </div>
       {!!audioBuffer ? (
-        <div className='grid grid-cols-[1fr,auto] gap-1 items-center'>
+        <div className='grid grid-cols-[1fr_auto] gap-1 items-center'>
           <AudioSlider
             audioBuffer={audioBuffer}
             start={0}

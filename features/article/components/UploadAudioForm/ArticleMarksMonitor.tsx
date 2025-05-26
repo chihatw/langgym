@@ -63,7 +63,7 @@ const ArticleMarkMonitorRow = ({
         <div>{sentence.japanese}</div>
         <SentencePitchLine pitchStr={pitchStr!} />
         <div className='flex gap-x-2 justify-end'>
-          <div className='grid grid-cols-[auto,64px] items-center p-1 pr-3 rounded bg-gray-200'>
+          <div className='grid grid-cols-[auto_64px] items-center p-1 pr-3 rounded bg-gray-200'>
             {start !== null && end !== null ? (
               <Button
                 size={'icon'}
@@ -76,7 +76,7 @@ const ArticleMarkMonitorRow = ({
 
             <div>{`start: ${start}`}</div>
           </div>
-          <div className='grid grid-cols-[auto,64px] gap-x-2 items-center p-1 pr-3 rounded bg-gray-200'>
+          <div className='grid grid-cols-[auto_64px] gap-x-2 items-center p-1 pr-3 rounded bg-gray-200'>
             {start !== null && end !== null ? (
               <Button
                 size={'icon'}

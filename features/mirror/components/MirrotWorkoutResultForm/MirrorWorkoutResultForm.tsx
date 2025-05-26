@@ -38,7 +38,7 @@ const MirrorWorkoutResultForm = ({ result }: Props) => {
           </div>
         </div>
         <div className='grid gap-4 '>
-          <div className='grid grid-cols-[24px,1fr,1fr,1fr,40px,48px] items-center gap-2'>
+          <div className='grid grid-cols-[24px_1fr_1fr_1fr_40px_48px] items-center gap-2'>
             <div />
             <div />
             <div />

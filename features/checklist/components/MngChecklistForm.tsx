@@ -9,7 +9,7 @@ const MngChecklistForm = (props: Props) => {
   return (
     <div className='grid gap-4 max-w-md mx-auto '>
       <div className='text-2xl font-extrabold'>Check List</div>
-      <div className='grid grid-cols-[120px,40px,40px]'>
+      <div className='grid grid-cols-[120px_40px_40px]'>
         <RowGrids>
           <div></div>
           {ITEMS.map((item, index) => (
@@ -27,7 +27,7 @@ export default MngChecklistForm;
 
 const RowGrids = ({ children }: { children: ReactNode }) => {
   return (
-    <div className='grid grid-rows-[60px,40px,40px,40px,40px,40px] items-center text-sm justify-center'>
+    <div className='grid grid-rows-[60px_40px_40px_40px_40px_40px] items-center text-sm justify-center'>
       {children}
     </div>
   );

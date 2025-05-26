@@ -45,7 +45,7 @@ const items_2: { label: string; sentence: string }[] = [
 const PostitThreeSentencesTopic_2 = ({ workout, disabled }: Props) => {
   return (
     <div className='grid gap-0'>
-      <div className='grid grid-cols-[16px,1fr] gap-4 items-center'>
+      <div className='grid grid-cols-[16px_1fr] gap-4 items-center'>
         <PostitWorksheetCheckBox
           value={12}
           workout={workout}
@@ -53,7 +53,7 @@ const PostitThreeSentencesTopic_2 = ({ workout, disabled }: Props) => {
         />
         <div className='font-bold'>要注意時制</div>
       </div>
-      <div className='grid grid-cols-[16px,1fr] gap-4 items-center'>
+      <div className='grid grid-cols-[16px_1fr] gap-4 items-center'>
         <div></div>
         <div>
           <div>日文的句尾，隨著時態而變化。</div>

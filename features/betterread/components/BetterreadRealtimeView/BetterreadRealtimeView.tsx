@@ -279,14 +279,14 @@ const BetterreadRealtimeView = ({}: Props) => {
                     return (
                       <div key={item.question_id!} className='grid gap-0'>
                         {value.viewPoints.includes(item.question_id!) ? (
-                          <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
+                          <div className='grid grid-cols-[auto_1fr] gap-2 items-center'>
                             <div className='text-2xl'>👀</div>
                             {item.view_point}
                           </div>
                         ) : null}
 
                         {value.questions.includes(item.question_id!) ? (
-                          <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
+                          <div className='grid grid-cols-[auto_1fr] gap-2 items-center'>
                             <div className='text-2xl'>❓</div>
                             {item.question}
                           </div>

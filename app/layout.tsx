@@ -12,7 +12,7 @@ export default function RootLayout({
     <html lang='en'>
       <body
         className={cn(
-          'grid min-h-screen grid-rows-[48px,1fr] bg-slate-200 font-sans text-gray-700 print:text-black',
+          'grid min-h-screen grid-rows-[48px_1fr] bg-slate-200 font-sans text-gray-700 print:text-black',
           fontSans.className
         )}
       >

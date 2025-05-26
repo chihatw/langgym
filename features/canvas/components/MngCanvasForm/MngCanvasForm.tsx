@@ -183,7 +183,7 @@ const MngCanvasForm = ({}: Props) => {
       <CanvasDom ref={canvas} mode={value.field?.mode} />
       <div className='text-xs text-slate-400 grid gap-2'>
         <div>Keyboard Short Cut:</div>
-        <div className='grid grid-cols-[24px,1fr] gap-y-1'>
+        <div className='grid grid-cols-[24px_1fr] gap-y-1'>
           <div>{`⌘${SHORT_CUT_KEY.highlight}`}</div>
           <div>highlight</div>
         </div>

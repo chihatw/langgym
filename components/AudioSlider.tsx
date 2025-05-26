@@ -173,11 +173,11 @@ const AudioSlider = ({ start, end, audioBuffer }: Props) => {
     }));
   };
   return (
-    <div className='grid grid-cols-[auto,1fr] items-center '>
+    <div className='grid grid-cols-[auto_1fr] items-center '>
       <Button size='icon' variant={'ghost'} onClick={handleClickPlayButton}>
         {value.isPlaying ? <Pause /> : <Play />}
       </Button>
-      <div className='grid grid-cols-[1fr,auto] items-center rounded py-3 pl-3 bg-slate-200'>
+      <div className='grid grid-cols-[1fr_auto] items-center rounded py-3 pl-3 bg-slate-200'>
         <Slider value={[value.progress]} onValueChange={handleSlide} />
         <div className='flex items-center text-xs font-mono  text-gray-600 px-2'>
           <Time seconds={((end - start) * value.progress) / 100} />

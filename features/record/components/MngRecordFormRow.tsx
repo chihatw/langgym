@@ -57,7 +57,7 @@ const MngRecordFormRow = ({ record, handleRemoveRecord }: Props) => {
       </div>
       <SentencePitchLine pitchStr={record.pitchStr} />
       {value.audioBuffer ? (
-        <div className='grid grid-cols-[1fr,auto]'>
+        <div className='grid grid-cols-[1fr_auto]'>
           <AudioSlider
             audioBuffer={value.audioBuffer}
             start={0}

@@ -13,7 +13,7 @@ const WorkoutRecordPaneMonitor = ({ value }: Props) => {
         return (
           <div
             key={index}
-            className='rounded py-1 bg-slate-200 grid grid-cols-[auto,1fr] gap-2 items-center px-2'
+            className='rounded py-1 bg-slate-200 grid grid-cols-[auto_1fr] gap-2 items-center px-2'
           >
             <div className='text-xs font-extrabold'>{index + 1}</div>
             <SentencePitchLine pitchStr={item.pitchStr!} />

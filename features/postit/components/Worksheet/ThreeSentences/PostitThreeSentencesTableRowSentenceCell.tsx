@@ -8,7 +8,7 @@ const PostitThreeSentencesTableRowSentenceCell = ({
   sentence,
 }: Props) => {
   return (
-    <div className='grid grid-cols-[100px,1fr] border-black/40 border-b'>
+    <div className='grid grid-cols-[100px_1fr] border-black/40 border-b'>
       <div className='font-bold border-black/40 border-r flex justify-center items-center'>
         {label}
       </div>

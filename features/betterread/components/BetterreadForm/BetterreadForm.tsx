@@ -41,7 +41,7 @@ const BetterreadForm = ({
         <div>
           <span
             className={cn(
-              'font-lato text-[90px] font-[900] ',
+              'font-lato text-[90px] font-black ',
               betterreadItems.length >= maxCount
                 ? 'text-gray-700'
                 : 'text-red-500'
@@ -49,7 +49,7 @@ const BetterreadForm = ({
           >
             {betterreadItems.length}
           </span>
-          <span className='font-lato text-[48px] font-[900] text-gray-700'>{`/${maxCount}`}</span>
+          <span className='font-lato text-[48px] font-black text-gray-700'>{`/${maxCount}`}</span>
         </div>
       </div>
       <div className='grid gap-1'>

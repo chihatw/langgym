@@ -23,7 +23,7 @@ const MngQuizListRow = ({ quiz, removeQuiz }: Props) => {
   };
 
   return (
-    <div className='border-slate-400 border-b grid grid-cols-[auto,1fr,auto] items-center gap-x-2'>
+    <div className='border-slate-400 border-b grid grid-cols-[auto_1fr_auto] items-center gap-x-2'>
       <div className='text-xs text-slate-500'>{quiz.display}</div>
       <div>{quiz.title}</div>
       <div className='flex flex-nowrap'>

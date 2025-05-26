@@ -9,7 +9,7 @@ const Header = async () => {
   const user = await getUserFromServerSide();
 
   return (
-    <nav className='grid h-12 shadow print:hidden '>
+    <nav className='grid h-12 shadow-sm print:hidden '>
       <div className='flex items-center justify-between sm:mx-8 '>
         <Link
           href={'/'}

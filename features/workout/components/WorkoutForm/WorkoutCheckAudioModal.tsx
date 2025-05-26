@@ -122,7 +122,7 @@ const WorkoutCheckAudioModal = ({ value, setValue }: Props) => {
     >
       <DialogContent className='h-screen overflow-scroll py-20 max-h-[calc(100vh-80px)]'>
         <div className='grid'>
-          <div className='grid grid-cols-[1fr,auto,1fr] items-end gap-2'>
+          <div className='grid grid-cols-[1fr_auto_1fr] items-end gap-2'>
             <div />
             <div
               className={cn('flex text-8xl font-extrabold ', lato.className)}

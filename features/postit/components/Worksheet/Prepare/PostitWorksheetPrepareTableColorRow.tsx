@@ -9,7 +9,7 @@ type Props = {
 
 const PostitWorksheetPrepareTableColorRow = ({ color, types, bg }: Props) => {
   return (
-    <div className='grid grid-cols-[1fr,1fr] items-center border-black/40 border-r'>
+    <div className='grid grid-cols-[1fr_1fr] items-center border-black/40 border-r'>
       <div
         className={cn(
           ' h-full border-r border-l border-b  border-black/40 flex items-center justify-center',

@@ -64,7 +64,7 @@ const BetterreadFormRow = ({ betterreadItems }: Props) => {
       ) : null}
 
       <div className='grid gap-2'>
-        <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
+        <div className='grid grid-cols-[auto_1fr] gap-2 items-center'>
           <div className='text-2xl'>👀</div>
           <Input
             value={value.viewPoint}
@@ -78,7 +78,7 @@ const BetterreadFormRow = ({ betterreadItems }: Props) => {
             }
           />
         </div>
-        <div className='grid grid-cols-[auto,1fr] gap-2 items-center'>
+        <div className='grid grid-cols-[auto_1fr] gap-2 items-center'>
           <div className='text-2xl'>❓</div>
           <Input
             value={value.question}

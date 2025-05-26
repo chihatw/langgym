@@ -9,7 +9,7 @@ const MirrorWorkoutResultList = ({ results }: Props) => {
 
   return (
     <div className='grid gap-2'>
-      <div className='grid grid-cols-[150px,48px,40px] items-center gap-4'>
+      <div className='grid grid-cols-[150px_48px_40px] items-center gap-4'>
         <div></div>
         <div className='text-xs text-center'>時間</div>
         <div className='text-xs text-center'>正答率</div>
@@ -18,7 +18,7 @@ const MirrorWorkoutResultList = ({ results }: Props) => {
         return (
           <Link
             key={result.id}
-            className='grid grid-cols-[150px,48px,40px] items-center gap-4'
+            className='grid grid-cols-[150px_48px_40px] items-center gap-4'
             href={`/mirror/${result.id}`}
           >
             <div className='text-xs'>

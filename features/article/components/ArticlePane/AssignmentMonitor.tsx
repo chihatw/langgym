@@ -57,7 +57,7 @@ const AssignmentMonitor = ({
           <CassetteTape className='w-3 h-3' />
         </div>
       </div>
-      <div className='grid grid-cols-[1fr,auto] items-center'>
+      <div className='grid grid-cols-[1fr_auto] items-center'>
         <AudioSlider
           start={0}
           end={optAudioBuffer.duration}

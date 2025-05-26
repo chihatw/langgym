@@ -21,7 +21,7 @@ const QuizListAnswerRow = ({ answer, answerRows }: Props) => {
         size={'sm'}
         variant={'link'}
         onClick={() => router.push(`/answer/${answer.id}`)}
-        className='grid grid-cols-[auto,24px] gap-2 justify-end text-xs text-slate-700   p-0 m-0 h-6'
+        className='grid grid-cols-[auto_24px] gap-2 justify-end text-xs text-slate-700   p-0 m-0 h-6'
       >
         <div className='text-slate-500'>
           {formatDistance(answer.created_at!, new Date(), {

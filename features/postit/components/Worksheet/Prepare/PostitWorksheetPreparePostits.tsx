@@ -26,7 +26,7 @@ const PostitWorksheetPreparePostits = ({
       <div className='pl-[1em] grid gap-12'>
         <div className='grid gap-2'>
           <div className=''>確認後，請打勾</div>
-          <div className='grid grid-cols-[16px,1fr] gap-x-4 gap-y-2 items-center'>
+          <div className='grid grid-cols-[16px_1fr] gap-x-4 gap-y-2 items-center'>
             <PostitWorksheetCheckBox value={20} workout={workout} />
             <div className='font-bold'>顏色有4種、詞性有7種</div>
             <div></div>
@@ -55,7 +55,7 @@ const PostitWorksheetPreparePostits = ({
               </div>
             </div>
           </div>
-          <div className='grid grid-cols-[16px,1fr] gap-x-4 gap-y-2 items-center'>
+          <div className='grid grid-cols-[16px_1fr] gap-x-4 gap-y-2 items-center'>
             <PostitWorksheetCheckBox value={21} workout={workout} />
             <div className='font-bold'>符號有2種</div>
             <div></div>
@@ -72,7 +72,7 @@ const PostitWorksheetPreparePostits = ({
               </div>
             </div>
           </div>
-          <div className='grid grid-cols-[16px,1fr] gap-x-4 gap-y-2 items-center'>
+          <div className='grid grid-cols-[16px_1fr] gap-x-4 gap-y-2 items-center'>
             <PostitWorksheetCheckBox value={22} workout={workout} />
             <div className='font-bold'>線條有2種</div>
             <div></div>
@@ -93,7 +93,7 @@ const PostitWorksheetPreparePostits = ({
             <div></div>
             <div>※其實，藍色線條也可以接到「い形容詞、な形容詞、名詞後面」</div>
           </div>
-          <div className='grid grid-cols-[16px,1fr] gap-x-4 gap-y-2 items-center'>
+          <div className='grid grid-cols-[16px_1fr] gap-x-4 gap-y-2 items-center'>
             <PostitWorksheetCheckBox value={23} workout={workout} />
             <div className='font-bold'>
               膠的部分放在<span className='text-red-500'>右邊</span>

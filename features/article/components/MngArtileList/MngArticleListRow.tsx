@@ -45,9 +45,9 @@ const MngArticleListRow = ({
   removeArticle,
 }: Props) => {
   return (
-    <div className='border-b border-black/20 px-2 py-1 text-sm grid grid-cols-[1fr,auto] items-center gap-2'>
+    <div className='border-b border-black/20 px-2 py-1 text-sm grid grid-cols-[1fr_auto] items-center gap-2'>
       <Link href={`/mng/article/${article.id}/edit`}>
-        <div className='grid grid-cols-[48px,1fr,auto] gap-2 items-center justify-between'>
+        <div className='grid grid-cols-[48px_1fr_auto] gap-2 items-center justify-between'>
           <UserDisplay display={article.display} />
           <ArticleTitle title={article.title} />
           <div className='flex items-center gap-1'>

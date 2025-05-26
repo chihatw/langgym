@@ -35,10 +35,10 @@ const AnswerListRow = ({ answer, answerRows, removeAnswer }: Props) => {
   };
 
   return (
-    <div className='border-slate-400 border-b grid grid-cols-[auto,1fr,auto] items-center gap-x-2'>
+    <div className='border-slate-400 border-b grid grid-cols-[auto_1fr_auto] items-center gap-x-2'>
       <div className='text-xs text-slate-500'>{answer.display}</div>
       <div className='text-sm '>{answer.title}</div>
-      <div className='grid grid-cols-[auto,40px,auto,auto] items-center gap-x-0'>
+      <div className='grid grid-cols-[auto_40px_auto_auto] items-center gap-x-0'>
         <div className='text-xs text-slate-500 '>
           {formatDistance(answer.created_at!, new Date(), {
             addSuffix: true,

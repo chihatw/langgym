@@ -9,7 +9,7 @@ type Props = {
 const PostitThreeSentencesTopic_3 = ({ workout, disabled }: Props) => {
   return (
     <div className='grid gap-0'>
-      <div className='grid grid-cols-[16px,1fr] gap-4 items-center'>
+      <div className='grid grid-cols-[16px_1fr] gap-4 items-center'>
         <PostitWorksheetCheckBox
           value={13}
           workout={workout}
@@ -17,7 +17,7 @@ const PostitThreeSentencesTopic_3 = ({ workout, disabled }: Props) => {
         />
         <div className='font-bold'>「同一詞」不一定指出「同一個主題」</div>
       </div>
-      <div className='grid grid-cols-[16px,1fr] gap-4 items-center'>
+      <div className='grid grid-cols-[16px_1fr] gap-4 items-center'>
         <div></div>
         <div>
           <div>a. 田中さんは男性です。</div>

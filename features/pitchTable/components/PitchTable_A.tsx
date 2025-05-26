@@ -9,7 +9,7 @@ const PitchTable_A = ({ lines }: Props) => {
       {lines.map((line, index) => (
         <div
           key={index}
-          className='h-12 grid grid-cols-[auto,1fr] items-center gap-x-2'
+          className='h-12 grid grid-cols-[auto_1fr] items-center gap-x-2'
         >
           <div className='text-sm text-black'>{line.japanese}</div>
           <SentencePitchLine pitchStr={line.pitchStr} />

@@ -4,7 +4,7 @@ type Props = {
 
 const MirrorWorkoutWorkoutButtonWrapper = ({ children }: Props) => {
   return (
-    <div className='grid  grid-cols-[206px] sm:grid-cols-[206px,206px] gap-8'>
+    <div className='grid  grid-cols-[206px] sm:grid-cols-[206px_206px] gap-8'>
       {children}
     </div>
   );

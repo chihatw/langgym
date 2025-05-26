@@ -49,7 +49,7 @@ const MngMirrorForm = (props: Props) => {
         {MIRROR_REALTIME_ITEMS.map((item, index) => (
           <div
             key={index}
-            className='grid grid-cols-[40px,1fr,40px] items-center p-0 border-b border-slate-500 pb-4 gap-2'
+            className='grid grid-cols-[40px_1fr_40px] items-center p-0 border-b border-slate-500 pb-4 gap-2'
           >
             <Checkbox
               checked={value.selectedId === item.id}
