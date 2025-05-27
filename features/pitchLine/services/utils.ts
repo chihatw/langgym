@@ -1,4 +1,3 @@
-import { WorkoutFormProps } from '@/features/workout/components/WorkoutForm/WorkoutForm';
 import { ACCENT_MARK, LONG_VOWELS, MORA_VOWEL_MAP, YOUONS } from '../constants';
 
 export function removeMarks(input: string) {
@@ -119,25 +118,6 @@ export function buildNewPitchStr(pitchStr: string, accentIndex: number) {
 
 export function calcBeatCount(pitchStr: string): number {
   return Math.ceil(buildMoras(pitchStr).length / 2);
-}
-
-const INTERVAL = 1; // bpm 計算時、行間に加える拍数
-
-export function calcBpm(value: WorkoutFormProps, isReview: boolean) {
-  if (!value.audioBuffer) return 0;
-  let beats = value.items.reduce((acc, cur, index) => {
-    const isLast = index === value.items.length - 1;
-    const curBeat = calcBeatCount(cur.pitchStr!);
-    return acc + curBeat + (!isLast ? INTERVAL : 0);
-  }, 0);
-
-  // isReview の処理
-  if (isReview) {
-    beats = beats * 2;
-  }
-
-  if (!beats) return 0;
-  return Math.round((beats * 60) / value.audioBuffer.duration);
 }
 
 // MORA_VOWEL_MAP 作成用

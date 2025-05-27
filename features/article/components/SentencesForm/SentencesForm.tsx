@@ -9,7 +9,7 @@ import {
 import { blobToAudioBuffer } from '@/utils';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState, useTransition } from 'react';
-import BuildArticlePitchQuizButton from '../../../quiz/components/BuildArticlePitchQuizButton';
+
 import { ArticleView, Sentence, SentenceView } from '../../schema';
 import { batchInsertSentences } from '../../services/actions';
 
@@ -176,10 +176,6 @@ const SentencesForm = ({ sentences, article }: Props) => {
         >
           Submit
         </SubmitServerActionButton>
-
-        {!!sentences.length ? (
-          <BuildArticlePitchQuizButton sentences={sentences} />
-        ) : null}
       </div>
     </div>
   );

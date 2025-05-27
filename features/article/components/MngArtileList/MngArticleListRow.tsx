@@ -2,7 +2,6 @@
 import { Button, buttonVariants } from '@/components/ui/button';
 
 import TooltipWrapper from '@/components/TooltipWrapper';
-import { ArticlePitchQuizAnswerView } from '@/features/answer/schema';
 import { cn } from '@/lib/utils';
 import {
   AlignJustify,
@@ -26,7 +25,7 @@ import { deleteArticle, updateArticleIsArchived } from '../../services/actions';
 type Props = {
   article: ArticleView;
   sentences: SentenceView[];
-  answers: ArticlePitchQuizAnswerView[];
+
   removeArticle: (id: number) => void;
 };
 
@@ -41,7 +40,7 @@ const INITIAL_STATE: FormProps = {
 const MngArticleListRow = ({
   article,
   sentences,
-  answers,
+
   removeArticle,
 }: Props) => {
   return (
@@ -52,7 +51,6 @@ const MngArticleListRow = ({
           <ArticleTitle title={article.title} />
           <div className='flex items-center gap-1'>
             <IsArchived article={article} />
-            <HasAnswers hasAnswers={!!answers.length} />
             <IsShowAccents article={article} />
             <PDFExists article={article} />
             <UploadAudioExists article={article} />

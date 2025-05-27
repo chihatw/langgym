@@ -4,8 +4,6 @@ import HomepageInfoListLoader from '@/features/homepageInfo/components/HomepageI
 import MirrorNumbersLoader from '@/features/mirror/components/MirrorWorkoutTopPane/MirrorWorkoutLoader';
 import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/server';
 import PostItLoader from '@/features/postit/components/PostItLoader';
-import QuizListContainer from '@/features/quiz/components/QuizList/QuizListContainer';
-import WorkoutListContainer from '@/features/workout/components/WorkoutList/WorkoutListContainer';
 import ArticleListLoader from '../features/article/components/ArticleList/ArticleListLoader';
 import HiddenElements from './HiddenElements';
 
@@ -19,8 +17,6 @@ const GroupATop = async ({ uid, cheat }: Props) => {
       <div className='grid gap-8 max-w-lg mx-auto pt-10 pb-40'>
         <HomepageInfoListLoader uid={uid} />
         <ArticleListLoader uid={uid} />
-        <QuizListContainer uid={uid} />
-        <WorkoutListContainer uid={uid} />
         <BetterreadContainer uid={uid} />
         <PostItLoader uid={uid} />
         <MirrorNumbersLoader uid={uid} />

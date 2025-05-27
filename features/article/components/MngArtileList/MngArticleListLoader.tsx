@@ -1,5 +1,5 @@
 import MngHeader from '@/components/MngHeader';
-import { fetchAnswers } from '@/features/answer/services/server';
+
 import {
   fetchArticles,
   fetchSentencesByArticleIds,
@@ -11,16 +11,11 @@ const MngArticleListLoader = async () => {
   const sentences = await fetchSentencesByArticleIds(
     articles.map(({ id }) => id!)
   );
-  const answers = await fetchAnswers();
 
   return (
     <div className='grid gap-4 max-w-lg mx-auto pb-40'>
       <MngHeader />
-      <MngArticleList
-        articles={articles}
-        sentences={sentences}
-        answers={answers}
-      />
+      <MngArticleList articles={articles} sentences={sentences} />
     </div>
   );
 };
