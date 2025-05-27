@@ -1,6 +1,6 @@
 'use client';
 
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -10,7 +10,7 @@ type Props = { uid: string };
 const RedirectController = ({ uid }: Props) => {
   const router = useRouter();
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
     const channel = supabase
       .channel(`redirect to ${nanoid()}`)
       .on(

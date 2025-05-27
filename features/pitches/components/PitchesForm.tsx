@@ -7,8 +7,8 @@ import {
   buildMoras,
   buildMoras_no_remove_mark,
 } from '@/features/pitchLine/services/utils';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
+import { createClient } from '@/utils/supabase/client';
 import { useEffect, useMemo, useState } from 'react';
 import {
   fetchPitches,
@@ -74,7 +74,7 @@ const PitchesForm = (props: Props) => {
 
   // subscribe
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
     const channel = supabase
       .channel('pitches')
       .on(

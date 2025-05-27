@@ -1,8 +1,8 @@
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { Record, RecordParams } from '../schema';
 
 export async function fetchRecordParams(): Promise<undefined | RecordParams> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('record_params')
     .select()
@@ -21,7 +21,7 @@ export async function fetchRecordParams(): Promise<undefined | RecordParams> {
 }
 
 export async function fetchRecords(): Promise<Record[]> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { data, error } = await supabase.from('records').select();
 
   if (error) {
@@ -36,7 +36,7 @@ export async function fetchRecords(): Promise<Record[]> {
 }
 
 export async function insertRecord(record: Omit<Record, 'id' | 'created_at'>) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error } = await supabase.from('records').insert(record);
   if (error) {
@@ -45,7 +45,7 @@ export async function insertRecord(record: Omit<Record, 'id' | 'created_at'>) {
 }
 
 export async function updateRecordParamsTitle(id: number, title: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase
     .from('record_params')
     .update({ title })
@@ -58,7 +58,7 @@ export async function updateRecordParamsTitle(id: number, title: string) {
 }
 
 export async function updateRecordParamsPitchStr(id: number, pitchStr: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase
     .from('record_params')
     .update({ pitchStr })
@@ -71,7 +71,7 @@ export async function updateRecordParamsPitchStr(id: number, pitchStr: string) {
 }
 
 export async function deleteRecord(id: number) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase.from('records').delete().eq('id', id);
 
   if (error) {
@@ -80,7 +80,7 @@ export async function deleteRecord(id: number) {
 }
 
 export async function deleteRecords(ids: number[]) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase.from('records').delete().in('id', ids);
 
   if (error) {

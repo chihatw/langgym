@@ -1,6 +1,6 @@
 'use server';
 
-import { createSupabaseServerActionClient } from '@/lib/supabase/actions';
+import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { PostItItem } from '../schema';
 
@@ -13,7 +13,7 @@ export async function revalidatePostitNote(postitNoteId: number) {
 }
 
 export async function resetPostItItemImageUrl(item: PostItItem) {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
 
   const { error } = await supabase
     .from('postit_items')
@@ -29,7 +29,7 @@ export async function resetPostItItemImageUrl(item: PostItItem) {
 }
 
 export async function deletePostItNoteItem(id: number, postitNoteId: number) {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
 
   const { error } = await supabase
     .from('postit_note_items')
@@ -48,7 +48,7 @@ export async function updatePostItWorkoutChecked(
   id: number,
   checked: number[]
 ) {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
 
   const { error } = await supabase
     .from('postit_workouts')
@@ -67,7 +67,7 @@ export async function updatePostItWorkoutJapanese(
   id: number,
   japanese: string
 ): Promise<string | undefined> {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
 
   const { error } = await supabase
     .from('postit_workouts')
@@ -90,7 +90,7 @@ export async function updatePostItWorkoutThreeTopicsImageUrls(
   id: number,
   three_topics_image_urls: string[]
 ) {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
   const { error } = await supabase
     .from('postit_workouts')
     .update({ three_topics_image_urls })

@@ -1,5 +1,5 @@
 'use server';
-import { createSupabaseServerActionClient } from '@/lib/supabase/actions';
+import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import {
   Workout,
@@ -19,7 +19,7 @@ function revalidatePath_workout(id: number) {
 export async function insertWorkout(
   workout: Omit<Workout, 'id' | 'created_at' | 'isDev' | 'isReview'>
 ) {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
   const { error } = await supabase.from('workouts').insert(workout);
 
   if (error) {
@@ -35,7 +35,7 @@ export async function updateWorkout(
   id: number,
   workout: Omit<Workout, 'id' | 'created_at' | 'isDev' | 'isReview'>
 ) {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
   const { error } = await supabase
     .from('workouts')
     .update(workout)
@@ -50,7 +50,7 @@ export async function updateWorkout(
 }
 
 export async function updateWorkoutIsDev(workoutId: number, isDev: boolean) {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
   const { error } = await supabase
     .from('workouts')
     .update({ isDev })
@@ -68,7 +68,7 @@ export async function updateWorkoutIsReview(
   workoutId: number,
   isReview: boolean
 ) {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
   const { error } = await supabase
     .from('workouts')
     .update({ isReview })
@@ -83,7 +83,7 @@ export async function updateWorkoutIsReview(
 }
 
 export async function deleteWorkout(id: number) {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
   const { error } = await supabase.from('workouts').delete().eq('id', id);
 
   if (error) {
@@ -101,7 +101,7 @@ export async function batchInsertWorkoutItems(
   workoutId: number,
   items: Omit<WorkoutItem, 'id' | 'created_at'>[]
 ) {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
 
   // 既存の workoutItems を削除
   const { error } = await supabase
@@ -131,7 +131,7 @@ export async function insertWorkoutRecord(
 ) {
   // workoutId に対して 既存の record があれば削除
   // recordRow は cascade で削除される
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
   const { error: error_dr } = await supabase
     .from('workout_records')
     .delete()
@@ -171,7 +171,7 @@ export async function insertWorkoutRecord(
 }
 
 export async function deleteWorkoutRecord(id: number) {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
 
   const { error } = await supabase
     .from('workout_records')

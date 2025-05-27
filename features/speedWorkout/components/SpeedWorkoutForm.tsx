@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { WorkoutItemView } from '@/features/workout/schema';
 import { fetchWorkoutItems } from '@/features/workout/services/client';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { PlayCircle, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { SpeedWorkout } from '../schema';
@@ -56,7 +56,7 @@ const SpeedWorkoutForm = ({}: Props) => {
 
   // subscribe
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
 
     const channel = supabase
       .channel('speed workout speed workout form')

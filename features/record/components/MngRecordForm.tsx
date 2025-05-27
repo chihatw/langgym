@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 import { deleteAudioFiles } from '@/features/storage/services/client';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Record, RecordParams } from '../schema';
 import {
@@ -54,7 +54,7 @@ const MngRecordForm = ({ recordParams, records }: Props) => {
 
   // subscribe
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
 
     const channel = supabase
       .channel('records mng record form')

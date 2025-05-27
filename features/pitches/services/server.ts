@@ -1,8 +1,8 @@
-import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
+import { createClient } from '@/utils/supabase/server';
 import { Pitches, PitchesUser } from '../schema';
 
 export async function fetchPitches(): Promise<Pitches | undefined> {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from('pitches')
@@ -18,7 +18,7 @@ export async function fetchPitches(): Promise<Pitches | undefined> {
 }
 
 export async function fetchPitchesUser(): Promise<PitchesUser | undefined> {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from('pitches_user')

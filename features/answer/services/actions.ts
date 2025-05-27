@@ -1,6 +1,6 @@
 'use server';
 
-import { createSupabaseServerActionClient } from '@/lib/supabase/actions';
+import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { ArticlePitchQuizAnswerRow } from '../schema';
 
@@ -8,7 +8,7 @@ export async function insertQuizAnswers(
   quizId: number,
   rows: Omit<ArticlePitchQuizAnswerRow, 'id' | 'created_at' | 'answerId'>[]
 ): Promise<{ errMsg?: string; answerId?: number }> {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
   const { data: _answer, error: error_a } = await supabase
     .from('article_pitch_quiz_answers')
     .insert({ quizId })
@@ -37,7 +37,7 @@ export async function insertQuizAnswers(
 }
 
 export async function deleteAnswer(id: number) {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
 
   const { error } = await supabase
     .from('article_pitch_quiz_answers')

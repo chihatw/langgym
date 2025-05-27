@@ -1,10 +1,10 @@
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { PostItItem, PostItNoteItem } from '../schema';
 
 export async function insertPostitNoteItem(
   postitNoteItem: Omit<PostItNoteItem, 'id' | 'created_at'>
 ) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error } = await supabase
     .from('postit_note_items')
@@ -16,7 +16,7 @@ export async function insertPostitNoteItem(
 }
 
 export async function updatePostitItem(item: PostItItem) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error } = await supabase
     .from('postit_items')
@@ -32,7 +32,7 @@ export async function updatePostItWorkoutThreeTopicsImageUrls(
   id: number,
   three_topics_image_urls: string[]
 ) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase
     .from('postit_workouts')
     .update({ three_topics_image_urls })

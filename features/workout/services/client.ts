@@ -1,8 +1,8 @@
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { WorkoutItemView } from '../schema';
 
 export async function fetchWorkoutItems(): Promise<WorkoutItemView[]> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('workout_items_view')
     .select()

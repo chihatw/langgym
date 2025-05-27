@@ -1,4 +1,4 @@
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { MirrorWorkoutRealtime, MirrorWorkoutResult } from '../schema';
 
 export async function updateMirrorWorkoutRealtime({
@@ -6,7 +6,7 @@ export async function updateMirrorWorkoutRealtime({
   isMirror,
   selectedId,
 }: MirrorWorkoutRealtime) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error } = await supabase
     .from('mirror_workout_realtime')
@@ -20,7 +20,7 @@ export async function updateMirrorWorkoutRealtime({
 export async function fetchMirrorWorkoutResultsByUid(
   uid: string
 ): Promise<MirrorWorkoutResult[]> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('mirror_workout_results')
     .select()

@@ -1,8 +1,8 @@
-import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
+import { createClient } from '@/utils/supabase/server';
 import { AppUser } from '../schema';
 
 export async function fetchUsers() {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.from('users').select();
   if (error) {
     console.error(error.message);

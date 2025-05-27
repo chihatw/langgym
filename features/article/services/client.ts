@@ -1,8 +1,8 @@
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { Article } from '../schema';
 
 export async function fetchArticlesByUid(uid: string): Promise<Article[]> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -22,7 +22,7 @@ export async function fetchArticlesByUid(uid: string): Promise<Article[]> {
 export async function fetchLatestArticleByUid(
   uid: string
 ): Promise<Article | undefined> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('articles')
     .select()

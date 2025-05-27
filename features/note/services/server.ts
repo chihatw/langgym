@@ -1,8 +1,8 @@
-import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
+import { createClient } from '@/utils/supabase/server';
 import { Note, NoteAudioPath } from '../schema';
 
 export async function fetchNote(): Promise<Note | undefined> {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('note')
     .select()
@@ -18,7 +18,7 @@ export async function fetchNote(): Promise<Note | undefined> {
 }
 
 export async function fetchNoteAudioPaths(): Promise<NoteAudioPath[]> {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.from('note_audio_paths').select();
 
   if (error) {

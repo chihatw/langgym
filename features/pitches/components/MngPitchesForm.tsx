@@ -2,7 +2,7 @@
 import MngPaneContainer from '@/components/MngPaneContainer';
 import { Input } from '@/components/ui/input';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Pitches, PitchesUser } from '../schema';
 import {
@@ -60,7 +60,7 @@ const MngPitchesForm = ({ pitches, pitchesUser }: Props) => {
 
   // subscribe
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
 
     const channel = supabase
       .channel('pitches user')

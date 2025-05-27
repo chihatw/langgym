@@ -2,7 +2,7 @@
 import MngPaneContainer from '@/components/MngPaneContainer';
 import { Textarea } from '@/components/ui/textarea';
 import { Record } from '@/features/record/schema';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Note, NoteAudioPath } from '../schema';
 import { updateNote } from '../services/client';
@@ -47,7 +47,7 @@ const MngNoteForm = ({ note, records, noteAudioPaths }: Props) => {
 
   // subscribe
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
 
     const channel = supabase
       .channel('records mng note form')

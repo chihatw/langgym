@@ -1,10 +1,10 @@
 'use server';
 
-import { createSupabaseServerActionClient } from '@/lib/supabase/actions';
+import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 
 export async function updateRedirectTo(id: number, redirect_to: string) {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
 
   const { error } = await supabase
     .from('redirect_tos')

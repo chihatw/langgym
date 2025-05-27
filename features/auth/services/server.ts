@@ -1,7 +1,7 @@
-import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
+import { createClient } from '@/utils/supabase/server';
 
 export async function getUserFromServerSide() {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
 
   const {
     data: { user },

@@ -1,8 +1,8 @@
-import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
+import { createClient } from '@/utils/supabase/server';
 import { RedirectToView } from '../schema';
 
 export async function fetchRedirectTos(): Promise<RedirectToView[]> {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.from('redirect_tos_view').select();
   if (error) {
     console.error(error.message);

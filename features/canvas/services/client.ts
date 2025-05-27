@@ -1,10 +1,10 @@
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { CANVAS_FIELD_ID } from '../constants';
 import { CanvasBox, CanvasField } from '../schema';
 import { connectedObjSetsStringify } from './utils';
 
 export async function fetchField(): Promise<undefined | CanvasField> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('canvas_field')
     .select()
@@ -19,7 +19,7 @@ export async function fetchField(): Promise<undefined | CanvasField> {
 }
 
 export async function fetchBoxes(): Promise<CanvasBox[]> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { data, error } = await supabase.from('canvas_boxes').select();
   if (error) {
     console.error(error.message);
@@ -35,7 +35,7 @@ export async function updateField({
   expandStartObjId,
   connectedObjSets,
 }: Omit<CanvasField, 'connectedObjSets'> & { connectedObjSets: number[][] }) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase
     .from('canvas_field')
     .update({
@@ -59,7 +59,7 @@ export async function insertBox({
   highlights,
   isHidden,
 }: CanvasBox) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase.from('canvas_boxes').insert({
     id,
     x: x >> 0,
@@ -85,7 +85,7 @@ export async function updateBox({
   highlights,
   isHidden,
 }: CanvasBox) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase
     .from('canvas_boxes')
     .update({
@@ -106,7 +106,7 @@ export async function updateBox({
 
 //
 export async function updateHighlights(id: number, highlights: number[]) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase
     .from('canvas_boxes')
     .update({ highlights })
@@ -119,7 +119,7 @@ export async function updateHighlights(id: number, highlights: number[]) {
 }
 
 export async function deleteBox(id: number) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase.from('canvas_boxes').delete().eq('id', id);
   if (error) {
     console.error(error.message);
@@ -128,7 +128,7 @@ export async function deleteBox(id: number) {
 }
 
 export async function clearCanvas() {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   // field
   const { error: error_f } = await supabase

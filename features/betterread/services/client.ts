@@ -1,10 +1,10 @@
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { BetterReadItem, BetterReadItemView } from '../schema';
 
 export async function insertBetterreadItem(
   betterreadItem: Omit<BetterReadItem, 'id' | 'created_at'>
 ) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error } = await supabase
     .from('betterread_items')
@@ -18,7 +18,7 @@ export async function insertBetterreadItem(
 export async function fetchBetterreadItemsByBetterreadId(
   betterread_id: number
 ): Promise<BetterReadItemView[]> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('betterread_items_view')
     .select()

@@ -1,7 +1,7 @@
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 
 export async function downloadAudioFile(path: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { data, error } = await supabase.storage.from('audio').download(path);
   if (error) {
     console.error(error.message);
@@ -11,7 +11,7 @@ export async function downloadAudioFile(path: string) {
 }
 
 export async function uploadAudioFile(file: Blob, path: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error } = await supabase.storage
     .from('audio')
@@ -22,7 +22,7 @@ export async function uploadAudioFile(file: Blob, path: string) {
 }
 
 export async function uploadImageFile(file: Blob, path: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error } = await supabase.storage
     .from('image')
@@ -39,7 +39,7 @@ export async function uploadImageFile(file: Blob, path: string) {
 }
 
 export async function uploadPostItItemImage(file: Blob, path: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error } = await supabase.storage
     .from('postits')
@@ -56,7 +56,7 @@ export async function uploadPostItItemImage(file: Blob, path: string) {
 }
 
 export async function uploadPostItNoteFile(file: Blob, path: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error } = await supabase.storage
     .from('postit-notes')
@@ -75,7 +75,7 @@ export async function uploadPostItNoteFile(file: Blob, path: string) {
 }
 
 export async function deleteAudioFile(path: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase.storage.from('audio').remove([path]);
   if (error) {
     return error.message;
@@ -83,7 +83,7 @@ export async function deleteAudioFile(path: string) {
 }
 
 export async function deleteAudioFiles(paths: string[]) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase.storage.from('audio').remove(paths);
   if (error) {
     console.error(error.message);
@@ -91,7 +91,7 @@ export async function deleteAudioFiles(paths: string[]) {
 }
 
 export async function deleteImageFile(path: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase.storage.from('image').remove([path]);
   if (error) {
     return error.message;
@@ -99,7 +99,7 @@ export async function deleteImageFile(path: string) {
 }
 
 export async function deletePostItItemImage(path: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase.storage.from('postits').remove([path]);
   if (error) {
     return error.message;
@@ -107,7 +107,7 @@ export async function deletePostItItemImage(path: string) {
 }
 
 export async function deletePostItNoteFile(path: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase.storage.from('postit-notes').remove([path]);
   if (error) {
     return error.message;

@@ -10,8 +10,8 @@ import {
 } from '@/components/ui/select';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 import { WorkoutItemView } from '@/features/workout/schema';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
+import { createClient } from '@/utils/supabase/client';
 import { useEffect, useMemo, useState } from 'react';
 import { SpeedWorkout } from '../schema';
 import {
@@ -37,22 +37,25 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
   const [value, setValue] = useState(INITIAL_STATE);
 
   const workouts = useMemo(() => {
-    return workoutItems.reduce((acc, cur) => {
-      const ids = acc.map((i) => i.id);
+    return workoutItems.reduce(
+      (acc, cur) => {
+        const ids = acc.map((i) => i.id);
 
-      if (ids.includes(cur.workoutId!)) {
-        return acc;
-      }
+        if (ids.includes(cur.workoutId!)) {
+          return acc;
+        }
 
-      return [
-        ...acc,
-        {
-          id: cur.workoutId!,
-          title: cur.title!,
-          display: cur.display!,
-        },
-      ];
-    }, [] as { id: number; title: string; display: string }[]);
+        return [
+          ...acc,
+          {
+            id: cur.workoutId!,
+            title: cur.title!,
+            display: cur.display!,
+          },
+        ];
+      },
+      [] as { id: number; title: string; display: string }[]
+    );
   }, [workoutItems]);
 
   const selectedWorkoutItems = useMemo(
@@ -71,7 +74,7 @@ const MngSpeedWorkoutForm = ({ speedWorkout, workoutItems }: Props) => {
 
   // subscribe
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
     const channel = supabase
       .channel('speed workout mng speed workout form')
       .on(

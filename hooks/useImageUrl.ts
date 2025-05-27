@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabaseClient';
+import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 
 export const useImageUrl = (bucket: string, path: string) => {
@@ -6,6 +6,7 @@ export const useImageUrl = (bucket: string, path: string) => {
 
   useEffect(() => {
     const fetchImageUrl = async () => {
+      const supabase = createClient();
       const { data } = supabase.storage.from(bucket).getPublicUrl(path);
 
       setImageUrl(data.publicUrl);

@@ -1,10 +1,10 @@
-import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
+import { createClient } from '@/utils/supabase/server';
 import { HomepageInfo } from '../schema';
 
 export async function fetchHomepageInfosByUid(
   uid: string
 ): Promise<HomepageInfo[]> {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from('homepage_infos')

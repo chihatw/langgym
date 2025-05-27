@@ -1,10 +1,10 @@
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { PaperCupParams } from '../schema';
 
 export async function fetchPaperCupParams(): Promise<
   PaperCupParams | undefined
 > {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { data, error } = await supabase
     .from('paper_cup_params')
@@ -27,7 +27,7 @@ export async function updatePaperCupParams(
   params: string,
   cue: string
 ) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error } = await supabase
     .from('paper_cup_params')

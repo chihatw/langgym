@@ -1,8 +1,8 @@
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { Pitches, PitchesUser } from '../schema';
 
 export async function fetchPitches(): Promise<Pitches | undefined> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { data, error } = await supabase
     .from('pitches')
@@ -18,7 +18,7 @@ export async function fetchPitches(): Promise<Pitches | undefined> {
 }
 
 export async function fetchPitchesUser(): Promise<PitchesUser | undefined> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { data, error } = await supabase
     .from('pitches_user')
@@ -34,7 +34,7 @@ export async function fetchPitchesUser(): Promise<PitchesUser | undefined> {
 }
 
 export async function updatePitchesJapanese(id: number, japanese: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error } = await supabase
     .from('pitches')
@@ -47,7 +47,7 @@ export async function updatePitchesJapanese(id: number, japanese: string) {
 }
 
 export async function updatePitchesPitchStr(id: number, pitchStr: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error } = await supabase
     .from('pitches')
@@ -60,7 +60,7 @@ export async function updatePitchesPitchStr(id: number, pitchStr: string) {
 }
 
 export async function updatePitchesUserPitchStr(id: number, pitchStr: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase
     .from('pitches_user')
     .update({ pitchStr })

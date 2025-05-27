@@ -5,9 +5,9 @@ import { Button } from '@/components/ui/button';
 
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
 import { uploadAudioFile } from '@/features/storage/services/client';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
 import { blobToAudioBuffer } from '@/utils';
+import { createClient } from '@/utils/supabase/client';
 import { Mic, Pause, Play, StopCircle } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Record } from '../schema';
@@ -73,7 +73,7 @@ const RecordForm = (props: Props) => {
 
   // subscribe
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
 
     const channel = supabase
       .channel('record params')

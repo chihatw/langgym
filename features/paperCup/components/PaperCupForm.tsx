@@ -1,7 +1,7 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import SentencePitchLine from '@/features/pitchLine/components/SentencePitchLine';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { RefreshCcw } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { PaperCupCueObj, PaperCupParams } from '../schema';
@@ -46,7 +46,7 @@ const PaperCupForm = ({}: Props) => {
 
   // subscribe
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
 
     const channel = supabase
       .channel('paper cup')

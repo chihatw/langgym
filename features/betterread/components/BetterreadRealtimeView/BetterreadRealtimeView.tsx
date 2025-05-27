@@ -1,6 +1,6 @@
 'use client';
 import { Sentence } from '@/features/article/schema';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import { BetterReadItemView } from '../../schema';
@@ -32,7 +32,7 @@ const BetterreadRealtimeView = ({}: Props) => {
 
   // initialize
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
 
     (async () => {
       const { data, error } = await supabase
@@ -64,7 +64,7 @@ const BetterreadRealtimeView = ({}: Props) => {
 
   // subscribe betterread_toggle
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
 
     const channel = supabase
       .channel(`betterread_toggle ${nanoid()}`)
@@ -93,7 +93,7 @@ const BetterreadRealtimeView = ({}: Props) => {
 
   // subscribe betterread_items
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
     const channel = supabase
       .channel(`betterread_item_questions ${nanoid()}`)
       .on(
@@ -188,7 +188,7 @@ const BetterreadRealtimeView = ({}: Props) => {
 
     (async () => {
       if (!value.betterreadId) return;
-      const supabase = createSupabaseClientComponentClient();
+      const supabase = createClient();
 
       const { data: data_b, error: error_b } = await supabase
         .from('betterread')

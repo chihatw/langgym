@@ -1,8 +1,8 @@
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { SpeedWorkout } from '../schema';
 
 export async function fetchSpeedWorkout(): Promise<SpeedWorkout | undefined> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { data, error } = await supabase
     .from('speed_workout')
@@ -22,7 +22,7 @@ export async function updateSpeedWorkoutSelectedId(
   id: number,
   selectedId: number
 ) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase
     .from('speed_workout')
     .update({ selectedId })
@@ -37,7 +37,7 @@ export async function updateSpeedWorkoutIsRunning(
   id: number,
   isRunning: boolean
 ) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase
     .from('speed_workout')
     .update({ isRunning, selectedItemId: null })
@@ -52,7 +52,7 @@ export async function updateSpeedWorkoutSelectedItemId(
   id: number,
   selectedItemId: number | null
 ) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { error } = await supabase
     .from('speed_workout')
     .update({ selectedItemId })

@@ -1,6 +1,6 @@
 'use client';
 
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { nanoid } from 'nanoid';
 import { MutableRefObject, useEffect, useRef } from 'react';
 import { Box } from '../class/Box';
@@ -57,7 +57,7 @@ const CanvasForm = (props: Props) => {
   // subscribe canvas
 
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
     const channel = supabase
       .channel(`canvas form ${nanoid()}`)
 

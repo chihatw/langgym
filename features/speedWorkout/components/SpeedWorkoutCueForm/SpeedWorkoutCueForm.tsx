@@ -1,7 +1,7 @@
 'use client';
 import { Workout, WorkoutItemView } from '@/features/workout/schema';
 import { fetchWorkoutItems } from '@/features/workout/services/client';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { useEffect, useMemo, useState } from 'react';
 import { SpeedWorkout } from '../../schema';
 import {
@@ -76,7 +76,7 @@ const SpeedWorkoutCueForm = ({}: Props) => {
 
   // subscribe
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
 
     const channel = supabase
       .channel('speed workout speed workout cue form')

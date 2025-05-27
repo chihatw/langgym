@@ -1,8 +1,8 @@
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { Note, NoteAudioPath } from '../schema';
 
 export async function fetchNote(): Promise<Note | undefined> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { data, error } = await supabase
     .from('note')
     .select()
@@ -18,7 +18,7 @@ export async function fetchNote(): Promise<Note | undefined> {
 }
 
 export async function fetchNoteAudioPaths(): Promise<NoteAudioPath[]> {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
   const { data, error } = await supabase.from('note_audio_paths').select();
 
   if (error) {
@@ -29,7 +29,7 @@ export async function fetchNoteAudioPaths(): Promise<NoteAudioPath[]> {
 }
 
 export async function updateNote(id: number, text: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error } = await supabase.from('note').update({ text }).eq('id', id);
 
@@ -39,7 +39,7 @@ export async function updateNote(id: number, text: string) {
 }
 
 export async function upsertNoteAudioPath(index: number, audioPath: string) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   // 既存のものがあれば、削除
   const { error: error_d } = await supabase
@@ -61,7 +61,7 @@ export async function upsertNoteAudioPath(index: number, audioPath: string) {
 }
 
 export async function deleteNoteAudioPath(index: number) {
-  const supabase = createSupabaseClientComponentClient();
+  const supabase = createClient();
 
   const { error: error_d } = await supabase
     .from('note_audio_paths')

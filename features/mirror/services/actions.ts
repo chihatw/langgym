@@ -1,13 +1,13 @@
 'use server';
 
-import { createSupabaseServerActionClient } from '@/lib/supabase/actions';
+import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { MirrorWorkoutResult } from '../schema';
 
 export async function insertMirrorWorkoutResult(
   result: Omit<MirrorWorkoutResult, 'id'>
 ): Promise<number | undefined> {
-  const supabase = await createSupabaseServerActionClient();
+  const supabase = await createClient();
 
   const { data, error } = await supabase
     .from('mirror_workout_results')

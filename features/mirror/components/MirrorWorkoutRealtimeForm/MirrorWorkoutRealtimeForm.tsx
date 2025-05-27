@@ -1,5 +1,5 @@
 'use client';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { nanoid } from 'nanoid';
 import { useEffect, useMemo, useState } from 'react';
 import { MIRROR_REALTIME_ITEMS } from '../../constants';
@@ -27,7 +27,7 @@ const MirrorWorkoutRealtimeForm = ({ params }: Props) => {
 
   // subscribe
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
 
     const channel = supabase
       .channel(`mirror ${nanoid()}`)

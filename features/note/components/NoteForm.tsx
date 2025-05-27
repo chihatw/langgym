@@ -1,5 +1,5 @@
 'use client';
-import { createSupabaseClientComponentClient } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/client';
 import { useEffect, useMemo, useState } from 'react';
 import { Note, NoteAudioPath } from '../schema';
 import { fetchNote, fetchNoteAudioPaths } from '../services/client';
@@ -48,7 +48,7 @@ const NoteForm = (props: Props) => {
 
   // subscrive
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
     const channel = supabase
       .channel('note')
       .on(
@@ -69,7 +69,7 @@ const NoteForm = (props: Props) => {
 
   // subscrive
   useEffect(() => {
-    const supabase = createSupabaseClientComponentClient();
+    const supabase = createClient();
     const channel = supabase
       .channel('note audio paths')
       .on(

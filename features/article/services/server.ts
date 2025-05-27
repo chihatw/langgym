@@ -1,8 +1,8 @@
-import { createSupabaseServerComponentClient } from '@/lib/supabase/actions';
+import { createClient } from '@/utils/supabase/server';
 import { Article, ArticleView, SentenceView } from '../schema';
 
 export async function fetchArticles(limit: number): Promise<ArticleView[]> {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('articles_view')
     .select('*')
@@ -21,7 +21,7 @@ export async function fetchArticles(limit: number): Promise<ArticleView[]> {
 export async function fetchLatestArticleByUid(
   uid: string
 ): Promise<Article | undefined> {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('articles')
     .select()
@@ -44,7 +44,7 @@ export async function fetchLatestArticleByUid(
 
 // user 側で使うので display 不要
 export async function fetchArticlesByUid(uid: string): Promise<Article[]> {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -65,7 +65,7 @@ export async function fetchArticlesByUid(uid: string): Promise<Article[]> {
 export async function fetchArticleById(
   id: number
 ): Promise<ArticleView | undefined> {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('articles_view')
     .select('*')
@@ -87,7 +87,7 @@ export async function fetchArticleById(
 export async function fetchArticlesByIds(
   ids: number[]
 ): Promise<ArticleView[]> {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('articles_view')
     .select()
@@ -107,7 +107,7 @@ export async function fetchArticlesByIds(
 export async function fetchSentencesByArticleId(
   articleId: number
 ): Promise<SentenceView[]> {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('sentences_view')
     .select()
@@ -124,7 +124,7 @@ export async function fetchSentencesByArticleId(
 }
 
 export async function fetchSentencesByArticleIds(articleIds: number[]) {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('sentences_view')
     .select()
@@ -144,7 +144,7 @@ export async function fetchSentencesByArticleId_Uid(
   articleId: number,
   uid: string
 ): Promise<SentenceView[]> {
-  const supabase = await createSupabaseServerComponentClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('sentences_view')
     .select()
