@@ -17,7 +17,7 @@ const Header = async () => {
         >
           <Home />
         </Link>
-        <AuthPane user={user} />
+        <AuthPane hasUser={user ? true : false} />
       </div>
     </nav>
   );
