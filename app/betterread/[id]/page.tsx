@@ -7,16 +7,13 @@ import {
   fetchBetterread,
   fetchBetterreadItems,
 } from '@/features/betterread/services/server';
-import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/server';
 
 type Props = { params: Promise<{ id: string }> };
 
 const BetterreadPage = async (props: Props) => {
   const params = await props.params;
 
-  const {
-    id
-  } = params;
+  const { id } = params;
 
   const betterreadId = parseInt(id);
 
@@ -31,8 +28,6 @@ const BetterreadPage = async (props: Props) => {
   const user = await getUserFromServerSide();
   if (!user) return null;
 
-  const latestMirrorResult = await fetchLatestMirrorWorkoutResultByUid(user.id);
-
   return (
     <>
       <div className='grid gap-4 max-w-lg mx-auto pt-4 pb-40'>
@@ -43,7 +38,7 @@ const BetterreadPage = async (props: Props) => {
           betterreadItems={betterreadItems}
         />
       </div>
-      <HiddenElements uid={user.id} latestMirrorResult={latestMirrorResult} />
+      <HiddenElements uid={user.id} />
     </>
   );
 };

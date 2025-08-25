@@ -1,7 +1,6 @@
 import Breadcrumb from '@/components/Breadcrumb';
 import HiddenElements from '@/components/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
-import { fetchLatestMirrorWorkoutResultByUid } from '@/features/mirror/services/server';
 import PostitNoteForm from '@/features/postit/components/PostitNoteForm';
 import { fetchPostItNoteItemsByPostItNoteId } from '@/features/postit/services/server';
 
@@ -10,17 +9,13 @@ type Props = { params: Promise<{ id: string }> };
 const PostItNotePage = async (props: Props) => {
   const params = await props.params;
 
-  const {
-    id
-  } = params;
+  const { id } = params;
 
   const postitNoteItems = await fetchPostItNoteItemsByPostItNoteId(
     parseInt(id)
   );
   const user = await getUserFromServerSide();
   if (!user) return null;
-
-  const latestMirrorResult = await fetchLatestMirrorWorkoutResultByUid(user.id);
 
   return (
     <>
@@ -31,7 +26,7 @@ const PostItNotePage = async (props: Props) => {
           postitNoteId={parseInt(id)}
         />
       </div>
-      <HiddenElements uid={user.id} latestMirrorResult={latestMirrorResult} />
+      <HiddenElements uid={user.id} />
     </>
   );
 };
