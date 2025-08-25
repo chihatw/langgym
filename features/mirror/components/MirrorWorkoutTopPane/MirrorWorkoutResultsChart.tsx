@@ -36,7 +36,7 @@ const MirrorWorkoutResultsChart = ({ results }: Props) => {
           legend: { position: 'none' },
         }}
       />
-      <Chart
+      {/* <Chart
         chartType='ColumnChart'
         data={[['日付', '正答率'], ...columnChartData]}
         options={{
@@ -49,7 +49,7 @@ const MirrorWorkoutResultsChart = ({ results }: Props) => {
           },
           legend: { position: 'none' },
         }}
-      />
+      /> */}
     </div>
   );
 };

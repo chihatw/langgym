@@ -2,7 +2,6 @@ import BorderLabel from '@/components/BorderLabel';
 import Link from 'next/link';
 import { MIRROR_WORKOUTS_LABEL } from '../../constants';
 import { fetchMirrorWorkoutResultsByUid } from '../../services/server';
-import MirrorWorkoutResultList from './MirrorWorkoutResultList';
 import MirrorWorkoutResultsChart from './MirrorWorkoutResultsChart';
 
 type Props = { uid: string };
@@ -19,7 +18,7 @@ const MirrorNumbersLoader = async ({ uid }: Props) => {
           </Link>
         </div>
         <MirrorWorkoutResultsChart results={results} />
-        <MirrorWorkoutResultList results={results} />
+        {/* <MirrorWorkoutResultList results={results} /> */}
       </div>
     </div>
   );
