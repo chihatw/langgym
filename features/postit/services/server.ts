@@ -1,34 +1,10 @@
 import { createClient } from '@/utils/supabase/server';
 import {
-  PostIt,
   PostItItem,
   PostItNote,
   PostItNoteItem,
   PostItWorkout,
 } from '../schema';
-
-export async function fetchPostItByUid(
-  uid: string
-): Promise<PostIt | undefined> {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from('postits')
-    .select()
-    .eq('uid', uid)
-    .single();
-
-  if (error) {
-    console.error(error.message);
-    return;
-  }
-
-  if (!data) {
-    return;
-  }
-
-  return data;
-}
 
 export async function fetchPostItItemsByPostitId(
   postitId: number

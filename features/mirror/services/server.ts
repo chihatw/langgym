@@ -1,6 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
-import { MIRROR_WORKOUT_REALTIME_ID } from '../constants';
-import { MirrorWorkoutRealtime, MirrorWorkoutResult } from '../schema';
+import { MirrorWorkoutResult } from '../schema';
 
 export async function fetchMirrorWorkoutResults(): Promise<
   MirrorWorkoutResult[]
@@ -74,22 +73,4 @@ export async function fetchLatestMirrorWorkoutResultByUid(
   }
 
   return { ...data, created_at: new Date(data.created_at) };
-}
-
-export async function fetchMirrorWorkoutRealtime(): Promise<
-  MirrorWorkoutRealtime | undefined
-> {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from('mirror_workout_realtime')
-    .select()
-    .eq('id', MIRROR_WORKOUT_REALTIME_ID)
-    .single();
-
-  if (error) {
-    console.error(error.message);
-    return;
-  }
-
-  return data;
 }

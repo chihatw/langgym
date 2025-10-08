@@ -7,6 +7,11 @@ export type Json =
   | Json[]
 
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "12.2.12 (cd3cf9e)"
+  }
   public: {
     Tables: {
       article_marks: {
@@ -39,199 +44,11 @@ export type Database = {
             foreignKeyName: "article_marks_articleid_fkey"
             columns: ["articleId"]
             isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["articleId"]
-          },
-          {
-            foreignKeyName: "article_marks_articleid_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
             referencedRelation: "articles"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "article_marks_articleid_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "articles_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      article_pitch_quiz_answer_rows: {
-        Row: {
-          answerId: number
-          created_at: string
-          id: number
-          line: number
-          pitchStr: string
-        }
-        Insert: {
-          answerId: number
-          created_at?: string
-          id?: number
-          line: number
-          pitchStr: string
-        }
-        Update: {
-          answerId?: number
-          created_at?: string
-          id?: number
-          line?: number
-          pitchStr?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_article_pitch_quiz_answer_rows_answerId_fkey"
-            columns: ["answerId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_rows_view"
-            referencedColumns: ["answerId"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quiz_answer_rows_answerId_fkey"
-            columns: ["answerId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quiz_answer_rows_answerId_fkey"
-            columns: ["answerId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answers"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      article_pitch_quiz_answers: {
-        Row: {
-          created_at: string
-          id: number
-          quizId: number
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          quizId: number
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          quizId?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_article_pitch_quiz_answers_quizId_fkey"
-            columns: ["quizId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["quizId"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quiz_answers_quizId_fkey"
-            columns: ["quizId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quizzes"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quiz_answers_quizId_fkey"
-            columns: ["quizId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quizzes_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      article_pitch_quiz_questions: {
-        Row: {
-          created_at: string
-          id: number
-          line: number
-          lockedIndexes: number[]
-          quizId: number
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          line: number
-          lockedIndexes: number[]
-          quizId: number
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          line?: number
-          lockedIndexes?: number[]
-          quizId?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_article_pitch_questions_articlePitchQuizId_fkey"
-            columns: ["quizId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["quizId"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_questions_articlePitchQuizId_fkey"
-            columns: ["quizId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quizzes"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_questions_articlePitchQuizId_fkey"
-            columns: ["quizId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quizzes_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      article_pitch_quizzes: {
-        Row: {
-          articleId: number
-          created_at: string
-          hasAudio: boolean
-          id: number
-          isDev: boolean
-          title: string
-        }
-        Insert: {
-          articleId: number
-          created_at?: string
-          hasAudio?: boolean
-          id?: number
-          isDev?: boolean
-          title: string
-        }
-        Update: {
-          articleId?: number
-          created_at?: string
-          hasAudio?: boolean
-          id?: number
-          isDev?: boolean
-          title?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["articleId"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "articles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
             columns: ["articleId"]
             isOneToOne: false
             referencedRelation: "articles_view"
@@ -262,13 +79,6 @@ export type Database = {
           line?: number
         }
         Relationships: [
-          {
-            foreignKeyName: "public_article_recorded_assinments_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["articleId"]
-          },
           {
             foreignKeyName: "public_article_recorded_assinments_articleId_fkey"
             columns: ["articleId"]
@@ -318,266 +128,274 @@ export type Database = {
         }
         Relationships: []
       }
-      betterread: {
+      dictation_article_collections: {
         Row: {
-          articleId: number
           created_at: string
-          id: number
-          uid: string
+          id: string
+          title: string
+          user_id: string
         }
         Insert: {
-          articleId: number
           created_at?: string
-          id?: number
-          uid: string
+          id?: string
+          title: string
+          user_id: string
         }
         Update: {
-          articleId?: number
           created_at?: string
-          id?: number
-          uid?: string
+          id?: string
+          title?: string
+          user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "betterread_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["articleId"]
-          },
-          {
-            foreignKeyName: "betterread_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "articles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "betterread_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "articles_view"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
-      betterread_item_questions: {
+      dictation_articles: {
         Row: {
-          betterread_item_id: number
+          audio_path_full: string | null
+          collection_id: string
           created_at: string
-          id: number
-          question: string
-          view_point: string
+          id: string
+          seq: number
+          subtitle: string
         }
         Insert: {
-          betterread_item_id: number
+          audio_path_full?: string | null
+          collection_id: string
           created_at?: string
-          id?: number
-          question: string
-          view_point?: string
+          id?: string
+          seq: number
+          subtitle?: string
         }
         Update: {
-          betterread_item_id?: number
+          audio_path_full?: string | null
+          collection_id?: string
           created_at?: string
-          id?: number
-          question?: string
-          view_point?: string
+          id?: string
+          seq?: number
+          subtitle?: string
         }
         Relationships: [
           {
-            foreignKeyName: "betterread_item_questions_betterread_item_id_fkey"
-            columns: ["betterread_item_id"]
+            foreignKeyName: "dictation_articles_collection_fkey"
+            columns: ["collection_id"]
             isOneToOne: false
-            referencedRelation: "betterread_items"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "betterread_item_questions_betterread_item_id_fkey"
-            columns: ["betterread_item_id"]
-            isOneToOne: false
-            referencedRelation: "betterread_items_view"
+            referencedRelation: "dictation_article_collections"
             referencedColumns: ["id"]
           },
         ]
       }
-      betterread_items: {
+      dictation_journals: {
         Row: {
-          betterread_id: number
+          article_id: string
+          body: string
           created_at: string
-          id: number
-          image_url: string
+          id: string
+          rating_score: number
         }
         Insert: {
-          betterread_id: number
+          article_id: string
+          body: string
           created_at?: string
-          id?: number
-          image_url: string
+          id?: string
+          rating_score?: number
         }
         Update: {
-          betterread_id?: number
+          article_id?: string
+          body?: string
           created_at?: string
-          id?: number
-          image_url?: string
+          id?: string
+          rating_score?: number
         }
         Relationships: [
           {
-            foreignKeyName: "betterread_items_betterread_id_fkey"
-            columns: ["betterread_id"]
-            isOneToOne: false
-            referencedRelation: "betterread"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "betterread_items_betterread_id_fkey"
-            columns: ["betterread_id"]
-            isOneToOne: false
-            referencedRelation: "betterread_items_view"
-            referencedColumns: ["betterread_id"]
-          },
-          {
-            foreignKeyName: "betterread_items_betterread_id_fkey"
-            columns: ["betterread_id"]
-            isOneToOne: false
-            referencedRelation: "betterread_view"
+            foreignKeyName: "dictation_journals_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: true
+            referencedRelation: "dictation_articles"
             referencedColumns: ["id"]
           },
         ]
       }
-      betterread_toggle: {
+      dictation_releases: {
         Row: {
-          betterread_id: number | null
-          id: number
-          questions: number[]
-          view_points: number[]
+          collection_id: string
+          created_at: string
+          due_at: string
+          id: string
+          published_at: string | null
+          user_id: string
         }
         Insert: {
-          betterread_id?: number | null
-          id?: number
-          questions?: number[]
-          view_points?: number[]
+          collection_id: string
+          created_at?: string
+          due_at: string
+          id?: string
+          published_at?: string | null
+          user_id: string
         }
         Update: {
-          betterread_id?: number | null
-          id?: number
-          questions?: number[]
-          view_points?: number[]
+          collection_id?: string
+          created_at?: string
+          due_at?: string
+          id?: string
+          published_at?: string | null
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "betterread_toggle_betterread_id_fkey"
-            columns: ["betterread_id"]
+            foreignKeyName: "dictation_releases_collection_id_fkey"
+            columns: ["collection_id"]
             isOneToOne: false
-            referencedRelation: "betterread"
+            referencedRelation: "dictation_article_collections"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "betterread_toggle_betterread_id_fkey"
-            columns: ["betterread_id"]
+            foreignKeyName: "dictation_releases_user_id_users_uid_fkey"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "betterread_items_view"
-            referencedColumns: ["betterread_id"]
+            referencedRelation: "users"
+            referencedColumns: ["uid"]
           },
+        ]
+      }
+      dictation_sentences: {
+        Row: {
+          article_id: string
+          audio_path: string | null
+          content: string
+          created_at: string
+          id: string
+          seq: number
+        }
+        Insert: {
+          article_id: string
+          audio_path?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          seq: number
+        }
+        Update: {
+          article_id?: string
+          audio_path?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          seq?: number
+        }
+        Relationships: [
           {
-            foreignKeyName: "betterread_toggle_betterread_id_fkey"
-            columns: ["betterread_id"]
+            foreignKeyName: "dictation_sentences_article_id_fkey"
+            columns: ["article_id"]
             isOneToOne: false
-            referencedRelation: "betterread_view"
+            referencedRelation: "dictation_articles"
             referencedColumns: ["id"]
           },
         ]
       }
-      canvas_boxes: {
+      dictation_submissions: {
         Row: {
-          highlights: number[]
-          id: number
-          isHidden: boolean
+          answer: string
+          created_at: string
+          elapsed_ms_since_first_play: number
+          elapsed_ms_since_item_view: number
+          feedback_md: string | null
+          id: string
+          plays_count: number
+          self_assessed_comprehension: number
+          sentence_id: string
+          teacher_feedback: string | null
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          elapsed_ms_since_first_play?: number
+          elapsed_ms_since_item_view?: number
+          feedback_md?: string | null
+          id?: string
+          plays_count?: number
+          self_assessed_comprehension?: number
+          sentence_id: string
+          teacher_feedback?: string | null
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          elapsed_ms_since_first_play?: number
+          elapsed_ms_since_item_view?: number
+          feedback_md?: string | null
+          id?: string
+          plays_count?: number
+          self_assessed_comprehension?: number
+          sentence_id?: string
+          teacher_feedback?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dictation_submissions_sentence_id_fkey"
+            columns: ["sentence_id"]
+            isOneToOne: false
+            referencedRelation: "dictation_sentences"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dictation_tag_master: {
+        Row: {
+          created_at: string
+          id: string
           label: string
-          splitBy: number
-          x: number
-          y: number
+          norm_label: string | null
         }
         Insert: {
-          highlights: number[]
-          id?: number
-          isHidden: boolean
+          created_at?: string
+          id?: string
           label: string
-          splitBy: number
-          x: number
-          y: number
+          norm_label?: string | null
         }
         Update: {
-          highlights?: number[]
-          id?: number
-          isHidden?: boolean
+          created_at?: string
+          id?: string
           label?: string
-          splitBy?: number
-          x?: number
-          y?: number
+          norm_label?: string | null
         }
         Relationships: []
       }
-      canvas_field: {
-        Row: {
-          connectedObjSets: string[]
-          expandObjId: number | null
-          expandStartObjId: number | null
-          id: number
-        }
-        Insert: {
-          connectedObjSets?: string[]
-          expandObjId?: number | null
-          expandStartObjId?: number | null
-          id?: number
-        }
-        Update: {
-          connectedObjSets?: string[]
-          expandObjId?: number | null
-          expandStartObjId?: number | null
-          id?: number
-        }
-        Relationships: []
-      }
-      homepage_infos: {
+      dictation_teacher_feedback_tags: {
         Row: {
           created_at: string
-          id: number
-          image_url: string | null
-          text: string
-          uid: string
+          id: string
+          submission_id: string
+          tag_master_id: string | null
         }
         Insert: {
           created_at?: string
-          id?: number
-          image_url?: string | null
-          text?: string
-          uid: string
+          id?: string
+          submission_id: string
+          tag_master_id?: string | null
         }
         Update: {
           created_at?: string
-          id?: number
-          image_url?: string | null
-          text?: string
-          uid?: string
+          id?: string
+          submission_id?: string
+          tag_master_id?: string | null
         }
-        Relationships: []
-      }
-      mirror_workout_realtime: {
-        Row: {
-          id: number
-          isMirror: boolean
-          selectedId: string
-        }
-        Insert: {
-          id?: number
-          isMirror?: boolean
-          selectedId: string
-        }
-        Update: {
-          id?: number
-          isMirror?: boolean
-          selectedId?: string
-        }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "dictation_teacher_feedback_tags_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "dictation_submissions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dtft_tag_master_fkey"
+            columns: ["tag_master_id"]
+            isOneToOne: false
+            referencedRelation: "dictation_tag_master"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mirror_workout_results: {
         Row: {
@@ -612,107 +430,150 @@ export type Database = {
         }
         Relationships: []
       }
-      note: {
+      pin_comment_admin_state: {
         Row: {
-          id: number
-          text: string
+          blur: number | null
+          gradient: number | null
+          id: string
+          position_y: number | null
+          selected_ellipse_ids: string[] | null
+          selected_image_meta_id: string | null
+          updated_at: string | null
         }
         Insert: {
-          id?: number
-          text: string
+          blur?: number | null
+          gradient?: number | null
+          id?: string
+          position_y?: number | null
+          selected_ellipse_ids?: string[] | null
+          selected_image_meta_id?: string | null
+          updated_at?: string | null
         }
         Update: {
-          id?: number
-          text?: string
+          blur?: number | null
+          gradient?: number | null
+          id?: string
+          position_y?: number | null
+          selected_ellipse_ids?: string[] | null
+          selected_image_meta_id?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
-      note_audio_paths: {
+      pin_comment_ellipses: {
         Row: {
-          audioPath: string
-          id: number
+          center_x: number
+          center_y: number
+          comment: string
+          created_at: string
+          id: string
+          image_meta_id: string
           index: number
+          rx: number
+          ry: number
+          updated_at: string
         }
         Insert: {
-          audioPath: string
-          id?: number
+          center_x: number
+          center_y: number
+          comment?: string
+          created_at: string
+          id: string
+          image_meta_id: string
           index: number
+          rx: number
+          ry: number
+          updated_at: string
         }
         Update: {
-          audioPath?: string
-          id?: number
+          center_x?: number
+          center_y?: number
+          comment?: string
+          created_at?: string
+          id?: string
+          image_meta_id?: string
           index?: number
+          rx?: number
+          ry?: number
+          updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "pin_comment_ellipses_image_meta_id_fkey"
+            columns: ["image_meta_id"]
+            isOneToOne: false
+            referencedRelation: "pin_comment_image_metas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      page_states: {
-        Row: {
-          pageState: string
-          uid: string
-        }
-        Insert: {
-          pageState: string
-          uid: string
-        }
-        Update: {
-          pageState?: string
-          uid?: string
-        }
-        Relationships: []
-      }
-      paper_cup_params: {
+      pin_comment_image_metas: {
         Row: {
           created_at: string
-          cue: string
-          id: number
-          params: string
+          file_name: string
+          height: number
+          id: string
+          mime_type: string
+          size: number
+          storage_path: string
+          thumbnail_url: string
+          updated_at: string
+          width: number
         }
         Insert: {
           created_at?: string
-          cue?: string
-          id?: number
-          params?: string
+          file_name: string
+          height: number
+          id?: string
+          mime_type: string
+          size: number
+          storage_path: string
+          thumbnail_url: string
+          updated_at?: string
+          width: number
         }
         Update: {
           created_at?: string
-          cue?: string
-          id?: number
-          params?: string
+          file_name?: string
+          height?: number
+          id?: string
+          mime_type?: string
+          size?: number
+          storage_path?: string
+          thumbnail_url?: string
+          updated_at?: string
+          width?: number
         }
         Relationships: []
       }
-      pitches: {
+      pin_comment_image_thumbnails: {
         Row: {
-          id: number
-          japanese: string
-          pitchStr: string
+          created_at: string | null
+          id: string
+          image_meta_id: string | null
+          user_id: string | null
         }
         Insert: {
-          id?: number
-          japanese: string
-          pitchStr: string
+          created_at?: string | null
+          id?: string
+          image_meta_id?: string | null
+          user_id?: string | null
         }
         Update: {
-          id?: number
-          japanese?: string
-          pitchStr?: string
+          created_at?: string | null
+          id?: string
+          image_meta_id?: string | null
+          user_id?: string | null
         }
-        Relationships: []
-      }
-      pitches_user: {
-        Row: {
-          id: number
-          pitchStr: string
-        }
-        Insert: {
-          id?: number
-          pitchStr: string
-        }
-        Update: {
-          id?: number
-          pitchStr?: string
-        }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "pin_comment_image_thumbnails_image_meta_id_fkey"
+            columns: ["image_meta_id"]
+            isOneToOne: false
+            referencedRelation: "pin_comment_image_metas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       postit_items: {
         Row: {
@@ -859,72 +720,6 @@ export type Database = {
         }
         Relationships: []
       }
-      record_params: {
-        Row: {
-          created_at: string
-          id: number
-          pitchStr: string
-          title: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          pitchStr: string
-          title: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          pitchStr?: string
-          title?: string
-        }
-        Relationships: []
-      }
-      records: {
-        Row: {
-          created_at: string
-          id: number
-          path: string
-          pitchStr: string
-          title: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          path: string
-          pitchStr: string
-          title: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          path?: string
-          pitchStr?: string
-          title?: string
-        }
-        Relationships: []
-      }
-      redirect_tos: {
-        Row: {
-          id: number
-          redirect_to: string
-          uid: string | null
-          updated_at: string
-        }
-        Insert: {
-          id?: number
-          redirect_to: string
-          uid?: string | null
-          updated_at?: string
-        }
-        Update: {
-          id?: number
-          redirect_to?: string
-          uid?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
       sentences: {
         Row: {
           articleId: number
@@ -961,13 +756,6 @@ export type Database = {
             foreignKeyName: "public_sentences_articleId_fkey"
             columns: ["articleId"]
             isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["articleId"]
-          },
-          {
-            foreignKeyName: "public_sentences_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
             referencedRelation: "articles"
             referencedColumns: ["id"]
           },
@@ -976,59 +764,6 @@ export type Database = {
             columns: ["articleId"]
             isOneToOne: false
             referencedRelation: "articles_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      speed_workout: {
-        Row: {
-          id: number
-          isOpen: boolean
-          isRunning: boolean
-          selectedId: number | null
-          selectedItemId: number | null
-        }
-        Insert: {
-          id?: number
-          isOpen?: boolean
-          isRunning?: boolean
-          selectedId?: number | null
-          selectedItemId?: number | null
-        }
-        Update: {
-          id?: number
-          isOpen?: boolean
-          isRunning?: boolean
-          selectedId?: number | null
-          selectedItemId?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "speed_workout_selectedid_fkey"
-            columns: ["selectedId"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "speed_workout_selectedid_fkey"
-            columns: ["selectedId"]
-            isOneToOne: false
-            referencedRelation: "workouts_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "speed_workout_selectedItemId_fkey"
-            columns: ["selectedItemId"]
-            isOneToOne: false
-            referencedRelation: "workout_items"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "speed_workout_selectedItemId_fkey"
-            columns: ["selectedItemId"]
-            isOneToOne: false
-            referencedRelation: "workout_items_view"
             referencedColumns: ["id"]
           },
         ]
@@ -1051,319 +786,8 @@ export type Database = {
         }
         Relationships: []
       }
-      workout_items: {
-        Row: {
-          chinese: string
-          created_at: string
-          id: number
-          index: number
-          japanese: string
-          pitchStr: string
-          workoutId: number
-        }
-        Insert: {
-          chinese: string
-          created_at?: string
-          id?: number
-          index: number
-          japanese: string
-          pitchStr: string
-          workoutId: number
-        }
-        Update: {
-          chinese?: string
-          created_at?: string
-          id?: number
-          index?: number
-          japanese?: string
-          pitchStr?: string
-          workoutId?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_workout_items_workoutId_fkey"
-            columns: ["workoutId"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_workout_items_workoutId_fkey"
-            columns: ["workoutId"]
-            isOneToOne: false
-            referencedRelation: "workouts_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      workout_record_rows: {
-        Row: {
-          created_at: string
-          id: number
-          index: number
-          workoutItemId: number
-          workoutRecordId: number
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          index: number
-          workoutItemId: number
-          workoutRecordId: number
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          index?: number
-          workoutItemId?: number
-          workoutRecordId?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_workout_record_rows_workoutItemId_fkey"
-            columns: ["workoutItemId"]
-            isOneToOne: false
-            referencedRelation: "workout_items"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_workout_record_rows_workoutItemId_fkey"
-            columns: ["workoutItemId"]
-            isOneToOne: false
-            referencedRelation: "workout_items_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_workout_record_rows_workoutRecordId_fkey"
-            columns: ["workoutRecordId"]
-            isOneToOne: false
-            referencedRelation: "workout_records"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      workout_records: {
-        Row: {
-          audioPath: string
-          bpm: number
-          created_at: string
-          id: number
-          workoutId: number
-        }
-        Insert: {
-          audioPath: string
-          bpm: number
-          created_at?: string
-          id?: number
-          workoutId: number
-        }
-        Update: {
-          audioPath?: string
-          bpm?: number
-          created_at?: string
-          id?: number
-          workoutId?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_workout_records_workoutId_fkey"
-            columns: ["workoutId"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_workout_records_workoutId_fkey"
-            columns: ["workoutId"]
-            isOneToOne: false
-            referencedRelation: "workouts_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      workouts: {
-        Row: {
-          created_at: string
-          id: number
-          isDev: boolean
-          isReview: boolean
-          targetBPM: number
-          title: string
-          uid: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          isDev?: boolean
-          isReview?: boolean
-          targetBPM: number
-          title: string
-          uid?: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          isDev?: boolean
-          isReview?: boolean
-          targetBPM?: number
-          title?: string
-          uid?: string
-        }
-        Relationships: []
-      }
     }
     Views: {
-      article_pitch_quiz_answer_rows_view: {
-        Row: {
-          answer: string | null
-          answerId: number | null
-          audioPath: string | null
-          created_at: string | null
-          end: number | null
-          hasAudio: boolean | null
-          id: number | null
-          line: number | null
-          lockedIndexes: number[] | null
-          pitchStr: string | null
-          quizId: number | null
-          start: number | null
-          title: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_article_pitch_quiz_answers_quizId_fkey"
-            columns: ["quizId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["quizId"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quiz_answers_quizId_fkey"
-            columns: ["quizId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quizzes"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quiz_answers_quizId_fkey"
-            columns: ["quizId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quizzes_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      article_pitch_quiz_answer_view: {
-        Row: {
-          articleId: number | null
-          audioPath: string | null
-          created_at: string | null
-          display: string | null
-          hasAudio: boolean | null
-          id: number | null
-          quizId: number | null
-          title: string | null
-        }
-        Relationships: []
-      }
-      article_pitch_quiz_questions_view: {
-        Row: {
-          articleId: number | null
-          audioPath: string | null
-          end: number | null
-          hasAudio: boolean | null
-          id: number | null
-          isDev: boolean | null
-          japanese: string | null
-          line: number | null
-          lockedIndexes: number[] | null
-          pitchStr: string | null
-          quizId: number | null
-          start: number | null
-          title: string | null
-          uid: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_article_pitch_questions_articlePitchQuizId_fkey"
-            columns: ["quizId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["quizId"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_questions_articlePitchQuizId_fkey"
-            columns: ["quizId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quizzes"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_questions_articlePitchQuizId_fkey"
-            columns: ["quizId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quizzes_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["articleId"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "articles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "articles_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      article_pitch_quizzes_view: {
-        Row: {
-          articleId: number | null
-          audioPath: string | null
-          created_at: string | null
-          display: string | null
-          hasAudio: boolean | null
-          id: number | null
-          isDev: boolean | null
-          title: string | null
-          uid: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["articleId"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "articles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_article_pitch_quizzes_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
-            referencedRelation: "articles_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       articles_view: {
         Row: {
           audioPath: string | null
@@ -1375,47 +799,6 @@ export type Database = {
           isShowAccents: boolean | null
           title: string | null
           uid: string | null
-        }
-        Relationships: []
-      }
-      betterread_items_view: {
-        Row: {
-          betterread_id: number | null
-          id: number | null
-          image_url: string | null
-          item_created_at: string | null
-          question: string | null
-          question_created_at: string | null
-          question_id: number | null
-          title: string | null
-          view_point: string | null
-        }
-        Relationships: []
-      }
-      betterread_view: {
-        Row: {
-          auther: string | null
-          display: string | null
-          id: number | null
-          title: string | null
-        }
-        Relationships: []
-      }
-      page_states_view: {
-        Row: {
-          display: string | null
-          pageState: string | null
-          uid: string | null
-        }
-        Relationships: []
-      }
-      redirect_tos_view: {
-        Row: {
-          display: string | null
-          id: number | null
-          redirect_to: string | null
-          uid: string | null
-          updated_at: string | null
         }
         Relationships: []
       }
@@ -1445,13 +828,6 @@ export type Database = {
             foreignKeyName: "public_sentences_articleId_fkey"
             columns: ["articleId"]
             isOneToOne: false
-            referencedRelation: "article_pitch_quiz_answer_view"
-            referencedColumns: ["articleId"]
-          },
-          {
-            foreignKeyName: "public_sentences_articleId_fkey"
-            columns: ["articleId"]
-            isOneToOne: false
             referencedRelation: "articles"
             referencedColumns: ["id"]
           },
@@ -1464,115 +840,208 @@ export type Database = {
           },
         ]
       }
-      workout_items_view: {
-        Row: {
-          chinese: string | null
-          created_at: string | null
-          display: string | null
-          id: number | null
-          index: number | null
-          isReview: boolean | null
-          japanese: string | null
-          pitchStr: string | null
-          targetBPM: number | null
-          title: string | null
-          uid: string | null
-          workoutId: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_workout_items_workoutId_fkey"
-            columns: ["workoutId"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_workout_items_workoutId_fkey"
-            columns: ["workoutId"]
-            isOneToOne: false
-            referencedRelation: "workouts_view"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      workout_record_rows_view: {
-        Row: {
-          audioPath: string | null
-          bpm: number | null
-          chinese: string | null
-          created_at: string | null
-          display: string | null
-          id: number | null
-          index: number | null
-          isDev: boolean | null
-          isReview: boolean | null
-          japanese: string | null
-          pitchStr: string | null
-          targetBPM: number | null
-          title: string | null
-          uid: string | null
-          workoutId: number | null
-          workoutItemId: number | null
-          workoutRecordId: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_workout_items_workoutId_fkey"
-            columns: ["workoutId"]
-            isOneToOne: false
-            referencedRelation: "workouts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_workout_items_workoutId_fkey"
-            columns: ["workoutId"]
-            isOneToOne: false
-            referencedRelation: "workouts_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_workout_record_rows_workoutItemId_fkey"
-            columns: ["workoutItemId"]
-            isOneToOne: false
-            referencedRelation: "workout_items"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_workout_record_rows_workoutItemId_fkey"
-            columns: ["workoutItemId"]
-            isOneToOne: false
-            referencedRelation: "workout_items_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "public_workout_record_rows_workoutRecordId_fkey"
-            columns: ["workoutRecordId"]
-            isOneToOne: false
-            referencedRelation: "workout_records"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      workouts_view: {
-        Row: {
-          created_at: string | null
-          display: string | null
-          id: number | null
-          isDev: boolean | null
-          isReview: boolean | null
-          targetBPM: number | null
-          title: string | null
-          uid: string | null
-        }
-        Relationships: []
-      }
     }
     Functions: {
-      [_ in never]: never
+      create_feedback_and_log: {
+        Args: {
+          p_answer: string
+          p_elapsed_ms_since_first_play: number
+          p_elapsed_ms_since_item_view: number
+          p_feedback_md: string
+          p_plays_count: number
+          p_self_comp: number
+          p_sentence_id: string
+        }
+        Returns: {
+          article_id: string
+          completed: boolean
+          logged: boolean
+          saved: boolean
+        }[]
+      }
+      delete_thumbnail_and_image: {
+        Args: { p_image_id: string }
+        Returns: undefined
+      }
+      get_admin_releases_by_user: {
+        Args: { p_user_id: string }
+        Returns: {
+          collection_id: string
+          collection_title: string
+          created_at: string
+          due_at: string
+          id: string
+          published_at: string
+          user_display: string
+          user_id: string
+        }[]
+      }
+      get_article_answers_for_modal: {
+        Args: { p_article_id: string }
+        Returns: {
+          answer: string
+          content: string
+          seq: number
+        }[]
+      }
+      get_article_page: {
+        Args: { p_article_id: string }
+        Returns: Json
+      }
+      get_collection_article_tags: {
+        Args: { p_collection_id: string }
+        Returns: {
+          created_at: string
+          id: string
+          journal_body: string
+          journal_created_at: string
+          seq: number
+          subtitle: string
+          tags: string[]
+        }[]
+      }
+      get_home_next_task: {
+        Args: { p_uid: string }
+        Returns: {
+          collection_id: string
+          collection_title: string
+          done_count: number
+          due_at: string
+          end_at: string
+          journals: Json
+          next_article_id: string
+          next_sentence_id: string
+          sentence_seq: number
+          start_at: string
+          subtitle: string
+          time_progress_pct: number
+          total_count: number
+        }[]
+      }
+      get_or_create_dictation_tag: {
+        Args: { p_label: string }
+        Returns: string
+      }
+      get_release_article_tags: {
+        Args: { p_uid: string }
+        Returns: {
+          created_at: string
+          id: string
+          journal_body: string
+          journal_created_at: string
+          pos: number
+          subtitle: string
+          tags: string[]
+          title: string
+        }[]
+      }
+      get_submission_admin: {
+        Args: { p_submission_id: string }
+        Returns: Json
+      }
+      get_submission_latest: {
+        Args: {
+          p_article_id?: string
+          p_limit?: number
+          p_offset?: number
+          p_user_id?: string
+        }
+        Returns: {
+          answer: string
+          article_id: string
+          content: string
+          created_at: string
+          display: string
+          elapsed_ms_since_first_play: number
+          elapsed_ms_since_item_view: number
+          id: string
+          plays_count: number
+          self_assessed_comprehension: number
+          sentence_id: string
+          seq: number
+          subtitle: string
+          title: string
+          user_id: string
+        }[]
+      }
+      gtrgm_compress: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      gtrgm_decompress: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      gtrgm_in: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      gtrgm_options: {
+        Args: { "": unknown }
+        Returns: undefined
+      }
+      gtrgm_out: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      immutable_unaccent: {
+        Args: { "": string }
+        Returns: string
+      }
+      insert_article_with_next_seq: {
+        Args: { p_collection_id: string; p_subtitle: string }
+        Returns: {
+          id: string
+          seq: number
+        }[]
+      }
+      insert_thumbnail_with_image: {
+        Args: { p_file_name: string; p_storage_path: string; p_user_id: string }
+        Returns: {
+          image_id: string
+        }[]
+      }
+      journal_vote: {
+        Args: { p_delta: number; p_id: string }
+        Returns: undefined
+      }
+      list_journals_for_me: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          article_id: string
+          body: string
+          created_at: string
+          id: string
+          rating_score: number
+        }[]
+      }
+      save_dictation_journal: {
+        Args: { p_article_id: string; p_body: string }
+        Returns: undefined
+      }
+      set_limit: {
+        Args: { "": number }
+        Returns: number
+      }
+      show_limit: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
+      show_trgm: {
+        Args: { "": string }
+        Returns: string[]
+      }
+      unaccent: {
+        Args: { "": string }
+        Returns: string
+      }
+      unaccent_init: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
     }
     Enums: {
-      [_ in never]: never
+      chat_role: "system" | "user" | "assistant"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1580,21 +1049,25 @@ export type Database = {
   }
 }
 
-type DefaultSchema = Database[Extract<keyof Database, "public">]
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-        Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
-      Database[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
@@ -1612,14 +1085,16 @@ export type Tables<
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
@@ -1635,14 +1110,16 @@ export type TablesInsert<
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   TableName extends DefaultSchemaTableNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
     : never = never,
-> = DefaultSchemaTableNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
@@ -1658,14 +1135,16 @@ export type TablesUpdate<
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   EnumName extends DefaultSchemaEnumNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
-> = DefaultSchemaEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
@@ -1673,20 +1152,24 @@ export type Enums<
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
-    | { schema: keyof Database },
+    | { schema: keyof DatabaseWithoutInternals },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database
+    schema: keyof DatabaseWithoutInternals
   }
-    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
     : never = never,
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
   : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      chat_role: ["system", "user", "assistant"],
+    },
   },
 } as const

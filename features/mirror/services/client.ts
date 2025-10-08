@@ -1,21 +1,5 @@
 import { createClient } from '@/utils/supabase/client';
-import { MirrorWorkoutRealtime, MirrorWorkoutResult } from '../schema';
-
-export async function updateMirrorWorkoutRealtime({
-  id,
-  isMirror,
-  selectedId,
-}: MirrorWorkoutRealtime) {
-  const supabase = createClient();
-
-  const { error } = await supabase
-    .from('mirror_workout_realtime')
-    .update({ isMirror, selectedId })
-    .eq('id', id);
-  if (error) {
-    console.error(error.message);
-  }
-}
+import { MirrorWorkoutResult } from '../schema';
 
 export async function fetchMirrorWorkoutResultsByUid(
   uid: string
