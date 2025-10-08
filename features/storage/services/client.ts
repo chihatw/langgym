@@ -20,7 +20,7 @@ export async function uploadAudioFile(file: Blob, path: string) {
     return error.message;
   }
 }
-
+// upload to image storage
 export async function uploadImageFile(file: Blob, path: string) {
   const supabase = createClient();
 
@@ -34,42 +34,6 @@ export async function uploadImageFile(file: Blob, path: string) {
 
   // url 取得
   const { data } = await supabase.storage.from('image').getPublicUrl(path);
-  const imageUrl = data.publicUrl;
-  return imageUrl;
-}
-
-export async function uploadPostItItemImage(file: Blob, path: string) {
-  const supabase = createClient();
-
-  const { error } = await supabase.storage
-    .from('postits')
-    .upload(path, file, { upsert: true });
-  if (error) {
-    console.error(error.message);
-    return '';
-  }
-
-  // url 取得
-  const { data } = await supabase.storage.from('postits').getPublicUrl(path);
-  const imageUrl = data.publicUrl;
-  return imageUrl;
-}
-
-export async function uploadPostItNoteFile(file: Blob, path: string) {
-  const supabase = createClient();
-
-  const { error } = await supabase.storage
-    .from('postit-notes')
-    .upload(path, file, { upsert: true });
-  if (error) {
-    console.error(error.message);
-    return '';
-  }
-
-  // url 取得
-  const { data } = await supabase.storage
-    .from('postit-notes')
-    .getPublicUrl(path);
   const imageUrl = data.publicUrl;
   return imageUrl;
 }
@@ -93,22 +57,6 @@ export async function deleteAudioFiles(paths: string[]) {
 export async function deleteImageFile(path: string) {
   const supabase = createClient();
   const { error } = await supabase.storage.from('image').remove([path]);
-  if (error) {
-    return error.message;
-  }
-}
-
-export async function deletePostItItemImage(path: string) {
-  const supabase = createClient();
-  const { error } = await supabase.storage.from('postits').remove([path]);
-  if (error) {
-    return error.message;
-  }
-}
-
-export async function deletePostItNoteFile(path: string) {
-  const supabase = createClient();
-  const { error } = await supabase.storage.from('postit-notes').remove([path]);
   if (error) {
     return error.message;
   }
