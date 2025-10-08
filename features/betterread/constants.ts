@@ -1,3 +1,0 @@
-export const BETTERREAD_MAX_COUNT = 8;
-
-export const BETTERREAD_PHOTO_MAX_COUNT = 2;

@@ -1,4 +1,3 @@
-import HiddenElements from '@/components/HiddenElements';
 import { getUserFromServerSide } from '@/features/auth/services/server';
 import MirrorWorkoutResultForm from '@/features/mirror/components/MirrotWorkoutResultForm/MirrorWorkoutResultForm';
 import { fetchMirrorWorkoutResultById } from '@/features/mirror/services/server';
@@ -17,12 +16,7 @@ const MirrorWorkoutResultPage = async (props: Props) => {
 
   if (!result) return null;
 
-  return (
-    <>
-      <MirrorWorkoutResultForm result={result} />
-      <HiddenElements uid={user.id} />
-    </>
-  );
+  return <MirrorWorkoutResultForm result={result} />;
 };
 
 export default MirrorWorkoutResultPage;
